@@ -1,0 +1,32 @@
+cmake_minimum_required(VERSION 2.6)
+project(ElementGames)
+
+### NOTE: This section should only be for debugging I think
+IF (WIN32)
+	#NOTHING
+ELSE (WIN32)
+	add_definitions(-pg) # NOTE: Do I still want this?
+	add_definitions(-Wall) # NOTE: Or this?
+	add_definitions(-ggdb) # gdb debugging
+ENDIF (WIN32)
+
+IF (WIN32)
+	IF (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
+		include_directories(../../../Dependencies/Windows/include ${CMAKE_CURRENT_BINARY_DIR})
+		#link_directories(../../Dependencies/Windows/library/debug)
+	ENDIF (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
+ELSE (WIN32)
+	include_directories(../../../Dependencies/Linux/include ${CMAKE_CURRENT_BINARY_DIR})
+	link_directories(../../../build/Engine)#../../Dependencies/linux/lib)
+ENDIF (WIN32)
+
+add_executable(element_games_sandbox ./main.cpp)
+
+IF (WIN32)
+	IF (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
+		target_link_libraries(element_games_sandbox egengine glew32s glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath freetype mingw32 egengine glew32s glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath freetype mingw32)
+	ENDIF (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
+ELSE (WIN32)
+	#target_link_libraries(element_games_sandbox egengine sfml-graphics sfml-window sfml-system sfml-audio sfml-network assimp GLEW glut BulletDynamics BulletCollision LinearMath Xrandr RocketCore RocketControls RocketDebugger)
+	target_link_libraries(element_games_sandbox egengine sfml-graphics sfml-window sfml-system sfml-audio sfml-network assimp GLEW glut BulletDynamics BulletCollision LinearMath Xrandr)
+ENDIF (WIN32)
