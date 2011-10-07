@@ -304,7 +304,7 @@ namespace EG{
 				++light_object_iterator;
 			}
 
-			shaders->SetFloat3("light_color", glm::vec3(0.0f, 0.0f, 0.0f));
+			/*shaders->SetFloat3("light_color", glm::vec3(0.0f, 0.0f, 0.0f));
 			shaders->SetFloat3("light_position", 0.0f, 0.0f, 0.0f);
 			shaders->SetFloat3("light_attenuation", glm::vec3(0.999f, 0.999f, 0.999f));
 			shaders->SetFloat("light_radius", 0.0001f);
@@ -322,7 +322,7 @@ namespace EG{
 				shaders->SetInt("shadow_mapping_enabled", 0);
 				shaders->SetMatrix4("shadow_mapping_bias", glm::mat4(1.0f));
 				graphics->BindTexture(scene->GetTextureManager()->GetTexture("default_decal")->GetId(), 2);
-			}
+			}*/
 
 			// Sphere Method
 			//shaders->SetMatrix4("model_matrix", model_matrix);
