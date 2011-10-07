@@ -268,12 +268,12 @@ namespace EG{
 						// Shadow Mapping
 						if (light->GetCastsShadows() && shadows_enabled == 1){
 							graphics->SetActiveTexture(2);
-							glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE_ARB);
-							glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 							shaders->SetInt("shadow_mapping_enabled", 1);
 							glm::mat4 shadow_mapping_transformation = shadow_mapping_bias * light->GetProjectionMatrix() * light->GetViewMatrix();
 							shaders->SetMatrix4("shadow_mapping_bias", shadow_mapping_transformation);
 							graphics->BindTexture(light->GetShadowBuffer()->GetDepthTextureId(), 2);
+							glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE_ARB);
+							glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 							graphics->SetActiveTexture(0);
 						}else{
 							shaders->SetInt("shadow_mapping_enabled", 0);
@@ -312,11 +312,11 @@ namespace EG{
 			// Shadow Mapping
 			if (shadows_enabled == 1){
 				graphics->SetActiveTexture(2);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE_ARB);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 				shaders->SetInt("shadow_mapping_enabled", 1);
 				shaders->SetMatrix4("shadow_mapping_bias", glm::mat4(1.0f));
 				graphics->BindTexture(scene->GetTextureManager()->GetTexture("default_decal")->GetId(), 2);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE_ARB);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 				graphics->SetActiveTexture(0);
 			}else{
 				shaders->SetInt("shadow_mapping_enabled", 0);
