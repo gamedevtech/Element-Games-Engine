@@ -304,6 +304,7 @@ namespace EG{
 				++light_object_iterator;
 			}
 
+			// TODO: This shouldn't be needed now... test on nvidia card and remove if not needed... w00t!
 			/*shaders->SetFloat3("light_color", glm::vec3(0.0f, 0.0f, 0.0f));
 			shaders->SetFloat3("light_position", 0.0f, 0.0f, 0.0f);
 			shaders->SetFloat3("light_attenuation", glm::vec3(0.999f, 0.999f, 0.999f));
