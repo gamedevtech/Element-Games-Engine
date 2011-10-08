@@ -304,42 +304,6 @@ namespace EG{
 				++light_object_iterator;
 			}
 
-			// TODO: This shouldn't be needed now... test on nvidia card and remove if not needed... w00t!
-			/*shaders->SetFloat3("light_color", glm::vec3(0.0f, 0.0f, 0.0f));
-			shaders->SetFloat3("light_position", 0.0f, 0.0f, 0.0f);
-			shaders->SetFloat3("light_attenuation", glm::vec3(0.999f, 0.999f, 0.999f));
-			shaders->SetFloat("light_radius", 0.0001f);
-
-			// Shadow Mapping
-			if (shadows_enabled == 1){
-				graphics->SetActiveTexture(2);
-				shaders->SetInt("shadow_mapping_enabled", 1);
-				shaders->SetMatrix4("shadow_mapping_bias", glm::mat4(1.0f));
-				graphics->BindTexture(scene->GetTextureManager()->GetTexture("default_decal")->GetId(), 2);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE_ARB);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-				graphics->SetActiveTexture(0);
-			}else{
-				shaders->SetInt("shadow_mapping_enabled", 0);
-				shaders->SetMatrix4("shadow_mapping_bias", glm::mat4(1.0f));
-				graphics->BindTexture(scene->GetTextureManager()->GetTexture("default_decal")->GetId(), 2);
-			}*/
-
-			// Sphere Method
-			//shaders->SetMatrix4("model_matrix", model_matrix);
-			//shaders->SetMatrix4("normal_matrix", normal_matrix);
-			//light_sphere->Draw();
-
-			// Quad Method
-			rectangle->Draw();
-
-			if (shadows_enabled == 1){
-				graphics->SetActiveTexture(2);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-				graphics->SetActiveTexture(0);
-			}
-
 			glDisable(GL_BLEND);
 
 			shaders->Unbind();
