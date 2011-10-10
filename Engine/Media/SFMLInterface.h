@@ -25,6 +25,7 @@ namespace EG{
 				bool WindowResized(void);
 				unsigned int GetResolutionWidth(void);
 				unsigned int GetResolutionHeight(void);
+				void Close(void);
 
 				// Input
 				void SetInput(EG::Input::Input *_input);
@@ -46,6 +47,7 @@ namespace EG{
 				unsigned int bits_per_pixel;
 				bool fullscreen, window_resized;
 				std::string window_title;
+				bool opened;
 
 				sf::RenderWindow *sfml_application;
 

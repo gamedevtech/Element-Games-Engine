@@ -7,9 +7,8 @@ project(ElementGames)
 IF (WIN32)
 	add_definitions(-DSFML_DYNAMIC)
 ELSE (WIN32)
-	add_definitions(-pg) # NOTE: Do I still want this?
-	add_definitions(-Wall) # NOTE: Or this?
-	add_definitions(-ggdb) # gdb debugging
+	add_definitions(-pg -Wall -ggdb) # For Profiling
+	set(CMAKE_SHARED_LINKER_FLAGS "-pg")
 ENDIF (WIN32)
 ###
 

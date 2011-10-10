@@ -5,9 +5,8 @@ project(ElementGames)
 IF (WIN32)
 	#NOTHING
 ELSE (WIN32)
-	add_definitions(-pg) # NOTE: Do I still want this?
-	add_definitions(-Wall) # NOTE: Or this?
-	add_definitions(-ggdb) # gdb debugging
+	add_definitions(-pg -Wall -ggdb) # For Profiling
+	set(CMAKE_SHARED_LINKER_FLAGS "-pg")
 ENDIF (WIN32)
 
 IF (WIN32)
@@ -21,6 +20,11 @@ ELSE (WIN32)
 ENDIF (WIN32)
 
 add_executable(element_games_sandbox ./main.cpp)
+IF (WIN32)
+	#NOTHING
+ELSE (WIN32)
+	set_target_properties(element_games_sandbox PROPERTIES LINK_FLAGS -pg)
+ENDIF (WIN32)
 
 IF (WIN32)
 	IF (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")

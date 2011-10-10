@@ -69,6 +69,7 @@ namespace EG{
 
 			// Render Objects
 			std::map<std::string, EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
+			//std::cout << "Rendering Objects" << std::endl;
 			std::map<std::string, EG::Game::Object *>::iterator object_iterator = objects->begin();
 			while (object_iterator != objects->end()){
 				EG::Game::Object *object = object_iterator->second;
@@ -151,6 +152,7 @@ namespace EG{
 			}
 
 			std::map<std::string, EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
+			//std::cout << "Rendering Lit Objects" << std::endl;
 			std::map<std::string, EG::Game::Object *>::iterator light_object_iterator = light_objects->begin();
 			while (light_object_iterator != light_objects->end()){
 				EG::Game::Object *light_object = light_object_iterator->second;
@@ -266,6 +268,7 @@ namespace EG{
 			shaders->SetInt("decal", 0);
 			shaders->SetInt("height", 1);
 			object_iterator = objects->begin();
+			//std::cout << "Rendering Non-Lit Objects" << std::endl;
 			while (object_iterator != objects->end()){
 				EG::Game::Object *object = object_iterator->second;
 

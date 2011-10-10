@@ -12,3 +12,6 @@ gprof... don't forget to compile with -pg!
 google-perftools
 valgrind
 perf - linux-tools
+
+
+valgrind --tool=callgrind myprog

@@ -17,6 +17,7 @@ namespace EG{
 		SFMLInterface::SFMLInterface(void){
 			window_resized = false;
 			input = NULL;
+			opened = true;
 		}
 
 		SFMLInterface::~SFMLInterface(void){
@@ -40,7 +41,7 @@ namespace EG{
 		}
 
 		bool SFMLInterface::IsWindowOpened(void){
-			return sfml_application->IsOpened();
+			return opened;
 		}
 
 		void SFMLInterface::UpdateWindow(void){
@@ -49,7 +50,7 @@ namespace EG{
 			sf::Event sfml_event;
 			while (sfml_application->PollEvent(sfml_event)){
 				if (sfml_event.Type == sf::Event::Closed || (sfml_event.Type == sf::Event::KeyPressed && sfml_event.Key.Code == sf::Keyboard::Escape)){
-					sfml_application->Close();
+					opened = false;
 				}else if (sfml_event.Type == sf::Event::Resized){
 					resolution_width = sfml_event.Size.Width;
 					resolution_height = sfml_event.Size.Height;
@@ -170,6 +171,10 @@ namespace EG{
 
 		unsigned int SFMLInterface::GetElapsedTime(void){
 			return clock->GetElapsedTime();
+		}
+
+		void SFMLInterface::Close(void){
+			sfml_application->Close();
 		}
 	}
 }

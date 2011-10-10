@@ -137,28 +137,7 @@ int main(int argc, char **argv){
 	material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "starfield_decal");
 	//material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, "concrete_normal");
 	object3->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("sphere", material));
-
-	// Dummy Light
-	/*EG::Game::Object *dummy_light_object = new EG::Game::Object("DummyLight");
-	glm::mat4 dlight_geometry_transform = glm::mat4(1.0f);
-	glm::vec3 dlight_position = glm::vec3(0.0f, 0.0f, 0.0f);
-	dlight_geometry_transform = glm::translate(dlight_geometry_transform, dlight_position);
-	dlight_geometry_transform = glm::scale(dlight_geometry_transform, glm::vec3(0.1f, 0.1f, 0.1f));
-	dummy_light_object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(dlight_geometry_transform));
-	EG::Graphics::Light *dlight = new EG::Graphics::Light();
-	dlight->SetPosition(dlight_position);
-	dlight->SetDirection(-dlight_position);
-	dlight->SetColor(glm::vec3(0.0f, 0.0f, 0.0f));
-	//light->SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
-	dlight->SetAttenuation(glm::vec3(0.99999f, 0.99999f, 0.99999f));
-	dlight->SetRadius(1.0f);
-	dlight->SetCastsShadows(true);
-	dummy_light_object->AddAttribute(new EG::Game::ObjectAttributeEmissionLight(dlight));
-	material = new EG::Graphics::RenderingMaterial();
-	material->SetLit(false);
-	material->SetColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
-	dummy_light_object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("sphere", material));*/
-
+ 
 	// Light 0
 	EG::Game::Object *light_object = new EG::Game::Object("RedLight");
 	glm::mat4 light_geometry_transform = glm::mat4(1.0f);
@@ -237,6 +216,8 @@ int main(int argc, char **argv){
 		game->Update();
 		game->Render();
 	}
+	window->Close();
+	std::cout << "Exiting..." << std::endl;
 
 	return 0;
 }

@@ -15,6 +15,7 @@ namespace EG{
 				bool IsOpened(void);
 				void Update(void);
 				void Display(void);
+				void Close(void);
 
 				float GetResolutionWidth(void);
 				float GetResolutionHeight(void);

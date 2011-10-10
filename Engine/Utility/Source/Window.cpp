@@ -31,6 +31,10 @@ namespace EG{
 			sfml_interface->DisplayWindow();
 		}
 
+		void Window::Close(void){
+			sfml_interface->Close();
+		}
+
 		float Window::GetResolutionWidth(void){
 			return resolution_width;
 		}
