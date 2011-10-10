@@ -15,3 +15,5 @@ perf - linux-tools
 
 
 valgrind --tool=callgrind myprog
+
+gprof build/Applications/Tests/Sandbox/element_games_sandbox | python gprof2dot.py | dot -Tpng -o gprof.png
