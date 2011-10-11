@@ -86,6 +86,7 @@ namespace EG{
 				void Set(std::string key, HashTableValueType value);
 				HashTableValueType Get(std::string key);
 				//HashTableValueType operator[](std::string key);
+				bool Has(std::string key);
 
 				std::vector<std::string> *GetKeys(void);
 				StringDictionaryKeysIterator GetKeysBegin(void);
@@ -155,6 +156,24 @@ namespace EG{
 					return 0;
 				}else{
 					return entry->GetValue();
+				}
+			}
+		}
+
+		template <class HashTableValueType>
+		bool StringDictionary<HashTableValueType>::Has(std::string key){
+			unsigned int hashed_key = HashingFunction(key);
+			if (_table[hashed_key] == NULL){
+				return false;
+			}else{
+				StringDictionaryEntry<HashTableValueType> *entry = _table[hashed_key];
+				while (entry != NULL && entry->GetKey() != key){
+					entry = entry->GetNext();
+				}
+				if (entry == NULL){
+					return false;
+				}else{
+					return true;
 				}
 			}
 		}

@@ -1,7 +1,8 @@
 #ifndef EG_GRAPHICS_MESH_MANAGER_H
 #define EG_GRAPHICS_MESH_MANAGER_H
 
-#include <map>
+//#include <map>
+#include "../Utility/StringDictionary.h"
 #include <string>
 #include "Mesh.h"
 
@@ -15,7 +16,8 @@ namespace EG{
 				bool Add(std::string mesh_id, EG::Graphics::Mesh *mesh);
 				EG::Graphics::Mesh *Get(std::string mesh_id);
 			private:
-				std::map<std::string, EG::Graphics::Mesh *> meshes;
+				//std::map<std::string, EG::Graphics::Mesh *> meshes;
+				EG::Utility::StringDictionary<EG::Graphics::Mesh *> meshes;
 		};
 	}
 }
