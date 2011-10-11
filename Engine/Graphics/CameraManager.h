@@ -15,7 +15,6 @@ namespace EG{
 			void Add(std::string camera_name, EG::Graphics::Camera *camera);
 			EG::Graphics::Camera *Get(std::string camera_name);
 		private:
-			//std::map<std::string, EG::Graphics::Camera *> cameras;
 			EG::Utility::StringDictionary<EG::Graphics::Camera *> cameras;
 		};
 	}

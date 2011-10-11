@@ -2,6 +2,7 @@
 #define EG_GRAPHICS_RENDERING_MATERIAL_H
 
 #include <map>
+#include "../Utility/StringDictionary.h"
 #include <string>
 #include "../Math/Math.h"
 

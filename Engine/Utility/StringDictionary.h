@@ -178,12 +178,6 @@ namespace EG{
 			}
 		}
 
-		/*template <class HashTableValueType>
-		HashTableValueType StringDictionary<HashTableValueType>::operator[](std::string key){
-			HashTableValueType out = Get(key);
-			if (
-		}*/
-
 		template <class HashTableValueType>
 		std::vector<std::string> *StringDictionary<HashTableValueType>::GetKeys(void){
 			return &_keys;

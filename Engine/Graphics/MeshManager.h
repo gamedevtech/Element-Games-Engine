@@ -16,7 +16,6 @@ namespace EG{
 				bool Add(std::string mesh_id, EG::Graphics::Mesh *mesh);
 				EG::Graphics::Mesh *Get(std::string mesh_id);
 			private:
-				//std::map<std::string, EG::Graphics::Mesh *> meshes;
 				EG::Utility::StringDictionary<EG::Graphics::Mesh *> meshes;
 		};
 	}

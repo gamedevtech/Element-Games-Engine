@@ -12,10 +12,12 @@ namespace EG{
 			shader_log.open("shaders.log", std::fstream::out | std::fstream::app);
 		}
 		ShaderManager::~ShaderManager(void){
-			std::map<std::string, unsigned int>::iterator shader_iterator = program_objects.begin();
-			while (shader_iterator != program_objects.end()){
+			//std::map<std::string, unsigned int>::iterator shader_iterator = program_objects.begin();
+			EG::Utility::StringDictionaryKeysIterator shader_iterator = program_objects.GetKeysBegin();
+			//while (shader_iterator != program_objects.end()){
+			while (shader_iterator != program_objects.GetKeysEnd()){
 				unsigned int *ids = new unsigned int[6];
-				ids[0] = (*shader_iterator).second;
+				ids[0] = program_objects.Get(*shader_iterator);//(*shader_iterator).second;
 				if (vertex_shader_objects.count(ids[0]) > 0){
 					ids[1] = vertex_shader_objects[ids[0]];
 				}else{
@@ -45,13 +47,13 @@ namespace EG{
 				delete []ids;
 				++shader_iterator;
 			}
-			program_objects.clear();
+			program_objects.Clear();
 			vertex_shader_objects.clear();
 			fragment_shader_objects.clear();
 			geometry_shader_objects.clear();
 			tessellation_control_shader_objects.clear();
 			tessellation_evaluation_shader_objects.clear();
-			variable_locations.clear();
+			variable_locations.Clear();
 			shader_log.close();
 		}
 
@@ -86,7 +88,8 @@ namespace EG{
 			graphics->CheckErrors("After Shader Log Printed");
 			graphics->ShaderBind(0);
 
-			program_objects[shader_id] = object_ids[SHADER_PROGRAM_OBJECT];
+			//program_objects[shader_id] = object_ids[SHADER_PROGRAM_OBJECT];
+			program_objects.Set(shader_id, object_ids[SHADER_PROGRAM_OBJECT]);
 			vertex_shader_objects[SHADER_PROGRAM_OBJECT] = object_ids[VERTEX_SHADER_OBJECT];
 			fragment_shader_objects[SHADER_PROGRAM_OBJECT] = object_ids[FRAGMENT_SHADER_OBJECT];
 			if (object_ids[GEOMETRY_SHADER_OBJECT]){
@@ -120,8 +123,9 @@ namespace EG{
 		}*/
 
 		void ShaderManager::Bind(std::string shader_id){
-			if (program_objects.count(shader_id) > 0){
-				current_program_object_id = program_objects[shader_id];
+			unsigned int temp_program_object_id = program_objects.Get(shader_id);
+			if (temp_program_object_id != 0){
+				current_program_object_id = temp_program_object_id;
 				graphics->ShaderBind(current_program_object_id);
 				shader_bound = true;
 			}else{
@@ -147,15 +151,29 @@ namespace EG{
 
 		unsigned int ShaderManager::GetVariableLocation(std::string variable_name, bool uniform_or_attribute){
 			if (shader_bound){
-				if (variable_locations.count(current_program_object_id) < 1 || variable_locations[current_program_object_id].count(variable_name) < 1){
+				bool create = false;
+				if (!(variable_locations.Has(current_program_object_id))){
+					variable_locations.Set(current_program_object_id, EG::Utility::StringDictionary<int>());
+					create = true;
+				}
+				if (!create && (!(variable_locations.Get(current_program_object_id).Has(variable_name)))){
+					create = true;
+				}
+				if (create){
 					if (uniform_or_attribute){
-						variable_locations[current_program_object_id][variable_name] = graphics->ShaderGetUniformLocation(current_program_object_id, variable_name.c_str());
+						variable_locations.Get(current_program_object_id).Set(variable_name, graphics->ShaderGetUniformLocation(current_program_object_id, variable_name.c_str()));
+						std::cout << "Here" << std::endl;
+						//variable_locations[current_program_object_id][variable_name] = graphics->ShaderGetUniformLocation(current_program_object_id, variable_name.c_str());
 					}else{
-						variable_locations[current_program_object_id][variable_name] = graphics->ShaderGetAttributeLocation(current_program_object_id, variable_name.c_str());
+						variable_locations.Get(current_program_object_id).Set(variable_name, graphics->ShaderGetAttributeLocation(current_program_object_id, variable_name.c_str()));
+						std::cout << "Here" << std::endl;
+						//variable_locations[current_program_object_id][variable_name] = graphics->ShaderGetAttributeLocation(current_program_object_id, variable_name.c_str());
 					}
-					return variable_locations[current_program_object_id][variable_name];
+					//return variable_locations[current_program_object_id][variable_name];
+					return variable_locations.Get(current_program_object_id).Get(variable_name);
 				}else{
-					return variable_locations[current_program_object_id][variable_name];
+					return variable_locations.Get(current_program_object_id).Get(variable_name);
+					//return variable_locations[current_program_object_id][variable_name];
 				}
 			}
 			return 0;

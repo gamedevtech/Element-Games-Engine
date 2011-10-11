@@ -124,6 +124,7 @@ set(SRCS
 	./Utility/RocketInterface.h
 	./Utility/GUI.h
 	./Utility/StringDictionary.h
+	./Utility/UnsignedIntDictionary.h
 	./Utility/Source/VariableManager.cpp
 	./Utility/Source/Window.cpp
 	./Utility/Source/Time.cpp

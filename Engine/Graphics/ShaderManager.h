@@ -6,6 +6,8 @@
 #include <iostream>
 #include <fstream>
 
+#include "../Utility/StringDictionary.h"
+#include "../Utility/UnsignedIntDictionary.h"
 #include "Shader.h"
 #include "GraphicsSubsystem.h"
 
@@ -59,13 +61,14 @@ namespace EG{
 			private:
 				bool shader_bound;
 				unsigned int current_program_object_id;
-				std::map<std::string, unsigned int> program_objects;
+				EG::Utility::StringDictionary<unsigned int> program_objects;
 				std::map<unsigned int, unsigned int> vertex_shader_objects;
 				std::map<unsigned int, unsigned int> fragment_shader_objects;
 				std::map<unsigned int, unsigned int> geometry_shader_objects;
 				std::map<unsigned int, unsigned int> tessellation_control_shader_objects;
 				std::map<unsigned int, unsigned int> tessellation_evaluation_shader_objects;
-				std::map<unsigned int, std::map<std::string, int> > variable_locations;
+				//std::map<unsigned int, EG::Utility::StringDictionary<int> > variable_locations;
+				EG::Utility::UnsignedIntDictionary<EG::Utility::StringDictionary<int> > variable_locations;
 
 				void PrintProgramLog(unsigned int program_object_id);
 				void PrintShaderLog(unsigned int shader_object_id);
