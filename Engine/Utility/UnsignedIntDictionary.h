@@ -78,7 +78,7 @@ namespace EG{
 		template <class HashTableValueType>
 		class UnsignedIntDictionary{
 			public:
-				UnsignedIntDictionary(unsigned int map_size = 100000);
+				UnsignedIntDictionary(unsigned int map_size = 100);
 				~UnsignedIntDictionary(void);
 
 				void Clear(void);
@@ -92,6 +92,7 @@ namespace EG{
 				UnsignedIntDictionaryKeysIterator GetKeysBegin(void);
 				UnsignedIntDictionaryKeysIterator GetKeysEnd(void);
 			private:
+				bool initialized;
 				unsigned int _map_size;
 				unsigned int HashingFunction(unsigned int key);
 				UnsignedIntDictionaryEntry<HashTableValueType> **_table;
@@ -101,10 +102,12 @@ namespace EG{
 		template <class HashTableValueType>
 		UnsignedIntDictionary<HashTableValueType>::UnsignedIntDictionary(unsigned int map_size){
 			_map_size = map_size;
+			_table = NULL;
 			_table = new UnsignedIntDictionaryEntry<HashTableValueType>*[_map_size];
 			for (unsigned int i = 0; i < _map_size; i++){
 				_table[i] = NULL;
 			}
+			initialized = true;
 		}
 
 		template <class HashTableValueType>
@@ -114,12 +117,17 @@ namespace EG{
 
 		template <class HashTableValueType>
 		void UnsignedIntDictionary<HashTableValueType>::Clear(void){
-			for (unsigned int i = 0; i < _map_size; i++){
-				if (_table[i] != NULL){
-					delete _table[i];
+			if (_table != NULL && initialized){
+				for (unsigned int i = 0; i < _map_size; i++){
+					if (_table[i] != NULL){
+						delete _table[i];
+					}
 				}
+				delete []_table;
+				initialized = false;
+				_table = NULL;
 			}
-			delete []_table;
+			std::cout << "Done Clearing UINT" << std::endl;
 		}
 
 		template <class HashTableValueType>

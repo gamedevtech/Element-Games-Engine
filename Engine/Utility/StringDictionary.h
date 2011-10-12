@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
 
 namespace EG{
 	namespace Utility{
@@ -78,7 +79,7 @@ namespace EG{
 		template <class HashTableValueType>
 		class StringDictionary{
 			public:
-				StringDictionary(unsigned int map_size = 100000);
+				StringDictionary(unsigned int map_size = 100);
 				~StringDictionary(void);
 
 				void Clear(void);
@@ -92,6 +93,7 @@ namespace EG{
 				StringDictionaryKeysIterator GetKeysBegin(void);
 				StringDictionaryKeysIterator GetKeysEnd(void);
 			private:
+				bool initialized;
 				unsigned int _map_size;
 				unsigned int HashingFunction(std::string key);
 				StringDictionaryEntry<HashTableValueType> **_table;
@@ -101,10 +103,12 @@ namespace EG{
 		template <class HashTableValueType>
 		StringDictionary<HashTableValueType>::StringDictionary(unsigned int map_size){
 			_map_size = map_size;
+			_table = NULL;
 			_table = new StringDictionaryEntry<HashTableValueType>*[_map_size];
 			for (unsigned int i = 0; i < _map_size; i++){
 				_table[i] = NULL;
 			}
+			initialized = true;
 		}
 
 		template <class HashTableValueType>
@@ -114,12 +118,19 @@ namespace EG{
 
 		template <class HashTableValueType>
 		void StringDictionary<HashTableValueType>::Clear(void){
-			for (unsigned int i = 0; i < _map_size; i++){
-				if (_table[i] != NULL){
-					delete _table[i];
+			if (_table != NULL && initialized){
+				std::cout << "Map Size: " << _map_size << std::endl;
+				for (unsigned int i = 0; i < _map_size; i++){
+					std::cout << i << std::endl;
+					if (_table[i] != NULL){
+						delete _table[i];
+					}
 				}
+				delete []_table;
+				initialized = false;
+				_table = NULL;
 			}
-			delete []_table;
+			std::cout << "Done Clearing STR" << std::endl;
 		}
 
 		template <class HashTableValueType>

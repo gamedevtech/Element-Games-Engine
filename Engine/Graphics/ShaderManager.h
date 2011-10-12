@@ -68,7 +68,7 @@ namespace EG{
 				std::map<unsigned int, unsigned int> tessellation_control_shader_objects;
 				std::map<unsigned int, unsigned int> tessellation_evaluation_shader_objects;
 				//std::map<unsigned int, EG::Utility::StringDictionary<int> > variable_locations;
-				EG::Utility::UnsignedIntDictionary<EG::Utility::StringDictionary<int> > variable_locations;
+				EG::Utility::UnsignedIntDictionary<EG::Utility::StringDictionary<int> *> variable_locations;
 
 				void PrintProgramLog(unsigned int program_object_id);
 				void PrintShaderLog(unsigned int shader_object_id);

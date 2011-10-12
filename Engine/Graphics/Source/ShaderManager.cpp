@@ -153,26 +153,30 @@ namespace EG{
 			if (shader_bound){
 				bool create = false;
 				if (!(variable_locations.Has(current_program_object_id))){
-					variable_locations.Set(current_program_object_id, EG::Utility::StringDictionary<int>());
+					EG::Utility::StringDictionary<int> *string_dict = new EG::Utility::StringDictionary<int>;
+					variable_locations.Set(current_program_object_id, string_dict);
 					create = true;
 				}
-				if (!create && (!(variable_locations.Get(current_program_object_id).Has(variable_name)))){
+				if (!create && (!(variable_locations.Get(current_program_object_id)->Has(variable_name)))){
 					create = true;
 				}
 				if (create){
+					int variable_location_id = -1;
 					if (uniform_or_attribute){
-						variable_locations.Get(current_program_object_id).Set(variable_name, graphics->ShaderGetUniformLocation(current_program_object_id, variable_name.c_str()));
-						std::cout << "Here" << std::endl;
+						variable_location_id = graphics->ShaderGetUniformLocation(current_program_object_id, variable_name.c_str());
 						//variable_locations[current_program_object_id][variable_name] = graphics->ShaderGetUniformLocation(current_program_object_id, variable_name.c_str());
 					}else{
-						variable_locations.Get(current_program_object_id).Set(variable_name, graphics->ShaderGetAttributeLocation(current_program_object_id, variable_name.c_str()));
-						std::cout << "Here" << std::endl;
+						//variable_locations.Get(current_program_object_id)->Set(variable_name, graphics->ShaderGetAttributeLocation(current_program_object_id, variable_name.c_str()));
+						variable_location_id = graphics->ShaderGetAttributeLocation(current_program_object_id, variable_name.c_str());
 						//variable_locations[current_program_object_id][variable_name] = graphics->ShaderGetAttributeLocation(current_program_object_id, variable_name.c_str());
 					}
+					//std::cout << "Variable: " << variable_name << ' ' << variable_location_id << std::endl;
+					variable_locations.Get(current_program_object_id)->Set(variable_name, variable_location_id);
 					//return variable_locations[current_program_object_id][variable_name];
-					return variable_locations.Get(current_program_object_id).Get(variable_name);
+					return variable_locations.Get(current_program_object_id)->Get(variable_name);
 				}else{
-					return variable_locations.Get(current_program_object_id).Get(variable_name);
+					//std::cout << "Variable: " << variable_name << ' ' << variable_locations.Get(current_program_object_id)->Get(variable_name) << std::endl;
+					return variable_locations.Get(current_program_object_id)->Get(variable_name);
 					//return variable_locations[current_program_object_id][variable_name];
 				}
 			}
