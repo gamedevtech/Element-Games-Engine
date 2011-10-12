@@ -18,28 +18,28 @@ namespace EG{
 			while (shader_iterator != program_objects.GetKeysEnd()){
 				unsigned int *ids = new unsigned int[6];
 				ids[0] = program_objects.Get(*shader_iterator);//(*shader_iterator).second;
-				if (vertex_shader_objects.count(ids[0]) > 0){
-					ids[1] = vertex_shader_objects[ids[0]];
+				if (vertex_shader_objects.Has(ids[0])){
+					ids[1] = vertex_shader_objects.Get(ids[0]);
 				}else{
 					ids[1] = 0;
 				}
-				if (fragment_shader_objects.count(ids[0]) > 0){
-					ids[2] = fragment_shader_objects[ids[0]];
+				if (fragment_shader_objects.Has(ids[0])){
+					ids[2] = fragment_shader_objects.Get(ids[0]);
 				}else{
 					ids[2] = 0;
 				}
-				if (geometry_shader_objects.count(ids[0]) > 0){
-					ids[3] = geometry_shader_objects[ids[0]];
+				if (geometry_shader_objects.Has(ids[0])){
+					ids[3] = geometry_shader_objects.Get(ids[0]);
 				}else{
 					ids[3] = 0;
 				}
-				if (tessellation_control_shader_objects.count(ids[0]) > 0){
-					ids[4] = tessellation_control_shader_objects[ids[0]];
+				if (tessellation_control_shader_objects.Has(ids[0])){
+					ids[4] = tessellation_control_shader_objects.Get(ids[0]);
 				}else{
 					ids[4] = 0;
 				}
-				if (tessellation_evaluation_shader_objects.count(ids[0]) > 0){
-					ids[5] = tessellation_evaluation_shader_objects[ids[0]];
+				if (tessellation_evaluation_shader_objects.Has(ids[0])){
+					ids[5] = tessellation_evaluation_shader_objects.Get(ids[0]);
 				}else{
 					ids[5] = 0;
 				}
@@ -48,11 +48,11 @@ namespace EG{
 				++shader_iterator;
 			}
 			program_objects.Clear();
-			vertex_shader_objects.clear();
-			fragment_shader_objects.clear();
-			geometry_shader_objects.clear();
-			tessellation_control_shader_objects.clear();
-			tessellation_evaluation_shader_objects.clear();
+			vertex_shader_objects.Clear();
+			fragment_shader_objects.Clear();
+			geometry_shader_objects.Clear();
+			tessellation_control_shader_objects.Clear();
+			tessellation_evaluation_shader_objects.Clear();
 			variable_locations.Clear();
 			shader_log.close();
 		}
@@ -90,16 +90,16 @@ namespace EG{
 
 			//program_objects[shader_id] = object_ids[SHADER_PROGRAM_OBJECT];
 			program_objects.Set(shader_id, object_ids[SHADER_PROGRAM_OBJECT]);
-			vertex_shader_objects[SHADER_PROGRAM_OBJECT] = object_ids[VERTEX_SHADER_OBJECT];
-			fragment_shader_objects[SHADER_PROGRAM_OBJECT] = object_ids[FRAGMENT_SHADER_OBJECT];
+			vertex_shader_objects.Set(SHADER_PROGRAM_OBJECT, object_ids[VERTEX_SHADER_OBJECT]);
+			fragment_shader_objects.Set(SHADER_PROGRAM_OBJECT, object_ids[FRAGMENT_SHADER_OBJECT]);
 			if (object_ids[GEOMETRY_SHADER_OBJECT]){
-				geometry_shader_objects[SHADER_PROGRAM_OBJECT] = object_ids[GEOMETRY_SHADER_OBJECT];
+				geometry_shader_objects.Set(SHADER_PROGRAM_OBJECT, object_ids[GEOMETRY_SHADER_OBJECT]);
 			}
 			if (object_ids[TESSELLATION_CONTROL_SHADER_OBJECT]){
-				tessellation_control_shader_objects[SHADER_PROGRAM_OBJECT] = object_ids[TESSELLATION_CONTROL_SHADER_OBJECT];
+				tessellation_control_shader_objects.Set(SHADER_PROGRAM_OBJECT, object_ids[TESSELLATION_CONTROL_SHADER_OBJECT]);
 			}
 			if (object_ids[TESSELLATION_EVALUATION_SHADER_OBJECT]){
-				tessellation_evaluation_shader_objects[SHADER_PROGRAM_OBJECT] = object_ids[TESSELLATION_EVALUATION_SHADER_OBJECT];
+				tessellation_evaluation_shader_objects.Set(SHADER_PROGRAM_OBJECT, object_ids[TESSELLATION_EVALUATION_SHADER_OBJECT]);
 			}
 
 			//delete sources; // Crashes when switching Rendering Pipelines

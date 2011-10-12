@@ -62,11 +62,11 @@ namespace EG{
 				bool shader_bound;
 				unsigned int current_program_object_id;
 				EG::Utility::StringDictionary<unsigned int> program_objects;
-				std::map<unsigned int, unsigned int> vertex_shader_objects;
-				std::map<unsigned int, unsigned int> fragment_shader_objects;
-				std::map<unsigned int, unsigned int> geometry_shader_objects;
-				std::map<unsigned int, unsigned int> tessellation_control_shader_objects;
-				std::map<unsigned int, unsigned int> tessellation_evaluation_shader_objects;
+				EG::Utility::UnsignedIntDictionary<unsigned int> vertex_shader_objects;
+				EG::Utility::UnsignedIntDictionary<unsigned int> fragment_shader_objects;
+				EG::Utility::UnsignedIntDictionary<unsigned int> geometry_shader_objects;
+				EG::Utility::UnsignedIntDictionary<unsigned int> tessellation_control_shader_objects;
+				EG::Utility::UnsignedIntDictionary<unsigned int> tessellation_evaluation_shader_objects;
 				//std::map<unsigned int, EG::Utility::StringDictionary<int> > variable_locations;
 				EG::Utility::UnsignedIntDictionary<EG::Utility::StringDictionary<int> *> variable_locations;
 
