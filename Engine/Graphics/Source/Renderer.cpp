@@ -68,11 +68,10 @@ namespace EG{
 			shaders->SetFloat("light_radius", 0.0000001f);
 
 			// Render Objects
-			std::map<std::string, EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
-			//std::cout << "Rendering Objects" << std::endl;
-			std::map<std::string, EG::Game::Object *>::iterator object_iterator = objects->begin();
-			while (object_iterator != objects->end()){
-				EG::Game::Object *object = object_iterator->second;
+			EG::Utility::StringDictionary<EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
+			EG::Utility::StringDictionaryKeysIterator object_iterator = objects->GetKeysBegin();
+			while (object_iterator != objects->GetKeysEnd()){
+				EG::Game::Object *object = objects->Get(*object_iterator);
 
 				// Meshes
 				std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
@@ -151,11 +150,10 @@ namespace EG{
 				++object_iterator;
 			}
 
-			std::map<std::string, EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
-			//std::cout << "Rendering Lit Objects" << std::endl;
-			std::map<std::string, EG::Game::Object *>::iterator light_object_iterator = light_objects->begin();
-			while (light_object_iterator != light_objects->end()){
-				EG::Game::Object *light_object = light_object_iterator->second;
+			EG::Utility::StringDictionary<EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
+			EG::Utility::StringDictionaryKeysIterator light_object_iterator = objects->GetKeysBegin();
+			while (light_object_iterator != light_objects->GetKeysEnd()){
+				EG::Game::Object *light_object = light_objects->Get(*light_object_iterator);
 				std::vector<EG::Game::ObjectAttribute *> *light_attributes = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
 				if (light_attributes->size() > 0){
 					std::vector<EG::Game::ObjectAttribute *>::iterator light_attribute_iterator = light_attributes->begin();
@@ -175,9 +173,9 @@ namespace EG{
 						shaders->SetFloat("light_radius", light->GetRadius());
 
 						// Render Objects
-						object_iterator = objects->begin();
-						while (object_iterator != objects->end()){
-							EG::Game::Object *object = object_iterator->second;
+						object_iterator = objects->GetKeysBegin();
+						while (object_iterator != objects->GetKeysEnd()){
+							EG::Game::Object *object = objects->Get(*object_iterator);
 
 							// Meshes
 							std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
@@ -267,10 +265,10 @@ namespace EG{
 			shaders->SetMatrix4("view_matrix", camera->GetViewMatrix());
 			shaders->SetInt("decal", 0);
 			shaders->SetInt("height", 1);
-			object_iterator = objects->begin();
+			object_iterator = objects->GetKeysBegin();
 			//std::cout << "Rendering Non-Lit Objects" << std::endl;
-			while (object_iterator != objects->end()){
-				EG::Game::Object *object = object_iterator->second;
+			while (object_iterator != objects->GetKeysEnd()){
+				EG::Game::Object *object = objects->Get(*object_iterator);
 
 				// Meshes
 				std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);

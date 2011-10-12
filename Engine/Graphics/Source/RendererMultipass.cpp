@@ -61,7 +61,7 @@ namespace EG{
 		}
 
 		void RendererMultipass::Render(EG::Game::Scene *scene){
-			graphics->BeginFrame();
+			/*graphics->BeginFrame();
 			camera->Update();
 
 			graphics->StartOffscreenRender(light_buffer->GetBufferId(), 0, 800, 500);
@@ -101,7 +101,7 @@ namespace EG{
 					EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
 					EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
 					if (material->GetLit()){
-						/*bool custom_shader = false;
+						bool custom_shader = false;
 						if (material->HasShader(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER)){
 							custom_shader = true;
 							shaders->Unbind();
@@ -118,7 +118,7 @@ namespace EG{
 							shaders->SetFloat4("light_position", 0.0f, 0.0f, 0.0f, 1.0f);
 							shaders->SetFloat3("light_attenuation", 1.0f, 1.0f, 1.0f);
 							shaders->SetFloat("light_radius", 0.0000001f);
-						}*/
+						}
 
 						if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL)){
 							graphics->BindTexture(scene->GetTextureManager()->GetTexture(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL))->GetId(), 0);
@@ -148,7 +148,7 @@ namespace EG{
 							mesh->Draw();
 						}
 
-						/*if (custom_shader){
+						if (custom_shader){
 							shaders->Unbind();
 							shaders->Bind("lighting");
 
@@ -163,7 +163,7 @@ namespace EG{
 							shaders->SetFloat4("light_position", 0.0f, 0.0f, 0.0f, 1.0f);
 							shaders->SetFloat3("light_attenuation", 1.0f, 1.0f, 1.0f);
 							shaders->SetFloat("light_radius", 0.0000001f);
-						}*/
+						}
 					}
 					++mesh_attribute_iterator;
 				}
@@ -206,7 +206,7 @@ namespace EG{
 								EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
 
 								if (material->GetLit()){
-									/*bool custom_shader = false;
+									bool custom_shader = false;
 									if (material->HasShader(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER)){
 										custom_shader = true;
 										shaders->Unbind();
@@ -223,7 +223,7 @@ namespace EG{
 										shaders->SetFloat4("light_position", light_position);
 										shaders->SetFloat3("light_attenuation", light->GetAttenuation());
 										shaders->SetFloat("light_radius", light->GetRadius());
-									}*/
+									}
 
 									if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL)){
 										graphics->BindTexture(scene->GetTextureManager()->GetTexture(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL))->GetId(), 0);
@@ -253,7 +253,7 @@ namespace EG{
 										mesh->Draw();
 									}
 
-									/*if (custom_shader){
+									if (custom_shader){
 										shaders->Unbind();
 										shaders->Bind("lighting");
 
@@ -267,7 +267,7 @@ namespace EG{
 										shaders->SetFloat4("light_position", light_position);
 										shaders->SetFloat3("light_attenuation", light->GetAttenuation());
 										shaders->SetFloat("light_radius", light->GetRadius());
-									}*/
+									}
 								}
 								++mesh_attribute_iterator;
 							}
@@ -419,7 +419,7 @@ namespace EG{
 				shaders->SetInt("bloom_map", 2);
 				rectangle->Draw();
 				shaders->Unbind();
-			}
+			}*/
 		}
 
 		void RendererMultipass::Bloom(void){

@@ -118,10 +118,10 @@ namespace EG{
 			shaders->SetInt("normal_mapping_enabled", normal_mapping_enabled);
 
 			// Render Objects
-			std::map<std::string, EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
-			std::map<std::string, EG::Game::Object *>::iterator object_iterator = objects->begin();
-			while (object_iterator != objects->end()){
-				EG::Game::Object *object = object_iterator->second;
+			EG::Utility::StringDictionary<EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
+			EG::Utility::StringDictionaryKeysIterator object_iterator = objects->GetKeysBegin();
+			while (object_iterator != objects->GetKeysEnd()){
+				EG::Game::Object *object = objects->Get(*object_iterator);
 
 				// Meshes
 				std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
@@ -242,10 +242,10 @@ namespace EG{
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_ONE, GL_ONE);
 
-			std::map<std::string, EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
-			std::map<std::string, EG::Game::Object *>::iterator light_object_iterator = light_objects->begin();
-			while (light_object_iterator != light_objects->end()){
-				EG::Game::Object *light_object = light_object_iterator->second;
+			EG::Utility::StringDictionary<EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
+			EG::Utility::StringDictionaryKeysIterator light_object_iterator = light_objects->GetKeysBegin();
+			while (light_object_iterator != light_objects->GetKeysEnd()){
+				EG::Game::Object *light_object = light_objects->Get(*light_object_iterator);
 				std::vector<EG::Game::ObjectAttribute *> *light_attributes = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
 				if (light_attributes->size() > 0){
 					std::vector<EG::Game::ObjectAttribute *>::iterator light_attribute_iterator = light_attributes->begin();
@@ -369,8 +369,8 @@ namespace EG{
 				rectangle->Draw();
 				shaders->Unbind();
 			}else if (output_type == EG::Graphics::RendererDeferred::DEFERRED_OUTPUT_SHADOW){
-				std::map<std::string, EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
-				EG::Game::Object *light_object = light_objects->begin()->second;
+				EG::Utility::StringDictionary<EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
+				EG::Game::Object *light_object = light_objects->Get(*(light_objects->GetKeysBegin()));
 				std::vector<EG::Game::ObjectAttribute *> *light_attributes = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
 				std::vector<EG::Game::ObjectAttribute *>::iterator light_attribute_iterator = light_attributes->begin();
 				EG::Game::ObjectAttributeEmissionLight *light_attribute = static_cast<EG::Game::ObjectAttributeEmissionLight *>(*light_attribute_iterator);
@@ -586,10 +586,10 @@ namespace EG{
 				glPolygonOffset(shadow_mapping_offset_0, shadow_mapping_offset_1);
 				//
 
-				std::map<std::string, EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
-				std::map<std::string, EG::Game::Object *>::iterator light_object_iterator = light_objects->begin();
-				while (light_object_iterator != light_objects->end()){
-					EG::Game::Object *light_object = light_object_iterator->second;
+				EG::Utility::StringDictionary<EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
+				EG::Utility::StringDictionaryKeysIterator light_object_iterator = light_objects->GetKeysBegin();
+				while (light_object_iterator != light_objects->GetKeysEnd()){
+					EG::Game::Object *light_object = light_objects->Get(*light_object_iterator);
 					std::vector<EG::Game::ObjectAttribute *> *light_attributes = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
 					if (light_attributes->size() > 0){
 						std::vector<EG::Game::ObjectAttribute *>::iterator light_attribute_iterator = light_attributes->begin();
@@ -609,10 +609,10 @@ namespace EG{
 								//shaders->SetMatrix4("view_matrix", camera->GetViewMatrix());
 
 								// TODO: Disable Color Writes, ETC... After it's working that is!
-								std::map<std::string, EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
-								std::map<std::string, EG::Game::Object *>::iterator object_iterator = objects->begin();
-								while (object_iterator != objects->end()){
-									EG::Game::Object *object = object_iterator->second;
+								EG::Utility::StringDictionary<EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
+								EG::Utility::StringDictionaryKeysIterator object_iterator = objects->GetKeysBegin();
+								while (object_iterator != objects->GetKeysEnd()){
+									EG::Game::Object *object = objects->Get(*object_iterator);
 
 									// Transformation
 									std::vector<EG::Game::ObjectAttribute *> *transformation_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);

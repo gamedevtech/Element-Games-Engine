@@ -12,12 +12,10 @@ namespace EG{
 			shader_log.open("shaders.log", std::fstream::out | std::fstream::app);
 		}
 		ShaderManager::~ShaderManager(void){
-			//std::map<std::string, unsigned int>::iterator shader_iterator = program_objects.begin();
 			EG::Utility::StringDictionaryKeysIterator shader_iterator = program_objects.GetKeysBegin();
-			//while (shader_iterator != program_objects.end()){
 			while (shader_iterator != program_objects.GetKeysEnd()){
 				unsigned int *ids = new unsigned int[6];
-				ids[0] = program_objects.Get(*shader_iterator);//(*shader_iterator).second;
+				ids[0] = program_objects.Get(*shader_iterator);
 				if (vertex_shader_objects.Has(ids[0])){
 					ids[1] = vertex_shader_objects.Get(ids[0]);
 				}else{

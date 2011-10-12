@@ -11,42 +11,44 @@ namespace EG{
 		}
 
 		bool ObjectManager::AddObject(EG::Game::Object *object){
-			if (objects_by_name.count(object->GetObjectName()) > 0){
+			if (objects_by_name.Has(object->GetObjectName())){
 				return false;
 			}
 
-			objects_by_name[object->GetObjectName()] = object;
+			objects_by_name.Set(object->GetObjectName(), object);
 
 			unsigned int object_id = 0;
 			bool found = false;
 			while (!found){
 				object_id += 1;
-				if (objects_by_id.count(object_id) <= 0){
+				if (!(objects_by_id.Has(object_id))){
 					found = true;
 				}
 			}
 
 			object->SetObjectId(object_id);
-			objects_by_id[object->GetObjectId()] = object;
+			objects_by_id.Set(object->GetObjectId(), object);
 
 			return true;
 		}
 
 		EG::Game::Object *ObjectManager::GetObject(std::string object_name){
-			if (objects_by_name.count(object_name) > 0){
-				return objects_by_name[object_name];
+			EG::Game::Object *out = objects_by_name.Get(object_name);
+			if (out != NULL){
+				return out;
 			}
 			return NULL;
 		}
 
 		EG::Game::Object *ObjectManager::GetObject(unsigned int object_id){
-			if (objects_by_id.count(object_id) > 0){
-				return objects_by_id[object_id];
+			EG::Game::Object *out = objects_by_id.Get(object_id);
+			if (out != NULL){
+				return out;
 			}
 			return NULL;
 		}
 
-		std::map<std::string, EG::Game::Object *> *ObjectManager::GetObjects(void){
+		EG::Utility::StringDictionary<EG::Game::Object *> *ObjectManager::GetObjects(void){
 			return &objects_by_name;
 		}
 	}
