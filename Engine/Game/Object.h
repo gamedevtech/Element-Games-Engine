@@ -1,10 +1,11 @@
 #ifndef EG_GAME_OBJECT_H
 #define EG_GAME_OBJECT_H
 
-#include <map>
+//#include <map>
 #include <vector>
 #include <string>
 
+#include "../Utility/Dictionary.h"
 #include "ObjectAttribute.h"
 
 namespace EG{
@@ -20,13 +21,14 @@ namespace EG{
 
 			void AddAttribute(EG::Game::ObjectAttribute *attribute);
 
-			std::map<EG::Game::ObjectAttribute::ObjectAttributeType, std::vector<EG::Game::ObjectAttribute *> > *GetAttributes(void);
+			EG::Utility::Dictionary<EG::Game::ObjectAttribute::ObjectAttributeType, std::vector<EG::Game::ObjectAttribute *> *> *GetAttributes(void);
 			std::vector<EG::Game::ObjectAttribute *> *GetAttributesByType(EG::Game::ObjectAttribute::ObjectAttributeType type);
+			bool HasAttributesOfType(EG::Game::ObjectAttribute::ObjectAttributeType type);
 		private:
 			std::string object_name;
 			unsigned int object_id;
 
-			std::map<EG::Game::ObjectAttribute::ObjectAttributeType, std::vector<EG::Game::ObjectAttribute *> > attributes;
+			EG::Utility::Dictionary<EG::Game::ObjectAttribute::ObjectAttributeType, std::vector<EG::Game::ObjectAttribute *> *> attributes;
 		};
 	}
 }

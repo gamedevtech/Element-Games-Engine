@@ -154,8 +154,8 @@ namespace EG{
 			EG::Utility::StringDictionaryKeysIterator light_object_iterator = objects->GetKeysBegin();
 			while (light_object_iterator != light_objects->GetKeysEnd()){
 				EG::Game::Object *light_object = light_objects->Get(*light_object_iterator);
-				std::vector<EG::Game::ObjectAttribute *> *light_attributes = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
-				if (light_attributes->size() > 0){
+				if (light_object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT)){
+					std::vector<EG::Game::ObjectAttribute *> *light_attributes = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
 					std::vector<EG::Game::ObjectAttribute *>::iterator light_attribute_iterator = light_attributes->begin();
 					while (light_attribute_iterator != light_attributes->end()){
 						EG::Game::ObjectAttributeEmissionLight *light_attribute = static_cast<EG::Game::ObjectAttributeEmissionLight *>(*light_attribute_iterator);
