@@ -1,7 +1,8 @@
 #ifndef EG_GRAPHICS_TEXTURE_MANAGER_H
 #define EG_GRAPHICS_TEXTURE_MANAGER_H
 
-#include <map>
+//#include <map>
+#include "../Utility/StringDictionary.h"
 #include <string>
 
 #include "Texture.h"
@@ -22,8 +23,8 @@ namespace EG{
 				EG::Graphics::Texture *GetTexture(std::string id);
 				EG::Graphics::CubeMap *GetCubeMap(std::string id);
 			private:
-				std::map<std::string, EG::Graphics::Texture *> textures;
-				std::map<std::string, EG::Graphics::CubeMap *> cube_maps;
+				EG::Utility::StringDictionary<EG::Graphics::Texture *> textures;
+				EG::Utility::StringDictionary<EG::Graphics::CubeMap *> cube_maps;
 		};
 	}
 }

@@ -11,45 +11,43 @@ namespace EG{
 		}
 
 		bool TextureManager::AddTexture(std::string id, EG::Graphics::Texture *texture){
-			if (textures.count(id) < 1){
-				textures[id] = texture;
+			if (!(textures.Has(id))){
+				//textures[id] = texture;
+				textures.Set(id, texture);
 				return true;
 			}
 			return false;
 		}
 
 		bool TextureManager::AddCubeMap(std::string id, EG::Graphics::CubeMap *texture){
-			if (cube_maps.count(id) < 1){
-				cube_maps[id] = texture;
+			if (!(cube_maps.Has(id))){
+				//cube_maps[id] = texture;
+				cube_maps.Set(id, texture);
 				return true;
 			}
 			return false;
 		}
 
 		bool TextureManager::HasTexture(std::string id){
-			if (textures.count(id) > 0){
-				return true;
-			}
-			return false;
+			return textures.Has(id);
 		}
 
 		bool TextureManager::HasCubeMap(std::string id){
-			if (cube_maps.count(id) > 0){
-				return true;
-			}
-			return false;
+			return cube_maps.Has(id);
 		}
 
 		EG::Graphics::Texture *TextureManager::GetTexture(std::string id){
-			if (textures.count(id) > 0){
-				return textures[id];
+			EG::Graphics::Texture *out = textures.Get(id);
+			if (out != NULL){
+				return out;
 			}
 			return NULL;
 		}
 
 		EG::Graphics::CubeMap *TextureManager::GetCubeMap(std::string id){
-			if (cube_maps.count(id) > 0){
-				return cube_maps[id];
+			EG::Graphics::CubeMap *out = cube_maps.Get(id);
+			if (out != NULL){
+				return out;
 			}
 			return NULL;
 		}
