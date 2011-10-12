@@ -1,6 +1,7 @@
 #include "../RendererDeferred.h"
 
 #include <iostream>
+#include <sstream>
 
 #include "../MeshGenerator.h"
 #include "../../Game/ObjectRenderingAttribute.h"
@@ -43,6 +44,7 @@ namespace EG{
 			shaders = new EG::Graphics::ShaderManager();
 			shaders->Add("prepass", "Shaders/Deferred/prepass.vert", "Shaders/Deferred/prepass.frag", "", "", "", 4);
 			shaders->Add("prepass_debug", "Shaders/Deferred/prepass_debug.vert", "Shaders/Deferred/prepass_debug.frag");
+			shaders->Add("font_rendering", "Shaders/Deferred/font_rendering.vert", "Shaders/Deferred/font_rendering.frag");
 			shaders->Add("lighting", "Shaders/Deferred/lighting.vert", "Shaders/Deferred/lighting.frag");
 			shaders->Add("composition", "Shaders/Deferred/composition.vert", "Shaders/Deferred/composition.frag");
 			shaders->Add("convolution", "Shaders/Deferred/convolution.vert", "Shaders/Deferred/convolution.frag");
@@ -103,6 +105,7 @@ namespace EG{
 
 			graphics->EndFrame();
 			ComposeScene(scene);
+			Overlays(scene);
 		}
 
 		void RendererDeferred::Prepass(EG::Game::Scene *scene){
@@ -444,6 +447,29 @@ namespace EG{
 					shaders->Unbind();
 				}
 			}
+		}
+
+		void RendererDeferred::Overlays(EG::Game::Scene *scene){
+			shaders->Bind("font_rendering");
+			shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
+			shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
+			shaders->SetMatrix4("model_matrix", glm::mat4(1.0f));
+			shaders->SetInt("decal", 0);
+			shaders->SetFloat4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+			glEnable(GL_BLEND);
+			glEnable(GL_TEXTURE_2D);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+			std::stringstream temp;
+			temp << "Frame Time (s): ";
+			temp << frame_time;
+			temp.flush();
+			//std::cout << temp.str() << std::endl;
+			shaders->SetMatrix4("model_matrix", glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(40.0f, 40.0f, 0.0f)), glm::vec3(1.0f, 1.0f, 1.0f)));
+			font_manager->DrawText(temp.str());
+
+			glDisable(GL_BLEND);
+			shaders->Unbind();
 		}
 
 		void RendererDeferred::Bloom(void){
