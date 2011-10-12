@@ -126,7 +126,7 @@ int main(int argc, char **argv){
 	EG::Graphics::Mesh *sphere = EG::Graphics::GenerateSphere(4, 4);
 	scene->GetMeshManager()->Add("sphere", sphere);
 	EG::Game::Object *object3 = new EG::Game::Object("SkySphere");
-	texture = new EG::Graphics::Texture("Assets/Textures/starfield.jpg");
+	texture = new EG::Graphics::Texture("Assets/Textures/sky.png");
 	scene->GetTextureManager()->AddTexture("starfield_decal", texture);
 	//texture = new EG::Graphics::Texture("Assets/Textures/concrete_normal.jpg");
 	//scene->GetTextureManager()->AddTexture("concrete_normal", texture);
