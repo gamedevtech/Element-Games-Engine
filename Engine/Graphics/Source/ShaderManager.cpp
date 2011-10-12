@@ -164,20 +164,13 @@ namespace EG{
 					int variable_location_id = -1;
 					if (uniform_or_attribute){
 						variable_location_id = graphics->ShaderGetUniformLocation(current_program_object_id, variable_name.c_str());
-						//variable_locations[current_program_object_id][variable_name] = graphics->ShaderGetUniformLocation(current_program_object_id, variable_name.c_str());
 					}else{
-						//variable_locations.Get(current_program_object_id)->Set(variable_name, graphics->ShaderGetAttributeLocation(current_program_object_id, variable_name.c_str()));
 						variable_location_id = graphics->ShaderGetAttributeLocation(current_program_object_id, variable_name.c_str());
-						//variable_locations[current_program_object_id][variable_name] = graphics->ShaderGetAttributeLocation(current_program_object_id, variable_name.c_str());
 					}
-					//std::cout << "Variable: " << variable_name << ' ' << variable_location_id << std::endl;
 					variable_locations.Get(current_program_object_id)->Set(variable_name, variable_location_id);
-					//return variable_locations[current_program_object_id][variable_name];
 					return variable_locations.Get(current_program_object_id)->Get(variable_name);
 				}else{
-					//std::cout << "Variable: " << variable_name << ' ' << variable_locations.Get(current_program_object_id)->Get(variable_name) << std::endl;
 					return variable_locations.Get(current_program_object_id)->Get(variable_name);
-					//return variable_locations[current_program_object_id][variable_name];
 				}
 			}
 			return 0;
