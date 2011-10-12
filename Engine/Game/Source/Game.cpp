@@ -73,6 +73,7 @@ namespace EG{
 			if (input->IsKeyDown(EG::Input::c)){
 				renderer->GetCamera()->Move(glm::vec3(0.0f, -movement_speed, 0.0f));
 			}
+			//std::cout << "Dongle" << std::endl;
 			if (input->IsKeyPressed(EG::Input::r)){
 				if (graphics->CheckVersion(3)){
 					if (rendering_method == RENDERER_MULTIPASS){
@@ -88,6 +89,7 @@ namespace EG{
 					}
 				}
 			}
+			//std::cout << "Elgnod" << std::endl;
 			if (input->IsKeyPressed(EG::Input::t)){
 				if (rendering_method == RENDERER_MULTIPASS){
 					(static_cast<EG::Graphics::RendererMultipass *>(renderer))->CycleOutputType();
@@ -120,6 +122,7 @@ namespace EG{
 					(static_cast<EG::Graphics::RendererDeferred *>(renderer))->ToggleDOF();
 				}
 			}
+
 			input->Update();
 		}
 

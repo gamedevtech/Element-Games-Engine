@@ -123,6 +123,7 @@ set(SRCS
 	./Utility/Text.h
 	./Utility/RocketInterface.h
 	./Utility/GUI.h
+	./Utility/Dictionary.h
 	./Utility/StringDictionary.h
 	./Utility/UnsignedIntDictionary.h
 	./Utility/Source/VariableManager.cpp

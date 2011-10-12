@@ -1,7 +1,8 @@
 #ifndef EG_INPUT_INPUT_H
 #define EG_INPUT_INPUT_H
 
-#include <map>
+//#include <map>
+#include "../Utility/Dictionary.h"
 #include "../Math/Math.h"
 
 namespace EG{
@@ -37,14 +38,14 @@ namespace EG{
 				glm::vec2 GetMousePosition(void);
 				glm::vec2 GetMouseDelta(void);
 			private:
-				std::map<EG::Input::Key, bool> key_downs;
-				std::map<EG::Input::Key, bool> key_toggles;
-				std::map<EG::Input::Key, bool> key_presses;
+				EG::Utility::Dictionary<EG::Input::Key, bool> key_downs;
+				EG::Utility::Dictionary<EG::Input::Key, bool> key_toggles;
+				EG::Utility::Dictionary<EG::Input::Key, bool> key_presses;
 
 				glm::vec2 mouse_movement_deltas, mouse_last_position, mouse_current_position;
-				std::map<EG::Input::Mouse, bool> mouse_downs;
-				std::map<EG::Input::Mouse, bool> mouse_toggles;
-				std::map<EG::Input::Mouse, bool> mouse_presses;
+				EG::Utility::Dictionary<EG::Input::Mouse, bool> mouse_downs;
+				EG::Utility::Dictionary<EG::Input::Mouse, bool> mouse_toggles;
+				EG::Utility::Dictionary<EG::Input::Mouse, bool> mouse_presses;
 				// float mouse_wheel_delta;
 				bool reset_mouse;
 		};

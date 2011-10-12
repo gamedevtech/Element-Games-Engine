@@ -2,7 +2,8 @@
 #define EG_GRAPHICS_RENDERING_MATERIAL_H
 
 #include <map>
-#include "../Utility/StringDictionary.h"
+#include "../Utility/Dictionary.h"
+//#include "../Utility/StringDictionary.h"
 #include <string>
 #include "../Math/Math.h"
 
@@ -61,10 +62,10 @@ namespace EG{
 				float ambient, diffuse, specular;
 				float specular_exponent;
 				glm::vec4 color;
-				std::map<EG::Graphics::RenderingMaterial::RenderingMaterialTextureType, std::string> textures;
-				std::map<EG::Graphics::RenderingMaterial::RenderingMaterialTextureType, std::string> cube_maps;
+				EG::Utility::Dictionary<EG::Graphics::RenderingMaterial::RenderingMaterialTextureType, std::string> textures;
+				EG::Utility::Dictionary<EG::Graphics::RenderingMaterial::RenderingMaterialTextureType, std::string> cube_maps;
 				// TODO: Put shader info in here too so people can override the default shaders for the various techniques
-				std::map<RendererType, std::map<RenderingPhaseShaderType, std::string> > shaders;
+				EG::Utility::Dictionary<EG::Graphics::RenderingMaterial::RendererType, EG::Utility::Dictionary<EG::Graphics::RenderingMaterial::RenderingPhaseShaderType, std::string> *> shaders;
 		};
 	}
 }
