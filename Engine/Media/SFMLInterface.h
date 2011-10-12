@@ -7,6 +7,7 @@
 #include <SFML/Graphics/Image.hpp>
 
 #include "../Input/Input.h"
+#include "../Utility/Dictionary.h"
 
 #define sfml_interface EG::Media::SFMLInterface::Instance()
 
@@ -53,8 +54,8 @@ namespace EG{
 
 				// Input
 				EG::Input::Input *input;
-				std::map<unsigned int, EG::Input::Key> key_translations;
-				std::map<unsigned int, EG::Input::Mouse> mouse_translations;
+				EG::Utility::Dictionary<sf::Keyboard::Key, EG::Input::Key> key_translations;
+				EG::Utility::Dictionary<sf::Mouse::Button, EG::Input::Mouse> mouse_translations;
 
 				// Time
 				sf::Clock *clock;
