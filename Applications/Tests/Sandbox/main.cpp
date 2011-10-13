@@ -141,7 +141,7 @@ int main(int argc, char **argv){
 	model = new EG::Media::ModelLoader(scene);
 	model->Load("Assets/Models/spaceship.3ds");
 	EG::Game::Object *object4 = new EG::Game::Object("SpaceShip");
-	object4->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(-5.0f, 0.0f, 0.0f)), glm::vec3(0.01f, 0.01f, 0.01f))));
+	object4->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(-2.5f, 0.2f, 0.0f)), glm::vec3(0.01f, 0.01f, 0.01f))));
 	model->GetMaterial(0)->SetLit(true);
 	model->GetMaterial(0)->SetCastsShadows(true);
 	object4->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(model->GetMesh(0), model->GetMaterial(0)));
