@@ -5,6 +5,7 @@
 #include "ShaderManager.h"
 #include "Camera.h"
 #include "../Game/Scene.h"
+#include "../Utility/Font.h"
 
 namespace EG{
 	namespace Graphics{
@@ -14,7 +15,7 @@ namespace EG{
 				~Renderer(void);
 
 				void Initialize(void);
-				void Render(EG::Game::Scene *scene);
+				void Render(EG::Game::Scene *scene, float frame_time);
 
 				// TEMP, SHOULD GO IN SCENE MANAGER WHICH SHOULD HOLD A CAMERA MANAGER
 				EG::Graphics::Camera *GetCamera(void){

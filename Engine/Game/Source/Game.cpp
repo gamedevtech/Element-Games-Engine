@@ -78,7 +78,7 @@ namespace EG{
 				renderer->GetCamera()->Move(glm::vec3(0.0f, -movement_speed, 0.0f));
 			}
 			//std::cout << "Dongle" << std::endl;
-			if (input->IsKeyPressed(EG::Input::r)){
+			/*if (input->IsKeyPressed(EG::Input::r)){
 				if (graphics->CheckVersion(3)){
 					if (rendering_method == RENDERER_MULTIPASS){
 						delete renderer;
@@ -92,12 +92,12 @@ namespace EG{
 						rendering_method = RENDERER_MULTIPASS;
 					}
 				}
-			}
+			}*/
 			//std::cout << "Elgnod" << std::endl;
 			if (input->IsKeyPressed(EG::Input::t)){
-				if (rendering_method == RENDERER_MULTIPASS){
+				/*if (rendering_method == RENDERER_MULTIPASS){
 					(static_cast<EG::Graphics::RendererMultipass *>(renderer))->CycleOutputType();
-				}else if (rendering_method == RENDERER_DEFERRED){
+				}else */if (rendering_method == RENDERER_DEFERRED){
 					(static_cast<EG::Graphics::RendererDeferred *>(renderer))->CycleOutputType();
 				}
 			}
@@ -132,7 +132,7 @@ namespace EG{
 
 		void Game::Render(void){
 			if (rendering_method == RENDERER_SIMPLE){
-				renderer->Render(scene);
+				renderer->Render(scene, time->GetFrameTime());
 			}else if (rendering_method == RENDERER_MULTIPASS){
 				(static_cast<EG::Graphics::RendererMultipass *>(renderer))->Render(scene);
 			}else if (rendering_method == RENDERER_DEFERRED){

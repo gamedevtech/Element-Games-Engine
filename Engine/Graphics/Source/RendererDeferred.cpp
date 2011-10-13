@@ -1,6 +1,7 @@
 #include "../RendererDeferred.h"
 
 #include <iostream>
+#include <sstream>
 
 #include "../MeshGenerator.h"
 #include "../../Game/ObjectRenderingAttribute.h"
@@ -43,6 +44,7 @@ namespace EG{
 			shaders = new EG::Graphics::ShaderManager();
 			shaders->Add("prepass", "Shaders/Deferred/prepass.vert", "Shaders/Deferred/prepass.frag", "", "", "", 4);
 			shaders->Add("prepass_debug", "Shaders/Deferred/prepass_debug.vert", "Shaders/Deferred/prepass_debug.frag");
+			shaders->Add("font_rendering", "Shaders/Deferred/font_rendering.vert", "Shaders/Deferred/font_rendering.frag");
 			shaders->Add("lighting", "Shaders/Deferred/lighting.vert", "Shaders/Deferred/lighting.frag");
 			shaders->Add("composition", "Shaders/Deferred/composition.vert", "Shaders/Deferred/composition.frag");
 			shaders->Add("convolution", "Shaders/Deferred/convolution.vert", "Shaders/Deferred/convolution.frag");
@@ -103,6 +105,7 @@ namespace EG{
 
 			graphics->EndFrame();
 			ComposeScene(scene);
+			Overlays(scene);
 		}
 
 		void RendererDeferred::Prepass(EG::Game::Scene *scene){
@@ -446,6 +449,29 @@ namespace EG{
 			}
 		}
 
+		void RendererDeferred::Overlays(EG::Game::Scene *scene){
+			shaders->Bind("font_rendering");
+			shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
+			shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
+			shaders->SetMatrix4("model_matrix", glm::mat4(1.0f));
+			shaders->SetInt("decal", 0);
+			shaders->SetFloat4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+			glEnable(GL_BLEND);
+			glEnable(GL_TEXTURE_2D);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+			std::stringstream temp;
+			temp << "Frame Time (s): ";
+			temp << frame_time;
+			temp.flush();
+			//std::cout << temp.str() << std::endl;
+			shaders->SetMatrix4("model_matrix", glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(40.0f, 40.0f, 0.0f)), glm::vec3(1.0f, 1.0f, 1.0f)));
+			font_manager->DrawText(temp.str());
+
+			glDisable(GL_BLEND);
+			shaders->Unbind();
+		}
+
 		void RendererDeferred::Bloom(void){
 			glDisable(GL_BLEND);
 			glm::mat4 model_matrix = glm::scale(glm::mat4(1.0f), glm::vec3(800.0f / 4.0f, 500.0f / 4.0f, 1.0f));
@@ -590,8 +616,8 @@ namespace EG{
 				EG::Utility::StringDictionaryKeysIterator light_object_iterator = light_objects->GetKeysBegin();
 				while (light_object_iterator != light_objects->GetKeysEnd()){
 					EG::Game::Object *light_object = light_objects->Get(*light_object_iterator);
-					std::vector<EG::Game::ObjectAttribute *> *light_attributes = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
-					if (light_attributes->size() > 0){
+					if (light_object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT)){
+						std::vector<EG::Game::ObjectAttribute *> *light_attributes = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
 						std::vector<EG::Game::ObjectAttribute *>::iterator light_attribute_iterator = light_attributes->begin();
 						while (light_attribute_iterator != light_attributes->end()){
 							EG::Game::ObjectAttributeEmissionLight *light_attribute = static_cast<EG::Game::ObjectAttributeEmissionLight *>(*light_attribute_iterator);

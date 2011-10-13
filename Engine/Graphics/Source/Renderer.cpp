@@ -1,6 +1,7 @@
 #include "../Renderer.h"
 
 #include <iostream>
+#include <sstream>
 
 #include "../../Game/ObjectRenderingAttribute.h"
 #include "../../Game/ObjectBasicAttribute.h"
@@ -31,6 +32,7 @@ namespace EG{
 			shaders = new EG::Graphics::ShaderManager();
 			shaders->Add("lighting", "Shaders/Basic/lighting.vert", "Shaders/Basic/lighting.frag");
 			shaders->Add("textured", "Shaders/Basic/textured.vert", "Shaders/Basic/textured.frag");
+			shaders->Add("font_rendering", "Shaders/Basic/font_rendering.vert", "Shaders/Basic/font_rendering.frag");
 			shaders->Add("sphere_cube_map_gradient_decal", "Shaders/Basic/sphere_cube_mapped_with_gradient_decal.vert", "Shaders/Basic/sphere_cube_mapped_with_gradient_decal.frag");
 			shaders->Add("sphere_cube_map_gradient_decal_with_lighting", "Shaders/Basic/sphere_cube_mapped_with_gradient_decal_with_lighting.vert", "Shaders/Basic/sphere_cube_mapped_with_gradient_decal_with_lighting.frag");
 
@@ -45,7 +47,7 @@ namespace EG{
 			initialized = true;
 		}
 
-		void Renderer::Render(EG::Game::Scene *scene){
+		void Renderer::Render(EG::Game::Scene *scene, float frame_time){
 			graphics->BeginFrame();
 			camera->Update();
 
@@ -343,16 +345,24 @@ namespace EG{
 			graphics->EndFrame();
 
 			// 2D Overlays
-			shaders->Bind("textured");
+			shaders->Bind("font_rendering");
 			shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
 			shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
 			shaders->SetMatrix4("model_matrix", glm::mat4(1.0f));
-			shaders->SetMatrix4("normal_matrix", glm::mat4(1.0f));
 			shaders->SetInt("decal", 0);
-			shaders->SetInt("height", 1);
 			shaders->SetFloat4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-			graphics->BindTexture(scene->GetTextureManager()->GetTexture("default_height")->GetId(), 1);
-			//text_manager->Draw();
+			glEnable(GL_BLEND);
+			glEnable(GL_TEXTURE_2D);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+			std::stringstream temp;
+			temp << "Frame Time (s): ";
+			temp << frame_time;
+			temp.flush();
+			shaders->SetMatrix4("model_matrix", glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(40.0f, 40.0f, 0.0f)), glm::vec3(1.0f, 1.0f, 1.0f)));
+			font_manager->DrawText(temp.str());
+
+			glDisable(GL_BLEND);
 			shaders->Unbind();
 		}
 	}

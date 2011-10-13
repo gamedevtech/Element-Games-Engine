@@ -40,6 +40,7 @@ namespace EG{
 				void Prepass(EG::Game::Scene *scene);
 				void Lighting(EG::Game::Scene *scene);
 				void ComposeScene(EG::Game::Scene *scene);
+				void Overlays(EG::Game::Scene *scene);
 
 				// Settings
 				DeferredOutputType output_type;
