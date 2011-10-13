@@ -1,6 +1,7 @@
 #include "../Game.h"
 #include "../../Graphics/RendererMultipass.h"
 #include "../../Graphics/RendererDeferred.h"
+#include "../../Media/AssimpInterface.h"
 
 namespace EG{
 	namespace Game{
@@ -11,6 +12,9 @@ namespace EG{
 			sfml_interface->SetInput(input);
 			time = new EG::Utility::Time();
 			graphics->Initialize(window->GetResolutionWidth(), window->GetResolutionHeight());
+
+			EG::Media::AssimpInterface model;
+			model.Load("Assets/Models/spaceship.3ds");
 
 			// Resolution needs to be from config
 			rendering_method = RENDERER_SIMPLE;
