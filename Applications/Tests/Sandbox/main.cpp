@@ -19,7 +19,9 @@
 #include "../../../Engine/Graphics/Texture.h"
 #include "../../../Engine/Graphics/RenderingMaterial.h"
 #include "../../../Engine/Utility/Time.h"
+#include "../../../Engine/Media/ModelLoader.h"
 
+EG::Media::ModelLoader *model;
 int main(int argc, char **argv){
 	// This is just a temporary organization to test classes as they get created!
 	EG::Utility::Window *window = new EG::Utility::Window(800, 500, 32, false, "Element Games Sandbox");
@@ -128,15 +130,21 @@ int main(int argc, char **argv){
 	EG::Game::Object *object3 = new EG::Game::Object("SkySphere");
 	texture = new EG::Graphics::Texture("Assets/Textures/sky.png");
 	scene->GetTextureManager()->AddTexture("starfield_decal", texture);
-	//texture = new EG::Graphics::Texture("Assets/Textures/concrete_normal.jpg");
-	//scene->GetTextureManager()->AddTexture("concrete_normal", texture);
 	object3->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)), glm::vec3(50.0f, 50.0f, 50.0f))));
 	material = new EG::Graphics::RenderingMaterial();
 	material->SetLit(false);
 	material->SetCastsShadows(false);
 	material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "starfield_decal");
-	//material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, "concrete_normal");
 	object3->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("sphere", material));
+
+	// Model Loading Teest
+	model = new EG::Media::ModelLoader(scene);
+	model->Load("Assets/Models/spaceship.3ds");
+	EG::Game::Object *object4 = new EG::Game::Object("SpaceShip");
+	object4->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(-5.0f, 0.0f, 0.0f)), glm::vec3(0.01f, 0.01f, 0.01f))));
+	model->GetMaterial(0)->SetLit(true);
+	model->GetMaterial(0)->SetCastsShadows(true);
+	object4->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(model->GetMesh(0), model->GetMaterial(0)));
  
 	// Light 0
 	EG::Game::Object *light_object = new EG::Game::Object("RedLight");
@@ -205,6 +213,7 @@ int main(int argc, char **argv){
 	EG::Game::ObjectManager *objects = game->GetScene()->GetObjectManager();
 	objects->AddObject(object);
 	objects->AddObject(object2);
+	objects->AddObject(object4);
 	objects->AddObject(object3);
 	objects->AddObject(light_object);
 	objects->AddObject(light_object2);

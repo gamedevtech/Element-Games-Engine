@@ -13,9 +13,6 @@ namespace EG{
 			time = new EG::Utility::Time();
 			graphics->Initialize(window->GetResolutionWidth(), window->GetResolutionHeight());
 
-			EG::Media::AssimpInterface model;
-			model.Load("Assets/Models/spaceship.3ds");
-
 			// Resolution needs to be from config
 			rendering_method = RENDERER_SIMPLE;
 
