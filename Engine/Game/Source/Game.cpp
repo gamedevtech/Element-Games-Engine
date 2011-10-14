@@ -43,9 +43,6 @@ namespace EG{
 		}
 
 		void Game::Update(void){
-			time->Update();
-			window->Update();
-
 			float movement_speed = time->GetFrameTime() * 2.0f;
 			if (input->IsMouseDown(EG::Input::mouse_right)){
 				renderer->GetCamera()->RotateByMouse(input->GetMouseDelta());
@@ -123,11 +120,10 @@ namespace EG{
 					(static_cast<EG::Graphics::RendererDeferred *>(renderer))->ToggleDOF();
 				}
 			}
-
-			input->Update();
 		}
 
 		void Game::Render(void){
+			PostUpdates();
 			if (rendering_method == RENDERER_SIMPLE){
 				renderer->Render(scene, time->GetFrameTime());
 			}else if (rendering_method == RENDERER_MULTIPASS){
@@ -136,6 +132,16 @@ namespace EG{
 				(static_cast<EG::Graphics::RendererDeferred *>(renderer))->Render(scene, time->GetFrameTime());
 			}
 			window->Display();
+			PreUpdates();
+		}
+
+		void Game::PreUpdates(void){
+			time->Update();
+			window->Update();
+		}
+
+		void Game::PostUpdates(void){
+			input->Update();
 		}
 
 		EG::Utility::Window *Game::GetWindow(void){

@@ -18,7 +18,9 @@ namespace EG{
 				Game(EG::Utility::Window *_window, EG::Game::Scene *_scene);
 				~Game(void);
 
-				void Update(void);
+				virtual void Update(void);
+				void PreUpdates(void);
+				void PostUpdates(void);
 				void Render(void);
 
 				EG::Game::Scene *GetScene(void);
