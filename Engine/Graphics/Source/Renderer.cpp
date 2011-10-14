@@ -126,6 +126,7 @@ namespace EG{
 						shaders->SetMatrix4("normal_matrix", normal_matrix);
 
 						EG::Graphics::Mesh *mesh = scene->GetMeshManager()->Get(mesh_attribute->GetMeshId());
+						//std::cout << "Drawing Object: " << object->GetObjectName() << " With Mesh: " << mesh_attribute->GetMeshId() << std::endl;
 						if (mesh){
 							mesh->Draw();
 						}
