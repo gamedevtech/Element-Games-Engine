@@ -26,7 +26,7 @@ namespace EG{
 				EG::Game::Scene *GetScene(void);
 				EG::Utility::Window *GetWindow(void);
 				EG::Graphics::Renderer *GetRenderer(void);
-			private:
+			protected:
 				EG::Utility::Window *window;
 				EG::Graphics::Renderer *renderer;
 				EG::Game::Scene *scene;
