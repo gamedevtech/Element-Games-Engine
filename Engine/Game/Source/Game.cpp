@@ -33,7 +33,7 @@ namespace EG{
 				renderer = new EG::Graphics::RendererDeferred();
 				(static_cast<EG::Graphics::RendererDeferred *>(renderer))->Initialize();
 			}
-			gui = new EG::Utility::GUI();
+			gui = new EG::GUI::GUI();
 
 			time->Update();
 		}

@@ -32,7 +32,7 @@ namespace EG{
 				EG::Game::Scene *scene;
 				EG::Input::Input *input;
 				EG::Utility::Time *time;
-				EG::Utility::GUI *gui;
+				EG::GUI::GUI *gui;
 
 				RenderingMethod rendering_method;
 		};

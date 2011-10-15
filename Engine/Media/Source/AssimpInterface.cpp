@@ -16,7 +16,7 @@ namespace EG{
 		bool AssimpInterface::Load(std::string _file_path){
 			Assimp::Importer importer;
 			file_path = _file_path;
-			ai_scene = importer.ReadFile(file_path, aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType);
+			ai_scene = importer.ReadFile(file_path, /*aiProcess_CalcTangentSpace | */aiProcess_Triangulate | /*aiProcess_JoinIdenticalVertices | */aiProcess_SortByPType);
 			if (!ai_scene){
 				return false;
 			}
@@ -39,7 +39,6 @@ namespace EG{
 		void AssimpInterface::LoadMesh(const aiMesh *ai_mesh, unsigned int index){
 			if (ai_mesh->HasFaces()){
 				std::string mesh_name = file_path + std::string(ai_mesh->mName.data);
-				//std::cout << "Face Count: " << ai_mesh->mNumFaces << std::endl;
 				EG::Graphics::Triangle *faces = new EG::Graphics::Triangle[ai_mesh->mNumFaces];
 				for (unsigned int i = 0; i < ai_mesh->mNumFaces; i++){
 					const aiFace *ai_face = &(ai_mesh->mFaces[i]);
@@ -50,13 +49,11 @@ namespace EG{
 						aiVector3D normal = ai_mesh->mNormals[vertex_index];
 						aiVector3D texcoord = ai_mesh->mTextureCoords[0][vertex_index];
 
-						faces[i].vertices[v] = glm::vec4(vertex.x, vertex.y, vertex.z, 1.0f);
-						faces[i].normals[v] = glm::vec4(normal.x, normal.y, normal.z, 1.0f);
-						faces[i].texcoords[v] = glm::vec4(texcoord.x, texcoord.y, 1.0f, 1.0f);
-						faces[i].normals[v] = -(faces[i].normals[v]);
+						faces[i].vertices[2 - v] = glm::vec4(vertex.x, vertex.y, vertex.z, 1.0f);
+						faces[i].texcoords[2 - v] = glm::vec4(texcoord.x, texcoord.y, 1.0f, 1.0f);
 					}
 				}
-				EG::Graphics::TriangleMesh *tmesh = new EG::Graphics::TriangleMesh(ai_mesh->mNumFaces, faces, false, false/*true, true*/, true, true, true, true);
+				EG::Graphics::TriangleMesh *tmesh = new EG::Graphics::TriangleMesh(ai_mesh->mNumFaces, faces, /*false, false*/true, true, true, true, true, true);
 				scene->GetMeshManager()->Add(mesh_name, new EG::Graphics::Mesh(tmesh));
 				meshes.Set(index, mesh_name);
 			}
