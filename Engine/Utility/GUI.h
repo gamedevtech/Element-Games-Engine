@@ -184,6 +184,15 @@ namespace EG{
 			private:
 				EG::Utility::Dictionary<std::string, Widget *> widgets;
 		};
+
+		class GUIRenderer{
+			public:
+				GUIRenderer(void);
+				~GUIRenderer(void);
+
+				void Draw(GUI *gui);
+			protected:
+		};
 	}
 }
 
