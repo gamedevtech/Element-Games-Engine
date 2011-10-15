@@ -14,6 +14,8 @@ namespace EG{
 			library = _library;
 			character_texture_ids = new unsigned int[128];
 			character_dimensions = new glm::vec2[128];
+			expanded_dimensions = new glm::vec2[128];
+			character_offsets = new glm::vec2[128];
 			FT_New_Face(*library, font_path.c_str(), 0, &face);
 		}
 
@@ -33,19 +35,26 @@ namespace EG{
 					std::cout << "Error Getting Glypp" << std::endl;
 				}
 
+				// Offsets
+				FT_BBox bbox;
+				FT_Glyph_Get_CBox(glyph, FT_GLYPH_BBOX_SUBPIXELS, &bbox);
+				character_offsets[i] = glm::vec2(bbox.xMin / 64.0f, bbox.yMin / 64.0f);
+
+				// Character Dimensions
+				character_dimensions[i] = glm::vec2(float(bbox.xMax - bbox.xMin) / 64.0f, float(bbox.yMax - bbox.yMin) / 64.0f);
+
 				FT_Glyph_To_Bitmap(&glyph, ft_render_mode_normal, 0, 1);
 				FT_BitmapGlyph bitmap_glyph = (FT_BitmapGlyph)glyph;
 				FT_Bitmap& bitmap = bitmap_glyph->bitmap;
 
+				// Next power of 2 data.
 				int width = EG::Math::Utility::NextPowerOfTwo(bitmap.width);
 				int height = EG::Math::Utility::NextPowerOfTwo(bitmap.rows);
-				character_dimensions[i] = glm::vec2(float(width), float(height));
-
+				expanded_dimensions[i] = glm::vec2(float(width), float(height));
 				GLubyte* expanded_data = new GLubyte[ 2 * width * height];
 
 				for (int j = 0; j < height; j++){
 					for (int i = (width - 1); i >= 0; i--){
-						//std::cout << "J: " << j << " I: " << i << std::endl;
 						expanded_data[2 * (i + j * width)] = expanded_data[2 * (i + j * width) + 1] = (i >= bitmap.width || j >= bitmap.rows) ? 0 : bitmap.buffer[i + bitmap.width * j];
 					}
 				}
@@ -56,8 +65,6 @@ namespace EG{
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, expanded_data);
 
-				GLuint texture_id = character_texture_ids[i];
-				//std::cout << "CInit (" << i << "): " << char(i) << " TexID: " << texture_id << std::endl;
 				delete []expanded_data;
 			}
 			FT_Done_Face(face);
@@ -70,6 +77,14 @@ namespace EG{
 
 		glm::vec2 Font::GetCharacterDimensions(unsigned int char_index){
 			return character_dimensions[char_index];
+		}
+
+		glm::vec2 Font::GetExpandedDimensions(unsigned int char_index){
+			return expanded_dimensions[char_index];
+		}
+
+		glm::vec2 Font::GetCharacterOffsets(unsigned int char_index){
+			return character_offsets[char_index];
 		}
 
 		// Singleton Stuff
@@ -117,18 +132,32 @@ namespace EG{
 		bool FontManager::DrawText(std::string text, glm::vec3 position, glm::vec2 scale, EG::Graphics::ShaderManager *shaders, std::string font_name){
 			Font *font = fonts.Get(font_name);
 
-			float x_offset = 0.0f;
+			float string_x_offset = 0.0f;
 			for (unsigned int i = 0; i < text.size(); i++){
 				unsigned int character_index = int(char(text[i]));
-				//std::cout << "Character (" << character_index << "): " << char(character_index) << std::endl;
-				glm::vec2 scale = font->GetCharacterDimensions(character_index);
-				glm::mat4 transformation_matrix = glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(position.x + x_offset, position.y, position.z)), glm::vec3(scale.x, scale.y, 1.0f));
-				GLuint texture_id = font->GetCharacterTextureId(character_index);
-				//std::cout << "Texture ID: " << texture_id << std::endl;
-				graphics->BindTexture(texture_id, 0);
+
+				glm::vec2 cdims = font->GetCharacterDimensions(character_index);
+				glm::vec2 offset = font->GetCharacterOffsets(character_index);
+				glm::vec2 bdims = font->GetExpandedDimensions(character_index);
+
+				glm::vec3 character_position;
+				character_position.x = position.x + string_x_offset + offset.x;
+				character_position.y = position.y + offset.y;
+				character_position.z = position.z;
+				//std::cout << "
+
+				glm::vec3 character_scale;
+				character_scale.x = scale.x * cdims.x;
+				character_scale.y = scale.y * cdims.y;
+				character_scale.z = 1.0f;
+
+				glm::mat4 transformation_matrix = glm::scale(glm::translate(glm::mat4(1.0f), character_position), character_scale);
+
+				graphics->BindTexture(font->GetCharacterTextureId(character_index), 0);
 				shaders->SetMatrix4("model_matrix", transformation_matrix);
+
 				rect->Draw();
-				x_offset += scale.x;
+				string_x_offset += cdims.x + offset.x;
 			}
 
 			graphics->BindTexture(0, 0);

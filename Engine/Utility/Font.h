@@ -25,6 +25,8 @@ namespace EG{
 				void Load(void);
 				unsigned int GetCharacterTextureId(unsigned int char_index);
 				glm::vec2 GetCharacterDimensions(unsigned int char_index);
+				glm::vec2 GetExpandedDimensions(unsigned int char_index);
+				glm::vec2 GetCharacterOffsets(unsigned int char_index);
 			private:
 				std::string font_name;
 				std::string font_path;
@@ -33,6 +35,8 @@ namespace EG{
 				FT_Face face;
 				unsigned int *character_texture_ids;
 				glm::vec2 *character_dimensions;
+				glm::vec2 *expanded_dimensions;
+				glm::vec2 *character_offsets;
 		};
 
 		class FontManager{
