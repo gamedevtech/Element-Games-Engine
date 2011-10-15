@@ -9,14 +9,14 @@
 ModelConverter::ModelConverter(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
 	model_path = "Assets/Models/spaceship.3ds";
 
-	model = new EG::Media::ModelLoader(scene);
+	/*model = new EG::Media::ModelLoader(scene);
 	model->Load(model_path);
 	model_object = new EG::Game::Object("SpaceShip");
 	model_object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.2f, 0.0f)), glm::vec3(0.01f, 0.01f, 0.01f))));
 	model->GetMaterial(0)->SetLit(true);
 	model->GetMaterial(0)->SetCastsShadows(true);
 	model_object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(model->GetMesh(0), model->GetMaterial(0)));
-	scene->GetObjectManager()->AddObject(model_object);
+	scene->GetObjectManager()->AddObject(model_object);*/
 }
 
 ModelConverter::~ModelConverter(void){

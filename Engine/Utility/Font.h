@@ -27,6 +27,7 @@ namespace EG{
 				glm::vec2 GetCharacterDimensions(unsigned int char_index);
 				glm::vec2 GetExpandedDimensions(unsigned int char_index);
 				glm::vec2 GetCharacterOffsets(unsigned int char_index);
+				unsigned int GetFontSize(void);
 			private:
 				std::string font_name;
 				std::string font_path;

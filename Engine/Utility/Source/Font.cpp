@@ -87,6 +87,10 @@ namespace EG{
 			return character_offsets[char_index];
 		}
 
+		unsigned int Font::GetFontSize(void){
+			return font_size;
+		}
+
 		// Singleton Stuff
 		FontManager *FontManager::instance = NULL;
 		FontManager *FontManager::Instance(void){
@@ -114,7 +118,7 @@ namespace EG{
 			EG::Graphics::TriangleMesh *rect_triangle_mesh = new EG::Graphics::TriangleMesh(2, rect_triangles, true, true, true, true, true, true);
 			rect = new EG::Graphics::Mesh(rect_triangle_mesh);
 
-			AddFont("default", "Assets/Fonts/DejaVuSansMono.ttf", 12);
+			AddFont("default", "Assets/Fonts/DejaVuSansMono.ttf", 24);
 		}
 
 		FontManager::~FontManager(void){
@@ -135,20 +139,28 @@ namespace EG{
 			float string_x_offset = 0.0f;
 			for (unsigned int i = 0; i < text.size(); i++){
 				unsigned int character_index = int(char(text[i]));
+				float size = float(font->GetFontSize());
 
 				glm::vec2 cdims = font->GetCharacterDimensions(character_index);
 				glm::vec2 offset = font->GetCharacterOffsets(character_index);
 				glm::vec2 bdims = font->GetExpandedDimensions(character_index);
+				if (char(character_index) != '.'){
+					offset.y += cdims.y - (size - 1.0f);
+				}else{
+					offset.x -= (size / 8.0f);
+					offset.y += (size / 8.0f);
+				}
+
+				//std::cout << char(character_index) << ' ' << offset.x << ' ' << offset.y << std::endl;
 
 				glm::vec3 character_position;
-				character_position.x = position.x + string_x_offset + offset.x;
+				character_position.x = position.x + string_x_offset + offset.x + (size / 4.0f);
 				character_position.y = position.y + offset.y;
 				character_position.z = position.z;
-				//std::cout << "
 
 				glm::vec3 character_scale;
-				character_scale.x = scale.x * cdims.x;
-				character_scale.y = scale.y * cdims.y;
+				character_scale.x = scale.x * bdims.x;
+				character_scale.y = scale.y * bdims.y;
 				character_scale.z = 1.0f;
 
 				glm::mat4 transformation_matrix = glm::scale(glm::translate(glm::mat4(1.0f), character_position), character_scale);
@@ -157,7 +169,7 @@ namespace EG{
 				shaders->SetMatrix4("model_matrix", transformation_matrix);
 
 				rect->Draw();
-				string_x_offset += cdims.x + offset.x;
+				string_x_offset += cdims.x + offset.x + (size / 4.0f);
 			}
 
 			graphics->BindTexture(0, 0);
