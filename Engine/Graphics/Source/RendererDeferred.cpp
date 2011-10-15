@@ -450,7 +450,7 @@ namespace EG{
 		}
 
 		void RendererDeferred::Overlays(EG::Game::Scene *scene){
-			shaders->Bind("font_rendering");
+			/*shaders->Bind("font_rendering");
 			shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
 			shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
 			shaders->SetMatrix4("model_matrix", glm::mat4(1.0f));
@@ -469,7 +469,7 @@ namespace EG{
 			font_manager->DrawText(temp.str());
 
 			glDisable(GL_BLEND);
-			shaders->Unbind();
+			shaders->Unbind();*/
 		}
 
 		void RendererDeferred::Bloom(void){

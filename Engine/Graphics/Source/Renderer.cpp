@@ -350,7 +350,7 @@ namespace EG{
 			shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
 			shaders->SetMatrix4("model_matrix", glm::mat4(1.0f));
 			shaders->SetInt("decal", 0);
-			shaders->SetFloat4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+			shaders->SetFloat4("color", glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 			glEnable(GL_BLEND);
 			glEnable(GL_TEXTURE_2D);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -359,8 +359,10 @@ namespace EG{
 			temp << "Frame Time (s): ";
 			temp << frame_time;
 			temp.flush();
-			shaders->SetMatrix4("model_matrix", glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(40.0f, 40.0f, 0.0f)), glm::vec3(1.0f, 1.0f, 1.0f)));
-			font_manager->DrawText(temp.str());
+			//shaders->SetMatrix4("model_matrix", glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(40.0f, 40.0f, 0.0f)), glm::vec3(1.0f, 1.0f, 1.0f)));
+			glm::vec3 position = glm::vec3(40.0f, 40.0f, 0.0f);
+			glm::vec2 scale = glm::vec2(1.0f, 1.0f);
+			font_manager->DrawText(temp.str(), position, scale, shaders);
 
 			glDisable(GL_BLEND);
 			shaders->Unbind();
