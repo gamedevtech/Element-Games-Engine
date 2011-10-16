@@ -1,9 +1,9 @@
 #ifndef EG_MEDIA_ASSIMP_INTERFACE_H
 #define EG_MEDIA_ASSIMP_INTERFACE_H
 
-#include <assimp.hpp>
-#include <aiScene.h>
-#include <aiPostProcess.h>
+#include <assimp/assimp.hpp>
+#include <assimp/aiScene.h>
+#include <assimp/aiPostProcess.h>
 
 #include "../Utility/Dictionary.h"
 #include "../Game/Scene.h"
