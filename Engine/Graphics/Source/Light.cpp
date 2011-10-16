@@ -11,6 +11,7 @@ namespace EG{
 			casts_shadows = false;
 			shadowing_initialized = false;
 			radius = 500.0f;
+			shadow_map_resolution = 2056.0f;
 		}
 
 		Light::~Light(void){
@@ -80,8 +81,8 @@ namespace EG{
 				if (spot_angle == 0.0f){
 					angle = 90.0f;//180.0f;
 				}
-				projection_matrix = glm::perspective(angle, 512 / 512.0f, 0.1f, radius);
-				shadow_buffer = new EG::Graphics::OffscreenBuffer(512, 512, 1, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
+				projection_matrix = glm::perspective(angle, shadow_map_resolution /shadow_map_resolution, 0.1f, radius);
+				shadow_buffer = new EG::Graphics::OffscreenBuffer(int(shadow_map_resolution), int(shadow_map_resolution), 1, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
 			}
 			glm::vec3 temp = direction;
 			if (direction.x > 0.0f || direction.y > 0.0f || direction.z > 0.0f){
@@ -100,6 +101,10 @@ namespace EG{
 
 		EG::Graphics::OffscreenBuffer *Light::GetShadowBuffer(void){
 			return shadow_buffer;
+		}
+
+		float Light::GetShadowMapResolution(void){
+			return shadow_map_resolution;
 		}
 	}
 }

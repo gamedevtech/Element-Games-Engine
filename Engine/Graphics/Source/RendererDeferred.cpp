@@ -278,6 +278,7 @@ namespace EG{
 							glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE_ARB);
 							glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 							graphics->SetActiveTexture(0);
+							shaders->SetFloat2("shadow_map_size", glm::vec2(light->GetShadowMapResolution(), light->GetShadowMapResolution()));
 						}else{
 							shaders->SetInt("shadow_mapping_enabled", 0);
 							shaders->SetMatrix4("shadow_mapping_bias", glm::mat4(1.0f));
@@ -372,12 +373,7 @@ namespace EG{
 				rectangle->Draw();
 				shaders->Unbind();
 			}else if (output_type == EG::Graphics::RendererDeferred::DEFERRED_OUTPUT_SHADOW){
-				EG::Utility::StringDictionary<EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
-				EG::Game::Object *light_object = light_objects->Get(*(light_objects->GetKeysBegin()));
-				std::vector<EG::Game::ObjectAttribute *> *light_attributes = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
-				std::vector<EG::Game::ObjectAttribute *>::iterator light_attribute_iterator = light_attributes->begin();
-				EG::Game::ObjectAttributeEmissionLight *light_attribute = static_cast<EG::Game::ObjectAttributeEmissionLight *>(*light_attribute_iterator);
-				EG::Graphics::Light *light = light_attribute->GetLight();
+				EG::Graphics::Light *light = debug_shadow_map_light;
 				light->GetColor();
 
 				shaders->Bind("depth_debug");
@@ -453,6 +449,8 @@ namespace EG{
 			std::stringstream temp;
 			temp << "Frame Time (s): ";
 			temp << frame_time;
+			temp << " ";
+			temp << 1.0f / frame_time;
 			temp.flush();
 			glm::vec3 position = glm::vec3(5.0f, 5.0f, -0.1f);
 			glm::vec2 scale = glm::vec2(1.0f, 1.0f);
@@ -625,8 +623,9 @@ namespace EG{
 							EG::Game::ObjectAttributeEmissionLight *light_attribute = static_cast<EG::Game::ObjectAttributeEmissionLight *>(*light_attribute_iterator);
 							EG::Graphics::Light *light = light_attribute->GetLight();
 							if (light->GetCastsShadows()){
+								debug_shadow_map_light = light;
 								light->Update();
-								graphics->StartOffscreenRender(light->GetShadowBuffer()->GetBufferId(), 0, 512, 512);
+								graphics->StartOffscreenRender(light->GetShadowBuffer()->GetBufferId(), 0, int(light->GetShadowMapResolution()), int(light->GetShadowMapResolution()));
 								shaders->Bind("shadow_map");
 
 								shaders->SetMatrix4("projection_matrix", light->GetProjectionMatrix());

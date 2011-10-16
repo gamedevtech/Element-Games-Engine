@@ -27,6 +27,7 @@ namespace EG{
 				bool GetCastsShadows(void);
 				float GetRadius(void);
 				float GetSpotAngle(void);
+				float GetShadowMapResolution(void);
 
 				void Update(void);
 				glm::mat4 GetProjectionMatrix(void);
@@ -44,6 +45,7 @@ namespace EG{
 
 				bool casts_shadows;
 				bool shadowing_initialized;
+				float shadow_map_resolution;
 				glm::mat4 projection_matrix, view_matrix;
 				EG::Graphics::OffscreenBuffer *shadow_buffer;
 

@@ -3,6 +3,7 @@
 
 #include "Renderer.h"
 #include "OffscreenBuffer.h"
+#include "Light.h"
 
 namespace EG{
 	namespace Graphics{
@@ -59,6 +60,9 @@ namespace EG{
 				float shadow_mapping_offset_0;
 				float shadow_mapping_offset_1;
 				glm::mat4 shadow_mapping_bias;
+
+				// Debugging
+				EG::Graphics::Light *debug_shadow_map_light;
 		};
 	}
 }
