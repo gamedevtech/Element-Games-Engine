@@ -8,5 +8,5 @@ smooth in vec2 texcoord;
 out vec4 fragment_output;
 
 void main(){
-	fragment_output = color;//texture(decal, texcoord) * color;
+	fragment_output = texture(decal, texcoord) * color;
 }

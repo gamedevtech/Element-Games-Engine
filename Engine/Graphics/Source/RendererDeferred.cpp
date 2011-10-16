@@ -450,26 +450,28 @@ namespace EG{
 		}
 
 		void RendererDeferred::Overlays(EG::Game::Scene *scene){
-                        shaders->Bind("font_rendering");
+			std::stringstream temp;
+			temp << "Frame Time (s): ";
+			temp << frame_time;
+			temp.flush();
+			glm::vec3 position = glm::vec3(5.0f, 5.0f, -0.1f);
+			glm::vec2 scale = glm::vec2(1.0f, 1.0f);
+
+			glDisable(GL_DEPTH_TEST);
+			shaders->Bind("font_rendering");
 			shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
 			shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
 			shaders->SetMatrix4("model_matrix", glm::mat4(1.0f));
 			shaders->SetInt("decal", 0);
 			shaders->SetFloat4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+			//glDepthFunc(GL_LEQUAL);
 			glEnable(GL_BLEND);
 			glEnable(GL_TEXTURE_2D);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-			std::stringstream temp;
-			temp << "Frame Time (s): ";
-			temp << frame_time;
-                        temp.flush();
-                        glm::vec3 position = glm::vec3(5.0f, 5.0f, 0.0f);
-                        glm::vec2 scale = glm::vec2(1.0f, 1.0f);
-                        font_manager->DrawText(temp.str(), position, scale, shaders);
-
+			font_manager->DrawText(temp.str(), position, scale, shaders);
 			glDisable(GL_BLEND);
-                        shaders->Unbind();
+			shaders->Unbind();
+			glEnable(GL_DEPTH_TEST);
 		}
 
 		void RendererDeferred::Bloom(void){

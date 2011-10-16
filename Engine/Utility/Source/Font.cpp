@@ -149,12 +149,13 @@ namespace EG{
 				}else{
 					offset.x -= (size / 8.0f);
 					offset.y += (size / 8.0f);
-                                }
+				}
 
 				glm::vec3 character_position;
 				character_position.x = position.x + string_x_offset + offset.x + (size / 4.0f);
 				character_position.y = position.y + offset.y;
 				character_position.z = position.z;
+				//std::cout << "Character Position (" << char(character_index) << "): " << character_position.x << ' ' << character_position.y << std::endl;
 
 				glm::vec3 character_scale;
 				character_scale.x = scale.x * bdims.x;
