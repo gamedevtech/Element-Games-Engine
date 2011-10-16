@@ -3,7 +3,7 @@
 #include <freetype/freetype.h>
 #include <freetype/ftglyph.h>
 #include <freetype/ftoutln.h>
-#include <freetype/fttrigon.h>
+//#include <freetype/fttrigon.h>
 
 namespace EG{
 	namespace Utility{
@@ -149,9 +149,7 @@ namespace EG{
 				}else{
 					offset.x -= (size / 8.0f);
 					offset.y += (size / 8.0f);
-				}
-
-				//std::cout << char(character_index) << ' ' << offset.x << ' ' << offset.y << std::endl;
+                                }
 
 				glm::vec3 character_position;
 				character_position.x = position.x + string_x_offset + offset.x + (size / 4.0f);

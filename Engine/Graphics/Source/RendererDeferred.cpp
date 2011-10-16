@@ -450,7 +450,7 @@ namespace EG{
 		}
 
 		void RendererDeferred::Overlays(EG::Game::Scene *scene){
-			/*shaders->Bind("font_rendering");
+                        shaders->Bind("font_rendering");
 			shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
 			shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
 			shaders->SetMatrix4("model_matrix", glm::mat4(1.0f));
@@ -463,13 +463,13 @@ namespace EG{
 			std::stringstream temp;
 			temp << "Frame Time (s): ";
 			temp << frame_time;
-			temp.flush();
-			//std::cout << temp.str() << std::endl;
-			shaders->SetMatrix4("model_matrix", glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(40.0f, 40.0f, 0.0f)), glm::vec3(1.0f, 1.0f, 1.0f)));
-			font_manager->DrawText(temp.str());
+                        temp.flush();
+                        glm::vec3 position = glm::vec3(5.0f, 5.0f, 0.0f);
+                        glm::vec2 scale = glm::vec2(1.0f, 1.0f);
+                        font_manager->DrawText(temp.str(), position, scale, shaders);
 
 			glDisable(GL_BLEND);
-			shaders->Unbind();*/
+                        shaders->Unbind();
 		}
 
 		void RendererDeferred::Bloom(void){
