@@ -9,6 +9,10 @@
 ModelConverter::ModelConverter(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
 	model_path = "Assets/Models/spaceship.3ds";
 
+	gui = new EG::Utility::RocketInterface(time);
+	use_gui = true;
+	renderer->SetGUI(gui);
+
 	/*model = new EG::Media::ModelLoader(scene);
 	model->Load(model_path);
 	model_object = new EG::Game::Object("SpaceShip");
@@ -82,4 +86,5 @@ void ModelConverter::Update(void){
 			(static_cast<EG::Graphics::RendererDeferred *>(renderer))->ToggleDOF();
 		}
 	}
+	//gui->Update();
 }

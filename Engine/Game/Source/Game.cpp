@@ -6,6 +6,7 @@
 namespace EG{
 	namespace Game{
 		Game::Game(EG::Utility::Window *_window, EG::Game::Scene *_scene){
+			use_gui = false;
 			window = _window;
 			scene = _scene;
 			input = new EG::Input::Input();
@@ -33,9 +34,12 @@ namespace EG{
 				renderer = new EG::Graphics::RendererDeferred();
 				(static_cast<EG::Graphics::RendererDeferred *>(renderer))->Initialize();
 			}
-			gui = new EG::GUI::GUI();
+			//gui = new EG::GUI::GUI();
 
 			time->Update();
+			if (use_gui){
+				gui->Update();
+			}
 		}
 
 		Game::~Game(void){

@@ -5,6 +5,9 @@
 #include "../../../Engine/Game/Object.h"
 #include "../../../Engine/Game/Game.h"
 
+// Switch this to GUI.h when it's all done.
+#include "../../../Engine/Utility/RocketInterface.h"
+
 class ModelConverter : public EG::Game::Game{
 	public:
 		ModelConverter(EG::Utility::Window *_window, EG::Game::Scene *_scene);

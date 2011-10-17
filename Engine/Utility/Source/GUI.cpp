@@ -2,7 +2,7 @@
 
 namespace EG{
 	namespace GUI{
-		WidgetStyle::WidgetStyle(void){
+		/*WidgetStyle::WidgetStyle(void){
 			padding = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
 			margin = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
 			front_color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -230,6 +230,6 @@ namespace EG{
 		}
 		std::vector<std::string>::iterator GUI::GetWidgetIdsEnd(void){
 			return widgets.GetKeysEnd();
-		}
+		}*/
 	}
 }

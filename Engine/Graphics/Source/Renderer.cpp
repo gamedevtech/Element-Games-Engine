@@ -15,6 +15,7 @@ namespace EG{
 	namespace Graphics{
 		Renderer::Renderer(void){
 			initialized = false;
+			gui_set = false;
 			//meshes = new EG::Graphics::MeshManager();
 			//textures = new EG::Graphics::TextureManager();
 			//font_manager;
@@ -45,6 +46,11 @@ namespace EG{
 			orthographics_projection_matrix = glm::gtc::matrix_transform::ortho(0.0f, 800.0f, 0.0f, 500.0f);
 
 			initialized = true;
+		}
+
+		void Renderer::SetGUI(EG::Utility::RocketInterface *_gui){
+			gui = _gui;
+			gui_set = true;
 		}
 
 		void Renderer::Render(EG::Game::Scene *scene, float frame_time){
@@ -365,6 +371,10 @@ namespace EG{
 			font_manager->DrawText(temp.str(), position, scale, shaders);
 
 			glDisable(GL_BLEND);
+
+			if (gui_set){
+				gui->Draw();
+			}
 			shaders->Unbind();
 		}
 	}

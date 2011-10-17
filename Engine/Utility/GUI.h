@@ -10,7 +10,7 @@ namespace EG{
 	namespace GUI{
 		// Should this be in it's own namespace?
 		// Probably...
-		class WidgetStyle{
+		/*class WidgetStyle{
 			public:
 				WidgetStyle(void);
 				~WidgetStyle(void);
@@ -193,6 +193,14 @@ namespace EG{
 				void Draw(GUI *gui);
 			protected:
 		};
+
+		class RocketInterface{
+			public:
+				RocketInterface(void);
+				~RocketInterface(void)
+			private:
+				//
+		};*/
 	}
 }
 

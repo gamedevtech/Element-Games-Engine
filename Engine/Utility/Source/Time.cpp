@@ -6,6 +6,7 @@ namespace EG{
 			started = 0;
 			last = 0;
 			frame = 0.0f;
+			elapsed = 0.0f;
 			sfml_interface->ResetTime();
 		}
 
@@ -17,6 +18,12 @@ namespace EG{
 			unsigned int temp = last;
 			last = sfml_interface->GetElapsedTime();
 			frame = (last - float(temp)) / 1000.0f;
+
+			elapsed = (last - started) / 1000.0f;
+		}
+
+		float Time::GetElapsedTime(void){
+			return elapsed;
 		}
 
 		float Time::GetFrameTime(void){

@@ -6,6 +6,7 @@
 #include "../Utility/Window.h"
 #include "../Utility/Time.h"
 #include "../Utility/GUI.h"
+#include "../Utility/RocketInterface.h"
 
 namespace EG{
 	namespace Game{
@@ -32,7 +33,11 @@ namespace EG{
 				EG::Game::Scene *scene;
 				EG::Input::Input *input;
 				EG::Utility::Time *time;
-				EG::GUI::GUI *gui;
+				//EG::GUI::GUI *gui;
+
+				// Switch this to GUI.h when it's all done.
+				bool use_gui;
+				EG::Utility::RocketInterface *gui;
 
 				RenderingMethod rendering_method;
 		};

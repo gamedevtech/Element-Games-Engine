@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "../Game/Scene.h"
 #include "../Utility/Font.h"
+#include "../Utility/RocketInterface.h"
 
 namespace EG{
 	namespace Graphics{
@@ -21,12 +22,17 @@ namespace EG{
 				EG::Graphics::Camera *GetCamera(void){
 					return camera;
 				}
+
+				void SetGUI(EG::Utility::RocketInterface *_gui);
 			protected:
 				// TEMP, SHOULD GO IN SCENE MANAGER WHICH SHOULD HOLD A CAMERA MANAGER
 				EG::Graphics::Camera *camera;
 				EG::Graphics::ShaderManager *shaders;
 				glm::mat4 orthographics_projection_matrix;
 				bool initialized;
+
+				bool gui_set;
+				EG::Utility::RocketInterface *gui;
 		};
 	}
 }

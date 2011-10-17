@@ -12,9 +12,11 @@ namespace EG{
 
 				void Update(void);
 				float GetFrameTime(void);
+				float GetElapsedTime(void);
 			private:
 				unsigned int started, last;
 				float frame;
+				float elapsed;
 		};
 	}
 }

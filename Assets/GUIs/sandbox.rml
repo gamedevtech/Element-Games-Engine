@@ -1,6 +1,14 @@
 <rml>
 	<head>
 		<title>Sandbox Test</title>
+		<style>
+			body{
+				font-family: Delicious;
+				font-weight: normal;
+				font-style: normal;
+				font-size: 15;
+			}
+		</style>
 	</head>
 	<body>
 		Hello
