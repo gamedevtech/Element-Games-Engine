@@ -30,7 +30,7 @@ namespace EG{
 		void RocketRenderInterface::SetVertex(Rocket::Core::Vertex *vertex){
 			SetColor(vertex->colour);
 			glTexCoord2f(vertex->tex_coord.x, vertex->tex_coord.y);
-			glVertex4f(vertex->position.x, vertex->position.y, 0.0f, 1.0f);
+			glVertex4f(vertex->position.x, /*500.0f - */vertex->position.y, 0.0f, 1.0f);
 		}
 
 		void RocketRenderInterface::SetColor(Rocket::Core::Colourb color){
@@ -40,7 +40,7 @@ namespace EG{
 
 		void RocketRenderInterface::RenderGeometry(Rocket::Core::Vertex* vertices, int num_vertices, int* indices, int num_indices, Rocket::Core::TextureHandle texture, const Rocket::Core::Vector2f& translation){
 			//shaders->SetMatrix4("model_matrix", glm::translate(glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, -1.0f, 1.0f)), glm::vec3(translation.x, translation.y, 0.0f)));
-			shaders->SetMatrix4("model_matrix", glm::translate(glm::mat4(1.0f), glm::vec3(translation.x, translation.y, 0.0f)));
+			shaders->SetMatrix4("model_matrix", glm::translate(glm::mat4(1.0f), glm::vec3(translation.x, /*500.0f - */translation.y, 0.0f)));
 
 			if (texture){
 				glEnable(GL_TEXTURE_2D);
@@ -190,7 +190,8 @@ struct TGAHeader
 		}
 
 		// GUI Storage/Interface Class
-		RocketInterface::RocketInterface(EG::Utility::Time *time, EG::Graphics::ShaderManager *shaders){
+		RocketInterface::RocketInterface(EG::Utility::Time *time, EG::Graphics::ShaderManager *shaders, EG::Input::Input *_input){
+			input = _input;
 			std::cout << "Setting Up libRocket." << std::endl;
 			render_interface = new RocketRenderInterface(shaders);
 			Rocket::Core::SetRenderInterface(render_interface);
@@ -218,9 +219,33 @@ struct TGAHeader
 		RocketInterface::~RocketInterface(void){
 			//
 		}
+
 		void RocketInterface::Update(void){
+			// Check for input... this is going to be painful!
+			// Key Presses
+			if (input->IsKeyPressed(EG::Input::a)){
+				context->ProcessKeyDown(Rocket::Core::Input::KI_A, 0);
+			}
+			// Key Releases
+			if (input->IsKeyReleased(EG::Input::a)){
+				context->ProcessKeyUp(Rocket::Core::Input::KI_A, 0);
+			}
+			// Mouse Presses
+			if (input->IsMousePressed(EG::Input::mouse_left)){
+				context->ProcessMouseButtonDown(0, 0);
+			}
+			// Mouse Releases
+			if (input->IsMouseReleased(EG::Input::mouse_left)){
+				context->ProcessMouseButtonUp(0, 0);
+			}
+			// Mouse Movement
+			glm::vec2 mouse_position = input->GetMousePosition();
+			context->ProcessMouseMove(mouse_position.x, mouse_position.y, 0);
+
+			// Update the GUI Itself
 			context->Update();
 		}
+
 		void RocketInterface::Draw(void){
 			context->Render();
 		}

@@ -126,6 +126,10 @@ namespace EG{
 		}
 
 		void Game::PostUpdates(void){
+			if (use_gui){
+				gui->Update();
+			}
+
 			input->Update();
 		}
 

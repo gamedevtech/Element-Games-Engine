@@ -18,8 +18,10 @@ namespace EG{
 		void Input::Update(void){
 			key_toggles.Clean();
 			key_presses.Clean();
+			key_releases.Clean();
 			mouse_toggles.Clean();
 			mouse_presses.Clean();
+			mouse_releases.Clean();
 			mouse_movement_deltas = glm::vec2(0.0f, 0.0f);
 			// text_entered.clear();
 			// mouse_wheel_delta = 0.0f;
@@ -31,6 +33,7 @@ namespace EG{
 		}
 
 		void Input::KeyReleased(EG::Input::Key key){
+			key_releases.Set(key, true);
 			if (key_downs.Has(key)){
 				key_downs.Set(key, false);
 				key_toggles.Set(key, true);
@@ -43,6 +46,7 @@ namespace EG{
 		}
 
 		void Input::MouseButtonReleased(EG::Input::Mouse mouse){
+			mouse_releases.Set(mouse, true);
 			if (mouse_downs.Has(mouse)){
 				mouse_downs.Set(mouse, false);
 				mouse_toggles.Set(mouse, true);
@@ -70,6 +74,13 @@ namespace EG{
 			return false;
 		}
 
+		bool Input::IsKeyReleased(EG::Input::Key key){
+			if (key_releases.Has(key)){
+				return key_releases.Get(key);
+			}
+			return false;
+		}
+
 		bool Input::IsKeyPressed(EG::Input::Key key){
 			if (key_presses.Has(key)){
 				return key_presses.Get(key);
@@ -80,6 +91,13 @@ namespace EG{
 		bool Input::IsMouseDown(EG::Input::Mouse mouse){
 			if (mouse_downs.Has(mouse)){
 				return mouse_downs.Get(mouse);
+			}
+			return false;
+		}
+
+		bool Input::IsMouseReleased(EG::Input::Mouse mouse){
+			if (mouse_releases.Has(mouse)){
+				return mouse_releases.Get(mouse);
 			}
 			return false;
 		}

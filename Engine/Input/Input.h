@@ -32,20 +32,24 @@ namespace EG{
 				bool IsKeyDown(EG::Input::Key key);
 				bool IsKeyToggled(EG::Input::Key key);
 				bool IsKeyPressed(EG::Input::Key key);
+				bool IsKeyReleased(EG::Input::Key key);
 				bool IsMouseDown(EG::Input::Mouse mouse);
 				bool IsMouseToggled(EG::Input::Mouse mouse);
 				bool IsMousePressed(EG::Input::Mouse mouse);
+				bool IsMouseReleased(EG::Input::Mouse mouse);
 				glm::vec2 GetMousePosition(void);
 				glm::vec2 GetMouseDelta(void);
 			private:
 				EG::Utility::Dictionary<EG::Input::Key, bool> key_downs;
 				EG::Utility::Dictionary<EG::Input::Key, bool> key_toggles;
 				EG::Utility::Dictionary<EG::Input::Key, bool> key_presses;
+				EG::Utility::Dictionary<EG::Input::Key, bool> key_releases;
 
 				glm::vec2 mouse_movement_deltas, mouse_last_position, mouse_current_position;
 				EG::Utility::Dictionary<EG::Input::Mouse, bool> mouse_downs;
 				EG::Utility::Dictionary<EG::Input::Mouse, bool> mouse_toggles;
 				EG::Utility::Dictionary<EG::Input::Mouse, bool> mouse_presses;
+				EG::Utility::Dictionary<EG::Input::Mouse, bool> mouse_releases;
 				// float mouse_wheel_delta;
 				bool reset_mouse;
 		};

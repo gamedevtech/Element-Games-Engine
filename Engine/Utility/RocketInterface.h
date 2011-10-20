@@ -42,15 +42,17 @@ namespace EG{
 
 		class RocketInterface{
 			public:
-				RocketInterface(EG::Utility::Time *time, EG::Graphics::ShaderManager *shaders);
+				RocketInterface(EG::Utility::Time *time, EG::Graphics::ShaderManager *shaders, EG::Input::Input *_input);
 				~RocketInterface(void);
 
 				void Update(void);
 				void Draw(void);
+
 			private:
 				RocketRenderInterface *render_interface;
 				RocketSystemInterface *system_interface;
 				Rocket::Core::Context *context;
+				EG::Input::Input *input;
 		};
 	}
 }
