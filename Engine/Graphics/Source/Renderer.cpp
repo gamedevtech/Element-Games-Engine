@@ -351,11 +351,13 @@ namespace EG{
 			graphics->EndFrame();
 
 			// 2D Overlays
+			glDisable(GL_DEPTH_TEST);
 			shaders->Bind("font_rendering");
 			shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
 			shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
 			shaders->SetMatrix4("model_matrix", glm::mat4(1.0f));
 			shaders->SetInt("decal", 0);
+			shaders->SetInt("use_decal", 1);
 			shaders->SetFloat4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 			glEnable(GL_BLEND);
 			glEnable(GL_TEXTURE_2D);
@@ -368,13 +370,13 @@ namespace EG{
 			//shaders->SetMatrix4("model_matrix", glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(40.0f, 40.0f, 0.0f)), glm::vec3(1.0f, 1.0f, 1.0f)));
 			glm::vec3 position = glm::vec3(5.0f, 5.0f, 0.0f);
 			glm::vec2 scale = glm::vec2(1.0f, 1.0f);
-			font_manager->DrawText(temp.str(), position, scale, shaders);
-
-			glDisable(GL_BLEND);
+			//font_manager->DrawText(temp.str(), position, scale, shaders);
 
 			if (gui_set){
 				gui->Draw();
 			}
+			glDisable(GL_BLEND);
+			glEnable(GL_DEPTH_TEST);
 			shaders->Unbind();
 		}
 	}

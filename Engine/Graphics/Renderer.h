@@ -22,6 +22,9 @@ namespace EG{
 				EG::Graphics::Camera *GetCamera(void){
 					return camera;
 				}
+				EG::Graphics::ShaderManager *GetShaderManager(void){
+					return shaders;
+				}
 
 				void SetGUI(EG::Utility::RocketInterface *_gui);
 			protected:

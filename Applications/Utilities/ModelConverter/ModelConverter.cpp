@@ -9,7 +9,7 @@
 ModelConverter::ModelConverter(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
 	model_path = "Assets/Models/spaceship.3ds";
 
-	gui = new EG::Utility::RocketInterface(time);
+	gui = new EG::Utility::RocketInterface(time, renderer->GetShaderManager());
 	use_gui = true;
 	renderer->SetGUI(gui);
 
