@@ -39,8 +39,8 @@ namespace EG{
 		}
 
 		void RocketRenderInterface::RenderGeometry(Rocket::Core::Vertex* vertices, int num_vertices, int* indices, int num_indices, Rocket::Core::TextureHandle texture, const Rocket::Core::Vector2f& translation){
-			//shaders->SetMatrix4("model_matrix", glm::translate(glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, -1.0f, 1.0f)), glm::vec3(translation.x, translation.y, 0.0f)));
-			shaders->SetMatrix4("model_matrix", glm::translate(glm::mat4(1.0f), glm::vec3(translation.x, /*500.0f - */translation.y, 0.0f)));
+			shaders->SetMatrix4("model_matrix", glm::translate(glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, -1.0f, 1.0f)), glm::vec3(translation.x, translation.y - 500.0f, 0.0f)));
+			//shaders->SetMatrix4("model_matrix", glm::translate(glm::mat4(1.0f), glm::vec3(translation.x, /*500.0f - */translation.y, 0.0f)));
 
 			if (texture){
 				glEnable(GL_TEXTURE_2D);
