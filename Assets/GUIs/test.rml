@@ -11,8 +11,8 @@
 				background-color: #44444488;
 
 				min-width: 120px;
-				width: 250px;
-				max-width: 400px;
+				width: 500px;
+				max-width: 750px;
 
 				min-height: 100px;
 				height: 120px;
@@ -23,17 +23,33 @@
 			}
 
 			button{
-				background-color: #444444FF;
+				background-color: #888888AA;
 				color: white;
 				font-weight: bold;
 				padding: 2px 2px 2px 2px;
 				/*border-radius: 6px;*/
 			}
+
+			#title-bar{
+				width: 200px;
+				color: white;
+				font-weight: bold;
+				padding: 2px 2px 2px 2px;
+				margin: 0px 0px 0px 0px;
+				background-color: #000000AA;
+			}
 		</style>
 	</head>
 	<body>
+		<div id="title-bar">
+			<handle move_target="#document">
+				<span id="title">Rocket Panel</span>
+			</handle>
+		</div>
+		<br/>
+
 		Rocket Test<br/>
-		<button>Test Button</button>
+		<input type="text" id="model_path" />&nbsp;<button>Load Model</button>
 	</body>
 </rml>
 
