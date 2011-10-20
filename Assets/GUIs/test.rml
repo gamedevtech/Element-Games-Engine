@@ -27,23 +27,31 @@
 				color: white;
 				font-weight: bold;
 				padding: 2px 2px 2px 2px;
-				/*border-radius: 6px;*/
+				margin: 0px 0px 0px 0px;
 			}
 
 			#title-bar{
-				width: 200px;
-				color: white;
+				min-width: 100%;
+				max-width: 100%;
+				width: 100%;
+				color: black;
 				font-weight: bold;
 				padding: 2px 2px 2px 2px;
 				margin: 0px 0px 0px 0px;
-				background-color: #000000AA;
+				background-color: #FFFFFFAA;
+			}
+
+			input{
+				border-color: #FFFFFFFF;
+				border-width: 1px;
+				padding: 2px 2px 2px 2px;
 			}
 		</style>
 	</head>
 	<body>
 		<div id="title-bar">
 			<handle move_target="#document">
-				<span id="title">Rocket Panel</span>
+				<div id="title">Rocket Panel</div>
 			</handle>
 		</div>
 		<br/>
@@ -52,4 +60,3 @@
 		<input type="text" id="model_path" />&nbsp;<button>Load Model</button>
 	</body>
 </rml>
-

@@ -28,6 +28,7 @@ namespace EG{
 				void MouseButtonPressed(EG::Input::Mouse mouse);
 				void MouseButtonReleased(EG::Input::Mouse mouse);
 				void MouseMoved(glm::vec2 mouse_position);
+				void SetTextEntered(std::string text);
 
 				bool IsKeyDown(EG::Input::Key key);
 				bool IsKeyToggled(EG::Input::Key key);
@@ -39,6 +40,7 @@ namespace EG{
 				bool IsMouseReleased(EG::Input::Mouse mouse);
 				glm::vec2 GetMousePosition(void);
 				glm::vec2 GetMouseDelta(void);
+				std::string GetTextEntered(void);
 			private:
 				EG::Utility::Dictionary<EG::Input::Key, bool> key_downs;
 				EG::Utility::Dictionary<EG::Input::Key, bool> key_toggles;
@@ -52,6 +54,8 @@ namespace EG{
 				EG::Utility::Dictionary<EG::Input::Mouse, bool> mouse_releases;
 				// float mouse_wheel_delta;
 				bool reset_mouse;
+
+				std::string character_buffer;
 		};
 	}
 }

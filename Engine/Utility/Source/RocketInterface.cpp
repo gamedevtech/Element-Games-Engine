@@ -189,31 +189,44 @@ struct TGAHeader
 			glDeleteTextures(1, (GLuint*) &texture_handle);
 		}
 
+		RocketEventListener::RocketEventListener() : Rocket::Core::EventListener(){
+			//
+		}
+
+		void RocketEventListener::SetDocument(Rocket::Core::ElementDocument *_document){
+			document = _document;
+		}
+
 		// GUI Storage/Interface Class
-		RocketInterface::RocketInterface(EG::Utility::Time *time, EG::Graphics::ShaderManager *shaders, EG::Input::Input *_input){
+		RocketInterface::RocketInterface(std::string file_path, EG::Utility::Time *time, EG::Graphics::ShaderManager *shaders, EG::Input::Input *_input){
 			input = _input;
-			std::cout << "Setting Up libRocket." << std::endl;
+// 			std::cout << "Setting Up libRocket." << std::endl;
 			render_interface = new RocketRenderInterface(shaders);
 			Rocket::Core::SetRenderInterface(render_interface);
-			std::cout << "Rocket Renderer Set" << std::endl;
+// 			std::cout << "Rocket Renderer Set" << std::endl;
 			system_interface = new RocketSystemInterface();
 			system_interface->SetTimer(time);
 			Rocket::Core::SetSystemInterface(system_interface);
-			std::cout << "Rocket System Interface Set" << std::endl;
+// 			std::cout << "Rocket System Interface Set" << std::endl;
 			Rocket::Core::Initialise();
 			Rocket::Controls::Initialise();
-			std::cout << "Rocket Initialized." << std::endl;
+// 			std::cout << "Rocket Initialized." << std::endl;
 			context = Rocket::Core::CreateContext("default", Rocket::Core::Vector2i(800, 500));
-			std::cout << "Rocket Context Created!" << std::endl;
+// 			std::cout << "Rocket Context Created!" << std::endl;
+			Rocket::Debugger::Initialise(context);
+			//Rocket::Debugger::SetVisible(true);
 			Rocket::Core::FontDatabase::LoadFontFace(Rocket::Core::String("Assets/GUIs/Delicious-Roman.otf"));
 			Rocket::Core::FontDatabase::LoadFontFace(Rocket::Core::String("Assets/GUIs/Delicious-Italic.otf"));
 			Rocket::Core::FontDatabase::LoadFontFace(Rocket::Core::String("Assets/GUIs/Delicious-Bold.otf"));
 			Rocket::Core::FontDatabase::LoadFontFace(Rocket::Core::String("Assets/GUIs/Delicious-BoldItalic.otf"));
-			Rocket::Core::ElementDocument* document = context->LoadDocument("Assets/GUIs/test.rml");
+			document = context->LoadDocument(file_path.c_str());
 			if (document != NULL){
 				document->Show();
 			}
-			std::cout << "Rocket Document Loaded" << std::endl;
+// 			std::cout << "Rocket Document Loaded" << std::endl
+
+			// NOTE: This should be a function that allows the user to register what happens when a button is pressed, but for now, hardcode this mammy jammy...
+			//
 		}
 
 		RocketInterface::~RocketInterface(void){
@@ -230,6 +243,8 @@ struct TGAHeader
 			if (input->IsKeyReleased(EG::Input::a)){
 				context->ProcessKeyUp(Rocket::Core::Input::KI_A, 0);
 			}
+			// Key Text Entered
+			context->ProcessTextInput(input->GetTextEntered().c_str());
 			// Mouse Presses
 			if (input->IsMousePressed(EG::Input::mouse_left)){
 				context->ProcessMouseButtonDown(0, 0);
@@ -248,6 +263,11 @@ struct TGAHeader
 
 		void RocketInterface::Draw(void){
 			context->Render();
+		}
+
+		void RocketInterface::RegisterEventListener(std::string event_type, std::string element_id, RocketEventListener *listener){
+			listener->SetDocument(document);
+			document->GetElementById(element_id.c_str())->AddEventListener(event_type.c_str(), listener, false);
 		}
 	}
 }

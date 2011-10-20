@@ -20,4 +20,12 @@ class ModelConverter : public EG::Game::Game{
 		EG::Game::Object *model_object;
 };
 
+class LoadModelEventListener : public EG::Utility::RocketEventListener{
+	public:
+		bool model_loaded;
+		EG::Game::Scene *scene;
+		EG::Media::ModelLoader *model;
+		void ProcessEvent(Rocket::Core::Event &event);
+};
+
 #endif

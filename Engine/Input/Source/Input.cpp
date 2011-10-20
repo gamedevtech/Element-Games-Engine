@@ -22,6 +22,7 @@ namespace EG{
 			mouse_toggles.Clean();
 			mouse_presses.Clean();
 			mouse_releases.Clean();
+			character_buffer.clear();
 			mouse_movement_deltas = glm::vec2(0.0f, 0.0f);
 			// text_entered.clear();
 			// mouse_wheel_delta = 0.0f;
@@ -58,6 +59,10 @@ namespace EG{
 			mouse_current_position = mouse_position;
 			mouse_movement_deltas = mouse_last_position - mouse_current_position;
 			mouse_movement_deltas = glm::vec2(((-mouse_movement_deltas.x) * 3.5f), (mouse_movement_deltas.y * 3.5f));
+		}
+
+		void Input::SetTextEntered(std::string text){
+			character_buffer += text;
 		}
 
 		bool Input::IsKeyDown(EG::Input::Key key){
@@ -122,6 +127,10 @@ namespace EG{
 
 		glm::vec2 Input::GetMouseDelta(void){
 			return mouse_movement_deltas;
+		}
+
+		std::string Input::GetTextEntered(void){
+			return character_buffer;
 		}
 	}
 }

@@ -9,9 +9,13 @@
 ModelConverter::ModelConverter(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
 	model_path = "Assets/Models/spaceship.3ds";
 
-	gui = new EG::Utility::RocketInterface(time, renderer->GetShaderManager(), input);
+	gui = new EG::Utility::RocketInterface("Assets/GUIs/model_converter.rml", time, renderer->GetShaderManager(), input);
 	use_gui = true;
 	renderer->SetGUI(gui);
+	LoadModelEventListener *load_model_event_listener = new LoadModelEventListener();
+	load_model_event_listener->model_loaded = false;
+	load_model_event_listener->scene = scene;
+	gui->RegisterEventListener("click", "load_model_button", load_model_event_listener);
 
 	/*model = new EG::Media::ModelLoader(scene);
 	model->Load(model_path);
@@ -30,7 +34,7 @@ ModelConverter::~ModelConverter(void){
 void ModelConverter::Update(void){
 	float movement_speed = time->GetFrameTime() * 2.0f;
 	if (input->IsMouseDown(EG::Input::mouse_right)){
-		renderer->GetCamera()->RotateByMouse(input->GetMouseDelta());
+		renderer->GetCamera()->RotateByMouse(input->GetMouseDelta() * 2.0f);
 	}
 	if (input->IsKeyDown(EG::Input::q)){
 		renderer->GetCamera()->Rotate(glm::vec3(0.0f, 0.0f, -movement_speed));
@@ -86,4 +90,24 @@ void ModelConverter::Update(void){
 			(static_cast<EG::Graphics::RendererDeferred *>(renderer))->ToggleDOF();
 		}
 	}
+}
+
+void LoadModelEventListener::ProcessEvent(Rocket::Core::Event &event){
+	Rocket::Core::Element *path_element = document->GetElementById("model_path");
+	const Rocket::Core::Variant *path_variant = path_element->GetAttribute("value");
+	if (path_variant){
+		const std::string model_path = (path_variant->Get<Rocket::Core::String>()).CString();
+		std::cout << "Here1" << model_path << std::endl;
+		model = new EG::Media::ModelLoader(scene);
+		model->Load(model_path);
+		model_loaded = true;
+		std::cout << "Here2" << std::endl;
+		EG::Game::Object *model_object = new EG::Game::Object("SpaceShip");
+		model_object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.2f, 0.0f)), glm::vec3(0.01f, 0.01f, 0.01f))));
+		model->GetMaterial(0)->SetLit(true);
+		model->GetMaterial(0)->SetCastsShadows(true);
+		model_object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(model->GetMesh(0), model->GetMaterial(0)));
+		scene->GetObjectManager()->AddObject(model_object);
+	}
+	
 }
