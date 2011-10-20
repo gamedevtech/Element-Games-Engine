@@ -7,8 +7,6 @@
 #include "../../../Engine/Game/ObjectRenderingAttribute.h"
 
 ModelConverter::ModelConverter(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
-	model_path = "Assets/Models/spaceship.3ds";
-
 	gui = new EG::Utility::RocketInterface("Assets/GUIs/model_converter.rml", time, renderer->GetShaderManager(), input);
 	use_gui = true;
 	renderer->SetGUI(gui);
@@ -96,9 +94,10 @@ void LoadModelEventListener::ProcessEvent(Rocket::Core::Event &event){
 	Rocket::Core::Element *path_element = document->GetElementById("model_path");
 	const Rocket::Core::Variant *path_variant = path_element->GetAttribute("value");
 	if (path_variant){
-		const std::string model_path = (path_variant->Get<Rocket::Core::String>()).CString();
+		std::string model_path = (path_variant->Get<Rocket::Core::String>()).CString();
 		std::cout << "Here1" << model_path << std::endl;
 		model = new EG::Media::ModelLoader(scene);
+		//model_path = "Assets/Models/spaceship.3ds";
 		model->Load(model_path);
 		model_loaded = true;
 		std::cout << "Here2" << std::endl;

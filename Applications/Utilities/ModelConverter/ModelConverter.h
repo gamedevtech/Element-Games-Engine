@@ -15,9 +15,9 @@ class ModelConverter : public EG::Game::Game{
 
 		void Update(void);
 	private:
-		std::string model_path;
-		EG::Media::ModelLoader *model;
-		EG::Game::Object *model_object;
+		//std::string model_path;
+		//EG::Media::ModelLoader *model;
+		//EG::Game::Object *model_object;
 };
 
 class LoadModelEventListener : public EG::Utility::RocketEventListener{
