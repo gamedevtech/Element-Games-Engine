@@ -236,15 +236,15 @@ struct TGAHeader
 		void RocketInterface::Update(void){
 			// Check for input... this is going to be painful!
 			// Key Presses
-			if (input->IsKeyPressed(EG::Input::a)){
-				context->ProcessKeyDown(Rocket::Core::Input::KI_A, 0);
+			if (input->IsKeyPressed(EG::Input::space)){
+				context->ProcessKeyDown(Rocket::Core::Input::KI_SPACE, 0);
 			}
 			if (input->IsKeyPressed(EG::Input::back_space)){
 				context->ProcessKeyDown(Rocket::Core::Input::KI_BACK, 0);
 			}
 			// Key Releases
-			if (input->IsKeyReleased(EG::Input::a)){
-				context->ProcessKeyUp(Rocket::Core::Input::KI_A, 0);
+			if (input->IsKeyReleased(EG::Input::space)){
+				context->ProcessKeyUp(Rocket::Core::Input::KI_SPACE, 0);
 			}
 			if (input->IsKeyReleased(EG::Input::back_space)){
 				context->ProcessKeyUp(Rocket::Core::Input::KI_BACK, 0);
