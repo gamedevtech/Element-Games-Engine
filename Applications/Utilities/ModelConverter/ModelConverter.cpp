@@ -97,7 +97,7 @@ void LoadModelEventListener::ProcessEvent(Rocket::Core::Event &event){
 			model->GetMaterial(0)->SetCastsShadows(true);
 			model_object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(model->GetMesh(0), model->GetMaterial(0)));
 			scene->GetObjectManager()->AddObject(model_object);
-			document->GetElementById("load_model_inputs")->SetInnerRML("");
+			document->GetElementById("load_model_inputs")->SetInnerRML((model_path + ":").c_str());
 			//document->GetElementById("load_model_inputs")->Hide();
 		}else{
 			document->GetElementById("loading_output_error")->SetInnerRML("Model Doesn't Exist Apparently... note: paths must be from where you ran this executable!");
