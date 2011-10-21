@@ -1,0 +1,120 @@
+<rml>
+	<head>
+		<title>Rocket Test</title>
+		<style>
+			body{
+				font-family: Delicious;
+				font-weight: normal;
+				font-style: normal;
+				font-size: 12;
+				color: white;
+				background-color: #44444488;
+
+				min-width: 120px;
+				width: 300px;
+				max-width: 750px;
+
+				min-height: 100px;
+				height: 350px;
+				max-height: 450px;
+
+				margin-top: 0px;
+				margin-bottom: 0px;
+				margin-left: 0px;
+				margin-right: 0px;
+				padding-top: 0px;
+				padding-bottom: 0px;
+				padding-left: 0px;
+				padding-right: 0px;
+			}
+
+			button{
+				border-color: #FFFFFFFF;
+				border-width: 1px;
+				background-color: #888888AA;
+				color: white;
+				font-weight: bold;
+				margin-top: 2px;
+				margin-bottom: 2px;
+				margin-left: 2px;
+				margin-right: 2px;
+				padding-top: 2px;
+				padding-bottom: 2px;
+				padding-left: 2px;
+				padding-right: 2px;
+			}
+
+			button:hover{
+				border-color: #FFFFFFFF;
+				border-width: 1px;
+				background-color: #8888FFAA;
+				color: white;
+				font-weight: bold;
+				margin-top: 2px;
+				margin-bottom: 2px;
+				margin-left: 2px;
+				margin-right: 2px;
+				padding-top: 2px;
+				padding-bottom: 2px;
+				padding-left: 2px;
+				padding-right: 2px;
+			}
+
+			button:active{
+				border-color: #FFFFFFFF;
+				border-width: 1px;
+				background-color: #FFFFFFFF;
+				color: black;
+				font-weight: bold;
+				margin-top: 2px;
+				margin-bottom: 2px;
+				margin-left: 2px;
+				margin-right: 2px;
+				padding-top: 2px;
+				padding-bottom: 2px;
+				padding-left: 2px;
+				padding-right: 2px;
+			}
+
+			input{
+				border-color: #FFFFFFFF;
+				border-width: 1px;
+				margin-top: 2px;
+				margin-bottom: 2px;
+				margin-left: 2px;
+				margin-right: 2px;
+				padding-top: 2px;
+				padding-bottom: 2px;
+				padding-left: 2px;
+				padding-right: 2px;
+			}
+
+			#title-bar{
+				min-width: 100%;
+				max-width: 100%;
+				width: 100%;
+				color: black;
+				font-weight: bold;
+				margin-top: 0px;
+				margin-bottom: 0px;
+				margin-left: 0px;
+				margin-right: 0px;
+				padding-top: 2px;
+				padding-bottom: 0px;
+				padding-left: 2px;
+				padding-right: 2px;
+				background-color: #FFFFFFAA;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="title-bar">
+			<handle move_target="#document">
+				<div id="title">Model Converter</div>
+			</handle>
+		</div>
+		<br/><br/>
+		Model: <input type="text" id="model_path" />&nbsp;<button id="load_model_button">Load Model</button>
+		<br />
+	</body>
+</rml>
