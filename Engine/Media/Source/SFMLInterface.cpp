@@ -69,12 +69,7 @@ namespace EG{
 				}else if (sfml_event.Type == sf::Event::MouseWheelMoved){
 					//input->MouseWheelMoved(input_translations[sfml_event.Key.Code]);
 				}else if (sfml_event.Type == sf::Event::TextEntered){
-					//if (sfml_event.Text.Unicode < 128){
-						//std::string txt = "";
-						//txt += (static_cast<char>(sfml_event.Text.Unicode));
-						//input->SetTextEntered(txt);
-					//}
-					if (sfml_event.Text.Unicode > 32){
+					if (sfml_event.Text.Unicode > 31){ // 32 is a space
 						input->SetTextEntered(static_cast<char>(sfml_event.Text.Unicode));
 					}
 				}
