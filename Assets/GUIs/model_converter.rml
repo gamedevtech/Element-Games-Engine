@@ -89,6 +89,14 @@
 				padding-right: 2px;
 			}
 
+			input:hover{
+				background-color: #8888FFAA;
+			}
+
+			input:active{
+				background-color: #FFFFFFAA;
+			}
+
 			#title-bar{
 				min-width: 100%;
 				max-width: 100%;
@@ -115,7 +123,8 @@
 		</div>
 		<br/><br/>
 		<div id="load_model_inputs">
-		Model: <input type="text" id="model_path" />&nbsp;<button id="load_model_button">Load Model</button><br /><br /><div id="loading_output_error"></div></div>
+		Model: <input type="text" id="model_path" value="Assets/Models/pla3.3ds"/>&nbsp;<button id="load_model_button">Load Model</button><br /><br /><div id="loading_output_error"></div></div>
+		<br />
 		<div id="model_options"></div>
 	</body>
 </rml>

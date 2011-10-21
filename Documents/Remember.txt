@@ -6,6 +6,8 @@ Remember:
 - Textures are definitely loaded upside down, this will definitely affect the order of the cube maps too!
 - Definitely need to add transformations to meshes (and rigid bodies later) too
 - Create a way to add shaders outside of the renderer class to a specific renderer type! Define in the material?
+- GUI Focus
+- Multiple Documents in RocketInterface
 
 Profiling and Other Optimizations, moved to git as well:
 gprof... don't forget to compile with -pg!
