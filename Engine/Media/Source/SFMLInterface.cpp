@@ -70,10 +70,13 @@ namespace EG{
 					//input->MouseWheelMoved(input_translations[sfml_event.Key.Code]);
 				}else if (sfml_event.Type == sf::Event::TextEntered){
 					//if (sfml_event.Text.Unicode < 128){
-						std::string txt = "";
-						txt += (static_cast<char>(sfml_event.Text.Unicode));
-						input->SetTextEntered(txt);
+						//std::string txt = "";
+						//txt += (static_cast<char>(sfml_event.Text.Unicode));
+						//input->SetTextEntered(txt);
 					//}
+					if (sfml_event.Text.Unicode > 32){
+						input->SetTextEntered(static_cast<char>(sfml_event.Text.Unicode));
+					}
 				}
 			}
 		}
@@ -142,6 +145,7 @@ namespace EG{
 			key_translations.Set(sf::Keyboard::Down, EG::Input::down);
 			key_translations.Set(sf::Keyboard::Left, EG::Input::left);
 			key_translations.Set(sf::Keyboard::Right, EG::Input::right);
+			key_translations.Set(sf::Keyboard::Back, EG::Input::back_space);
 			mouse_translations.Set(sf::Mouse::Left, EG::Input::mouse_left);
 			mouse_translations.Set(sf::Mouse::Right, EG::Input::mouse_right);
 			mouse_translations.Set(sf::Mouse::Middle, EG::Input::mouse_middle);

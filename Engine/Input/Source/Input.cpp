@@ -61,8 +61,8 @@ namespace EG{
 			mouse_movement_deltas = glm::vec2(((-mouse_movement_deltas.x) * 3.5f), (mouse_movement_deltas.y * 3.5f));
 		}
 
-		void Input::SetTextEntered(std::string text){
-			character_buffer += text;
+		void Input::SetTextEntered(char c){
+			character_buffer.push_back(c);
 		}
 
 		bool Input::IsKeyDown(EG::Input::Key key){
@@ -129,7 +129,7 @@ namespace EG{
 			return mouse_movement_deltas;
 		}
 
-		std::string Input::GetTextEntered(void){
+		std::vector<char> Input::GetTextEntered(void){
 			return character_buffer;
 		}
 	}

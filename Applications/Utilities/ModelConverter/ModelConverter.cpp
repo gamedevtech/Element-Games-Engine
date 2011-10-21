@@ -87,20 +87,21 @@ void LoadModelEventListener::ProcessEvent(Rocket::Core::Event &event){
 	const Rocket::Core::Variant *path_variant = path_element->GetAttribute("value");
 	if (path_variant){
 		std::string model_path = (path_variant->Get<Rocket::Core::String>()).CString();
-		model_path = EG::Utility::StringMethods::RemoveCharacter(model_path, '\n');
-		model_path = EG::Utility::StringMethods::RemoveCharacter(model_path, '\0');
-		model_path = EG::Utility::StringMethods::RemoveCharacter(model_path, '\r');
-		model_path = EG::Utility::StringMethods::RemoveCharacter(model_path, '\t');
-		model_path = EG::Utility::StringMethods::RemoveCharacter(model_path, char(int(8)));
+		model_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(model_path);
 		model = new EG::Media::ModelLoader(scene);
-		model->Load(model_path);
-		model_loaded = true;
-		EG::Game::Object *model_object = new EG::Game::Object("SpaceShip");
-		model_object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.2f, 0.0f)), glm::vec3(0.01f, 0.01f, 0.01f))));
-		model->GetMaterial(0)->SetLit(true);
-		model->GetMaterial(0)->SetCastsShadows(true);
-		model_object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(model->GetMesh(0), model->GetMaterial(0)));
-		scene->GetObjectManager()->AddObject(model_object);
+		model_loaded = model->Load(model_path);
+		if (model_loaded){
+			EG::Game::Object *model_object = new EG::Game::Object("SpaceShip");
+			model_object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.2f, 0.0f)), glm::vec3(0.01f, 0.01f, 0.01f))));
+			model->GetMaterial(0)->SetLit(true);
+			model->GetMaterial(0)->SetCastsShadows(true);
+			model_object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(model->GetMesh(0), model->GetMaterial(0)));
+			scene->GetObjectManager()->AddObject(model_object);
+			document->GetElementById("load_model_inputs")->SetInnerRML("");
+			//document->GetElementById("load_model_inputs")->Hide();
+		}else{
+			document->GetElementById("loading_output_error")->SetInnerRML("Model Doesn't Exist Apparently... note: paths must be from where you ran this executable!");
+		}
 	}
 	
 }

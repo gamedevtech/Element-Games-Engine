@@ -115,7 +115,7 @@
 		</div>
 		<br/><br/>
 		<div id="load_model_inputs">
-		Model: <input type="text" id="model_path" />&nbsp;<button id="load_model_button">Load Model</button></div>
+		Model: <input type="text" id="model_path" />&nbsp;<button id="load_model_button">Load Model</button><br /><br /><div id="loading_output_error"></div></div>
 		<br /><br />
 	</body>
 </rml>

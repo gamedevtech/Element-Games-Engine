@@ -9,7 +9,7 @@ namespace EG{
 	namespace Input{
 		typedef enum Key{
 			a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, one, two, three, four, five, six, seven, eight, nine, zero,
-			space, escape, up, down, left, right
+			space, escape, up, down, left, right, back_space
 		} Key;
 
 		typedef enum Mouse{
@@ -28,7 +28,7 @@ namespace EG{
 				void MouseButtonPressed(EG::Input::Mouse mouse);
 				void MouseButtonReleased(EG::Input::Mouse mouse);
 				void MouseMoved(glm::vec2 mouse_position);
-				void SetTextEntered(std::string text);
+				void SetTextEntered(char c);
 
 				bool IsKeyDown(EG::Input::Key key);
 				bool IsKeyToggled(EG::Input::Key key);
@@ -40,7 +40,7 @@ namespace EG{
 				bool IsMouseReleased(EG::Input::Mouse mouse);
 				glm::vec2 GetMousePosition(void);
 				glm::vec2 GetMouseDelta(void);
-				std::string GetTextEntered(void);
+				std::vector<char> GetTextEntered(void);
 			private:
 				EG::Utility::Dictionary<EG::Input::Key, bool> key_downs;
 				EG::Utility::Dictionary<EG::Input::Key, bool> key_toggles;
@@ -55,7 +55,8 @@ namespace EG{
 				// float mouse_wheel_delta;
 				bool reset_mouse;
 
-				std::string character_buffer;
+				//std::string character_buffer;
+				std::vector<char> character_buffer;
 		};
 	}
 }

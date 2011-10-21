@@ -239,12 +239,22 @@ struct TGAHeader
 			if (input->IsKeyPressed(EG::Input::a)){
 				context->ProcessKeyDown(Rocket::Core::Input::KI_A, 0);
 			}
+			if (input->IsKeyPressed(EG::Input::back_space)){
+				context->ProcessKeyDown(Rocket::Core::Input::KI_BACK, 0);
+			}
 			// Key Releases
 			if (input->IsKeyReleased(EG::Input::a)){
 				context->ProcessKeyUp(Rocket::Core::Input::KI_A, 0);
 			}
+			if (input->IsKeyReleased(EG::Input::back_space)){
+				context->ProcessKeyUp(Rocket::Core::Input::KI_BACK, 0);
+			}
 			// Key Text Entered
-			context->ProcessTextInput(input->GetTextEntered().c_str());
+			std::vector<char> text_entered = input->GetTextEntered();
+			for (int i = 0; i < text_entered.size(); i++){
+				context->ProcessTextInput(text_entered[i]);
+			}
+			//context->ProcessTextInput(input->GetTextEntered().c_str());
 			// Mouse Presses
 			if (input->IsMousePressed(EG::Input::mouse_left)){
 				context->ProcessMouseButtonDown(0, 0);
