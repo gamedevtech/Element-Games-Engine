@@ -114,7 +114,8 @@
 			</handle>
 		</div>
 		<br/><br/>
-		Model: <input type="text" id="model_path" />&nbsp;<button id="load_model_button">Load Model</button>
-		<br />
+		<div id="load_model_inputs">
+		Model: <input type="text" id="model_path" />&nbsp;<button id="load_model_button">Load Model</button></div>
+		<br /><br />
 	</body>
 </rml>
