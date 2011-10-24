@@ -44,12 +44,13 @@ namespace EG{
 		class RocketEventListener : public Rocket::Core::EventListener{
 			public:
 				RocketEventListener(void);
-				virtual void ProcessEvent(Rocket::Core::Event &event) = 0;
+				virtual void ProcessEvent(Event &event) = 0;
 
 				void SetDocument(Rocket::Core::ElementDocument *_document);
 			protected:
 				Rocket::Core::ElementDocument *document;
 		};
+		typedef RocketEventListener EventListener;
 
 		class RocketInterface{
 			public:

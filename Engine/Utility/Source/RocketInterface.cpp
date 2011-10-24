@@ -200,19 +200,14 @@ struct TGAHeader
 		// GUI Storage/Interface Class
 		RocketInterface::RocketInterface(std::string file_path, EG::Utility::Time *time, EG::Graphics::ShaderManager *shaders, EG::Input::Input *_input){
 			input = _input;
-// 			std::cout << "Setting Up libRocket." << std::endl;
 			render_interface = new RocketRenderInterface(shaders);
 			Rocket::Core::SetRenderInterface(render_interface);
-// 			std::cout << "Rocket Renderer Set" << std::endl;
 			system_interface = new RocketSystemInterface();
 			system_interface->SetTimer(time);
 			Rocket::Core::SetSystemInterface(system_interface);
-// 			std::cout << "Rocket System Interface Set" << std::endl;
 			Rocket::Core::Initialise();
 			Rocket::Controls::Initialise();
-// 			std::cout << "Rocket Initialized." << std::endl;
 			context = Rocket::Core::CreateContext("default", Rocket::Core::Vector2i(800, 500));
-// 			std::cout << "Rocket Context Created!" << std::endl;
 			Rocket::Debugger::Initialise(context);
 			//Rocket::Debugger::SetVisible(true);
 			Rocket::Core::FontDatabase::LoadFontFace(Rocket::Core::String("Assets/GUIs/Delicious-Roman.otf"));
@@ -223,10 +218,6 @@ struct TGAHeader
 			if (document != NULL){
 				document->Show();
 			}
-// 			std::cout << "Rocket Document Loaded" << std::endl
-
-			// NOTE: This should be a function that allows the user to register what happens when a button is pressed, but for now, hardcode this mammy jammy...
-			//
 		}
 
 		RocketInterface::~RocketInterface(void){

@@ -20,12 +20,53 @@ class ModelConverter : public EG::Game::Game{
 		//EG::Game::Object *model_object;
 };
 
-class LoadModelEventListener : public EG::Utility::RocketEventListener{
+class LoadModelEventListener : public EG::Utility::EventListener{
 	public:
 		bool model_loaded;
 		EG::Game::Scene *scene;
 		EG::Media::ModelLoader *model;
-		void ProcessEvent(Rocket::Core::Event &event);
+		EG::Utility::RocketInterface *gui;
+		void ProcessEvent(EG::Utility::Event &event);
+};
+
+class SetLitEventListener : public EG::Utility::EventListener{
+	public:
+		EG::Game::Object *object;
+		void ProcessEvent(EG::Utility::Event &event);
+};
+
+class SetShadowsEventListener : public EG::Utility::EventListener{
+	public:
+		EG::Game::Object *object;
+		void ProcessEvent(EG::Utility::Event &event);
+};
+
+class DecalButtonEventListener : public EG::Utility::EventListener{
+	public:
+		EG::Game::Scene *scene;
+		EG::Game::Object *object;
+		void ProcessEvent(EG::Utility::Event &event);
+};
+
+class NormalButtonEventListener : public EG::Utility::EventListener{
+	public:
+		EG::Game::Scene *scene;
+		EG::Game::Object *object;
+		void ProcessEvent(EG::Utility::Event &event);
+};
+
+class HeightButtonEventListener : public EG::Utility::EventListener{
+	public:
+		EG::Game::Scene *scene;
+		EG::Game::Object *object;
+		void ProcessEvent(EG::Utility::Event &event);
+};
+
+class SpecularButtonEventListener : public EG::Utility::EventListener{
+	public:
+		EG::Game::Scene *scene;
+		EG::Game::Object *object;
+		void ProcessEvent(EG::Utility::Event &event);
 };
 
 #endif
