@@ -6,6 +6,7 @@
 #include "../../../Engine/Game/ObjectEmissionAttribute.h"
 #include "../../../Engine/Game/ObjectRenderingAttribute.h"
 #include "../../../Engine/Utility/StringMethods.h"
+#include "../../../Engine/Media/ObjectWriter.h"
 
 ModelConverter::ModelConverter(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
 	gui = new EG::Utility::RocketInterface("Assets/GUIs/model_converter.rml", time, renderer->GetShaderManager(), input);
@@ -92,7 +93,7 @@ void LoadModelEventListener::ProcessEvent(EG::Utility::Event &event){
 		model = new EG::Media::ModelLoader(scene);
 		model_loaded = model->Load(model_path);
 		if (model_loaded){
-			EG::Game::Object *model_object = new EG::Game::Object("SpaceShip");
+			EG::Game::Object *model_object = new EG::Game::Object(model_path);
 			model_object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 2.0f, 0.0f)), glm::vec3(0.02f, 0.02f, 0.02f))));
 			model->GetMaterial(0)->SetLit(true);
 			model->GetMaterial(0)->SetCastsShadows(true);
@@ -102,11 +103,12 @@ void LoadModelEventListener::ProcessEvent(EG::Utility::Event &event){
 
 			// Add new controls to RML
 			std::string model_options_rml = "<br />Is Lit: <input type=\"checkbox\" id=\"lit\" />";
-			model_options_rml += "&nbsp;&nbsp;&nbsp;&nbsp;Casts Shadows: <input type=\"checkbox\" id=\"shadows\" />";
-			model_options_rml += "<br />Decal: <input type=\"text\" id=\"decal\" />&nbsp;<button id=\"decal_button\">Set</button>";
-			model_options_rml += "<br />Normal: <input type=\"text\" id=\"normal\" />&nbsp;<button id=\"normal_button\">Set</button>";
-			model_options_rml += "<br />Height: <input type=\"text\" id=\"height\" />&nbsp;<button id=\"height_button\">Set</button>";
-			model_options_rml += "<br />Specular: <input type=\"text\" id=\"specular\" />&nbsp;<button id=\"specular_button\">Set</button>";
+			model_options_rml += "&nbsp;&nbsp;&nbsp;&nbsp;Casts Shadows: <input type=\"checkbox\" id=\"shadows\" /><br />";
+			model_options_rml += "<br />Decal: <input type=\"text\" id=\"decal\" />&nbsp;<button id=\"decal_button\">Set</button><br />";
+			model_options_rml += "<br />Normal: <input type=\"text\" id=\"normal\" />&nbsp;<button id=\"normal_button\">Set</button><br />";
+			model_options_rml += "<br />Height: <input type=\"text\" id=\"height\" />&nbsp;<button id=\"height_button\">Set</button><br />";
+			model_options_rml += "<br />Specular: <input type=\"text\" id=\"specular\" />&nbsp;<button id=\"specular_button\">Set</button><br />";
+			model_options_rml += "<br />Save As: <input type=\"text\" id=\"file_out\" />&nbsp;<button id=\"save_button\">Save</button>";
 			document->GetElementById("model_options")->SetInnerRML(model_options_rml.c_str());
 
 			// Values
@@ -145,9 +147,11 @@ void LoadModelEventListener::ProcessEvent(EG::Utility::Event &event){
 			DecalButtonEventListener *decal_button_event_listener = new DecalButtonEventListener();
 			decal_button_event_listener->object = model_object;
 			decal_button_event_listener->scene = scene;
-			//std::cout << "DEBUG0" << std::endl;
 			gui->RegisterEventListener("click", "decal_button", decal_button_event_listener);
-			//std::cout << "DEBUG1" << std::endl;
+
+			SaveFileButtonEventListener *save_event_listener = new SaveFileButtonEventListener();
+			save_event_listener ->object = model_object;
+			gui->RegisterEventListener("click", "save_button", save_event_listener);
 		}else{
 			document->GetElementById("loading_output_error")->SetInnerRML("Model Doesn't Exist Apparently... note: paths must be from where you ran this executable!");
 		}
@@ -270,4 +274,13 @@ void SpecularButtonEventListener::ProcessEvent(EG::Utility::Event &event){
 		material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR, new_texture_path);
 		++mesh_attribute_iterator;
 	}
+}
+
+void SaveFileButtonEventListener::ProcessEvent(EG::Utility::Event &event){
+	std::string file_path = (document->GetElementById("file_out")->GetAttribute("value")->Get<Rocket::Core::String>()).CString();
+	file_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(file_path);
+
+	EG::Media::ObjectWriter *writer = new EG::Media::ObjectWriter(object);
+	writer->Write(file_path);
+	document->GetElementById("model_options")->SetInnerRML(("Model Saved To: " + file_path).c_str());
 }

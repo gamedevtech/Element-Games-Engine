@@ -99,15 +99,17 @@ set(SRCS
 	./Math/Math.h
 	./Math/Source/Math.cpp
 
-	# Medis
+	# Media
 	./Media/AssimpInterface.h
 	./Media/Image.h
 	./Media/ModelLoader.h
 	./Media/SFMLInterface.h
+	./Media/ObjectWriter.h
 	./Media/Source/AssimpInterface.cpp
 	./Media/Source/Image.cpp
 	./Media/Source/ModelLoader.cpp
 	./Media/Source/SFMLInterface.cpp
+	./Media/Source/ObjectWriter.cpp
 
 	# Networking
 	./Networking/Networking.h

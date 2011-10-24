@@ -69,4 +69,10 @@ class SpecularButtonEventListener : public EG::Utility::EventListener{
 		void ProcessEvent(EG::Utility::Event &event);
 };
 
+class SaveFileButtonEventListener : public EG::Utility::EventListener{
+	public:
+		EG::Game::Object *object;
+		void ProcessEvent(EG::Utility::Event &event);
+};
+
 #endif
