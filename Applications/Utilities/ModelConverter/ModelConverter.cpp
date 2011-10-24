@@ -151,7 +151,8 @@ void LoadModelEventListener::ProcessEvent(EG::Utility::Event &event){
 			gui->RegisterEventListener("click", "decal_button", decal_button_event_listener);
 
 			SaveFileButtonEventListener *save_event_listener = new SaveFileButtonEventListener();
-			save_event_listener ->object = model_object;
+			save_event_listener->object = model_object;
+			save_event_listener->scene = scene;
 			gui->RegisterEventListener("click", "save_button", save_event_listener);
 		}else{
 			document->GetElementById("loading_output_error")->SetInnerRML("Model Doesn't Exist Apparently... note: paths must be from where you ran this executable!");
@@ -281,7 +282,7 @@ void SaveFileButtonEventListener::ProcessEvent(EG::Utility::Event &event){
 	std::string file_path = (document->GetElementById("file_out")->GetAttribute("value")->Get<Rocket::Core::String>()).CString();
 	file_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(file_path);
 
-	EG::Media::ObjectWriter *writer = new EG::Media::ObjectWriter(object, document->GetElementById("object_name")->GetAttribute("value")->Get<Rocket::Core::String>().CString());
+	EG::Media::ObjectWriter *writer = new EG::Media::ObjectWriter(object, scene, document->GetElementById("object_name")->GetAttribute("value")->Get<Rocket::Core::String>().CString());
 	writer->Write(file_path);
 	document->GetElementById("model_options")->SetInnerRML(("Model Saved To: " + file_path).c_str());
 }

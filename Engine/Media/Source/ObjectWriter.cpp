@@ -10,7 +10,8 @@
 
 namespace EG{
 	namespace Media{
-		ObjectWriter::ObjectWriter(EG::Game::Object *_object, std::string _object_name){
+		ObjectWriter::ObjectWriter(EG::Game::Object *_object, EG::Game::Scene *_scene, std::string _object_name){
+			scene = _scene;
 			object = _object;
 			object_name = _object_name;
 		}
