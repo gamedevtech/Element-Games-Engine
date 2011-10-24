@@ -101,27 +101,15 @@ void LoadModelEventListener::ProcessEvent(Rocket::Core::Event &event){
 
 			// Add new controls to RML
 			std::string model_options_rml = "<br />Is Lit: <input type=\"checkbox\" id=\"lit\" />";
+			model_options_rml += "<br />Casts Shadows: <input type=\"checkbox\" id=\"shadows\" />";
 			document->GetElementById("model_options")->SetInnerRML(model_options_rml.c_str());
 
 			if (model->GetMaterial(0)->GetLit()){
-				std::string checked_value = "";
-				//document->GetElementById("lit")->GetAttribute<std::string>("checked", checked_value);
-				checked_value = document->GetElementById("lit")->GetAttribute("type")->Get<std::string>();
-				std::cout << "Checked: " << checked_value << std::endl;
 				document->GetElementById("lit")->SetAttribute("checked", "checked");
-				//document->GetElementById("lit")->GetAttribute<std::string>("checked", checked_value);
-				checked_value = document->GetElementById("lit")->GetAttribute("type")->Get<std::string>();
-				std::cout << "Checked: " << checked_value << std::endl;
 			}
-
-			/*Rocket::Core::Element *lit_break = new Rocket::Core::Element("br");
-			Rocket::Core::Element *lit_checkbox_label = new Rocket::Core::Element("p");
-			lit_checkbox_label->SetInnerRML("Is Lit: ");
-			Rocket::Core::Element *lit_checkbox = new Rocket::Core::Element("input");
-			lit_checkbox->SetAttribute("type", "checkbox");
-			document->GetElementById("model_options")->AppendChild(lit_break);
-			document->GetElementById("model_options")->AppendChild(lit_checkbox_label);
-			document->GetElementById("model_options")->AppendChild(lit_checkbox);*/
+			if (model->GetMaterial(0)->GetCastsShadows()){
+				document->GetElementById("shadows")->SetAttribute("checked", "checked");
+			}
 		}else{
 			document->GetElementById("loading_output_error")->SetInnerRML("Model Doesn't Exist Apparently... note: paths must be from where you ran this executable!");
 		}
