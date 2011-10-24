@@ -101,7 +101,7 @@ void LoadModelEventListener::ProcessEvent(Rocket::Core::Event &event){
 
 			// Add new controls to RML
 			std::string model_options_rml = "<br />Is Lit: <input type=\"checkbox\" id=\"lit\" />";
-			model_options_rml += "<br />Casts Shadows: <input type=\"checkbox\" id=\"shadows\" />";
+			model_options_rml += "&nbsp;&nbsp;&nbsp;&nbsp;Casts Shadows: <input type=\"checkbox\" id=\"shadows\" />";
 			document->GetElementById("model_options")->SetInnerRML(model_options_rml.c_str());
 
 			if (model->GetMaterial(0)->GetLit()){

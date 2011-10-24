@@ -1,0 +1,133 @@
+body{
+	font-family: Delicious;
+	font-weight: normal;
+	font-style: normal;
+	font-size: 12;
+
+	shadow-font-effect: shadow;
+	shadow-offset: 0px 0px;
+	shadow-color: white;
+
+	color: #2E91D9FF;
+	background-color: #44444488;
+
+	min-width: 120px;
+	width: 300px;
+	max-width: 750px;
+
+	min-height: 100px;
+	height: 350px;
+	max-height: 450px;
+
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-left: 4px;
+	padding-right: 4px;
+
+	border-width: 1px;
+	border-color: #2E91D9AA;
+}
+
+input{
+	border-color: #2E91D9FF;
+	border-width: 1px;
+}
+
+input.text{
+	border-color: #2E91D9FF;
+	border-width: 1px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 2px;
+	padding-right: 2px;
+	min-height: 22px;
+	height: 22px;
+}
+
+input.text:hover{
+	background-color: #444444FF;
+}
+
+input.text:active{
+	background-color: #666666FF;
+}
+
+input.checkbox:{
+	border-color: #2E91D9FF;
+	border-width: 1px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
+	min-height: 16px;
+	height: 16px;
+}
+input.checkbox:hover{
+	border-color: #4FB3FAFF;
+	background-color: #083657AA;
+}
+input.checkbox:active{
+	border-color: #2E91D9FF;
+	background-color: #2E91D9FF;
+}
+input.checkbox:checked{
+	border-color: #2E91D9FF;
+	background-color: #2E91D9FF;
+}
+
+#title-bar{
+	min-width: 100%;
+	max-width: 100%;
+	width: 100%;
+	color: black;
+	font-weight: bold;
+	margin-top: -4px;
+	margin-bottom: 0px;
+	margin-left: -4px;
+	margin-right: 0px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-left: 4px;
+	padding-right: 4px;
+	background-color: #2E91D9FF;
+}
+
+button{
+	border-color: #2E91D9FF;
+	border-width: 1px;
+	background-color: #083657AA;
+	color: #2E91D9FF;
+	font-weight: bold;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+button:hover{
+	border-color: #4FB3FAFF;
+	background-color: #083657AA;
+	color: #2E91D9FF;
+}
+
+button:active{
+	border-color: #2E91D9FF;
+	background-color: #2E91D9FF;
+	color: #061435FF;
+}

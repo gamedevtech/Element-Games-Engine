@@ -39,7 +39,8 @@ namespace EG{
 
 			camera = new EG::Graphics::Camera(45.0f, glm::ivec2(800, 500), glm::vec2(0.1f, 100.0f));
 			camera->ComputeProjectionMatrix();
-			camera->SetPosition(glm::vec3(0.0f, 0.0f, 5.0f));
+			camera->SetPosition(glm::vec3(-0.7f, 2.5f, 5.0f));
+			camera->RotateByMouse(glm::vec2(0.0f, -200.0f));
 			camera->Update();
 			camera->SetCameraType(EG::Graphics::Camera::CAMERA_FPS);
 
