@@ -102,7 +102,7 @@ void LoadModelEventListener::ProcessEvent(EG::Utility::Event &event){
 			document->GetElementById("load_model_inputs")->SetInnerRML((model_path + ":").c_str());
 
 			// Add new controls to RML
-			std::string model_options_rml = "<br />Is Lit: <input type=\"checkbox\" id=\"lit\" />";
+			std::string model_options_rml = "Object Name: <input type=\"text\" id=\"object_name\" /><br /><br />Is Lit: <input type=\"checkbox\" id=\"lit\" />";
 			model_options_rml += "&nbsp;&nbsp;&nbsp;&nbsp;Casts Shadows: <input type=\"checkbox\" id=\"shadows\" /><br />";
 			model_options_rml += "<br />Decal: <input type=\"text\" id=\"decal\" />&nbsp;<button id=\"decal_button\">Set</button><br />";
 			model_options_rml += "<br />Normal: <input type=\"text\" id=\"normal\" />&nbsp;<button id=\"normal_button\">Set</button><br />";
@@ -112,6 +112,7 @@ void LoadModelEventListener::ProcessEvent(EG::Utility::Event &event){
 			document->GetElementById("model_options")->SetInnerRML(model_options_rml.c_str());
 
 			// Values
+			document->GetElementById("object_name")->SetAttribute("value", model_object->GetObjectName().c_str());
 			if (model->GetMaterial(0)->GetLit()){
 				document->GetElementById("lit")->SetAttribute("checked", "checked");
 			}
@@ -280,7 +281,7 @@ void SaveFileButtonEventListener::ProcessEvent(EG::Utility::Event &event){
 	std::string file_path = (document->GetElementById("file_out")->GetAttribute("value")->Get<Rocket::Core::String>()).CString();
 	file_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(file_path);
 
-	EG::Media::ObjectWriter *writer = new EG::Media::ObjectWriter(object);
+	EG::Media::ObjectWriter *writer = new EG::Media::ObjectWriter(object, document->GetElementById("object_name")->GetAttribute("value")->Get<Rocket::Core::String>().CString());
 	writer->Write(file_path);
 	document->GetElementById("model_options")->SetInnerRML(("Model Saved To: " + file_path).c_str());
 }

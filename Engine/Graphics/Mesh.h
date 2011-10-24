@@ -65,6 +65,18 @@ namespace EG{
 				~Mesh(void);
 
 				unsigned int GetVertexCount(void);
+				unsigned int GetStride(void);
+				float *GetVertices(void);
+				float *GetTexCoords(void);
+				float *GetNormals(void);
+				float *GetBinormals(void);
+				float *GetBitangents(void);
+				bool HasVertices(void);
+				bool HasNormals(void);
+				bool HasTexCoords(void);
+				bool HasBinormals(void);
+				bool HasBitangents(void);
+
 				void Draw(void);
 			private:
 				// Mesh Data

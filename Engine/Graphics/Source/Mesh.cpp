@@ -360,6 +360,39 @@ namespace EG{
 		unsigned int Mesh::GetVertexCount(void){
 			return vertex_count;
 		}
+		unsigned int Mesh::GetStride(void){
+			return stride;
+		}
+		float *Mesh::GetVertices(void){
+			return vertices;
+		}
+		float *Mesh::GetTexCoords(void){
+			return texcoords;
+		}
+		float *Mesh::GetNormals(void){
+			return normals;
+		}
+		float *Mesh::GetBinormals(void){
+			return binormals;
+		}
+		float *Mesh::GetBitangents(void){
+			return bitangents;
+		}
+		bool Mesh::HasVertices(void){
+			return has_vertices;
+		}
+		bool Mesh::HasNormals(void){
+			return has_normals;
+		}
+		bool Mesh::HasTexCoords(void){
+			return has_texcoords;
+		}
+		bool Mesh::HasBinormals(void){
+			return has_binormals;
+		}
+		bool Mesh::HasBitangents(void){
+			return has_bitangents;
+		}
 
 		void Mesh::Draw(void){
 			graphics->DrawMesh(&vertex_array_object_id, vertex_buffer_object_ids, vertex_count, has_vertices, has_texcoords, has_normals, has_binormals, has_bitangents);
