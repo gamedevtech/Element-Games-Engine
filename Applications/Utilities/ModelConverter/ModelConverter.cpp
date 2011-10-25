@@ -107,7 +107,8 @@ void LoadModelEventListener::ProcessEvent(EG::Utility::Event &event){
 			model_options_rml += "<br />Decal: <input type=\"text\" id=\"decal\" />&nbsp;<button id=\"decal_button\">Set</button><br />";
 			model_options_rml += "<br />Normal: <input type=\"text\" id=\"normal\" />&nbsp;<button id=\"normal_button\">Set</button><br />";
 			model_options_rml += "<br />Height: <input type=\"text\" id=\"height\" />&nbsp;<button id=\"height_button\">Set</button><br />";
-			model_options_rml += "<br />Specular: <input type=\"text\" id=\"specular\" />&nbsp;<button id=\"specular_button\">Set</button><br />";
+			model_options_rml += "<br />Specular: <input type=\"text\" id=\"specular\" />&nbsp;<button id=\"specular_button\">Set</button><br /><br /><br />";
+			model_options_rml += "<br />Images Output Path: <input type=\"text\" id=\"images_output_path\" value=\"Assets/Textures/\"/><br />Model Output Path: <input type=\"text\" id=\"model_output_path\" value=\"Assets/Models/\" />";
 			model_options_rml += "<br />Save As: <input type=\"text\" id=\"file_out\" />&nbsp;<button id=\"save_button\">Save</button>";
 			document->GetElementById("model_options")->SetInnerRML(model_options_rml.c_str());
 
@@ -149,6 +150,21 @@ void LoadModelEventListener::ProcessEvent(EG::Utility::Event &event){
 			decal_button_event_listener->object = model_object;
 			decal_button_event_listener->scene = scene;
 			gui->RegisterEventListener("click", "decal_button", decal_button_event_listener);
+
+			NormalButtonEventListener *normal_button_event_listener = new NormalButtonEventListener();
+			normal_button_event_listener->object = model_object;
+			normal_button_event_listener->scene = scene;
+			gui->RegisterEventListener("click", "normal_button", normal_button_event_listener);
+
+			HeightButtonEventListener *height_button_event_listener = new HeightButtonEventListener();
+			height_button_event_listener->object = model_object;
+			height_button_event_listener->scene = scene;
+			gui->RegisterEventListener("click", "height_button", height_button_event_listener);
+
+			SpecularButtonEventListener *specular_button_event_listener = new SpecularButtonEventListener();
+			specular_button_event_listener->object = model_object;
+			specular_button_event_listener->scene = scene;
+			gui->RegisterEventListener("click", "specular_button", specular_button_event_listener);
 
 			SaveFileButtonEventListener *save_event_listener = new SaveFileButtonEventListener();
 			save_event_listener->object = model_object;
@@ -282,7 +298,7 @@ void SaveFileButtonEventListener::ProcessEvent(EG::Utility::Event &event){
 	std::string file_path = (document->GetElementById("file_out")->GetAttribute("value")->Get<Rocket::Core::String>()).CString();
 	file_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(file_path);
 
-	EG::Media::ObjectWriter *writer = new EG::Media::ObjectWriter(object, scene, document->GetElementById("object_name")->GetAttribute("value")->Get<Rocket::Core::String>().CString());
+	EG::Media::ObjectWriter *writer = new EG::Media::ObjectWriter(object, scene, document->GetElementById("object_name")->GetAttribute("value")->Get<Rocket::Core::String>().CString(), document->GetElementById("images_output_path")->GetAttribute("value")->Get<Rocket::Core::String>().CString(), document->GetElementById("model_output_path")->GetAttribute("value")->Get<Rocket::Core::String>().CString());
 	writer->Write(file_path);
 	document->GetElementById("model_options")->SetInnerRML(("Model Saved To: " + file_path).c_str());
 }

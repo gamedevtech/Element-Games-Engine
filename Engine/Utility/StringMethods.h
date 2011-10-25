@@ -6,6 +6,7 @@ namespace EG{
 		namespace StringMethods{
 			std::string RemoveCharacter(std::string in, char c);
 			std::string RemoveSpecialCharactersFromPathString(std::string in);
+			std::string GetFilenameFromPath(std::string path);
 		}
 	}
 }

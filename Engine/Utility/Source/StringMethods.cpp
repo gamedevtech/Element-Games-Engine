@@ -14,6 +14,7 @@ namespace EG{
 
 				return out;
 			}
+
 			std::string RemoveSpecialCharactersFromPathString(std::string in){
 				std::string out;
 				out = EG::Utility::StringMethods::RemoveCharacter(in, '\n');
@@ -22,6 +23,14 @@ namespace EG{
 				out = EG::Utility::StringMethods::RemoveCharacter(out, '\t');
 				out = EG::Utility::StringMethods::RemoveCharacter(out, char(int(8)));
 				return out;
+			}
+
+			std::string GetFilenameFromPath(std::string path){
+				unsigned int pos = path.find_last_of('/');
+				if (pos != std::string::npos){
+					return path.substr(pos + 1);
+				}
+				return "";
 			}
 		}
 	}
