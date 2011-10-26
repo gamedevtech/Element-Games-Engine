@@ -20,6 +20,7 @@
 #include "../../../Engine/Graphics/RenderingMaterial.h"
 #include "../../../Engine/Utility/Time.h"
 #include "../../../Engine/Media/ModelLoader.h"
+#include "../../../Engine/Media/ObjectReader.h"
 
 EG::Media::ModelLoader *model;
 int main(int argc, char **argv){
@@ -88,6 +89,13 @@ int main(int argc, char **argv){
 	material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "sphere_cube_map_gradient_decal");
 	material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER, "sphere_cube_map_gradient_decal_with_lighting");
 	object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));*/
+
+	// NOTE: Object Reader Test
+	EG::Media::ObjectReader reader;
+	reader.Read("Assets/Models/test_model.ego", scene);
+	EG::Game::Object *read_object = reader.GetObject();
+	std::cout << "Object was read with name: " << read_object->GetObjectName() << std::endl;
+	// END TEST
 
 	// Test Cube
 	EG::Game::Object *object = new EG::Game::Object("TestObject");
@@ -215,6 +223,7 @@ int main(int argc, char **argv){
 	objects->AddObject(object2);
 	objects->AddObject(object4);
 	objects->AddObject(object3);
+	objects->AddObject(read_object);
 	objects->AddObject(light_object);
 	objects->AddObject(light_object2);
 	objects->AddObject(light_object3);

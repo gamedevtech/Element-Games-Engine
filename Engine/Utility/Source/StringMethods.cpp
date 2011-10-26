@@ -32,6 +32,30 @@ namespace EG{
 				}
 				return "";
 			}
+
+			float *ConvertStringToFloatArray(std::string float_string){
+				std::vector<std::string> float_array_string_list = Tokenize(float_string);
+				unsigned int count = float_array_string_list.size();
+				float *out = new float[count];
+				for (unsigned int i = 0; i < count; i++){
+					out[i] = atof(float_array_string_list[i].c_str());
+				}
+				return out;
+			}
+
+			std::vector<std::string> Tokenize(const std::string& string_to_parse, const std::string& delimiters){
+				std::string::size_type lastPos = string_to_parse.find_first_not_of(delimiters, 0);
+				std::string::size_type pos = string_to_parse.find_first_of(delimiters, lastPos);
+				std::vector<std::string> tokens;
+				while (std::string::npos != pos || std::string::npos != lastPos){
+					tokens.push_back(string_to_parse.substr(lastPos, pos - lastPos));
+					// Skip delimiters.  Note the "not_of"
+					lastPos = string_to_parse.find_first_not_of(delimiters, pos);
+					// Find next "non-delimiter"
+					pos = string_to_parse.find_first_of(delimiters, lastPos);
+				}
+				return tokens;
+			}
 		}
 	}
 }

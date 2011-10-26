@@ -25,6 +25,7 @@ namespace EG{
 			if (file_path.length() > 0){
 				bool success = false;
 				unsigned char *pixels = sfml_interface->LoadImage(file_path, &success, &width, &height);
+				std::cout << "DONGLE1111" << std::endl;
 				if (success){
 					filtering = _filtering;
 					id = graphics->CreateTexture(pixels, width, height, filtering, anisotropic_param);

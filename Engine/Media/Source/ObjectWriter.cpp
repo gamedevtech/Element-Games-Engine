@@ -103,6 +103,7 @@ namespace EG{
 
 				out << "MESH" << std::endl;
 				EG::Graphics::Mesh *mesh = scene->GetMeshManager()->Get(mesh_attribute->GetMeshId());
+				//out << mesh_attribute->GetMeshId(); // Dupe checking?!?
 				out << mesh->GetVertexCount() << std::endl;
 				out << mesh->GetStride() << std::endl;
 				if (mesh->HasVertices()){
