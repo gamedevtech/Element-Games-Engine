@@ -105,11 +105,13 @@ set(SRCS
 	./Media/ModelLoader.h
 	./Media/SFMLInterface.h
 	./Media/ObjectWriter.h
+	./Media/ObjectReader.h
 	./Media/Source/AssimpInterface.cpp
 	./Media/Source/Image.cpp
 	./Media/Source/ModelLoader.cpp
 	./Media/Source/SFMLInterface.cpp
 	./Media/Source/ObjectWriter.cpp
+	./Media/Source/ObjectReader.cpp
 
 	# Networking
 	./Networking/Networking.h
