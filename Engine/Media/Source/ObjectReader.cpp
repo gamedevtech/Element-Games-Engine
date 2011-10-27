@@ -71,11 +71,8 @@ namespace EG{
 			normal_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(normal_path);
 			if (normal_path.size() > 2){
 				if (!(scene->GetTextureManager()->HasTexture(normal_path))){
-					std::cout << "NP: (" << normal_path << ")" << std::endl;
 					EG::Graphics::Texture *new_tex = new EG::Graphics::Texture(normal_path);
-					std::cout << "DONGLE" << std::endl;
 					scene->GetTextureManager()->AddTexture(normal_path, new_tex);
-					std::cout << "EENP: " << normal_path << std::endl;
 				}
 				material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, normal_path);
 			}
@@ -138,6 +135,8 @@ namespace EG{
 
 			std::getline(in, line);
 			std::getline(in, line);
+			std::string mesh_name = line;
+			std::getline(in, line);
 			unsigned int vertex_count = atoi(line.c_str());
 			std::getline(in, line);
 			bool has_vers = false;
@@ -154,7 +153,11 @@ namespace EG{
 					vers = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
 					has_vers = true;
 				}else if (simple_prefix == "NOR"){
-					nors = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
+					//if (graphics->CheckVersion(3)){
+						nors = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
+					//}else{
+						//float *tn = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
+					//}
 					has_nors = true;
 				}else if (simple_prefix == "TEX"){
 					texs = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
@@ -168,9 +171,9 @@ namespace EG{
 				}
 			}
 			EG::Graphics::Mesh *mesh = new EG::Graphics::Mesh(vertex_count, 4, vers, has_vers, texs, has_texs, nors, has_nors, bins, has_bins, bits, has_bits);
-			scene->GetMeshManager()->Add(file_path, mesh);
+			scene->GetMeshManager()->Add(mesh_name, mesh);
 
-			object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(file_path, material));
+			object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(mesh_name, material));
 
 			in.close();
 		}

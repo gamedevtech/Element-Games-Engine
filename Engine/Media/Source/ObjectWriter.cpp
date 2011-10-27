@@ -5,6 +5,7 @@
 #include "../../Game/ObjectEmissionAttribute.h"
 #include "../../Graphics/Mesh.h"
 #include "../../Graphics/RenderingMaterial.h"
+#include "../../Graphics/GraphicsSubsystem.h"
 #include "../../Utility/StringMethods.h"
 
 #include <fstream>
@@ -103,14 +104,14 @@ namespace EG{
 
 				out << "MESH" << std::endl;
 				EG::Graphics::Mesh *mesh = scene->GetMeshManager()->Get(mesh_attribute->GetMeshId());
-				//out << mesh_attribute->GetMeshId(); // Dupe checking?!?
+				out << mesh_attribute->GetMeshId() << std::endl; // Dupe checking?!?
 				out << mesh->GetVertexCount() << std::endl;
 				out << mesh->GetStride() << std::endl;
 				if (mesh->HasVertices()){
 					out << "VERTICES" << std::endl;
 					float *d = mesh->GetVertices();
 					for (unsigned int i = 0; i < mesh->GetVertexCount(); i++){
-						out << d[i * 4] << ' ' << d[(i * 4) + 1] << ' ' << d[(i * 4) + 2] << ' ' << d[(i * 4) + 1];
+						out << d[i * 4] << ' ' << d[(i * 4) + 1] << ' ' << d[(i * 4) + 2] << ' ' << 1.0f;
 						if (i != (mesh->GetVertexCount() - 1)){
 							out << ' ';
 						}
@@ -121,7 +122,14 @@ namespace EG{
 					out << "NORMALS" << std::endl;
 					float *d = mesh->GetNormals();
 					for (unsigned int i = 0; i < mesh->GetVertexCount(); i++){
-						out << d[i * 4] << ' ' << d[(i * 4) + 1] << ' ' << d[(i * 4) + 2] << ' ' << d[(i * 4) + 1];
+						unsigned int temp_stride = 3;
+						if (graphics->CheckVersion(3)){
+							temp_stride = 4;
+						}
+						out << d[i * temp_stride] << ' ' << d[(i * temp_stride) + 1] << ' ' << d[(i * temp_stride) + 2];
+						if (graphics->CheckVersion(3)){
+							out << ' ' << 1.0f;
+						}
 						if (i != (mesh->GetVertexCount() - 1)){
 							out << ' ';
 						}
@@ -132,7 +140,7 @@ namespace EG{
 					out << "TEXCOORDS" << std::endl;
 					float *d = mesh->GetTexCoords();
 					for (unsigned int i = 0; i < mesh->GetVertexCount(); i++){
-						out << d[i * 4] << ' ' << d[(i * 4) + 1] << ' ' << d[(i * 4) + 2] << ' ' << d[(i * 4) + 1];
+						out << d[i * 4] << ' ' << d[(i * 4) + 1] << ' ' << d[(i * 4) + 2] << ' ' << 1.0f;
 						if (i != (mesh->GetVertexCount() - 1)){
 							out << ' ';
 						}
@@ -143,7 +151,7 @@ namespace EG{
 					out << "BINORMALS" << std::endl;
 					float *d = mesh->GetBinormals();
 					for (unsigned int i = 0; i < mesh->GetVertexCount(); i++){
-						out << d[i * 4] << ' ' << d[(i * 4) + 1] << ' ' << d[(i * 4) + 2] << ' ' << d[(i * 4) + 1];
+						out << d[i * 4] << ' ' << d[(i * 4) + 1] << ' ' << d[(i * 4) + 2] << ' ' << 1.0f;
 						if (i != (mesh->GetVertexCount() - 1)){
 							out << ' ';
 						}
@@ -154,7 +162,7 @@ namespace EG{
 					out << "BITANGENTS" << std::endl;
 					float *d = mesh->GetBitangents();
 					for (unsigned int i = 0; i < mesh->GetVertexCount(); i++){
-						out << d[i * 4] << ' ' << d[(i * 4) + 1] << ' ' << d[(i * 4) + 2] << ' ' << d[(i * 4) + 1];
+						out << d[i * 4] << ' ' << d[(i * 4) + 1] << ' ' << d[(i * 4) + 2] << ' ' << 1.0f;
 						if (i != (mesh->GetVertexCount() - 1)){
 							out << ' ';
 						}
