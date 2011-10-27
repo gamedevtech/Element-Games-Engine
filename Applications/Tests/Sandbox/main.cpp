@@ -90,35 +90,16 @@ int main(int argc, char **argv){
 	material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER, "sphere_cube_map_gradient_decal_with_lighting");
 	object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));*/
 
-	// Test Cube
-	EG::Game::Object *object = new EG::Game::Object("TestObject");
-
-	object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::mat4(1.0f)));
-
+	// Test Cube2
 	EG::Graphics::Mesh *cube = EG::Graphics::GenerateCube();
 	scene->GetMeshManager()->Add("cube", cube);
-
-	EG::Graphics::Texture *texture = new EG::Graphics::Texture("Assets/Textures/box.jpg");
-	scene->GetTextureManager()->AddTexture("test", texture);
-	texture = new EG::Graphics::Texture("Assets/Textures/box_normal_map.jpg");
-	scene->GetTextureManager()->AddTexture("test_normal", texture);
-	EG::Graphics::RenderingMaterial *material = new EG::Graphics::RenderingMaterial();
-	material->SetLit(true);
-	material->SetCastsShadows(true);
-	material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "test");
-	material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, "test_normal");
-	object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("cube", material));
-
-	// Test Cube2
-	//EG::Graphics::Mesh *plane = EG::Graphics::GeneratePlane(100.0f, 100.0f, 16);
-	//scene->GetMeshManager()->Add("plane", plane);
 	EG::Game::Object *object2 = new EG::Game::Object("TestObject2");
-	texture = new EG::Graphics::Texture("Assets/Textures/concrete.jpg");
+	EG::Graphics::Texture *texture = new EG::Graphics::Texture("Assets/Textures/concrete.jpg");
 	scene->GetTextureManager()->AddTexture("concrete_decal", texture);
 	texture = new EG::Graphics::Texture("Assets/Textures/concrete_normal.jpg");
 	scene->GetTextureManager()->AddTexture("concrete_normal", texture);
 	object2->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(-5.0f, -0.101f, -5.0f)), glm::vec3(10.0f, 0.1f, 10.0f))));
-	material = new EG::Graphics::RenderingMaterial();
+	EG::Graphics::RenderingMaterial *material = new EG::Graphics::RenderingMaterial();
 	material->SetLit(true);
 	material->SetCastsShadows(true);
 	material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "concrete_decal");
@@ -137,15 +118,6 @@ int main(int argc, char **argv){
 	material->SetCastsShadows(false);
 	material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "starfield_decal");
 	object3->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("sphere", material));
-
-	// Model Loading Teest
-	model = new EG::Media::ModelLoader(scene);
-	model->Load("Assets/Models/spaceship.3ds");
-	EG::Game::Object *object4 = new EG::Game::Object("SpaceShip");
-	object4->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(-2.5f, 0.2f, 0.0f)), glm::vec3(0.01f, 0.01f, 0.01f))));
-	model->GetMaterial(0)->SetLit(true);
-	model->GetMaterial(0)->SetCastsShadows(true);
-	object4->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(model->GetMesh(0), model->GetMaterial(0)));
  
 	// Light 0
 	EG::Game::Object *light_object = new EG::Game::Object("RedLight");
@@ -220,10 +192,10 @@ int main(int argc, char **argv){
 	// Add Objects
 	EG::Game::ObjectManager *objects = game->GetScene()->GetObjectManager();
 	//objects->AddObject(object);
-	//objects->AddObject(object2);
-	//objects->AddObject(object4);
-	//objects->AddObject(object3);
 	objects->AddObject(read_object);
+	objects->AddObject(object2);
+	objects->AddObject(object3);
+	//objects->AddObject(object4);
 	objects->AddObject(light_object);
 	objects->AddObject(light_object2);
 	objects->AddObject(light_object3);
