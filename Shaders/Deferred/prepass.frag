@@ -34,9 +34,11 @@ void main(){
 		float height = texture(height_map, texcoord).r * 2.0 - 1.0;
 		vec3 computed_normal = normalize(normal);
 		if (normal_mapping_enabled == 1){
-			mat3 tbn_matrix = mat3(normalize(binormal), normalize(bitangent), normalize(normal));
+			vec3 temp_bitangent = cross(normal, binormal);
+			mat3 tbn_matrix = mat3(normalize(binormal), /*normalize(bitangent)*/ normalize(temp_bitangent), normalize(normal));
 			vec3 normal_map_value = normalize(2.0 * texture(normal_map, texcoord).xyz - 1.0);
 			computed_normal = normalize(tbn_matrix * normal_map_value);
+			//computed_normal = texture(normal_map, texcoord).xyz;
 		}
 		fragment2 = vec4(computed_normal, height);
 

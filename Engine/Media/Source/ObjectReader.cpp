@@ -54,8 +54,8 @@ namespace EG{
 			std::getline(in, line);
 			EG::Graphics::RenderingMaterial *material = new EG::Graphics::RenderingMaterial();
 
-			std::getline(in, line);
 			// DECAL
+			std::getline(in, line);
 			std::string decal_path = line.substr(5);
 			decal_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(decal_path);
 			if (decal_path.size() > 2){
@@ -65,8 +65,8 @@ namespace EG{
 				material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, decal_path);
 			}
 
-			std::getline(in, line);
 			// NORMAL
+			std::getline(in, line);
 			std::string normal_path = line.substr(6);
 			normal_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(normal_path);
 			if (normal_path.size() > 2){
@@ -77,8 +77,8 @@ namespace EG{
 				material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, normal_path);
 			}
 
-			std::getline(in, line);
 			// HEIGHT
+			std::getline(in, line);
 			std::string height_path = line.substr(6);
 			height_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(height_path);
 			if (height_path.size() > 2){
@@ -88,8 +88,8 @@ namespace EG{
 				material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT, height_path);
 			}
 
-			std::getline(in, line);
 			// SPECULAR
+			std::getline(in, line);
 			std::string specular_path = line.substr(8);
 			specular_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(specular_path);
 			if (specular_path.size() > 2){
@@ -153,11 +153,7 @@ namespace EG{
 					vers = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
 					has_vers = true;
 				}else if (simple_prefix == "NOR"){
-					//if (graphics->CheckVersion(3)){
-						nors = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
-					//}else{
-						//float *tn = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
-					//}
+					nors = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
 					has_nors = true;
 				}else if (simple_prefix == "TEX"){
 					texs = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
