@@ -42,3 +42,21 @@ tabset tabs
 	display: block;
 }
 
+table{
+	display: block;
+}
+
+tbody{
+	display: block;
+}
+
+tr{
+	display: block;
+}
+
+td{
+	display: block;
+	float: left;
+	width: auto;
+}
+
