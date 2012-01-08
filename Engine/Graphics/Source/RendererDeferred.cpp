@@ -56,6 +56,7 @@ namespace EG{
 			shaders->Add("depth_debug", "Shaders/Deferred/depth_debug.vert", "Shaders/Deferred/depth_debug.frag");
 			shaders->Add("gui_rendering", "Shaders/Deferred/gui_renderer.vert", "Shaders/Deferred/gui_renderer.frag");
 			shaders->Add("dof", "Shaders/Deferred/dof.vert", "Shaders/Deferred/dof.frag");
+			shaders->Add("sphere_cube_mapped_gradient_decal_prepass", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass.vert", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass.frag");
 
 			camera = new EG::Graphics::Camera(45.0f, glm::ivec2(800, 500), glm::vec2(0.1f, 100.0f));
 			camera->ComputeProjectionMatrix();
@@ -135,10 +136,10 @@ namespace EG{
 					EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
 					//if (material->GetLit()){
 					bool custom_shader = false;
-					if (material->HasShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER)){
+					if (material->HasShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER)){
 						custom_shader = true;
 						shaders->Unbind();
-						shaders->Bind(material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER));
+						shaders->Bind(material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER));
 
 						shaders->SetMatrix4("projection_matrix", camera->GetProjectionMatrix());
 						shaders->SetMatrix4("view_matrix", camera->GetViewMatrix());

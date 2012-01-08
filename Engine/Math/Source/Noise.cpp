@@ -323,7 +323,7 @@ namespace EG{
 					unsigned int z_top =    (z == (height - 1)) ? (0)          : (z + 1);
 					unsigned int z_bottom = (z == 0)            ? (height - 1) : (z - 1);
 
-					float normal_map_scalar = 8.0f;
+					float normal_map_scalar = 1.25f;
 					float left = heights[(z * width) + x_left] * normal_map_scalar;
 					float right = heights[(z * width) + x_right] * normal_map_scalar;
 					float top = heights[(z_top * width) + x] * normal_map_scalar;

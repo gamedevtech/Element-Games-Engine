@@ -30,7 +30,7 @@ int main(int argc, char **argv){
 	EG::Game::Game *game = new EG::Game::Game(window, scene);
 
 	// NOTE: Test Data
-	/*float width = 256;
+	float width = 256;
 	float height = 256;
 	EG::Math::Noise *noise_generator = new EG::Math::Noise(0, 16, 1.75f);
 	float **heights = EG::Math::GenerateCubeSphereHeightMap(width, height, noise_generator, "Assets/Textures/generated_planet_height_map.png");
@@ -51,10 +51,10 @@ int main(int argc, char **argv){
 	delete []normals;
 	delete []heights;
 	delete []colors;
-	delete noise_generator;*/
+	delete noise_generator;
 
 	// Planet Sorta
-	/*EG::Game::Object *object = new EG::Game::Object("Planet");
+	EG::Game::Object *object = new EG::Game::Object("Planet");
 	object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::mat4(1.0f)));
 
 	EG::Graphics::Mesh *sphere = EG::Graphics::GenerateCubeSphere(4);
@@ -72,6 +72,7 @@ int main(int argc, char **argv){
 	for (unsigned int i = 0; i < 6; i++){
 		std::stringstream temp;
 		temp << "Assets/Textures/generated_planet_normal_map_" << i << ".png";
+		//temp << "Assets/Textures/default_normal.png";
 		images[i] = temp.str();
 	}
 	cube_map = new EG::Graphics::CubeMap(images[CUBE_RIGHT], images[CUBE_LEFT], images[CUBE_TOP], images[CUBE_BOTTOM], images[CUBE_BACK], images[CUBE_FRONT]);
@@ -88,7 +89,8 @@ int main(int argc, char **argv){
 	material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER, "sphere_cube_map_gradient_decal_with_lighting");
 	material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "sphere_cube_map_gradient_decal");
 	material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER, "sphere_cube_map_gradient_decal_with_lighting");
-	object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));*/
+	material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "sphere_cube_mapped_gradient_decal_prepass");
+	object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));
 
 	// Test Cube2
 	EG::Graphics::Mesh *cube = EG::Graphics::GenerateCube();
@@ -99,7 +101,8 @@ int main(int argc, char **argv){
 	texture = new EG::Graphics::Texture("Assets/Textures/concrete_normal.jpg");
 	scene->GetTextureManager()->AddTexture("concrete_normal", texture);
 	object2->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(-5.0f, -0.101f, -5.0f)), glm::vec3(10.0f, 0.1f, 10.0f))));
-	EG::Graphics::RenderingMaterial *material = new EG::Graphics::RenderingMaterial();
+	//EG::Graphics::RenderingMaterial *material = new EG::Graphics::RenderingMaterial();
+	material = new EG::Graphics::RenderingMaterial();
 	material->SetLit(true);
 	material->SetCastsShadows(true);
 	material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "concrete_decal");
@@ -107,8 +110,8 @@ int main(int argc, char **argv){
 	object2->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("cube", material));
 
 	// Sky Sphere
-	EG::Graphics::Mesh *sphere = EG::Graphics::GenerateSphere(4, 4);
-	scene->GetMeshManager()->Add("sphere", sphere);
+	EG::Graphics::Mesh *regular_sphere = EG::Graphics::GenerateSphere(4, 4);
+	scene->GetMeshManager()->Add("sphere", regular_sphere);
 	EG::Game::Object *object3 = new EG::Game::Object("SkySphere");
 	texture = new EG::Graphics::Texture("Assets/Textures/sky.png");
 	scene->GetTextureManager()->AddTexture("starfield_decal", texture);
@@ -191,7 +194,7 @@ int main(int argc, char **argv){
 
 	// Add Objects
 	EG::Game::ObjectManager *objects = game->GetScene()->GetObjectManager();
-	//objects->AddObject(object);
+	objects->AddObject(object);
 	objects->AddObject(read_object);
 	objects->AddObject(object2);
 	objects->AddObject(object3);
