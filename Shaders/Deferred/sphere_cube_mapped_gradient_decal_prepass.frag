@@ -38,7 +38,7 @@ void main(){
 
 		// Height and Normal
 		float height = height_index * 2.0 - 1.0;
-		vec3 computed_normal = normalize(teNormal);
+		vec3 computed_normal = normalize(-teNormal);
 		if (normal_mapping_enabled == 1){
 			vec3 temp_bitangent = cross(teNormal, teBinormal);
 			mat3 tbn_matrix = mat3(normalize(teBinormal), /*normalize(bitangent)*/ normalize(temp_bitangent), normalize(teNormal));
