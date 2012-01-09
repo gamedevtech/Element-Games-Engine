@@ -56,7 +56,7 @@ namespace EG{
 			shaders->Add("depth_debug", "Shaders/Deferred/depth_debug.vert", "Shaders/Deferred/depth_debug.frag");
 			shaders->Add("gui_rendering", "Shaders/Deferred/gui_renderer.vert", "Shaders/Deferred/gui_renderer.frag");
 			shaders->Add("dof", "Shaders/Deferred/dof.vert", "Shaders/Deferred/dof.frag");
-			shaders->Add("sphere_cube_mapped_gradient_decal_prepass", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass.vert", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass.frag");
+			shaders->Add("sphere_cube_mapped_gradient_decal_prepass", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass.vert", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass.frag", "", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass.cont", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass.eval");
 
 			camera = new EG::Graphics::Camera(45.0f, glm::ivec2(800, 500), glm::vec2(0.1f, 100.0f));
 			camera->ComputeProjectionMatrix();
@@ -121,6 +121,7 @@ namespace EG{
 			shaders->SetInt("normal_map", 1);
 			shaders->SetInt("height_map", 2);
 			shaders->SetInt("normal_mapping_enabled", normal_mapping_enabled);
+			shaders->SetFloat3("camera_position", camera->GetPosition());
 
 			// Render Objects
 			EG::Utility::StringDictionary<EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
@@ -135,11 +136,15 @@ namespace EG{
 					EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
 					EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
 					//if (material->GetLit()){
+					bool tessellation_shader = false;
 					bool custom_shader = false;
 					if (material->HasShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER)){
 						custom_shader = true;
 						shaders->Unbind();
 						shaders->Bind(material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER));
+						if (material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER) == "sphere_cube_mapped_gradient_decal_prepass") {
+							tessellation_shader = true;
+						}
 
 						shaders->SetMatrix4("projection_matrix", camera->GetProjectionMatrix());
 						shaders->SetMatrix4("view_matrix", camera->GetViewMatrix());
@@ -147,6 +152,7 @@ namespace EG{
 						shaders->SetInt("normal_map", 1);
 						shaders->SetInt("height_map", 2);
 						shaders->SetInt("normal_mapping_enabled", normal_mapping_enabled);
+						shaders->SetFloat3("camera_position", camera->GetPosition());
 					}
 
 					if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL)){
@@ -174,7 +180,6 @@ namespace EG{
 					shaders->SetFloat("material_specularity", material->GetSpecular());
 					shaders->SetFloat4("material_color", material->GetColor());
 					unsigned int object_lit = (material->GetLit())?1:0;
-					//std::cout << "Object (" << object->GetObjectName() << ") is Lit?: " << object_lit << std::endl;
 					shaders->SetInt("object_is_lit", object_lit);
 
 					// Transformation
@@ -187,8 +192,13 @@ namespace EG{
 
 					EG::Graphics::Mesh *mesh = scene->GetMeshManager()->Get(mesh_attribute->GetMeshId());
 					if (mesh){
+						if (tessellation_shader){
+							graphics->SetUsingTessellation(true);
+						}
 						mesh->Draw();
-						//std::cout << "Mesh Drawn" << std::endl;
+						if (tessellation_shader){
+							graphics->SetUsingTessellation(false);
+						}
 					}
 
 					if (custom_shader){
@@ -201,6 +211,7 @@ namespace EG{
 						shaders->SetInt("normal_map", 1);
 						shaders->SetInt("height_map", 2);
 						shaders->SetInt("normal_mapping_enabled", normal_mapping_enabled);
+						shaders->SetFloat3("camera_position", camera->GetPosition());
 					}
 					//}
 					++mesh_attribute_iterator;

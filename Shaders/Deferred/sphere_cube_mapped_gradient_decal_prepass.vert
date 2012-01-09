@@ -1,28 +1,22 @@
-#version 130
+#version 410
 
-uniform mat4 projection_matrix;
-uniform mat4 view_matrix;
-uniform mat4 model_matrix;
-uniform mat4 normal_matrix;
+layout(location=0) in vec4 vertex_position;
+layout(location=1) in vec4 vertex_normal;
+layout(location=2) in vec4 vertex_texcoord;
+layout(location=3) in vec4 vertex_binormal;
+layout(location=4) in vec4 vertex_bitangent;
 
-in vec4 vertex_position;
-in vec4 vertex_normal;
-in vec4 vertex_texcoord;
-in vec4 vertex_binormal;
-in vec4 vertex_bitangent;
-
-smooth out vec3 position;
-smooth out vec3 normal;
-smooth out vec3 binormal;
-smooth out vec3 bitangent;
-smooth out vec3 texcoord;
+out vec4 vPosition;
+out vec2 vTexCoord;
+out vec3 vNormal;
+out vec3 vBinormal;
+out vec3 vBitangent;
+out float vDistance;
 
 void main(){
-	position = (model_matrix * vertex_position).xyz;
-	normal = normalize(normal_matrix * vec4(vertex_position.xyz, 0.0)).xyz;
-	binormal = normalize(normal_matrix * vec4(vertex_binormal.xyz, 0.0)).xyz;
-	bitangent = normalize(normal_matrix * vec4(vertex_bitangent.xyz, 0.0)).xyz;
-	texcoord = normalize(vertex_position.xyz);
-
-	gl_Position = projection_matrix * view_matrix * model_matrix * vertex_position;
+	vPosition = vertex_position;//model_matrix * view_matrix * vertex_position;
+	vTexCoord = vertex_texcoord.st;
+	vNormal = vertex_normal.xyz;//(normal_matrix * vertex_normal).xyz;
+	vBinormal = vertex_binormal.xyz;//(normal_matrix * vertex_binormal).xyz;
+	vBitangent = vertex_bitangent.xyz;//(normal_matrix * vertex_bitangent).xyz;
 }

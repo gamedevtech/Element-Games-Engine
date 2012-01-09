@@ -55,7 +55,7 @@ int main(int argc, char **argv){
 
 	// Planet Sorta
 	EG::Game::Object *object = new EG::Game::Object("Planet");
-	object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::mat4(1.0f)));
+	object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::translate(glm::mat4(1.0f), glm::vec3(-5.0f, 5.0f, -5.0f))));
 
 	EG::Graphics::Mesh *sphere = EG::Graphics::GenerateCubeSphere(4);
 	scene->GetMeshManager()->Add("planet_sphere", sphere);

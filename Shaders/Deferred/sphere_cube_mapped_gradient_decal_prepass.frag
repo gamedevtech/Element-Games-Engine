@@ -1,10 +1,12 @@
-#version 130
+#version 410
 
-smooth in vec3 position;
-smooth in vec3 normal;
-smooth in vec3 binormal;
-smooth in vec3 bitangent;
-smooth in vec3 texcoord;
+in vec4 tePosition;
+in vec2 teTexCoord;
+in vec3 teNormal;
+in vec3 teBinormal;
+in vec3 teBitangent;
+in vec3 teCubeMapTexCoord;
+in float teHeightValue;
 
 uniform sampler2D decal_map;
 uniform samplerCube normal_map;
@@ -23,25 +25,25 @@ out vec4 fragment2;
 out vec4 fragment3;
 
 void main(){
-	float height_index = texture(height_map, texcoord).r;
+	vec3 texcoord = normalize(tePosition.xyz);
+	float height_index = texture(height_map, teCubeMapTexCoord).r;
 	vec4 decal_color = texture(decal_map, vec2(height_index, 0.5));
 	//vec4 decal_color = vec4(height_index, height_index, height_index, 1.0);
 	if (object_is_lit == 1){
 		// Position and Specular Factor
-		fragment0 = vec4(position, material_specularity);
+		fragment0 = vec4(tePosition.xyz, material_specularity);
 
 		// Decal and Color
 		fragment1 = decal_color * material_color;
 
 		// Height and Normal
 		float height = height_index * 2.0 - 1.0;
-		vec3 computed_normal = normalize(normal);
+		vec3 computed_normal = normalize(teNormal);
 		if (normal_mapping_enabled == 1){
-			vec3 temp_bitangent = cross(normal, binormal);
-			mat3 tbn_matrix = mat3(normalize(binormal), /*normalize(bitangent)*/ normalize(temp_bitangent), normalize(normal));
-			vec3 normal_map_value = normalize(2.0 * texture(normal_map, texcoord).xyz - 1.0);
+			vec3 temp_bitangent = cross(teNormal, teBinormal);
+			mat3 tbn_matrix = mat3(normalize(teBinormal), /*normalize(bitangent)*/ normalize(temp_bitangent), normalize(teNormal));
+			vec3 normal_map_value = normalize(2.0 * texture(normal_map, teCubeMapTexCoord).xyz - 1.0);
 			computed_normal = normalize(tbn_matrix * normal_map_value);
-			//computed_normal = texture(normal_map, texcoord).xyz;
 		}
 		fragment2 = vec4(computed_normal, height);
 
