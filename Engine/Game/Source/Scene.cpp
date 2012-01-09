@@ -11,6 +11,8 @@ namespace EG{
 			textures->AddTexture("default_decal", new EG::Graphics::Texture("Assets/Textures/default_decal.png"));
 			textures->AddTexture("default_normal", new EG::Graphics::Texture("Assets/Textures/default_normal.png"));
 			textures->AddTexture("default_height", new EG::Graphics::Texture("Assets/Textures/default_height.png"));
+			textures->AddCubeMap("default_normal_cube_map", new EG::Graphics::CubeMap("Assets/Textures/default_normal.png", "Assets/Textures/default_normal.png", "Assets/Textures/default_normal.png", "Assets/Textures/default_normal.png", "Assets/Textures/default_normal.png", "Assets/Textures/default_normal.png"));
+			textures->AddCubeMap("default_height_cube_map", new EG::Graphics::CubeMap("Assets/Textures/default_height.png", "Assets/Textures/default_height.png", "Assets/Textures/default_height.png", "Assets/Textures/default_height.png", "Assets/Textures/default_height.png", "Assets/Textures/default_height.png"));
 		}
 
 		Scene::~Scene(void){
