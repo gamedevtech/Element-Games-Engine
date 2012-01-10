@@ -19,13 +19,15 @@
 #include "../../../Engine/Graphics/Texture.h"
 #include "../../../Engine/Graphics/RenderingMaterial.h"
 #include "../../../Engine/Utility/Time.h"
+#include "../../../Engine/Utility/JSON.h"
 #include "../../../Engine/Media/ModelLoader.h"
 #include "../../../Engine/Media/ObjectReader.h"
 
 EG::Media::ModelLoader *model;
 int main(int argc, char **argv){
 	// This is just a temporary organization to test classes as they get created!
-	EG::Utility::Window *window = new EG::Utility::Window(800, 500, 32, false, "Element Games Sandbox");
+	EG::Utility::JSON config_file("config.json");
+	EG::Utility::Window *window = new EG::Utility::Window(config_file.GetInt("screen.width"), config_file.GetInt("screen.height"), config_file.GetInt("screen.bpp"), config_file.GetBool("screen.fullscreen"), "Element Games Sandbox");
 	EG::Game::Scene *scene = new EG::Game::Scene();
 	EG::Game::Game *game = new EG::Game::Game(window, scene);
 
@@ -121,7 +123,7 @@ int main(int argc, char **argv){
 	material->SetCastsShadows(false);
 	material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "starfield_decal");
 	object3->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("sphere", material));
- 
+
 	// Light 0
 	EG::Game::Object *light_object = new EG::Game::Object("RedLight");
 	glm::mat4 light_geometry_transform = glm::mat4(1.0f);
