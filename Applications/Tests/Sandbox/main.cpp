@@ -27,7 +27,7 @@ EG::Media::ModelLoader *model;
 int main(int argc, char **argv){
 	// This is just a temporary organization to test classes as they get created!
 	EG::Utility::JSON config_file("config.json");
-	EG::Utility::Window *window = new EG::Utility::Window(config_file.GetInt("screen.width"), config_file.GetInt("screen.height"), config_file.GetInt("screen.bpp"), config_file.GetBool("screen.fullscreen"), "Element Games Sandbox");
+	EG::Utility::Window *window = new EG::Utility::Window(config_file.GetInt("screen.width"), config_file.GetInt("screen.height"), 32, config_file.GetBool("screen.fullscreen"), "Element Games Sandbox");
 	EG::Game::Scene *scene = new EG::Game::Scene();
 	EG::Game::Game *game = new EG::Game::Game(window, scene);
 
