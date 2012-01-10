@@ -37,14 +37,14 @@ namespace EG{
 			shaders->Add("sphere_cube_map_gradient_decal", "Shaders/Basic/sphere_cube_mapped_with_gradient_decal.vert", "Shaders/Basic/sphere_cube_mapped_with_gradient_decal.frag");
 			shaders->Add("sphere_cube_map_gradient_decal_with_lighting", "Shaders/Basic/sphere_cube_mapped_with_gradient_decal_with_lighting.vert", "Shaders/Basic/sphere_cube_mapped_with_gradient_decal_with_lighting.frag");
 
-			camera = new EG::Graphics::Camera(45.0f, glm::ivec2(800, 500), glm::vec2(0.1f, 100.0f));
+			camera = new EG::Graphics::Camera(45.0f, glm::ivec2(graphics->GetViewportWidth(), graphics->GetViewportHeight()), glm::vec2(0.1f, 100.0f));
 			camera->ComputeProjectionMatrix();
 			camera->SetPosition(glm::vec3(-0.7f, 2.5f, 5.0f));
 			camera->RotateByMouse(glm::vec2(0.0f, -200.0f));
 			camera->Update();
 			camera->SetCameraType(EG::Graphics::Camera::CAMERA_FPS);
 
-			orthographics_projection_matrix = glm::gtc::matrix_transform::ortho(0.0f, 800.0f, 0.0f, 500.0f);
+			orthographics_projection_matrix = glm::gtc::matrix_transform::ortho(0.0f, float(graphics->GetViewportWidth()), 0.0f, float(graphics->GetViewportHeight()));
 
 			initialized = true;
 		}

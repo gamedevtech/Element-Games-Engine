@@ -198,8 +198,10 @@ struct TGAHeader
 		}
 
 		// GUI Storage/Interface Class
-		RocketInterface::RocketInterface(std::string file_path, EG::Utility::Time *time, EG::Graphics::ShaderManager *shaders, EG::Input::Input *_input){
+		RocketInterface::RocketInterface(std::string file_path, EG::Utility::Time *time, EG::Graphics::ShaderManager *shaders, EG::Input::Input *_input, unsigned int _width, unsigned int _height){
 			input = _input;
+            screen_width = _width;
+            screen_height = _height;
 			render_interface = new RocketRenderInterface(shaders);
 			Rocket::Core::SetRenderInterface(render_interface);
 			system_interface = new RocketSystemInterface();
@@ -207,7 +209,7 @@ struct TGAHeader
 			Rocket::Core::SetSystemInterface(system_interface);
 			Rocket::Core::Initialise();
 			Rocket::Controls::Initialise();
-			context = Rocket::Core::CreateContext("default", Rocket::Core::Vector2i(800, 500));
+			context = Rocket::Core::CreateContext("default", Rocket::Core::Vector2i(screen_width, screen_height));
 			Rocket::Debugger::Initialise(context);
 			//Rocket::Debugger::SetVisible(true);
 			Rocket::Core::FontDatabase::LoadFontFace(Rocket::Core::String("Assets/GUIs/Delicious-Roman.otf"));

@@ -222,5 +222,13 @@ namespace EG{
 		void GraphicsSubsystem::EndMultiBufferOffscreenRender(void){
 			opengl_interface->EndMultiBufferOffscreenRender();
 		}
+
+        unsigned int GraphicsSubsystem::GetViewportWidth(void){
+            return viewport_width;
+        }
+
+        unsigned int GraphicsSubsystem::GetViewportHeight(void){
+            return viewport_height;
+        }
 	}
 }

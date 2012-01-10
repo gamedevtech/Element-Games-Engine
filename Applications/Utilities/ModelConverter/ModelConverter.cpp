@@ -9,7 +9,7 @@
 #include "../../../Engine/Media/ObjectWriter.h"
 
 ModelConverter::ModelConverter(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
-	gui = new EG::Utility::RocketInterface("Assets/GUIs/model_converter.rml", time, renderer->GetShaderManager(), input);
+	gui = new EG::Utility::RocketInterface("Assets/GUIs/model_converter.rml", time, renderer->GetShaderManager(), input, window->GetResolutionWidth(), window->GetResolutionHeight());
 	use_gui = true;
 	renderer->SetGUI(gui);
 	LoadModelEventListener *load_model_event_listener = new LoadModelEventListener();

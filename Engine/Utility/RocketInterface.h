@@ -54,7 +54,7 @@ namespace EG{
 
 		class RocketInterface{
 			public:
-				RocketInterface(std::string file_path, EG::Utility::Time *time, EG::Graphics::ShaderManager *shaders, EG::Input::Input *_input);
+				RocketInterface(std::string file_path, EG::Utility::Time *time, EG::Graphics::ShaderManager *shaders, EG::Input::Input *_input, unsigned int _width, unsigned int _height);
 				~RocketInterface(void);
 
 				void Update(void);
@@ -67,6 +67,7 @@ namespace EG{
 				Rocket::Core::Context *context;
 				Rocket::Core::ElementDocument *document;
 				EG::Input::Input *input;
+                unsigned int screen_width, screen_height;
 		};
 	}
 }

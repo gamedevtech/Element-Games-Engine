@@ -46,16 +46,16 @@ namespace EG{
 			shaders->Add("sphere_cube_map_gradient_decal", "Shaders/Multipass/sphere_cube_mapped_with_gradient_decal.vert", "Shaders/Multipass/sphere_cube_mapped_with_gradient_decal.frag");
 			shaders->Add("sphere_cube_map_gradient_decal_with_lighting", "Shaders/Multipass/sphere_cube_mapped_with_gradient_decal_with_lighting.vert", "Shaders/Multipass/sphere_cube_mapped_with_gradient_decal_with_lighting.frag");
 
-			camera = new EG::Graphics::Camera(45.0f, glm::ivec2(800, 500), glm::vec2(0.1f, 100.0f));
+			camera = new EG::Graphics::Camera(45.0f, glm::ivec2(graphics->GetViewportWidth(), graphics->GetViewportHeight()), glm::vec2(0.1f, 100.0f));
 			camera->ComputeProjectionMatrix();
 			camera->SetPosition(glm::vec3(0.0f, 0.0f, 5.0f));
 			camera->Update();
 			camera->SetCameraType(EG::Graphics::Camera::CAMERA_FPS);
 
-			light_buffer = new EG::Graphics::OffscreenBuffer(800, 500, 1, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
-			color_buffer = new EG::Graphics::OffscreenBuffer(800, 500, 1, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_NONE);
-			bloom_buffer = new EG::Graphics::OffscreenBuffer(800 / 4.0f, 500 / 4.0f, 3, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
-			orthographics_projection_matrix = glm::gtc::matrix_transform::ortho(0.0f, 800.0f, 0.0f, 500.0f);
+			light_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth(), graphics->GetViewportHeight(), 1, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
+			color_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth(), graphics->GetViewportHeight(), 1, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_NONE);
+			bloom_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth() / 4.0f, graphics->GetViewportHeight() / 4.0f, 3, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
+			orthographics_projection_matrix = glm::gtc::matrix_transform::ortho(0.0f, float(graphics->GetViewportWidth()), 0.0f, float(graphics->GetViewportHeight()));
 
 			initialized = true;
 		}
@@ -64,7 +64,7 @@ namespace EG{
 			/*graphics->BeginFrame();
 			camera->Update();
 
-			graphics->StartOffscreenRender(light_buffer->GetBufferId(), 0, 800, 500);
+			graphics->StartOffscreenRender(light_buffer->GetBufferId(), 0, graphics->GetViewportWidth(), graphics->GetViewportHeight());
 
 			glDepthFunc(GL_LEQUAL);
 			glEnable(GL_BLEND);
@@ -285,7 +285,7 @@ namespace EG{
 			glDisable(GL_BLEND);
 			graphics->EndOffscreenRender();
 
-			graphics->StartOffscreenRender(color_buffer->GetBufferId(), 0, 800, 500);
+			graphics->StartOffscreenRender(color_buffer->GetBufferId(), 0, graphics->GetViewportWidth(), graphics->GetViewportHeight());
 
 			// Non Lit Objects (like lights)
 			shaders->Bind("textured");
@@ -410,7 +410,7 @@ namespace EG{
 				shaders->Bind("composition");
 				shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
 				shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
-				shaders->SetMatrix4("model_matrix", glm::scale(glm::mat4(1.0f), glm::vec3(800.0f, 500.0f, 1.0f)));
+				shaders->SetMatrix4("model_matrix", glm::scale(glm::mat4(1.0f), glm::vec3(float(graphics->GetViewportWidth()), float(graphics->GetViewportHeight()), 1.0f)));
 				graphics->BindTexture(color_buffer->GetTextureId(0), 0);
 				shaders->SetInt("decal_map", 0);
 				graphics->BindTexture(light_buffer->GetTextureId(0), 1);
@@ -424,10 +424,10 @@ namespace EG{
 
 		void RendererMultipass::Bloom(void){
 			glDisable(GL_BLEND);
-			glm::mat4 model_matrix = glm::scale(glm::mat4(1.0f), glm::vec3(800.0f / 4.0f, 500.0f / 4.0f, 1.0f));
-			glm::vec2 size = glm::vec2(800.0f / 4.0f, 500.0f / 4.0f);
+			glm::mat4 model_matrix = glm::scale(glm::mat4(1.0f), glm::vec3(float(graphics->GetViewportWidth()) / 4.0f, float(graphics->GetViewportHeight()) / 4.0f, 1.0f));
+			glm::vec2 size = glm::vec2(float(graphics->GetViewportWidth()) / 4.0f, float(graphics->GetViewportHeight()) / 4.0f);
 
-			graphics->StartOffscreenRender(bloom_buffer->GetBufferId(), 0, 800, 500);
+			graphics->StartOffscreenRender(bloom_buffer->GetBufferId(), 0, graphics->GetViewportWidth(), graphics->GetViewportHeight());
 			shaders->Bind("convolution");
 			graphics->BindTexture(light_buffer->GetTextureId(0), 0);
 			shaders->SetInt("map_in", 0);
@@ -439,7 +439,7 @@ namespace EG{
 			shaders->Unbind();
 			graphics->EndOffscreenRender();
 
-			graphics->StartOffscreenRender(bloom_buffer->GetBufferId(), 1, 800, 500);
+			graphics->StartOffscreenRender(bloom_buffer->GetBufferId(), 1, graphics->GetViewportWidth(), graphics->GetViewportHeight());
 			shaders->Bind("gaussian_h");
 			graphics->BindTexture(bloom_buffer->GetTextureId(0), 0);
 			shaders->SetInt("map_in", 0);
@@ -451,7 +451,7 @@ namespace EG{
 			shaders->Unbind();
 			graphics->EndOffscreenRender();
 
-			graphics->StartOffscreenRender(bloom_buffer->GetBufferId(), 2, 800, 500);
+			graphics->StartOffscreenRender(bloom_buffer->GetBufferId(), 2, graphics->GetViewportWidth(), graphics->GetViewportHeight());
 			shaders->Bind("gaussian_v");
 			graphics->BindTexture(bloom_buffer->GetTextureId(1), 0);
 			shaders->SetInt("map_in", 0);

@@ -75,6 +75,10 @@ namespace EG{
 				void StartMultiBufferOffscreenRender(unsigned int *buffer_id, unsigned int buffer_count, int *buffers, unsigned int width, unsigned int height);
 				void EndMultiBufferOffscreenRender(void);
 
+                // Utility
+                unsigned int GetViewportWidth(void);
+                unsigned int GetViewportHeight(void);
+
 				// Singleton
 				static GraphicsSubsystem *Instance(void);
 			private:
