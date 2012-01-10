@@ -40,6 +40,7 @@ namespace EG{
 				std::string GetVersionString(void);
 				unsigned int GetVersionMajor(void);
 				unsigned int GetVersionMinor(void);
+				void OverrideVersion(int major, int minor);
 
 				bool ErrorCheck(std::string prefix);
 

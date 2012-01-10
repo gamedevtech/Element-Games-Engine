@@ -64,6 +64,10 @@ namespace EG{
 			return false;
 		}
 
+		void GraphicsSubsystem::OverrideVersion(int major, int minor){
+			opengl_interface->OverrideVersion(major, minor);
+		}
+
 		bool GraphicsSubsystem::CheckErrors(std::string prefix){
 			return opengl_interface->ErrorCheck(prefix);
 		}

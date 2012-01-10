@@ -107,6 +107,11 @@ namespace EG{
 			return version_minor;
 		}
 
+		void OpenGLInterface::OverrideVersion(int major, int minor){
+			version_major = major;
+			version_minor = minor;
+		}
+
 		bool OpenGLInterface::ErrorCheck(std::string prefix){
 			GLenum result = glGetError();
 			switch (result){

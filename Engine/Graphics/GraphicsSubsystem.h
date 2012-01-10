@@ -27,6 +27,7 @@ namespace EG{
 				unsigned int GetVersionMajor(void);
 				unsigned int GetVersionMinor(void);
 				bool CheckVersion(unsigned int major, unsigned int minor = 0);
+				void OverrideVersion(int major, int minor);
 
 				// Check for Graphics Interface Errors
 				bool CheckErrors(std::string prefix);
