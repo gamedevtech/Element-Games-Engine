@@ -324,25 +324,19 @@ namespace EG{
 
 			if (has_vertices){
 				vertices = _vertices;
-// 				std::cout << "VERTICES D" << std::endl;
 			}
 			if (has_texcoords){
 				texcoords = _texcoords;
-// 				std::cout << "TEXCOORDS D" << std::endl;
 			}
 			if (has_normals){
 				normals = _normals;
-// 				std::cout << "NORMALS D" << std::endl;
 			}
 			if (has_binormals){
 				binormals = _binormals;
-// 				std::cout << "BINORMALS D" << std::endl;
 			}
 			if (has_bitangents){
 				bitangents = _bitangents;
-// 				std::cout << "BITANGENTS D" << std::endl;
 			}
-			std::cout << "MV: " << vertices[3] << std::endl;
 			GenerateBuffer();
 		}
 
@@ -472,8 +466,6 @@ namespace EG{
 
 				++triangle_iterator;
 			}
-			std::cout << "TV1: " << vertices[0] << ' ' << vertices[1] << ' ' << vertices[2] << ' ' << vertices[3] << std::endl;
-			std::cout << "TV2: " << vertices[4] << ' ' << vertices[5] << ' ' << vertices[6] << ' ' << vertices[7] << std::endl;
 		}
 	}
 }

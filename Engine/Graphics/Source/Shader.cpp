@@ -67,7 +67,7 @@ namespace EG{
 					memcpy(tessellation_control_shader_source[index], tessellation_control_shader_line.c_str(), tessellation_control_shader_line_sizes[index]);
 					index += 1;
 				}
-				std::cout << "Loaded Source for Tessellation Control." << std::endl;
+				//std::cout << "Loaded Source for Tessellation Control." << std::endl;
 			}else{
 				tessellation_control_shader_line_count = 0;
 			}
@@ -85,7 +85,7 @@ namespace EG{
 					memcpy(tessellation_evaluation_shader_source[index], tessellation_evaluation_shader_line.c_str(), tessellation_evaluation_shader_line_sizes[index]);
 					index += 1;
 				}
-				std::cout << "Loaded Source for Tessellation Evaluation." << std::endl;
+				//std::cout << "Loaded Source for Tessellation Evaluation." << std::endl;
 			}else{
 				tessellation_evaluation_shader_line_count = 0;
 			}
