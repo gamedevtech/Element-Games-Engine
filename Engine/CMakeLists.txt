@@ -61,6 +61,7 @@ set(SRCS
 	./Graphics/Texture.h
 	./Graphics/TextureManager.h
 	./Graphics/OffscreenBuffer.h
+	./Graphics/Particle.h
 	./Graphics/Source/Camera.cpp
 	./Graphics/Source/CameraManager.cpp
 	./Graphics/Source/GraphicsSubsystem.cpp
@@ -78,6 +79,7 @@ set(SRCS
 	./Graphics/Source/Texture.cpp
 	./Graphics/Source/TextureManager.cpp
 	./Graphics/Source/OffscreenBuffer.cpp
+	./Graphics/Source/Particle.cpp
 
 	# Input
 	./Input/Input.h
