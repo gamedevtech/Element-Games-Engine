@@ -125,6 +125,7 @@ set(SRCS
 	./Utility/Time.h
 	./Utility/Font.h
 	./Utility/Text.h
+	./Utility/JSON.h
 	./Utility/RocketInterface.h
 	./Utility/GUI.h
 	./Utility/Dictionary.h
