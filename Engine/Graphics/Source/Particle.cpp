@@ -72,5 +72,8 @@ namespace EG{
                 }
             }
 		}
+		std::list<Particle *> *Particles ParticleSystem::GetParticles(void){
+			return *particles;
+		}
 	}
 }

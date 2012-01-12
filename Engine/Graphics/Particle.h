@@ -50,13 +50,11 @@ namespace EG{
 				~ParticleSystem(void);
 
 				void Update(float frame_time);
+				std::list<Particle *> *GetParticles(void);
 			protected:
 				ParticleController *controller;
 				ParticleEmitter *emitter;
 				std::list<Particle *> particles;
-
-                // Object add list
-                // Object del list
 		};
 	}
 }
