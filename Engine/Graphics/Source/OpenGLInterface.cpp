@@ -42,8 +42,6 @@ namespace EG{
 			std::string version_numbers_string = version_string.substr(0, first_position);
 			version_major = atoi(version_numbers_string.substr(0, 1).c_str());
 			version_minor = atoi(version_numbers_string.substr(2, 1).c_str());
-			//version_major = 1;
-			//version_minor = 5;
 			std::cout << "OpenGL Version: " << version_major << '.' << version_minor << std::endl;
 		}
 

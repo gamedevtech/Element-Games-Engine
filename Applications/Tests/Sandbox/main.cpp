@@ -191,7 +191,6 @@ int main(int argc, char **argv){
     EG::Media::ObjectReader reader;
     reader.Read("Assets/Models/test_model.ego", scene);
     EG::Game::Object *read_object = reader.GetLoadedObject();
-    std::cout << "Object was read with name: " << read_object->GetObjectName() << std::endl;
     // END TEST
 
     // Add Objects

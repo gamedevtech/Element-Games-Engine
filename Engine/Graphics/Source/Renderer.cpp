@@ -77,8 +77,8 @@ namespace EG{
 			shaders->SetFloat("light_radius", 0.0000001f);
 
 			// Render Objects
-			EG::Utility::StringDictionary<EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
-			EG::Utility::StringDictionaryKeysIterator object_iterator = objects->GetKeysBegin();
+			EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
+			EG::Utility::UnsignedIntDictionaryKeysIterator object_iterator = objects->GetKeysBegin();
 			while (object_iterator != objects->GetKeysEnd()){
 				EG::Game::Object *object = objects->Get(*object_iterator);
 
@@ -159,8 +159,8 @@ namespace EG{
 				++object_iterator;
 			}
 
-			EG::Utility::StringDictionary<EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
-			EG::Utility::StringDictionaryKeysIterator light_object_iterator = objects->GetKeysBegin();
+			EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
+			EG::Utility::UnsignedIntDictionaryKeysIterator light_object_iterator = objects->GetKeysBegin();
 			while (light_object_iterator != light_objects->GetKeysEnd()){
 				EG::Game::Object *light_object = light_objects->Get(*light_object_iterator);
 				if (light_object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT)){
@@ -176,7 +176,7 @@ namespace EG{
 						glm::vec4 light_position = glm::vec4(lp.x, lp.y, lp.z, 1.0f);
 						light_position.w = 1.0f;
 						glm::vec4 light_view = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-						shaders->SetFloat3("light_color", light->GetColor());
+						shaders->SetFloat3("light_color", light_color);
 						shaders->SetFloat4("light_position", light_position);
 						shaders->SetFloat3("light_attenuation", light->GetAttenuation());
 						shaders->SetFloat("light_radius", light->GetRadius());
@@ -369,8 +369,8 @@ namespace EG{
 			temp << frame_time;
 			temp.flush();
 			//shaders->SetMatrix4("model_matrix", glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(40.0f, 40.0f, 0.0f)), glm::vec3(1.0f, 1.0f, 1.0f)));
-			glm::vec3 position = glm::vec3(5.0f, 5.0f, 0.0f);
-			glm::vec2 scale = glm::vec2(1.0f, 1.0f);
+			//glm::vec3 position = glm::vec3(5.0f, 5.0f, 0.0f);
+			//glm::vec2 scale = glm::vec2(1.0f, 1.0f);
 			//font_manager->DrawText(temp.str(), position, scale, shaders);
 
 			if (gui_set){

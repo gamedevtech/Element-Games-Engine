@@ -11,11 +11,13 @@ namespace EG{
 		}
 
 		bool ObjectManager::AddObject(EG::Game::Object *object){
-			if (objects_by_name.Has(object->GetObjectName())){
+			if (object->GetObjectName() != "" && objects_by_name.Has(object->GetObjectName())){
 				return false;
 			}
 
-			objects_by_name.Set(object->GetObjectName(), object);
+			if (object->GetObjectName() != ""){
+				objects_by_name.Set(object->GetObjectName(), object);
+			}
 
 			unsigned int object_id = 0;
 			bool found = false;
@@ -48,8 +50,8 @@ namespace EG{
 			return NULL;
 		}
 
-		EG::Utility::StringDictionary<EG::Game::Object *> *ObjectManager::GetObjects(void){
-			return &objects_by_name;
+		EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *ObjectManager::GetObjects(void){
+			return &objects_by_id;
 		}
 	}
 }

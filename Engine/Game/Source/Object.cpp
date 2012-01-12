@@ -19,7 +19,12 @@ namespace EG{
 		}
 
 		std::string Object::GetObjectName(void){
-			return object_name;
+			if (object_name != ""){
+				return object_name;
+			}
+			std::stringstream stream;
+			stream << object_id;
+			return stream.str();
 		}
 
 		void Object::AddAttribute(EG::Game::ObjectAttribute *attribute){

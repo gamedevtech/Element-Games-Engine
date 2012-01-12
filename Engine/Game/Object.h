@@ -4,6 +4,7 @@
 //#include <map>
 #include <vector>
 #include <string>
+#include <sstream>
 
 #include "../Utility/Dictionary.h"
 #include "ObjectAttribute.h"
@@ -12,7 +13,7 @@ namespace EG{
 	namespace Game{
 		class Object{
 			public:
-				Object(std::string _object_name);
+				Object(std::string _object_name = "");
 				~Object(void);
 
 				void SetObjectId(unsigned int _object_id);
