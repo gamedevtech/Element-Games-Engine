@@ -9,10 +9,12 @@ namespace EG{
 	namespace Graphics{
 		class Particle : public EG::Game::Object{
 			public:
-				Particle(std::string name = "");
+				Particle(void);
 				~Particle(void);
+
+                bool Alive(void);
 			protected:
-				// particle status
+				bool alive;
 		};
 
 		class ParticleController{
@@ -20,21 +22,26 @@ namespace EG{
 				ParticleController(void);
 				~ParticleController(void);
 
-				virtual void ControlParticle(Particle *particle) = 0;
+				void ControlParticle(Particle *particle);
 			protected:
 				//
 		};
 
 		class ParticleEmitter{
 			public:
-				ParticleEmitter(void);
+				ParticleEmitter(Particle *_particle_template, float _emission_velocity);
 				~ParticleEmitter(void);
 
-				void Emit(void);
+				void Emit(std::list<Particle *> *particles, float frame_time);
+                Particle *CreateParticle(void);
 			protected:
-				float emission_velicity;
+                Particle *particle_template;
+				float emission_velocity;
 				glm::vec3 initial_velocity;
 				glm::vec3 initial_velocity_mod;
+
+                float time_counter;
+                float time_between_particles;
 		};
 
 		class ParticleSystem{
@@ -42,11 +49,14 @@ namespace EG{
 				ParticleSystem(ParticleController *_controller, ParticleEmitter *_emitter);
 				~ParticleSystem(void);
 
-				void Update(void);
+				void Update(float frame_time);
 			protected:
 				ParticleController *controller;
 				ParticleEmitter *emitter;
 				std::list<Particle *> particles;
+
+                // Object add list
+                // Object del list
 		};
 	}
 }

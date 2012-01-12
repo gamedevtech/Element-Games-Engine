@@ -1,0 +1,12 @@
+*~
+CMakeCache.txt
+cmake*
+Dependencies/Downloads/**
+CMakeFiles
+Makefile
+shaders.log
+gmon.out
+*.a
+generated*.png
+element_games_sandbox
+element_games_model_converter
