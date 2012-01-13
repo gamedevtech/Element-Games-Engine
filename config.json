@@ -1,7 +1,7 @@
 {
-    "screen": {
-        "width": 800,
-        "height": 500,
-        "fullscreen": false
-    }
+	"screen": {
+		"width": 800,
+		"height": 500,
+		"fullscreen": false
+	}
 }

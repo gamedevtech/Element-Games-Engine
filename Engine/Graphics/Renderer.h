@@ -10,51 +10,51 @@
 #include "../Utility/RocketInterface.h"
 
 namespace EG{
-	namespace Graphics{
-		class TestEmitter : public EG::Graphics::ParticleEmitter{
-			public:
-				TestEmitter(void);
-				~TestEmitter(void);
-				EG::Graphics::Particle *Emit(void);
-		};
-		class TestController : public EG::Graphics::ParticleController{
-			public:
-				TestController(void);
-				~TestController(void);
-				void ControlParticle(EG::Graphics::Particle *p);
-		};
+    namespace Graphics{
+        class TestEmitter : public EG::Graphics::ParticleEmitter{
+            public:
+                TestEmitter(void);
+                ~TestEmitter(void);
+                void CreateParticle(EG::Graphics::Particle *p);
+        };
+        class TestController : public EG::Graphics::ParticleController{
+            public:
+                TestController(void);
+                ~TestController(void);
+                void ControlParticle(EG::Graphics::Particle *p);
+        };
 
-		class Renderer{
-			public:
-				Renderer(void);
-				~Renderer(void);
+        class Renderer{
+            public:
+                Renderer(void);
+                ~Renderer(void);
 
-				void Initialize(void);
-				void Render(EG::Game::Scene *scene, float frame_time);
+                void Initialize(void);
+                void Render(EG::Game::Scene *scene, float frame_time);
 
-				// TEMP, SHOULD GO IN SCENE MANAGER WHICH SHOULD HOLD A CAMERA MANAGER
-				EG::Graphics::Camera *GetCamera(void){
-					return camera;
-				}
-				EG::Graphics::ShaderManager *GetShaderManager(void){
-					return shaders;
-				}
+                // TEMP, SHOULD GO IN SCENE MANAGER WHICH SHOULD HOLD A CAMERA MANAGER
+                EG::Graphics::Camera *GetCamera(void){
+                    return camera;
+                }
+                EG::Graphics::ShaderManager *GetShaderManager(void){
+                    return shaders;
+                }
 
-				void SetGUI(EG::Utility::RocketInterface *_gui);
-			protected:
-				// TEMP, SHOULD GO IN SCENE MANAGER WHICH SHOULD HOLD A CAMERA MANAGER
-				EG::Graphics::Camera *camera;
-				EG::Graphics::ShaderManager *shaders;
-				glm::mat4 orthographics_projection_matrix;
-				bool initialized;
+                void SetGUI(EG::Utility::RocketInterface *_gui);
+            protected:
+                // TEMP, SHOULD GO IN SCENE MANAGER WHICH SHOULD HOLD A CAMERA MANAGER
+                EG::Graphics::Camera *camera;
+                EG::Graphics::ShaderManager *shaders;
+                glm::mat4 orthographics_projection_matrix;
+                bool initialized;
 
-				bool gui_set;
-				EG::Utility::RocketInterface *gui;
+                bool gui_set;
+                EG::Utility::RocketInterface *gui;
 
-				// Particles
-				EG::Graphics::ParticleSystem *test_particles;
-		};
-	}
+                // Particles
+                EG::Graphics::ParticleSystem *test_particles;
+        };
+    }
 }
 
 #endif
