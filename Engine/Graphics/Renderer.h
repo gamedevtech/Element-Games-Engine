@@ -1,6 +1,7 @@
 #ifndef EG_GRAPHICS_RENDERER_H
 #define EG_GRAPHICS_RENDERER_H
 
+#include "Light.h"
 #include "Camera.h"
 #include "Particle.h"
 #include "ShaderManager.h"
@@ -31,6 +32,7 @@ namespace EG{
 
                 void Initialize(void);
                 void Render(EG::Game::Scene *scene, float frame_time);
+                void RenderObject(EG::Game::Scene *scene, EG::Graphics::Light *light, EG::Game::Object *object);
 
                 // TEMP, SHOULD GO IN SCENE MANAGER WHICH SHOULD HOLD A CAMERA MANAGER
                 EG::Graphics::Camera *GetCamera(void){
