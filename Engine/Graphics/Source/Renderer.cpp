@@ -23,9 +23,16 @@ namespace EG{
             material->SetAmbient(1.0f);
             material->SetSpecular(1.0f);
             material->SetLit(true);
-            EG::Game::ObjectAttributeRenderingMesh *mesh = new EG::Game::ObjectAttributeRenderingMesh("sphere", material);
-            p->AddAttribute(mesh);
-            EG::Game::ObjectAttributeBasicTransformation *transformation = new EG::Game::ObjectAttributeBasicTransformation(glm::mat4(1.0f));
+            material->SetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT, "default_height_cube_map");
+            material->SetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, "default_normal_cube_map");
+            material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "default_decal");
+            material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "sphere_cube_map_gradient_decal");
+            material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER, "sphere_cube_map_gradient_decal_with_lighting");
+            material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "sphere_cube_map_gradient_decal");
+            material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER, "sphere_cube_map_gradient_decal_with_lighting");
+            material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "sphere_cube_mapped_gradient_decal_prepass");
+            p->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));
+            EG::Game::ObjectAttributeBasicTransformation *transformation = new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::mat4(1.0f), glm::vec3(0.1f, 0.1f, 0.1f)));
             p->AddAttribute(transformation);
         }
         TestController::TestController(void){}
@@ -37,6 +44,11 @@ namespace EG{
                 p->SetAlive(false);
             }
             p->SetAttribute("frame_count", fc);
+            std::vector<EG::Game::ObjectAttribute *> *attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
+            EG::Game::ObjectAttributeBasicTransformation *transformation = static_cast<EG::Game::ObjectAttributeBasicTransformation *>((*attributes)[0]);
+            glm::mat4 t = transformation->GetTransformation();
+            t = glm::translate(t, glm::vec3(0.0f, 0.01f, 0.0f));
+            transformation->SetTransformation(t);
         }
 
         Renderer::Renderer(void){
