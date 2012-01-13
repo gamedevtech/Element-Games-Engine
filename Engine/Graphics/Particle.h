@@ -2,6 +2,7 @@
 #define EG_GRAPHICS_PARTICLE_H
 
 #include <list>
+#include "../Utility/StringDictionary.h"
 #include "../Math/Math.h"
 #include "../Game/Object.h"
 
@@ -12,9 +13,13 @@ namespace EG{
 				Particle(void);
 				~Particle(void);
 
-                bool Alive(void);
+				void SetAlive(bool _alive);
+				bool Alive(void);
+				void SetAttribute(std::string key, float value);
+				float GetAttribute(std::string key);
 			protected:
 				bool alive;
+				EG::Utility::StringDictionary<float> attributes;
 		};
 
 		class ParticleController{
@@ -29,19 +34,18 @@ namespace EG{
 
 		class ParticleEmitter{
 			public:
-				ParticleEmitter(Particle *_particle_template, float _emission_velocity);
+				ParticleEmitter(float _emission_velocity);
 				~ParticleEmitter(void);
 
 				void Emit(std::list<Particle *> *particles, float frame_time);
-                Particle *CreateParticle(void);
+				Particle *CreateParticle(void);
 			protected:
-                Particle *particle_template;
 				float emission_velocity;
 				glm::vec3 initial_velocity;
 				glm::vec3 initial_velocity_mod;
 
-                float time_counter;
-                float time_between_particles;
+				float time_counter;
+				float time_between_particles;
 		};
 
 		class ParticleSystem{

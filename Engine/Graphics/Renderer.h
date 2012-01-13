@@ -1,15 +1,29 @@
 #ifndef EG_GRAPHICS_RENDERER_H
 #define EG_GRAPHICS_RENDERER_H
 
-#include "GraphicsSubsystem.h"
-#include "ShaderManager.h"
 #include "Camera.h"
+#include "Particle.h"
+#include "ShaderManager.h"
+#include "GraphicsSubsystem.h"
 #include "../Game/Scene.h"
 #include "../Utility/Font.h"
 #include "../Utility/RocketInterface.h"
 
 namespace EG{
 	namespace Graphics{
+		class TestEmitter : public EG::Graphics::ParticleEmitter{
+			public:
+				TestEmitter(void);
+				~TestEmitter(void);
+				EG::Graphics::Particle *Emit(void);
+		};
+		class TestController : public EG::Graphics::ParticleController{
+			public:
+				TestController(void);
+				~TestController(void);
+				void ControlParticle(EG::Graphics::Particle *p);
+		};
+
 		class Renderer{
 			public:
 				Renderer(void);
@@ -36,6 +50,9 @@ namespace EG{
 
 				bool gui_set;
 				EG::Utility::RocketInterface *gui;
+
+				// Particles
+				EG::Graphics::ParticleSystem *test_particles;
 		};
 	}
 }

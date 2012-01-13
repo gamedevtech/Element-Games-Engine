@@ -13,6 +13,23 @@
 
 namespace EG{
 	namespace Graphics{
+		TestEmitter::TestEmitter(void) : EG::Graphics::ParticleEmitter(1.0f){}
+		TestEmitter::~TestEmitter(void){}
+		EG::Graphics::Particle *TestEmitter::Emit(void){
+			EG::Graphics::Particle *p = new EG::Graphics::Particle();
+			p->SetAttribute("frame_count", 0.0f);
+			return p;
+		}
+		TestController::TestController(void){}
+		TestController::~TestController(void){}
+		void TestController::ControlParticle(EG::Graphics::Particle *p){
+			float fc = p->GetAttribute("frame_count");
+			fc += 1.0f;
+			if (fc > 30000.0f){
+				p->SetAlive(false);
+			}
+		}
+
 		Renderer::Renderer(void){
 			initialized = false;
 			gui_set = false;
