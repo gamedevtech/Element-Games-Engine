@@ -37,17 +37,17 @@ namespace EG{
         }
         TestController::TestController(void){}
         TestController::~TestController(void){}
-        void TestController::ControlParticle(EG::Graphics::Particle *p){
+        void TestController::ControlParticle(EG::Graphics::Particle *p, float frame_time){
             float fc = p->GetAttribute("frame_count");
             fc += 1.0f;
-            if (fc > 3000.0f){
+            if (fc > 300.0f){
                 p->SetAlive(false);
             }
             p->SetAttribute("frame_count", fc);
             std::vector<EG::Game::ObjectAttribute *> *attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
             EG::Game::ObjectAttributeBasicTransformation *transformation = static_cast<EG::Game::ObjectAttributeBasicTransformation *>((*attributes)[0]);
             glm::mat4 t = transformation->GetTransformation();
-            t = glm::translate(t, glm::vec3(0.0f, 0.01f, 0.0f));
+            t = glm::translate(t, glm::vec3(0.0f, 0.1f, 0.0f));
             transformation->SetTransformation(t);
         }
 

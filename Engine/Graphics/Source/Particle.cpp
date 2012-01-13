@@ -65,7 +65,7 @@ namespace EG{
             std::list<Particle *>::iterator piter = particles.begin();
             while (piter != particles.end()){
                 Particle *p = (*piter);
-                controller->ControlParticle(p);
+                controller->ControlParticle(p, frame_time);
 
                 // NOTE: Erase should advance the iterator for us
                 // NOTE: If this doesn't work you have to store a temporary copy of the iter, delete that, and then increment, you can't delete the current iter and then increment!

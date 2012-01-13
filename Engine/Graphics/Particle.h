@@ -27,7 +27,7 @@ namespace EG{
                 ParticleController(void);
                 ~ParticleController(void);
 
-                virtual void ControlParticle(Particle *particle) = 0;
+                virtual void ControlParticle(Particle *particle, float frame_time) = 0;
             protected:
                 //
         };

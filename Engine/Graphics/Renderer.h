@@ -22,7 +22,7 @@ namespace EG{
             public:
                 TestController(void);
                 ~TestController(void);
-                void ControlParticle(EG::Graphics::Particle *p);
+                void ControlParticle(EG::Graphics::Particle *p, float frame_time);
         };
 
         class Renderer{
