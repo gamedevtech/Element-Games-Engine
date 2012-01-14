@@ -14,7 +14,7 @@
 
 namespace EG{
     namespace Graphics{
-        TestEmitter::TestEmitter(void) : EG::Graphics::ParticleEmitter(1.0f){}
+        TestEmitter::TestEmitter(void) : EG::Graphics::ParticleEmitter(5.0f){}
         TestEmitter::~TestEmitter(void){}
         void TestEmitter::CreateParticle(EG::Graphics::Particle *p){
             p->SetAttribute("frame_count", 0.0f);
@@ -25,6 +25,7 @@ namespace EG{
             material->SetSpecular(1.0f);
             material->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
             material->SetLit(false);
+            material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "particle");
             material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "billboarding");
             EG::Game::ObjectAttributeBasicTransformation *transformation = new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::mat4(1.0f), glm::vec3(0.1f, 0.1f, 0.1f)));
             p->AddAttribute(transformation);
@@ -42,7 +43,7 @@ namespace EG{
             std::vector<EG::Game::ObjectAttribute *> *attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
             EG::Game::ObjectAttributeBasicTransformation *transformation = static_cast<EG::Game::ObjectAttributeBasicTransformation *>((*attributes)[0]);
             glm::mat4 t = transformation->GetTransformation();
-            t = glm::translate(t, glm::vec3(0.0f, 0.1f, 0.0f));
+            t = glm::translate(t, glm::vec3(0.0f, 0.03f, 0.0f));
             transformation->SetTransformation(t);
         }
 
@@ -96,6 +97,7 @@ namespace EG{
         void Renderer::RenderObject(EG::Game::Scene *scene, EG::Graphics::Light *light, EG::Game::Object *object){
             if (!(scene->GetMeshManager()->Get("quad"))){
                 scene->GetMeshManager()->Add("quad", EG::Graphics::GenerateQuad());
+                scene->GetTextureManager()->AddTexture("particle", new EG::Graphics::Texture("Assets/Textures/particle.png"));
             }
             // Meshes
             glm::vec3 lp = light->GetPosition();
@@ -335,7 +337,6 @@ namespace EG{
                 ++light_object_iterator;
             }
             shaders->Unbind();
-            glDisable(GL_BLEND);
 
             // Non Lit Objects (like lights)
             shaders->Bind("textured");
@@ -345,6 +346,16 @@ namespace EG{
             shaders->SetInt("height", 1);
             object_iterator = objects->GetKeysBegin();
 
+            while (object_iterator != objects->GetKeysEnd()){
+                EG::Game::Object *object = objects->Get(*object_iterator);
+                RenderNonLitObject(scene, object);
+                ++object_iterator;
+            }
+
+            glEnable(GL_BLEND);
+            glDisable(GL_DEPTH_TEST);
+            glEnable(GL_TEXTURE_2D);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             particles = test_particles->GetParticles();
             piter = particles->begin();
             counter = 0;
@@ -355,11 +366,6 @@ namespace EG{
                 ++piter;
             }
 
-            while (object_iterator != objects->GetKeysEnd()){
-                EG::Game::Object *object = objects->Get(*object_iterator);
-                RenderNonLitObject(scene, object);
-                ++object_iterator;
-            }
             shaders->Unbind();
 
             graphics->EndFrame();
