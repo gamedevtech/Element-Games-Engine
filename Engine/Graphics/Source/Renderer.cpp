@@ -14,7 +14,7 @@
 
 namespace EG{
     namespace Graphics{
-        TestEmitter::TestEmitter(void) : EG::Graphics::ParticleEmitter(5.0f){}
+        TestEmitter::TestEmitter(void) : EG::Graphics::ParticleEmitter(10.0f){}
         TestEmitter::~TestEmitter(void){}
         void TestEmitter::CreateParticle(EG::Graphics::Particle *p){
             p->SetAttribute("frame_count", 0.0f);
@@ -27,7 +27,7 @@ namespace EG{
             material->SetLit(false);
             material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "particle");
             material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "billboarding");
-            EG::Game::ObjectAttributeBasicTransformation *transformation = new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::mat4(1.0f), glm::vec3(0.1f, 0.1f, 0.1f)));
+            EG::Game::ObjectAttributeBasicTransformation *transformation = new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f)));
             p->AddAttribute(transformation);
             p->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("quad", material));
         }
@@ -43,7 +43,7 @@ namespace EG{
             std::vector<EG::Game::ObjectAttribute *> *attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
             EG::Game::ObjectAttributeBasicTransformation *transformation = static_cast<EG::Game::ObjectAttributeBasicTransformation *>((*attributes)[0]);
             glm::mat4 t = transformation->GetTransformation();
-            t = glm::translate(t, glm::vec3(0.0f, 0.03f, 0.0f));
+            t = glm::translate(t, glm::vec3(0.0f, 0.01f, 0.0f));
             transformation->SetTransformation(t);
         }
 
