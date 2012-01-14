@@ -356,6 +356,7 @@ namespace EG{
             glDisable(GL_DEPTH_TEST);
             glEnable(GL_TEXTURE_2D);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            //glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
             particles = test_particles->GetParticles();
             piter = particles->begin();
             counter = 0;
