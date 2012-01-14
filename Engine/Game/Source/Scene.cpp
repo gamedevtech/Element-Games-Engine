@@ -7,6 +7,7 @@ namespace EG{
             meshes = new EG::Graphics::MeshManager();
             textures = new EG::Graphics::TextureManager();
 
+            // Default Data
             textures->AddTexture("test_decal", new EG::Graphics::Texture("Assets/Textures/test.png"));
             textures->AddTexture("default_decal", new EG::Graphics::Texture("Assets/Textures/default_decal.png"));
             textures->AddTexture("default_normal", new EG::Graphics::Texture("Assets/Textures/default_normal.png"));

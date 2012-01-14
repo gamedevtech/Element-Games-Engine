@@ -11,14 +11,15 @@
 #define CUBE_BOTTOM 5
 
 namespace EG{
-	namespace Graphics{
-		glm::vec4 CubeToSphereMapping(glm::vec4 in);
+    namespace Graphics{
+        glm::vec4 CubeToSphereMapping(glm::vec4 in);
 
-		EG::Graphics::Mesh *GenerateCube(void);
-		EG::Graphics::Mesh *GeneratePlane(float width, float length, unsigned int resolution);
-		EG::Graphics::Mesh *GenerateSphere(unsigned int stacks = 16, unsigned int slices = 16);
-		EG::Graphics::Mesh *GenerateCubeSphere(unsigned int resolution = 8);
-	}
+        EG::Graphics::Mesh *GenerateCube(void);
+        EG::Graphics::Mesh *GeneratePlane(float width, float length, unsigned int resolution);
+        EG::Graphics::Mesh *GenerateSphere(unsigned int stacks = 16, unsigned int slices = 16);
+        EG::Graphics::Mesh *GenerateCubeSphere(unsigned int resolution = 8);
+        EG::Graphics::Mesh *GenerateQuad(void);
+    }
 }
 
 #endif

@@ -8,6 +8,7 @@
 #include "../../Game/ObjectEmissionAttribute.h"
 #include "../../Graphics/MeshManager.h"
 #include "../../Graphics/TextureManager.h"
+#include "../../Graphics/MeshGenerator.h"
 #include "../../Utility/Font.h"
 #include "../../Utility/Text.h"
 
@@ -18,22 +19,16 @@ namespace EG{
         void TestEmitter::CreateParticle(EG::Graphics::Particle *p){
             p->SetAttribute("frame_count", 0.0f);
             EG::Graphics::RenderingMaterial *material = new EG::Graphics::RenderingMaterial();
-            material->SetCastsShadows(true);
+            material->SetCastsShadows(false);
             material->SetDiffuse(1.0f);
             material->SetAmbient(1.0f);
             material->SetSpecular(1.0f);
-            material->SetLit(true);
-            material->SetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT, "default_height_cube_map");
-            material->SetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, "default_normal_cube_map");
-            material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "default_decal");
-            material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "sphere_cube_map_gradient_decal");
-            material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER, "sphere_cube_map_gradient_decal_with_lighting");
-            material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "sphere_cube_map_gradient_decal");
-            material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER, "sphere_cube_map_gradient_decal_with_lighting");
-            material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "sphere_cube_mapped_gradient_decal_prepass");
-            p->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));
+            material->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+            material->SetLit(false);
+            material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "billboarding");
             EG::Game::ObjectAttributeBasicTransformation *transformation = new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::mat4(1.0f), glm::vec3(0.1f, 0.1f, 0.1f)));
             p->AddAttribute(transformation);
+            p->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("quad", material));
         }
         TestController::TestController(void){}
         TestController::~TestController(void){}
@@ -69,6 +64,7 @@ namespace EG{
 
         void Renderer::Initialize(void){
             shaders = new EG::Graphics::ShaderManager();
+            shaders->Add("billboarding", "Shaders/Basic/billboarding.vert", "Shaders/Basic/billboarding.frag");
             shaders->Add("lighting", "Shaders/Basic/lighting.vert", "Shaders/Basic/lighting.frag");
             shaders->Add("textured", "Shaders/Basic/textured.vert", "Shaders/Basic/textured.frag");
             shaders->Add("font_rendering", "Shaders/Basic/font_rendering.vert", "Shaders/Basic/font_rendering.frag");
@@ -98,6 +94,9 @@ namespace EG{
         }
 
         void Renderer::RenderObject(EG::Game::Scene *scene, EG::Graphics::Light *light, EG::Game::Object *object){
+            if (!(scene->GetMeshManager()->Get("quad"))){
+                scene->GetMeshManager()->Add("quad", EG::Graphics::GenerateQuad());
+            }
             // Meshes
             glm::vec3 lp = light->GetPosition();
             glm::vec4 light_position = glm::vec4(lp.x, lp.y, lp.z, 1.0f);
@@ -168,6 +167,74 @@ namespace EG{
                         shaders->SetFloat4("light_position", light_position);
                         shaders->SetFloat3("light_attenuation", light->GetAttenuation());
                         shaders->SetFloat("light_radius", light->GetRadius());
+                    }
+                }
+                ++mesh_attribute_iterator;
+            }
+        }
+
+        void Renderer::RenderNonLitObject(EG::Game::Scene *scene, EG::Game::Object *object){
+            // Meshes
+            std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+            std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
+            while (mesh_attribute_iterator != mesh_attributes->end()){
+                EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
+                EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
+                if (!material->GetLit()){
+                    bool custom_shader = false;
+                    if (material->HasShader(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER)){
+                        custom_shader = true;
+                        shaders->Unbind();
+                        shaders->Bind(material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER));
+                        //shaders->Bind("sphere_cube_map_gradient_decal");
+                        //std::cout << material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER) << std::endl;
+
+                        shaders->SetMatrix4("projection_matrix", camera->GetProjectionMatrix());
+                        shaders->SetMatrix4("view_matrix", camera->GetViewMatrix());
+                        shaders->SetInt("decal", 0);
+                        shaders->SetInt("height", 1);
+                    }
+
+                    if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL)){
+                        graphics->BindTexture(scene->GetTextureManager()->GetTexture(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL))->GetId());
+                    }else if (material->HasCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT)){
+                        graphics->BindCubeMap(scene->GetTextureManager()->GetCubeMap(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL))->GetId());
+                    }else{
+                        graphics->BindTexture(scene->GetTextureManager()->GetTexture("default_decal")->GetId());
+                    }
+                    if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT)){
+                        graphics->BindTexture(scene->GetTextureManager()->GetTexture(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT))->GetId(), 1);
+                    }else if (material->HasCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT)){
+                        graphics->BindCubeMap(scene->GetTextureManager()->GetCubeMap(material->GetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT))->GetId(), 1);
+                    }else{
+                        graphics->BindTexture(scene->GetTextureManager()->GetTexture("default_height")->GetId(), 1);
+                    }
+
+                    glm::vec4 color = material->GetColor();
+                    shaders->SetFloat4("color", color);
+
+                    // Transformation
+                    std::vector<EG::Game::ObjectAttribute *> *transformation_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
+                    EG::Game::ObjectAttributeBasicTransformation *transformation_attribute = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(transformation_attributes->at(0));
+                    glm::mat4 transformation = transformation_attribute->GetTransformation();
+
+                    glm::mat4 normal_matrix = EG::Math::Utility::GenerateNormalMatrix(transformation);
+                    shaders->SetMatrix4("model_matrix", transformation);
+                    shaders->SetMatrix4("normal_matrix", normal_matrix);
+
+                    EG::Graphics::Mesh *mesh = scene->GetMeshManager()->Get(mesh_attribute->GetMeshId());
+                    if (mesh){
+                        mesh->Draw();
+                    }
+
+                    if (custom_shader){
+                        shaders->Unbind();
+                        shaders->Bind("textured");
+
+                        shaders->SetMatrix4("projection_matrix", camera->GetProjectionMatrix());
+                        shaders->SetMatrix4("view_matrix", camera->GetViewMatrix());
+                        shaders->SetInt("decal", 0);
+                        shaders->SetInt("height", 1);
                     }
                 }
                 ++mesh_attribute_iterator;
@@ -277,76 +344,18 @@ namespace EG{
             shaders->SetInt("decal", 0);
             shaders->SetInt("height", 1);
             object_iterator = objects->GetKeysBegin();
-            //std::cout << "Rendering Non-Lit Objects" << std::endl;
+
+            objects = scene->GetObjectManager()->GetObjects();
+            object_iterator = objects->GetKeysBegin();
             while (object_iterator != objects->GetKeysEnd()){
                 EG::Game::Object *object = objects->Get(*object_iterator);
+                RenderNonLitObject(scene, object);
+                ++object_iterator;
+            }
 
-                // Meshes
-                std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
-                std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
-                while (mesh_attribute_iterator != mesh_attributes->end()){
-                    EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
-                    EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
-                    if (!material->GetLit()){
-                        bool custom_shader = false;
-                        if (material->HasShader(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER)){
-                            custom_shader = true;
-                            shaders->Unbind();
-                            shaders->Bind(material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER));
-                            //shaders->Bind("sphere_cube_map_gradient_decal");
-                            //std::cout << material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER) << std::endl;
-
-                            shaders->SetMatrix4("projection_matrix", camera->GetProjectionMatrix());
-                            shaders->SetMatrix4("view_matrix", camera->GetViewMatrix());
-                            shaders->SetInt("decal", 0);
-                            shaders->SetInt("height", 1);
-                        }
-
-                        if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL)){
-                            graphics->BindTexture(scene->GetTextureManager()->GetTexture(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL))->GetId());
-                        }else if (material->HasCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT)){
-                            graphics->BindCubeMap(scene->GetTextureManager()->GetCubeMap(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL))->GetId());
-                        }else{
-                            graphics->BindTexture(scene->GetTextureManager()->GetTexture("default_decal")->GetId());
-                        }
-                        if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT)){
-                            graphics->BindTexture(scene->GetTextureManager()->GetTexture(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT))->GetId(), 1);
-                        }else if (material->HasCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT)){
-                            graphics->BindCubeMap(scene->GetTextureManager()->GetCubeMap(material->GetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT))->GetId(), 1);
-                        }else{
-                            graphics->BindTexture(scene->GetTextureManager()->GetTexture("default_height")->GetId(), 1);
-                        }
-
-                        glm::vec4 color = material->GetColor();
-                        shaders->SetFloat4("color", color);
-
-                        // Transformation
-                        std::vector<EG::Game::ObjectAttribute *> *transformation_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
-                        EG::Game::ObjectAttributeBasicTransformation *transformation_attribute = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(transformation_attributes->at(0));
-                        glm::mat4 transformation = transformation_attribute->GetTransformation();
-
-                        glm::mat4 normal_matrix = EG::Math::Utility::GenerateNormalMatrix(transformation);
-                        shaders->SetMatrix4("model_matrix", transformation);
-                        shaders->SetMatrix4("normal_matrix", normal_matrix);
-
-                        EG::Graphics::Mesh *mesh = scene->GetMeshManager()->Get(mesh_attribute->GetMeshId());
-                        if (mesh){
-                            mesh->Draw();
-                        }
-
-                        if (custom_shader){
-                            shaders->Unbind();
-                            shaders->Bind("textured");
-
-                            shaders->SetMatrix4("projection_matrix", camera->GetProjectionMatrix());
-                            shaders->SetMatrix4("view_matrix", camera->GetViewMatrix());
-                            shaders->SetInt("decal", 0);
-                            shaders->SetInt("height", 1);
-                        }
-                    }
-                    ++mesh_attribute_iterator;
-                }
-
+            while (object_iterator != objects->GetKeysEnd()){
+                EG::Game::Object *object = objects->Get(*object_iterator);
+                RenderNonLitObject(scene, object);
                 ++object_iterator;
             }
             shaders->Unbind();
