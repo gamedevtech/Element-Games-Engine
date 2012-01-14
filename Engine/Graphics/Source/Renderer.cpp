@@ -345,12 +345,14 @@ namespace EG{
             shaders->SetInt("height", 1);
             object_iterator = objects->GetKeysBegin();
 
-            objects = scene->GetObjectManager()->GetObjects();
-            object_iterator = objects->GetKeysBegin();
-            while (object_iterator != objects->GetKeysEnd()){
-                EG::Game::Object *object = objects->Get(*object_iterator);
-                RenderNonLitObject(scene, object);
-                ++object_iterator;
+            particles = test_particles->GetParticles();
+            piter = particles->begin();
+            counter = 0;
+            while (piter != particles->end()){
+                EG::Graphics::Particle *p = (*piter);
+                RenderNonLitObject(scene, p);
+                counter += 1;
+                ++piter;
             }
 
             while (object_iterator != objects->GetKeysEnd()){
@@ -374,15 +376,6 @@ namespace EG{
             glEnable(GL_BLEND);
             glEnable(GL_TEXTURE_2D);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-            std::stringstream temp;
-            temp << "Frame Time (s): ";
-            temp << frame_time;
-            temp.flush();
-            //shaders->SetMatrix4("model_matrix", glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(40.0f, 40.0f, 0.0f)), glm::vec3(1.0f, 1.0f, 1.0f)));
-            //glm::vec3 position = glm::vec3(5.0f, 5.0f, 0.0f);
-            //glm::vec2 scale = glm::vec2(1.0f, 1.0f);
-            //font_manager->DrawText(temp.str(), position, scale, shaders);
 
             if (gui_set){
                 gui->Draw();
