@@ -44,7 +44,7 @@ namespace EG{
 				DictionaryEntry<KeyType, ValueType> *d = n;
 				n = d->GetNext();
 				delete d;
-				
+
 			}
 		}
 
@@ -125,10 +125,13 @@ namespace EG{
 		template <class HashTableKeyType, class HashTableValueType>
 		void Dictionary<HashTableKeyType, HashTableValueType>::Clear(void){
 			if (_table != NULL && initialized){
-				//std::cout << "Map Size: " << _map_size << std::endl;
 				for (unsigned int i = 0; i < _map_size; i++){
-					//std::cout << i << std::endl;
 					if (_table[i] != NULL){
+						DictionaryEntry<HashTableKeyType, HashTableValueType> *entry = _table[i];
+						while (entry->GetNext()){
+							DictionaryEntry<HashTableKeyType, HashTableValueType> *delete_me = entry;
+							entry = entry->GetNext();
+						}
 						delete _table[i];
 					}
 				}
@@ -136,7 +139,6 @@ namespace EG{
 				initialized = false;
 				_table = NULL;
 			}
-			//std::cout << "Done Clearing STR" << std::endl;
 		}
 
 		template <class HashTableKeyType, class HashTableValueType>

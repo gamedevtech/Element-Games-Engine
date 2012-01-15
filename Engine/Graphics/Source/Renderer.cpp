@@ -18,6 +18,7 @@ namespace EG{
         TestEmitter::~TestEmitter(void){}
         void TestEmitter::CreateParticle(EG::Graphics::Particle *p){
             p->SetAttribute("frame_count", 0.0f);
+			p->SetAttribute("alpha", 0.75f);
             p->SetAttribute("x", EG::Math::Utility::RandomFloat(-0.0025f, 0.0025f));
             p->SetAttribute("y", EG::Math::Utility::RandomFloat(0.0f, 0.0025f));
             p->SetAttribute("z", EG::Math::Utility::RandomFloat(-0.0025f, 0.0025f));
@@ -43,11 +44,21 @@ namespace EG{
                 p->SetAlive(false);
             }
             p->SetAttribute("frame_count", fc);
+
             std::vector<EG::Game::ObjectAttribute *> *attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
             EG::Game::ObjectAttributeBasicTransformation *transformation = static_cast<EG::Game::ObjectAttributeBasicTransformation *>((*attributes)[0]);
             glm::mat4 t = transformation->GetTransformation();
             t = glm::translate(t, glm::vec3(p->GetAttribute("x"), 0.005f + p->GetAttribute("y"), p->GetAttribute("z")));
             transformation->SetTransformation(t);
+
+			attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+			EG::Game::ObjectAttributeRenderingMesh *mesh_attr = static_cast<EG::Game::ObjectAttributeRenderingMesh *>((*attributes)[0]);
+			glm::vec4 color = mesh_attr->GetMaterial()->GetColor();
+
+			if (fc > 260.0f){
+				float alpha_reduction_factor = (300.0f - fc) / 40.0f;
+				mesh_attr->GetMaterial()->SetColor(glm::vec4(color.x, color.y, color.z, color.w * alpha_reduction_factor));
+			}
         }
 
         Renderer::Renderer(void){

@@ -22,6 +22,7 @@
 #include "../../../Engine/Utility/JSON.h"
 #include "../../../Engine/Media/ModelLoader.h"
 #include "../../../Engine/Media/ObjectReader.h"
+#include "../../../Engine/Graphics/Particle.h"
 
 EG::Media::ModelLoader *model;
 int main(int argc, char **argv){
