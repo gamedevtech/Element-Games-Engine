@@ -1,4 +1,8 @@
 #include "../Object.h"
+#include "../ObjectBasicAttribute.h"
+#include "../ObjectRenderingAttribute.h"
+#include "../ObjectControlAttribute.h"
+#include "../ObjectEmissionAttribute.h"
 
 namespace EG{
     namespace Game{
@@ -13,8 +17,11 @@ namespace EG{
                 std::vector<EG::Game::ObjectAttribute *> *type_attributes = GetAttributesByType(type_key);
                 std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = type_attributes->begin();
                 while (attr_iter != type_attributes->end()){
-                    EG::Game::ObjectAttribute *attribute = (*attr_iter);
-                    delete attribute;
+                    if (type_key == EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH) {
+                        delete static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*attr_iter);
+                    }else if (type_key == EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION){
+                        delete static_cast<EG::Game::ObjectAttributeBasicTransformation *>(*attr_iter);
+                    }
                     ++attr_iter;
                 }
                 ++type_iter;

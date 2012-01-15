@@ -1,22 +1,22 @@
 #include "../ObjectEmissionAttribute.h"
 
 namespace EG{
-	namespace Game{
-		ObjectAttributeEmissionLight::ObjectAttributeEmissionLight(EG::Graphics::Light *_light){
-			type = EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT;
-			light = _light;
-		}
+    namespace Game{
+        ObjectAttributeEmissionLight::ObjectAttributeEmissionLight(EG::Graphics::Light *_light){
+            type = EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT;
+            light = _light;
+        }
 
-		ObjectAttributeEmissionLight::~ObjectAttributeEmissionLight(void){
-			//
-		}
+        ObjectAttributeEmissionLight::~ObjectAttributeEmissionLight(void){
+            delete light;
+        }
 
-		void ObjectAttributeEmissionLight::SetLight(EG::Graphics::Light *_light){
-			light = _light;
-		}
+        void ObjectAttributeEmissionLight::SetLight(EG::Graphics::Light *_light){
+            light = _light;
+        }
 
-		EG::Graphics::Light *ObjectAttributeEmissionLight::GetLight(void){
-			return light;
-		}
-	}
+        EG::Graphics::Light *ObjectAttributeEmissionLight::GetLight(void){
+            return light;
+        }
+    }
 }
