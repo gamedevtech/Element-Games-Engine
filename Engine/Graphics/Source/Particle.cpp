@@ -6,7 +6,7 @@ namespace EG{
             alive = true;
         }
         Particle::~Particle(void){
-            //
+            //std::cout << "Particle Destruction" << std::endl;
         }
         void Particle::SetAlive(bool _alive){
             alive = _alive;
@@ -71,6 +71,7 @@ namespace EG{
                 // NOTE: If this doesn't work you have to store a temporary copy of the iter, delete that, and then increment, you can't delete the current iter and then increment!
                 // http://stackoverflow.com/questions/596162/can-you-remove-elements-from-a-stdlist-while-iterating-through-it
                 if (!p->Alive()){
+                    delete p;
                     piter = particles.erase(piter);
                 }else{
                     ++piter;
