@@ -37,7 +37,7 @@ int main(int argc, char **argv){
     scene->GetMeshManager()->Add("planet_sphere", sphere);
 
     // NOTE: Test Data
-    /*float width = 256;
+	float width = 256;
     float height = 256;
     EG::Math::Noise *noise_generator = new EG::Math::Noise(0, 16, 1.75f);
     float **heights = EG::Math::GenerateCubeSphereHeightMap(width, height, noise_generator, "Assets/Textures/generated_planet_height_map.png");
@@ -84,7 +84,7 @@ int main(int argc, char **argv){
 
     EG::Graphics::Texture *decal_gradient = new EG::Graphics::Texture("Assets/Textures/generated_planet_decal_map.png");
     scene->GetTextureManager()->AddTexture("planet_decal_gradient", decal_gradient);
-    EG::Graphics::RenderingMaterial *material = new EG::Graphics::RenderingMaterial();
+	material = new EG::Graphics::RenderingMaterial();
     material->SetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT, "planet_heights");
     material->SetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, "planet_normals");
     material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "planet_decal_gradient");
@@ -94,7 +94,7 @@ int main(int argc, char **argv){
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "sphere_cube_map_gradient_decal");
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER, "sphere_cube_map_gradient_decal_with_lighting");
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "sphere_cube_mapped_gradient_decal_prepass");
-    object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));*/
+	object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));
 
     // Test Cube2
     EG::Graphics::Mesh *cube = EG::Graphics::GenerateCube();
@@ -197,7 +197,7 @@ int main(int argc, char **argv){
 
     // Add Objects
     EG::Game::ObjectManager *objects = game->GetScene()->GetObjectManager();
-    //objects->AddObject(object);
+	objects->AddObject(object);
     objects->AddObject(read_object);
     objects->AddObject(object2);
     objects->AddObject(object3);
