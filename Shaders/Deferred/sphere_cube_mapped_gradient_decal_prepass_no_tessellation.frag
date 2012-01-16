@@ -33,7 +33,7 @@ void main(){
 		fragment0 = vec4(position, material_specularity);
 
 		// Decal and Color
-		fragment1 = texture(decal_map, texcoord) * material_color;
+		fragment1 = decal_color * material_color;
 
 		// Height and Normal
 		float height = height_index * 2.0 - 1.0;
@@ -50,7 +50,7 @@ void main(){
 		// Placeholder for transparent data!
 		fragment3 = vec4(0.0, 0.0, 0.0, 0.0);
 	}else{
-		vec4 color_output = texture(decal_map, texcoord) * material_color;
+		vec4 color_output = decal_color * material_color;
 		fragment0 = vec4(0.0, 0.0, 0.0, color_output.a);
 		fragment1 = vec4(0.0, 0.0, 0.0, color_output.a);
 		fragment2 = vec4(0.0, 0.0, 0.0, color_output.a);

@@ -215,7 +215,7 @@ namespace EG{
                     custom_shader = true;
                     shaders->Unbind();
                     shaders->Bind(material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER));
-                    if (material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER) == "sphere_cube_mapped_gradient_decal_prepass") {
+                    if (material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER) == "sphere_cube_mapped_gradient_decal_prepass" && graphics->CheckVersion(4, 1)) {
                         tessellation_shader = true;
                     }
 
