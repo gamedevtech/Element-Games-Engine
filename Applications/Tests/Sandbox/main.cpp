@@ -32,8 +32,12 @@ int main(int argc, char **argv){
     EG::Game::Scene *scene = new EG::Game::Scene();
     EG::Game::Game *game = new EG::Game::Game(window, scene);
 
+    EG::Graphics::RenderingMaterial *material;
+    EG::Graphics::Mesh *sphere = EG::Graphics::GenerateCubeSphere(4);
+    scene->GetMeshManager()->Add("planet_sphere", sphere);
+
     // NOTE: Test Data
-    float width = 256;
+    /*float width = 256;
     float height = 256;
     EG::Math::Noise *noise_generator = new EG::Math::Noise(0, 16, 1.75f);
     float **heights = EG::Math::GenerateCubeSphereHeightMap(width, height, noise_generator, "Assets/Textures/generated_planet_height_map.png");
@@ -59,9 +63,6 @@ int main(int argc, char **argv){
     // Planet Sorta
     EG::Game::Object *object = new EG::Game::Object("Planet");
     object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::translate(glm::mat4(1.0f), glm::vec3(-5.0f, 5.0f, -5.0f))));
-
-    EG::Graphics::Mesh *sphere = EG::Graphics::GenerateCubeSphere(4);
-    scene->GetMeshManager()->Add("planet_sphere", sphere);
 
     std::string images[6];
     for (unsigned int i = 0; i < 6; i++){
@@ -93,7 +94,7 @@ int main(int argc, char **argv){
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "sphere_cube_map_gradient_decal");
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER, "sphere_cube_map_gradient_decal_with_lighting");
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "sphere_cube_mapped_gradient_decal_prepass");
-    object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));
+    object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));*/
 
     // Test Cube2
     EG::Graphics::Mesh *cube = EG::Graphics::GenerateCube();
@@ -196,7 +197,7 @@ int main(int argc, char **argv){
 
     // Add Objects
     EG::Game::ObjectManager *objects = game->GetScene()->GetObjectManager();
-    objects->AddObject(object);
+    //objects->AddObject(object);
     objects->AddObject(read_object);
     objects->AddObject(object2);
     objects->AddObject(object3);

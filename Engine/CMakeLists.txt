@@ -142,7 +142,6 @@ set(SRCS
 	./Utility/Source/RocketInterface.cpp
 	./Utility/Source/GUI.cpp
 	./Utility/Source/StringMethods.cpp
-
 )
 
 add_library(egengine STATIC ${SRCS})

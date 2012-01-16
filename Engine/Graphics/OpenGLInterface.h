@@ -5,8 +5,6 @@
 #define GLEW_STATIC
 #endif
 
-#pragma warning disable
-
 #include "../Math/Math.h"
 #include <GL/glew.h>
 #include <GL/glut.h>

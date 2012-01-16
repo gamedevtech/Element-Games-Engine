@@ -32,8 +32,8 @@ namespace EG{
 
                 void Initialize(void);
                 void Render(EG::Game::Scene *scene, float frame_time);
-                void RenderObject(EG::Game::Scene *scene, EG::Graphics::Light *light, EG::Game::Object *object);
-                void RenderNonLitObject(EG::Game::Scene *scene, EG::Game::Object *object);
+                void RenderLitObject(EG::Game::Scene *scene, EG::Graphics::Light *light, EG::Game::Object *object);
+                void RenderObject(EG::Game::Scene *scene, EG::Game::Object *object);
 
                 // TEMP, SHOULD GO IN SCENE MANAGER WHICH SHOULD HOLD A CAMERA MANAGER
                 EG::Graphics::Camera *GetCamera(void){

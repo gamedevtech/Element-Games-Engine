@@ -11,6 +11,7 @@ namespace EG{
         }
 
         Object::~Object(void){
+            std::cout << "Deleting Object" << std::endl;
             std::vector<EG::Game::ObjectAttribute::ObjectAttributeType>::iterator type_iter = attributes.GetKeysBegin();
             while (type_iter != attributes.GetKeysEnd()){
                 EG::Game::ObjectAttribute::ObjectAttributeType type_key = (*type_iter);
@@ -21,6 +22,8 @@ namespace EG{
                         delete static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*attr_iter);
                     }else if (type_key == EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION){
                         delete static_cast<EG::Game::ObjectAttributeBasicTransformation *>(*attr_iter);
+                    }else if (type_key == EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT){
+                        delete static_cast<EG::Game::ObjectAttributeEmissionLight *>(*attr_iter);
                     }
                     ++attr_iter;
                 }

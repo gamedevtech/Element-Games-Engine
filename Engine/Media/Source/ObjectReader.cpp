@@ -168,10 +168,10 @@ namespace EG{
             }
             EG::Graphics::Mesh *mesh = new EG::Graphics::Mesh(vertex_count, 4, vers, has_vers, texs, has_texs, nors, has_nors, bins, has_bins, bits, has_bits);
             scene->GetMeshManager()->Add(mesh_name, mesh);
-
             object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(mesh_name, material));
-
             in.close();
+
+            return true;
         }
 
         EG::Game::Object *ObjectReader::GetLoadedObject(void){

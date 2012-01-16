@@ -14,11 +14,11 @@
 
 namespace EG{
     namespace Graphics{
-        TestEmitter::TestEmitter(void) : EG::Graphics::ParticleEmitter(25.0f){}
+        TestEmitter::TestEmitter(void) : EG::Graphics::ParticleEmitter(50.0f){}
         TestEmitter::~TestEmitter(void){}
         void TestEmitter::CreateParticle(EG::Graphics::Particle *p){
             p->SetAttribute("frame_count", 0.0f);
-			p->SetAttribute("alpha", 0.75f);
+            p->SetAttribute("alpha", 0.75f);
             p->SetAttribute("x", EG::Math::Utility::RandomFloat(-0.0025f, 0.0025f));
             p->SetAttribute("y", EG::Math::Utility::RandomFloat(0.0f, 0.0025f));
             p->SetAttribute("z", EG::Math::Utility::RandomFloat(-0.0025f, 0.0025f));
@@ -51,14 +51,14 @@ namespace EG{
             t = glm::translate(t, glm::vec3(p->GetAttribute("x"), 0.005f + p->GetAttribute("y"), p->GetAttribute("z")));
             transformation->SetTransformation(t);
 
-			attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
-			EG::Game::ObjectAttributeRenderingMesh *mesh_attr = static_cast<EG::Game::ObjectAttributeRenderingMesh *>((*attributes)[0]);
-			glm::vec4 color = mesh_attr->GetMaterial()->GetColor();
+            attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+            EG::Game::ObjectAttributeRenderingMesh *mesh_attr = static_cast<EG::Game::ObjectAttributeRenderingMesh *>((*attributes)[0]);
+            glm::vec4 color = mesh_attr->GetMaterial()->GetColor();
 
-			if (fc > 260.0f){
-				float alpha_reduction_factor = (300.0f - fc) / 40.0f;
-				mesh_attr->GetMaterial()->SetColor(glm::vec4(color.x, color.y, color.z, color.w * alpha_reduction_factor));
-			}
+            if (fc > 260.0f){
+                float alpha_reduction_factor = (300.0f - fc) / 40.0f;
+                mesh_attr->GetMaterial()->SetColor(glm::vec4(color.x, color.y, color.z, color.w * alpha_reduction_factor));
+            }
         }
 
         Renderer::Renderer(void){
@@ -108,7 +108,7 @@ namespace EG{
             gui_set = true;
         }
 
-        void Renderer::RenderObject(EG::Game::Scene *scene, EG::Graphics::Light *light, EG::Game::Object *object){
+        void Renderer::RenderLitObject(EG::Game::Scene *scene, EG::Graphics::Light *light, EG::Game::Object *object){
             if (!(scene->GetMeshManager()->Get("quad"))){
                 scene->GetMeshManager()->Add("quad", EG::Graphics::GenerateQuad());
                 scene->GetTextureManager()->AddTexture("particle", new EG::Graphics::Texture("Assets/Textures/particle.png"));
@@ -189,7 +189,7 @@ namespace EG{
             }
         }
 
-        void Renderer::RenderNonLitObject(EG::Game::Scene *scene, EG::Game::Object *object){
+        void Renderer::RenderObject(EG::Game::Scene *scene, EG::Game::Object *object){
             // Meshes
             std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
             std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
@@ -291,7 +291,7 @@ namespace EG{
             unsigned int counter = 0;
             while (piter != particles->end()){
                 EG::Graphics::Particle *p = (*piter);
-                RenderObject(scene, &blank_light, p);
+                RenderLitObject(scene, &blank_light, p);
                 counter += 1;
                 ++piter;
             }
@@ -301,7 +301,7 @@ namespace EG{
             EG::Utility::UnsignedIntDictionaryKeysIterator object_iterator = objects->GetKeysBegin();
             while (object_iterator != objects->GetKeysEnd()){
                 EG::Game::Object *object = objects->Get(*object_iterator);
-                RenderObject(scene, &blank_light, object);
+                RenderLitObject(scene, &blank_light, object);
                 ++object_iterator;
             }
 
@@ -321,7 +321,7 @@ namespace EG{
                         glm::vec3 lp = light->GetPosition();
                         glm::vec4 light_position = glm::vec4(lp.x, lp.y, lp.z, 1.0f);
                         light_position.w = 1.0f;
-                        glm::vec4 light_view = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+                        //glm::vec4 light_view = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
                         shaders->SetFloat3("light_color", light_color);
                         shaders->SetFloat4("light_position", light_position);
                         shaders->SetFloat3("light_attenuation", light->GetAttenuation());
@@ -334,7 +334,7 @@ namespace EG{
                         unsigned int counter = 0;
                         while (piter != particles->end()){
                             EG::Graphics::Particle *p = (*piter);
-                            RenderObject(scene, light, p);
+                            RenderLitObject(scene, light, p);
                             counter += 1;
                             ++piter;
                         }
@@ -342,7 +342,7 @@ namespace EG{
                         object_iterator = objects->GetKeysBegin();
                         while (object_iterator != objects->GetKeysEnd()){
                             EG::Game::Object *object = objects->Get(*object_iterator);
-                            RenderObject(scene, light, object);
+                            RenderLitObject(scene, light, object);
                             ++object_iterator;
                         }
                         ++light_attribute_iterator;
@@ -362,7 +362,7 @@ namespace EG{
 
             while (object_iterator != objects->GetKeysEnd()){
                 EG::Game::Object *object = objects->Get(*object_iterator);
-                RenderNonLitObject(scene, object);
+                RenderObject(scene, object);
                 ++object_iterator;
             }
 
@@ -376,7 +376,7 @@ namespace EG{
             counter = 0;
             while (piter != particles->end()){
                 EG::Graphics::Particle *p = (*piter);
-                RenderNonLitObject(scene, p);
+                RenderObject(scene, p);
                 counter += 1;
                 ++piter;
             }

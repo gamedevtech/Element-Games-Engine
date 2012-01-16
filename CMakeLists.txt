@@ -5,7 +5,7 @@ project(ElementGames)
 
 ### NOTE: This section should only be for debugging I think
 IF (WIN32)
-	add_definitions(-DSFML_DYNAMIC -Wno-unknown-pragmas)
+	add_definitions(-DSFML_DYNAMIC -Wall)
 ELSE (WIN32)
 	add_definitions(-pg -Wall -ggdb) # For Profiling
 	set(CMAKE_SHARED_LINKER_FLAGS "-pg")
