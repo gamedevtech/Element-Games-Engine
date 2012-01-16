@@ -11,7 +11,7 @@ namespace EG{
         }
 
         Object::~Object(void){
-            std::cout << "Deleting Object" << std::endl;
+            //std::cout << "Deleting Object" << std::endl;
             std::vector<EG::Game::ObjectAttribute::ObjectAttributeType>::iterator type_iter = attributes.GetKeysBegin();
             while (type_iter != attributes.GetKeysEnd()){
                 EG::Game::ObjectAttribute::ObjectAttributeType type_key = (*type_iter);

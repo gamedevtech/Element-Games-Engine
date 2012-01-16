@@ -31,14 +31,14 @@ namespace EG{
             p->AddAttribute(transformation);
             p->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("quad", material));
 
-            if (EG::Math::Utility::RandomUnsigned(500) >= 495){
+            if (EG::Math::Utility::RandomUnsigned(500) >= 350){
                 EG::Graphics::Light *light = new EG::Graphics::Light();
-                light->SetPosition(glm::vec3(0.2f, 0.2f, 0.2f));
+                light->SetPosition(glm::vec3(0.0f, 0.2f, 0.0f));
                 light->SetDirection(-glm::vec3(0.2f, 0.2f, 0.2f));
-                light->SetColor(glm::vec3(0.8f, 0.2f, 0.0f));
+                light->SetColor(glm::vec3(0.3f, 0.1f, 0.0f));
                 //light->SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
                 light->SetAttenuation(glm::vec3(0.8f, 0.00125f, 0.0000001f));
-                light->SetRadius(EG::Math::Utility::RandomFloat(0.0f, 5.0f));
+                light->SetRadius(EG::Math::Utility::RandomFloat(0.1f, 1.0f));
                 light->SetCastsShadows(false);
                 p->AddAttribute(new EG::Game::ObjectAttributeEmissionLight(light));
             }
@@ -50,7 +50,7 @@ namespace EG{
             fc += 1.0f;
             if (fc > 100.0f){
                 p->SetAlive(false);
-                std::cout << "Killing Particle" << std::endl;
+                //std::cout << "Killing Particle" << std::endl;
             }
             p->SetAttribute("frame_count", fc);
 
@@ -64,7 +64,7 @@ namespace EG{
             EG::Game::ObjectAttributeRenderingMesh *mesh_attr = static_cast<EG::Game::ObjectAttributeRenderingMesh *>((*attributes)[0]);
             glm::vec4 color = mesh_attr->GetMaterial()->GetColor();
 
-            EG::Game::ObjectAttributeEmissionLight *light_attr;
+            /*EG::Game::ObjectAttributeEmissionLight *light_attr;
             glm::vec3 light_color;
             bool has_light = p->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
             if (has_light){
@@ -74,14 +74,15 @@ namespace EG{
                 glm::vec3 light_position = light_attr->GetLight()->GetPosition();
                 light_position += glm::vec3(p->GetAttribute("x"), 0.015f + p->GetAttribute("y"), p->GetAttribute("z"));
                 light_attr->GetLight()->SetPosition(light_position);
-            }
+            }*/
 
             if (fc > 80.0f){
                 float alpha_reduction_factor = (100.0f - fc) / 20.0f;
+                //std::cout << "Alpha Reduction Factor: " << alpha_reduction_factor << std::endl;
                 mesh_attr->GetMaterial()->SetColor(glm::vec4(color.x, color.y, color.z, color.w * alpha_reduction_factor));
-                if (has_light){
+               /* if (has_light){
                     light_attr->GetLight()->SetColor(light_color * alpha_reduction_factor);
-                }
+                }*/
             }
         }
         RendererDeferred::RendererDeferred(void) : Renderer(){
@@ -433,6 +434,7 @@ namespace EG{
 
             std::list<EG::Graphics::Particle *> *particles = test_particles->GetParticles();
             std::list<EG::Graphics::Particle *>::iterator piter = particles->begin();
+            //unsigned int particle_lights = 0;
             while (piter != particles->end()){
                 EG::Graphics::Particle *light_object = (*piter);
                 if (light_object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT)){
@@ -459,20 +461,14 @@ namespace EG{
                         // Quad Method
                         rectangle->Draw();
 
-                        if (light->GetCastsShadows() && shadows_enabled == 1){
-                            graphics->SetActiveTexture(2);
-                            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
-                            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-                            graphics->SetActiveTexture(0);
-                        }
-
                         ++light_attribute_iterator;
                         //glPopAttrib();
+                        //particle_lights += 1;
                     }
                 }
                 ++piter;
             }
-
+            //std::cout << "Particle Light Count: " << particle_lights << std::endl;
             glDisable(GL_BLEND);
 
             shaders->Unbind();
