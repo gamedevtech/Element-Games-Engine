@@ -18,5 +18,22 @@ namespace EG{
         EG::Graphics::Light *ObjectAttributeEmissionLight::GetLight(void){
             return light;
         }
+
+        ObjectAttributeEmissionParticleSystem::ObjectAttributeEmissionParticleSystem(EG::Graphics::ParticleSystem *_particle_system){
+            type = EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM;
+            particle_system = _particle_system;
+        }
+
+        ObjectAttributeEmissionParticleSystem::~ObjectAttributeEmissionParticleSystem(void){
+            delete particle_system;
+        }
+
+        void ObjectAttributeEmissionParticleSystem::SetParticleSystem(EG::Graphics::ParticleSystem *_particle_system){
+            particle_system = _particle_system;
+        }
+
+        EG::Graphics::ParticleSystem *ObjectAttributeEmissionParticleSystem::GetParticleSystem(void){
+            return particle_system;
+        }
     }
 }

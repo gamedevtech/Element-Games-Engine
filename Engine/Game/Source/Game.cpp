@@ -1,4 +1,5 @@
 #include "../Game.h"
+#include "../ObjectEmissionAttribute.h"
 #include "../../Graphics/RendererMultipass.h"
 #include "../../Graphics/RendererDeferred.h"
 #include "../../Media/AssimpInterface.h"
@@ -133,6 +134,23 @@ namespace EG{
             }
 
             input->Update();
+
+            EG::Utility::UnsignedIntDictionaryIterator object_iter = scene->GetObjectManager()->GetObjects()->GetKeysBegin();
+            while (object_iter != scene->GetObjectManager()->GetObjects()->GetKeysEnd()){
+                unsigned int object_id = (*object_iter);
+                EG::Game::Object *object = scene->GetObjectManager()->GetObject(object_id);
+                if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM)){
+                    std::vector<EG::Game::ObjectAttribute *> *attrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM);
+                    std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+                    while (attr_iter != attrs->end()){
+                        EG::Game::ObjectAttribute *attr = (*attr_iter);
+                        EG::Game::ObjectAttributeEmissionParticleSystem *pattr = static_cast<EG::Game::ObjectAttributeEmissionParticleSystem *>(attr);
+                        pattr->GetParticleSystem()->Update(time->GetFrameTime());
+                        ++attr_iter;
+                    }
+                }
+                ++object_iter;
+            }
         }
 
         EG::Utility::Window *Game::GetWindow(void){

@@ -7,19 +7,6 @@
 
 namespace EG{
     namespace Graphics{
-        class TestEmitterDef : public EG::Graphics::ParticleEmitter{
-            public:
-                TestEmitterDef(void);
-                ~TestEmitterDef(void);
-                void CreateParticle(EG::Graphics::Particle *p);
-        };
-        class TestControllerDef : public EG::Graphics::ParticleController{
-            public:
-                TestControllerDef(void);
-                ~TestControllerDef(void);
-                void ControlParticle(EG::Graphics::Particle *p, float frame_time);
-        };
-
         class RendererDeferred : public Renderer{
             public:
             enum DeferredOutputType{
@@ -77,9 +64,6 @@ namespace EG{
 
                 // Debugging
                 EG::Graphics::Light *debug_shadow_map_light;
-
-                // Particles
-                EG::Graphics::ParticleSystem *test_particles;
         };
     }
 }

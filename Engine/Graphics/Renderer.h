@@ -12,19 +12,6 @@
 
 namespace EG{
     namespace Graphics{
-        class TestEmitter : public EG::Graphics::ParticleEmitter{
-            public:
-                TestEmitter(void);
-                ~TestEmitter(void);
-                void CreateParticle(EG::Graphics::Particle *p);
-        };
-        class TestController : public EG::Graphics::ParticleController{
-            public:
-                TestController(void);
-                ~TestController(void);
-                void ControlParticle(EG::Graphics::Particle *p, float frame_time);
-        };
-
         class Renderer{
             public:
                 Renderer(void);
@@ -53,9 +40,6 @@ namespace EG{
 
                 bool gui_set;
                 EG::Utility::RocketInterface *gui;
-
-                // Particles
-                EG::Graphics::ParticleSystem *test_particles;
         };
     }
 }

@@ -14,53 +14,6 @@
 
 namespace EG{
     namespace Graphics{
-        TestEmitter::TestEmitter(void) : EG::Graphics::ParticleEmitter(20.0f){}
-        TestEmitter::~TestEmitter(void){}
-        void TestEmitter::CreateParticle(EG::Graphics::Particle *p){
-            p->SetAttribute("frame_count", 0.0f);
-            p->SetAttribute("alpha", 0.75f);
-            p->SetAttribute("x", EG::Math::Utility::RandomFloat(-0.0025f, 0.0025f));
-            p->SetAttribute("y", EG::Math::Utility::RandomFloat(0.0f, 0.0025f));
-            p->SetAttribute("z", EG::Math::Utility::RandomFloat(-0.0025f, 0.0025f));
-            EG::Graphics::RenderingMaterial *material = new EG::Graphics::RenderingMaterial();
-            material->SetCastsShadows(false);
-            material->SetDiffuse(1.0f);
-            material->SetAmbient(1.0f);
-            material->SetSpecular(1.0f);
-            material->SetColor(glm::vec4(0.8f, 0.2f, 0.0f, 0.75f));
-            material->SetLit(false);
-            material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "particle");
-            material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "billboarding");
-            EG::Game::ObjectAttributeBasicTransformation *transformation = new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f)));
-            p->AddAttribute(transformation);
-            p->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("quad", material));
-        }
-        TestController::TestController(void){}
-        TestController::~TestController(void){}
-        void TestController::ControlParticle(EG::Graphics::Particle *p, float frame_time){
-            float fc = p->GetAttribute("frame_count");
-            fc += 1.0f;
-            if (fc > 100.0f){
-                p->SetAlive(false);
-            }
-            p->SetAttribute("frame_count", fc);
-
-            std::vector<EG::Game::ObjectAttribute *> *attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
-            EG::Game::ObjectAttributeBasicTransformation *transformation = static_cast<EG::Game::ObjectAttributeBasicTransformation *>((*attributes)[0]);
-            glm::mat4 t = transformation->GetTransformation();
-            t = glm::translate(t, glm::vec3(p->GetAttribute("x"), 0.015f + p->GetAttribute("y"), p->GetAttribute("z")));
-            transformation->SetTransformation(t);
-
-            attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
-            EG::Game::ObjectAttributeRenderingMesh *mesh_attr = static_cast<EG::Game::ObjectAttributeRenderingMesh *>((*attributes)[0]);
-            glm::vec4 color = mesh_attr->GetMaterial()->GetColor();
-
-            if (fc > 80.0f){
-                float alpha_reduction_factor = (100.0f - fc) / 20.0f;
-                mesh_attr->GetMaterial()->SetColor(glm::vec4(color.x, color.y, color.z, color.w * alpha_reduction_factor));
-            }
-        }
-
         Renderer::Renderer(void){
             initialized = false;
             gui_set = false;
@@ -95,11 +48,6 @@ namespace EG{
 
             orthographics_projection_matrix = glm::gtc::matrix_transform::ortho(0.0f, float(graphics->GetViewportWidth()), 0.0f, float(graphics->GetViewportHeight()));
 
-            /* Test Data */
-            TestEmitter *emitter = new TestEmitter();
-            TestController *controller = new TestController();
-            test_particles = new EG::Graphics::ParticleSystem(controller, emitter);
-
             initialized = true;
         }
 
@@ -109,10 +57,6 @@ namespace EG{
         }
 
         void Renderer::RenderLitObject(EG::Game::Scene *scene, EG::Graphics::Light *light, EG::Game::Object *object){
-            if (!(scene->GetMeshManager()->Get("quad"))){
-                scene->GetMeshManager()->Add("quad", EG::Graphics::GenerateQuad());
-                scene->GetTextureManager()->AddTexture("particle", new EG::Graphics::Texture("Assets/Textures/particle.png"));
-            }
             // Meshes
             glm::vec3 lp = light->GetPosition();
             glm::vec4 light_position = glm::vec4(lp.x, lp.y, lp.z, 1.0f);
@@ -285,7 +229,7 @@ namespace EG{
             blank_light.SetColor(glm::vec3(0.0f, 0.0f, 0.0f));
             blank_light.SetRadius(0.0000001f);
 
-            test_particles->Update(frame_time);
+            //test_particles->Update(frame_time);
             std::list<EG::Graphics::Particle *> *particles = test_particles->GetParticles();
             std::list<EG::Graphics::Particle *>::iterator piter = particles->begin();
             unsigned int counter = 0;

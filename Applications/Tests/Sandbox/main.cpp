@@ -37,7 +37,7 @@ int main(int argc, char **argv){
     scene->GetMeshManager()->Add("planet_sphere", sphere);
 
     // NOTE: Test Data
-	float width = 256;
+    float width = 256;
     float height = 256;
     EG::Math::Noise *noise_generator = new EG::Math::Noise(0, 16, 1.75f);
     float **heights = EG::Math::GenerateCubeSphereHeightMap(width, height, noise_generator, "Assets/Textures/generated_planet_height_map.png");
@@ -84,7 +84,7 @@ int main(int argc, char **argv){
 
     EG::Graphics::Texture *decal_gradient = new EG::Graphics::Texture("Assets/Textures/generated_planet_decal_map.png");
     scene->GetTextureManager()->AddTexture("planet_decal_gradient", decal_gradient);
-	material = new EG::Graphics::RenderingMaterial();
+    material = new EG::Graphics::RenderingMaterial();
     material->SetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT, "planet_heights");
     material->SetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, "planet_normals");
     material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "planet_decal_gradient");
@@ -94,7 +94,7 @@ int main(int argc, char **argv){
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "sphere_cube_map_gradient_decal");
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER, "sphere_cube_map_gradient_decal_with_lighting");
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "sphere_cube_mapped_gradient_decal_prepass");
-	object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));
+    object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));
 
     // Test Cube2
     EG::Graphics::Mesh *cube = EG::Graphics::GenerateCube();
@@ -189,6 +189,94 @@ int main(int argc, char **argv){
     material->SetColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
     light_object3->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("sphere", material));
 
+    // Particle System
+    scene->GetMeshManager()->Add("quad", EG::Graphics::GenerateQuad());
+    scene->GetTextureManager()->AddTexture("particle", new EG::Graphics::Texture("Assets/Textures/particle.png"));
+    EG::Game::Object *particle_system = new EG::Game::Object("ParticleSystem");
+
+    class TestEmitterDef : public EG::Graphics::ParticleEmitter{
+        TestEmitterDef(void) : EG::Graphics::ParticleEmitter(20.0f){ }
+        ~TestEmitterDef(void){ }
+        void CreateParticle(EG::Graphics::Particle *p){
+            p->SetAttribute("frame_count", 0.0f);
+            p->SetAttribute("alpha", 0.75f);
+            p->SetAttribute("x", EG::Math::Utility::RandomFloat(-0.25f, 0.25f));
+            p->SetAttribute("y", EG::Math::Utility::RandomFloat(0.0f, 0.25f));
+            p->SetAttribute("z", EG::Math::Utility::RandomFloat(-0.25f, 0.25f));
+            EG::Graphics::RenderingMaterial *material = new EG::Graphics::RenderingMaterial();
+            material->SetCastsShadows(false);
+            material->SetDiffuse(1.0f);
+            material->SetAmbient(1.0f);
+            material->SetSpecular(1.0f);
+            material->SetColor(glm::vec4(0.8f, 0.2f, 0.0f, 0.75f));
+            material->SetLit(false);
+            material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "particle");
+            material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "billboarding");
+            EG::Game::ObjectAttributeBasicTransformation *transformation = new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f)));
+            p->AddAttribute(transformation);
+            p->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("quad", material));
+
+            if (EG::Math::Utility::RandomUnsigned(500) >= 350){
+                EG::Graphics::Light *light = new EG::Graphics::Light();
+                light->SetPosition(glm::vec3(0.0f, 0.2f, 0.0f));
+                light->SetDirection(-glm::vec3(0.2f, 0.2f, 0.2f));
+                light->SetColor(glm::vec3(0.3f, 0.1f, 0.0f));
+                //light->SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
+                light->SetAttenuation(glm::vec3(0.8f, 0.00125f, 0.0000001f));
+                light->SetRadius(EG::Math::Utility::RandomFloat(0.1f, 1.0f));
+                light->SetCastsShadows(false);
+                p->AddAttribute(new EG::Game::ObjectAttributeEmissionLight(light));
+            }
+        }
+    };
+
+    class TestControllerDef : public EG::Graphics::ParticleController{
+    public:
+        TestControllerDef(void){ }
+        ~TestControllerDef(void){ }
+        void ControlParticle(EG::Graphics::Particle *p, float frame_time){
+            float fc = p->GetAttribute("frame_count");
+            fc += frame_time;
+            if (fc > 3.0f){
+                p->SetAlive(false);
+                //std::cout << "Killing Particle" << std::endl;
+            }
+            p->SetAttribute("frame_count", fc);
+
+            std::vector<EG::Game::ObjectAttribute *> *attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
+            EG::Game::ObjectAttributeBasicTransformation *transformation = static_cast<EG::Game::ObjectAttributeBasicTransformation *>((*attributes)[0]);
+            glm::mat4 t = transformation->GetTransformation();
+            t = glm::translate(t, glm::vec3(frame_time * p->GetAttribute("x"), frame_time * (1.0f + p->GetAttribute("y")), frame_time * p->GetAttribute("z")));
+            transformation->SetTransformation(t);
+
+            attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+            EG::Game::ObjectAttributeRenderingMesh *mesh_attr = static_cast<EG::Game::ObjectAttributeRenderingMesh *>((*attributes)[0]);
+            glm::vec4 color = mesh_attr->GetMaterial()->GetColor();
+
+            /*EG::Game::ObjectAttributeEmissionLight *light_attr;
+            glm::vec3 light_color;
+            bool has_light = p->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
+            if (has_light){
+                std::vector<EG::Game::ObjectAttribute *> *light_attrs = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
+                EG::Game::ObjectAttributeEmissionLight *light_attr = static_cast<EG::Game::ObjectAttributeEmissionLight *>((*light_attrs)[0]);
+                glm::vec3 light_color = light_attr->GetLight()->GetColor();
+                glm::vec3 light_position = light_attr->GetLight()->GetPosition();
+                light_position += glm::vec3(p->GetAttribute("x"), 0.015f + p->GetAttribute("y"), p->GetAttribute("z"));
+                light_attr->GetLight()->SetPosition(light_position);
+            }*/
+
+            if (fc > 2.0f){
+                float alpha_reduction_factor = (3.0f - fc) / 1.0f;
+                //std::cout << "Alpha Reduction Factor: " << alpha_reduction_factor << std::endl;
+                mesh_attr->GetMaterial()->SetColor(glm::vec4(color.x, color.y, color.z, color.w * alpha_reduction_factor));
+               /* if (has_light){
+                    light_attr->GetLight()->SetColor(light_color * alpha_reduction_factor);
+                }*/
+            }
+        }
+    };
+    particle_system->AddAttribute(new EG::Game::ObjectAttributeEmissionParticleSystem(new EG::Graphics::ParticleSystem(new TestControllerDef(), new TestEmitterDef())));
+
     // NOTE: Object Reader Test
     EG::Media::ObjectReader reader;
     reader.Read("Assets/Models/test_model.ego", scene);
@@ -197,7 +285,7 @@ int main(int argc, char **argv){
 
     // Add Objects
     EG::Game::ObjectManager *objects = game->GetScene()->GetObjectManager();
-	objects->AddObject(object);
+    objects->AddObject(object);
     objects->AddObject(read_object);
     objects->AddObject(object2);
     objects->AddObject(object3);
@@ -205,12 +293,14 @@ int main(int argc, char **argv){
     objects->AddObject(light_object);
     objects->AddObject(light_object2);
     objects->AddObject(light_object3);
+    objects->AddObject(particle_system);
     //objects->AddObject(dummy_light_object);
     // NOTE: End Test Data
 
     while (game->GetWindow()->IsOpened()){
         game->Update();
         game->Render();
+        glFinish();
     }
     window->Close();
     std::cout << "Exiting..." << std::endl;
