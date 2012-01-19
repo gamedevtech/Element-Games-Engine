@@ -391,44 +391,6 @@ namespace EG{
 
                 ++light_object_iterator;
             }
-
-            /*std::list<EG::Graphics::Particle *> *particles = test_particles->GetParticles();
-            std::list<EG::Graphics::Particle *>::iterator piter = particles->begin();
-            //unsigned int particle_lights = 0;
-            while (piter != particles->end()){
-                EG::Graphics::Particle *light_object = (*piter);
-                if (light_object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT)){
-                    std::vector<EG::Game::ObjectAttribute *> *light_attributes = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
-                    std::vector<EG::Game::ObjectAttribute *>::iterator light_attribute_iterator = light_attributes->begin();
-                    while (light_attribute_iterator != light_attributes->end()){
-                        //glPushAttrib(GL_TEXTURE_BIT);
-                        EG::Game::ObjectAttributeEmissionLight *light_attribute = static_cast<EG::Game::ObjectAttributeEmissionLight *>(*light_attribute_iterator);
-                        EG::Graphics::Light *light = light_attribute->GetLight();
-
-                        glm::vec3 lp = light->GetPosition();
-                        glm::vec4 light_position = glm::vec4(lp.x, lp.y, lp.z, 1.0f);
-                        float light_radius = light->GetRadius();
-                        //glm::mat4 model_matrix = glm::scale(light_transformation, glm::vec3(light_radius * 2.0f, light_radius * 2.0f, light_radius * 2.0f));
-                        //glm::mat4 normal_matrix = EG::Math::Utility::GenerateNormalMatrix(model_matrix);
-                        //EG::Math::Utility::PrintMat4(model_matrix);
-                        shaders->SetFloat3("light_color", light->GetColor());
-                        shaders->SetFloat3("light_position", light_position.x, light_position.y, light_position.z);
-                        shaders->SetFloat3("light_attenuation", light->GetAttenuation());
-                        shaders->SetFloat("light_radius", light_radius);shaders->SetInt("shadow_mapping_enabled", 0);
-                        shaders->SetMatrix4("shadow_mapping_bias", glm::mat4(1.0f));
-                        graphics->BindTexture(scene->GetTextureManager()->GetTexture("default_decal")->GetId(), 2);
-
-                        // Quad Method
-                        rectangle->Draw();
-
-                        ++light_attribute_iterator;
-                        //glPopAttrib();
-                        //particle_lights += 1;
-                    }
-                }
-                ++piter;
-            }*/
-            //std::cout << "Particle Light Count: " << particle_lights << std::endl;
             glDisable(GL_BLEND);
 
             shaders->Unbind();
