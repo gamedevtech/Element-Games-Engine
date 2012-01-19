@@ -195,6 +195,7 @@ int main(int argc, char **argv){
     EG::Game::Object *particle_system = new EG::Game::Object("ParticleSystem");
 
     class TestEmitterDef : public EG::Graphics::ParticleEmitter{
+    public:
         TestEmitterDef(void) : EG::Graphics::ParticleEmitter(20.0f){ }
         ~TestEmitterDef(void){ }
         void CreateParticle(EG::Graphics::Particle *p){

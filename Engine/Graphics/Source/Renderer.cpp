@@ -230,7 +230,7 @@ namespace EG{
             blank_light.SetRadius(0.0000001f);
 
             //test_particles->Update(frame_time);
-            std::list<EG::Graphics::Particle *> *particles = test_particles->GetParticles();
+            /*std::list<EG::Graphics::Particle *> *particles = test_particles->GetParticles();
             std::list<EG::Graphics::Particle *>::iterator piter = particles->begin();
             unsigned int counter = 0;
             while (piter != particles->end()){
@@ -238,7 +238,7 @@ namespace EG{
                 RenderLitObject(scene, &blank_light, p);
                 counter += 1;
                 ++piter;
-            }
+            }*/
 
             // Render Objects
             EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
@@ -272,7 +272,7 @@ namespace EG{
                         shaders->SetFloat("light_radius", light->GetRadius());
 
                         // Render Objects
-                        test_particles->Update(frame_time);
+                        /*test_particles->Update(frame_time);
                         std::list<EG::Graphics::Particle *> *particles = test_particles->GetParticles();
                         std::list<EG::Graphics::Particle *>::iterator piter = particles->begin();
                         unsigned int counter = 0;
@@ -281,7 +281,7 @@ namespace EG{
                             RenderLitObject(scene, light, p);
                             counter += 1;
                             ++piter;
-                        }
+                        }*/
 
                         object_iterator = objects->GetKeysBegin();
                         while (object_iterator != objects->GetKeysEnd()){
@@ -315,7 +315,7 @@ namespace EG{
             glEnable(GL_TEXTURE_2D);
             //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-            particles = test_particles->GetParticles();
+            /*particles = test_particles->GetParticles();
             piter = particles->begin();
             counter = 0;
             while (piter != particles->end()){
@@ -323,7 +323,7 @@ namespace EG{
                 RenderObject(scene, p);
                 counter += 1;
                 ++piter;
-            }
+            }*/
 
             shaders->Unbind();
 
