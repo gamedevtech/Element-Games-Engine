@@ -39,6 +39,7 @@ namespace EG{
                 void ShadowMapping(EG::Game::Scene *scene);
 
                 void RenderObject(EG::Game::Scene *scene, EG::Game::Object *object);
+                void CalculateLighting(EG::Game::Scene *scene, EG::Graphics::Light *light);
                 void Prepass(EG::Game::Scene *scene);
                 void Lighting(EG::Game::Scene *scene);
                 void ComposeScene(EG::Game::Scene *scene);

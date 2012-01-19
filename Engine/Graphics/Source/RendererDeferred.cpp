@@ -263,6 +263,51 @@ namespace EG{
             graphics->EndMultiBufferOffscreenRender();
         }
 
+        void RendererDeferred::CalculateLighting(EG::Game::Scene *scene, EG::Graphics::Light *light){
+            glm::vec3 lp = light->GetPosition();
+            glm::vec4 light_position = glm::vec4(lp.x, lp.y, lp.z, 1.0f);
+            float light_radius = light->GetRadius();
+            //glm::mat4 model_matrix = glm::scale(light_transformation, glm::vec3(light_radius * 2.0f, light_radius * 2.0f, light_radius * 2.0f));
+            //glm::mat4 normal_matrix = EG::Math::Utility::GenerateNormalMatrix(model_matrix);
+            //EG::Math::Utility::PrintMat4(model_matrix);
+            shaders->SetFloat3("light_color", light->GetColor());
+            shaders->SetFloat3("light_position", light_position.x, light_position.y, light_position.z);
+            shaders->SetFloat3("light_attenuation", light->GetAttenuation());
+            shaders->SetFloat("light_radius", light_radius);
+
+            // Shadow Mapping
+            if (light->GetCastsShadows() && shadows_enabled == 1){
+                graphics->SetActiveTexture(2);
+                shaders->SetInt("shadow_mapping_enabled", 1);
+                glm::mat4 shadow_mapping_transformation = shadow_mapping_bias * light->GetProjectionMatrix() * light->GetViewMatrix();
+                shaders->SetMatrix4("shadow_mapping_bias", shadow_mapping_transformation);
+                graphics->BindTexture(light->GetShadowBuffer()->GetDepthTextureId(), 2);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE_ARB);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+                graphics->SetActiveTexture(0);
+                shaders->SetFloat2("shadow_map_size", glm::vec2(light->GetShadowMapResolution(), light->GetShadowMapResolution()));
+            }else{
+                shaders->SetInt("shadow_mapping_enabled", 0);
+                shaders->SetMatrix4("shadow_mapping_bias", glm::mat4(1.0f));
+                graphics->BindTexture(scene->GetTextureManager()->GetTexture("default_decal")->GetId(), 2);
+            }
+
+            // Sphere Method
+            //shaders->SetMatrix4("model_matrix", model_matrix);
+            //shaders->SetMatrix4("normal_matrix", normal_matrix);
+            //light_sphere->Draw();
+
+            // Quad Method
+            rectangle->Draw();
+
+            if (light->GetCastsShadows() && shadows_enabled == 1){
+                graphics->SetActiveTexture(2);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+                graphics->SetActiveTexture(0);
+            }
+        }
+
         void RendererDeferred::Lighting(EG::Game::Scene *scene){
             graphics->StartOffscreenRender(light_buffer->GetBufferId(), 0, graphics->GetViewportWidth(), graphics->GetViewportHeight());
             shaders->Bind("lighting");
@@ -311,52 +356,36 @@ namespace EG{
                         //glPushAttrib(GL_TEXTURE_BIT);
                         EG::Game::ObjectAttributeEmissionLight *light_attribute = static_cast<EG::Game::ObjectAttributeEmissionLight *>(*light_attribute_iterator);
                         EG::Graphics::Light *light = light_attribute->GetLight();
-
-                        glm::vec3 lp = light->GetPosition();
-                        glm::vec4 light_position = glm::vec4(lp.x, lp.y, lp.z, 1.0f);
-                        float light_radius = light->GetRadius();
-                        //glm::mat4 model_matrix = glm::scale(light_transformation, glm::vec3(light_radius * 2.0f, light_radius * 2.0f, light_radius * 2.0f));
-                        //glm::mat4 normal_matrix = EG::Math::Utility::GenerateNormalMatrix(model_matrix);
-                        //EG::Math::Utility::PrintMat4(model_matrix);
-                        shaders->SetFloat3("light_color", light->GetColor());
-                        shaders->SetFloat3("light_position", light_position.x, light_position.y, light_position.z);
-                        shaders->SetFloat3("light_attenuation", light->GetAttenuation());
-                        shaders->SetFloat("light_radius", light_radius);
-
-                        // Shadow Mapping
-                        if (light->GetCastsShadows() && shadows_enabled == 1){
-                            graphics->SetActiveTexture(2);
-                            shaders->SetInt("shadow_mapping_enabled", 1);
-                            glm::mat4 shadow_mapping_transformation = shadow_mapping_bias * light->GetProjectionMatrix() * light->GetViewMatrix();
-                            shaders->SetMatrix4("shadow_mapping_bias", shadow_mapping_transformation);
-                            graphics->BindTexture(light->GetShadowBuffer()->GetDepthTextureId(), 2);
-                            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE_ARB);
-                            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-                            graphics->SetActiveTexture(0);
-                            shaders->SetFloat2("shadow_map_size", glm::vec2(light->GetShadowMapResolution(), light->GetShadowMapResolution()));
-                        }else{
-                            shaders->SetInt("shadow_mapping_enabled", 0);
-                            shaders->SetMatrix4("shadow_mapping_bias", glm::mat4(1.0f));
-                            graphics->BindTexture(scene->GetTextureManager()->GetTexture("default_decal")->GetId(), 2);
-                        }
-
-                        // Sphere Method
-                        //shaders->SetMatrix4("model_matrix", model_matrix);
-                        //shaders->SetMatrix4("normal_matrix", normal_matrix);
-                        //light_sphere->Draw();
-
-                        // Quad Method
-                        rectangle->Draw();
-
-                        if (light->GetCastsShadows() && shadows_enabled == 1){
-                            graphics->SetActiveTexture(2);
-                            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
-                            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-                            graphics->SetActiveTexture(0);
-                        }
-
+                        CalculateLighting(scene, light);
                         ++light_attribute_iterator;
                         //glPopAttrib();
+                    }
+                }
+
+                if (light_object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM)){
+                    std::vector<EG::Game::ObjectAttribute *> *attrs = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM);
+                    std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+                    while (attr_iter != attrs->end()){
+                        EG::Game::ObjectAttributeEmissionParticleSystem *pattr = static_cast<EG::Game::ObjectAttributeEmissionParticleSystem *>(*attr_iter);
+                        EG::Graphics::ParticleSystem *psys = pattr->GetParticleSystem();
+                        std::list<EG::Graphics::Particle *>::iterator piter = psys->GetParticles()->begin();
+                        while (piter != psys->GetParticles()->end()){
+                            EG::Graphics::Particle *p = (*piter);
+                            if (p->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT)){
+                                std::vector<EG::Game::ObjectAttribute *> *light_attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
+                                std::vector<EG::Game::ObjectAttribute *>::iterator light_attribute_iterator = light_attributes->begin();
+                                while (light_attribute_iterator != light_attributes->end()){
+                                    //glPushAttrib(GL_TEXTURE_BIT);
+                                    EG::Game::ObjectAttributeEmissionLight *light_attribute = static_cast<EG::Game::ObjectAttributeEmissionLight *>(*light_attribute_iterator);
+                                    EG::Graphics::Light *light = light_attribute->GetLight();
+                                    CalculateLighting(scene, light);
+                                    ++light_attribute_iterator;
+                                    //glPopAttrib();
+                                }
+                            }
+                            ++piter;
+                        }
+                        ++attr_iter;
                     }
                 }
 
