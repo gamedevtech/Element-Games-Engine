@@ -223,7 +223,6 @@ int main(int argc, char **argv){
                 light->SetPosition(glm::vec3(0.0f, 0.2f, 0.0f));
                 light->SetDirection(-glm::vec3(0.2f, 0.2f, 0.2f));
                 light->SetColor(glm::vec3(0.3f, 0.1f, 0.0f));
-                //light->SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
                 light->SetAttenuation(glm::vec3(0.8f, 0.00125f, 0.0000001f));
                 light->SetRadius(EG::Math::Utility::RandomFloat(0.1f, 1.0f));
                 light->SetCastsShadows(false);

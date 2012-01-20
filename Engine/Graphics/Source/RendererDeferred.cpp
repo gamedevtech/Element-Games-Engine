@@ -735,7 +735,7 @@ namespace EG{
                                     EG::Game::Object *object = objects->Get(*object_iterator);
 
                                     // HACK: For now, don't render objects with particle systems
-                                    if (!(object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM))){
+                                    if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH)){
                                         // Transformation
                                         std::vector<EG::Game::ObjectAttribute *> *transformation_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
                                         EG::Game::ObjectAttributeBasicTransformation *transformation_attribute = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(transformation_attributes->at(0));
@@ -754,6 +754,40 @@ namespace EG{
                                             }
 
                                             ++mesh_attribute_iterator;
+                                        }
+                                    }
+                                    if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM)){
+                                        std::vector<EG::Game::ObjectAttribute *> *attrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM);
+                                        std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+                                        while (attr_iter != attrs->end()){
+                                            EG::Game::ObjectAttributeEmissionParticleSystem *pattr = static_cast<EG::Game::ObjectAttributeEmissionParticleSystem *>(*attr_iter);
+                                            EG::Graphics::ParticleSystem *psys = pattr->GetParticleSystem();
+                                            std::list<EG::Graphics::Particle *>::iterator piter = psys->GetParticles()->begin();
+                                            while (piter != psys->GetParticles()->end()){
+                                                EG::Graphics::Particle *object = (*piter);
+                                                if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH)){
+                                                    // Transformation
+                                                    std::vector<EG::Game::ObjectAttribute *> *transformation_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
+                                                    EG::Game::ObjectAttributeBasicTransformation *transformation_attribute = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(transformation_attributes->at(0));
+                                                    glm::mat4 transformation = transformation_attribute->GetTransformation();
+                                                    shaders->SetMatrix4("model_matrix", transformation);
+
+                                                    std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+                                                    std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
+                                                    while (mesh_attribute_iterator != mesh_attributes->end()){
+                                                        EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
+                                                        EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
+                                                        if (material->GetLit() && material->GetCastsShadows()){
+                                                            EG::Graphics::Mesh *mesh = scene->GetMeshManager()->Get(mesh_attribute->GetMeshId());
+                                                            mesh->Draw();
+                                                        }
+
+                                                        ++mesh_attribute_iterator;
+                                                    }
+                                                }
+                                                ++piter;
+                                            }
+                                            ++attr_iter;
                                         }
                                     }
 
