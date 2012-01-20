@@ -87,6 +87,8 @@ namespace EG{
                 void EndOffscreenRender(void);
                 void StartMultiBufferOffscreenRender(unsigned int *buffer_id, unsigned int buffer_count, int *buffers, unsigned int width, unsigned int height);
                 void EndMultiBufferOffscreenRender(void);
+
+                void SetBlendingMode(unsigned int blending_mode = 0);
             private:
                 std::string version_string;
                 unsigned int version_major, version_minor;

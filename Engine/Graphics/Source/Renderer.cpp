@@ -174,13 +174,11 @@ namespace EG{
                             shaders->SetInt("height", 1);
 
                             if (material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER) == "billboarding"){
-                                glEnable(GL_BLEND);
                                 glDisable(GL_DEPTH_TEST);
-                                glEnable(GL_TEXTURE_2D);
-                                glBlendFunc(GL_SRC_ALPHA, GL_ONE);
                                 billboarding_shader = true;
                             }
                         }
+                        graphics->SetBlendingMode(material->GetBlendingMode());
 
                         if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL)){
                             graphics->BindTexture(scene->GetTextureManager()->GetTexture(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL))->GetId());
@@ -222,10 +220,8 @@ namespace EG{
                             shaders->SetMatrix4("view_matrix", camera->GetViewMatrix());
                             shaders->SetInt("decal", 0);
                             shaders->SetInt("height", 1);
-                            if (billboarding_shader){
-                                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-                            }
                         }
+                        graphics->SetBlendingMode();
                     }
                     ++mesh_attribute_iterator;
                 }

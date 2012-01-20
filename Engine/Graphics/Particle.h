@@ -37,7 +37,7 @@ namespace EG{
                 ParticleEmitter(float _emission_velocity);
                 ~ParticleEmitter(void);
 
-                void Emit(std::list<Particle *> *particles, float frame_time);
+                virtual void Emit(std::list<Particle *> *particles, float frame_time);
                 virtual void CreateParticle(Particle *out) = 0;
             protected:
                 float emission_velocity;

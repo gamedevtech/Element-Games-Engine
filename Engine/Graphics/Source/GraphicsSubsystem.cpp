@@ -234,5 +234,9 @@ namespace EG{
         unsigned int GraphicsSubsystem::GetViewportHeight(void){
             return viewport_height;
         }
+
+        void GraphicsSubsystem::SetBlendingMode(unsigned int blending_mode){
+            opengl_interface->SetBlendingMode(blending_mode);
+        }
 	}
 }

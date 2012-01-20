@@ -191,12 +191,15 @@ int main(int argc, char **argv){
 
     // Particle System
     scene->GetMeshManager()->Add("quad", EG::Graphics::GenerateQuad());
+    //scene->GetTextureManager()->AddTexture("particle", new EG::Graphics::Texture("Assets/Textures/nebula_particle.png"));
     scene->GetTextureManager()->AddTexture("particle", new EG::Graphics::Texture("Assets/Textures/particle.png"));
     EG::Game::Object *particle_system = new EG::Game::Object("ParticleSystem");
 
     class TestEmitterDef : public EG::Graphics::ParticleEmitter{
     public:
-        TestEmitterDef(void) : EG::Graphics::ParticleEmitter(20.0f){ }
+        TestEmitterDef(void) : EG::Graphics::ParticleEmitter(20.0f){
+            emitted = false;
+        }
         ~TestEmitterDef(void){ }
         void CreateParticle(EG::Graphics::Particle *p){
             p->SetAttribute("frame_count", 0.0f);
@@ -211,6 +214,7 @@ int main(int argc, char **argv){
             material->SetSpecular(1.0f);
             material->SetColor(glm::vec4(0.8f, 0.2f, 0.0f, 0.75f));
             material->SetLit(false);
+            material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ALPHA_PARTICLE);
             material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "particle");
             material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "billboarding");
             material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "billboarding");
@@ -229,6 +233,8 @@ int main(int argc, char **argv){
                 p->AddAttribute(new EG::Game::ObjectAttributeEmissionLight(light));
             }
         }
+    private:
+        bool emitted;
     };
 
     class TestControllerDef : public EG::Graphics::ParticleController{
@@ -240,7 +246,6 @@ int main(int argc, char **argv){
             fc += frame_time;
             if (fc > 3.0f){
                 p->SetAlive(false);
-                //std::cout << "Killing Particle" << std::endl;
             }
             p->SetAttribute("frame_count", fc);
 
@@ -254,25 +259,9 @@ int main(int argc, char **argv){
             EG::Game::ObjectAttributeRenderingMesh *mesh_attr = static_cast<EG::Game::ObjectAttributeRenderingMesh *>((*attributes)[0]);
             glm::vec4 color = mesh_attr->GetMaterial()->GetColor();
 
-            /*EG::Game::ObjectAttributeEmissionLight *light_attr;
-            glm::vec3 light_color;
-            bool has_light = p->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
-            if (has_light){
-                std::vector<EG::Game::ObjectAttribute *> *light_attrs = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
-                EG::Game::ObjectAttributeEmissionLight *light_attr = static_cast<EG::Game::ObjectAttributeEmissionLight *>((*light_attrs)[0]);
-                glm::vec3 light_color = light_attr->GetLight()->GetColor();
-                glm::vec3 light_position = light_attr->GetLight()->GetPosition();
-                light_position += glm::vec3(p->GetAttribute("x"), 0.015f + p->GetAttribute("y"), p->GetAttribute("z"));
-                light_attr->GetLight()->SetPosition(light_position);
-            }*/
-
             if (fc > 2.0f){
                 float alpha_reduction_factor = (3.0f - fc) / 1.0f;
-                //std::cout << "Alpha Reduction Factor: " << alpha_reduction_factor << std::endl;
                 mesh_attr->GetMaterial()->SetColor(glm::vec4(color.x, color.y, color.z, color.w * alpha_reduction_factor));
-               /* if (has_light){
-                    light_attr->GetLight()->SetColor(light_color * alpha_reduction_factor);
-                }*/
             }
         }
     };

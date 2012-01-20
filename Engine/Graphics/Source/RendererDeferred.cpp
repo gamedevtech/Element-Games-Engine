@@ -148,11 +148,9 @@ namespace EG{
                         if (material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER) == "billboarding"){
                             billboarding_shader = true;
                             // HACK: Assuming particle systems for now!
-                            glEnable(GL_BLEND);
                             glDisable(GL_DEPTH_TEST);
-                            glEnable(GL_TEXTURE_2D);
-                            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
                         }
+                        graphics->SetBlendingMode(material->GetBlendingMode());
                     }
 
                     if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL)){
@@ -215,10 +213,9 @@ namespace EG{
 
                         if (billboarding_shader){
                             glDisable(GL_DEPTH_TEST);
-                            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-                            glDisable(GL_BLEND);
                         }
                     }
+                    graphics->SetBlendingMode();
                     ++mesh_attribute_iterator;
                 }
             }

@@ -80,6 +80,9 @@ namespace EG{
                 unsigned int GetViewportWidth(void);
                 unsigned int GetViewportHeight(void);
 
+                // Blending and Depth Testing
+                void SetBlendingMode(unsigned int blending_mode = 0);
+
 				// Singleton
 				static GraphicsSubsystem *Instance(void);
 			private:

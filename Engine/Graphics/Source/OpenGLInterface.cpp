@@ -979,5 +979,33 @@ namespace EG{
             SetActiveTexture(texture_index);
             glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_FLOAT, texture_data);
         }
+enum BlendingMode{
+                    BLEND_OFF = 0,
+                    BLEND_ALPHA = 1,
+                    BLEND_COLOR = 2,
+                    BLEND_ADDITIVE = 3,
+                    BLEND_ALPHA_PARTICLE = 4,
+                    BLEND_COLOR_PARTICLE = 5
+                };
+        void OpenGLInterface::SetBlendingMode(unsigned int blending_mode){
+            if (blending_mode == 1){
+                glEnable(GL_BLEND);
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            }else if (blending_mode == 2){
+                glEnable(GL_BLEND);
+                glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
+            }else if (blending_mode == 3){
+                glEnable(GL_BLEND);
+                glBlendFunc(GL_ONE, GL_ONE);
+            }else if (blending_mode == 4){
+                glEnable(GL_BLEND);
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+            }else if (blending_mode == 5){
+                glEnable(GL_BLEND);
+                glBlendFunc(GL_SRC_COLOR, GL_ONE);
+            }else{
+                glDisable(GL_BLEND);
+            }
+        }
     }
 }

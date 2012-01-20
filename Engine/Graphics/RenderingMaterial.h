@@ -27,6 +27,14 @@ namespace EG{
 					RENDERER_MULTIPASS = 1,
 					RENDERER_DEFERRED = 2
 				};
+                enum BlendingMode{
+                    BLEND_OFF = 0,
+                    BLEND_ALPHA = 1,
+                    BLEND_COLOR = 2,
+                    BLEND_ADDITIVE = 3,
+                    BLEND_ALPHA_PARTICLE = 4,
+                    BLEND_COLOR_PARTICLE = 5
+                };
 
 				RenderingMaterial(void);
 				~RenderingMaterial(void);
@@ -58,11 +66,15 @@ namespace EG{
 
 				bool HasTexture(EG::Graphics::RenderingMaterial::RenderingMaterialTextureType type);
 				bool HasCubeMap(EG::Graphics::RenderingMaterial::RenderingMaterialTextureType type);
+
+                void SetBlendingMode(EG::Graphics::RenderingMaterial::BlendingMode _blending_mode);
+                EG::Graphics::RenderingMaterial::BlendingMode GetBlendingMode(void);
 			private:
 				bool lit, translucent, casts_shadows;
 				float ambient, diffuse, specular;
 				float specular_exponent;
 				glm::vec4 color;
+                EG::Graphics::RenderingMaterial::BlendingMode blending_mode;
 				EG::Utility::Dictionary<EG::Graphics::RenderingMaterial::RenderingMaterialTextureType, std::string> textures;
 				EG::Utility::Dictionary<EG::Graphics::RenderingMaterial::RenderingMaterialTextureType, std::string> cube_maps;
 				// TODO: Put shader info in here too so people can override the default shaders for the various techniques
