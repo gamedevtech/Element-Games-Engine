@@ -15,12 +15,11 @@ smooth out vec3 position;
 smooth out vec3 normal;
 smooth out vec3 binormal;
 smooth out vec3 bitangent;
-//smooth out vec2 texcoord;
 
 void main(){
 	position = (model_matrix * vertex_position).xyz;
 	//texcoord = vertex_texcoord.st;
-	normal = normalize(normal_matrix * vec4(vertex_normal.xyz, 0.0)).xyz;
+	normal = normalize(vertex_position).xyz;
 	binormal = normalize(normal_matrix * vec4(vertex_binormal.xyz, 0.0)).xyz;
 	bitangent = normalize(normal_matrix * vec4(vertex_bitangent.xyz, 0.0)).xyz;
 

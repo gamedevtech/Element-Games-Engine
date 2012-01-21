@@ -56,13 +56,12 @@ namespace EG{
             shaders->Add("depth_debug", "Shaders/Deferred/depth_debug.vert", "Shaders/Deferred/depth_debug.frag");
             shaders->Add("gui_rendering", "Shaders/Deferred/gui_renderer.vert", "Shaders/Deferred/gui_renderer.frag");
             shaders->Add("dof", "Shaders/Deferred/dof.vert", "Shaders/Deferred/dof.frag");
-            shaders->Add("billboarding", "Shaders/Deferred/billboarding.vert", "Shaders/Deferred/billboarding.frag", "", "", "", 4);
-            if (graphics->CheckVersion(4, 1)){
+			shaders->Add("billboarding", "Shaders/Deferred/billboarding.vert", "Shaders/Deferred/billboarding.frag", "", "", "", 4);
+			if (graphics->CheckVersion(4, 1)){
                 shaders->Add("sphere_cube_mapped_gradient_decal_prepass", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass.vert", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass.frag", "", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass.cont", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass.eval", 4);
-            } else {
-                shaders->Add("sphere_cube_mapped_gradient_decal_prepass", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass_no_tessellation.vert", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass_no_tessellation.frag", "", "", "", 4);
-                //shaders->Add("sphere_cube_mapped_gradient_decal_prepass", "Shaders/Deferred/prepass.vert", "Shaders/Deferred/prepass.frag", "", "", "", 4);
-            }
+			} else {
+				shaders->Add("sphere_cube_mapped_gradient_decal_prepass", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass_no_tessellation.vert", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass_no_tessellation.frag", "", "", "", 4);
+			}
 
             camera = new EG::Graphics::Camera(45.0f, glm::ivec2(graphics->GetViewportWidth(), graphics->GetViewportHeight()), glm::vec2(0.1f, 100.0f));
             camera->ComputeProjectionMatrix();
@@ -133,7 +132,7 @@ namespace EG{
                         shaders->Unbind();
                         shaders->Bind(material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER));
                         if (material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER) == "sphere_cube_mapped_gradient_decal_prepass" && graphics->CheckVersion(4, 1)) {
-                            tessellation_shader = true;
+							tessellation_shader = true;
                         }
 
                         shaders->SetMatrix4("projection_matrix", camera->GetProjectionMatrix());
