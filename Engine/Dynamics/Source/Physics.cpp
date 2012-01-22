@@ -2,6 +2,78 @@
 
 namespace EG{
 	namespace Dynamics{
+		CollisionShape::CollisionShape(void){
+			shape_type = COLLISION_SHAPE_NONE;
+			mass = 0.0f;
+			bt_shape = NULL;
+		}
+
+		CollisionShape::~CollisionShape(void){
+			if (bt_shape){
+				delete bt_shape;
+			}
+		}
+
+		void CollisionShape::SetMass(float _mass){
+			mass = _mass;
+		}
+
+		float CollisionShape::GetMass(void){
+			return mass;
+		}
+
+		btCollisionShape *CollisionShape::GetBulletShape(void){
+			return bt_shape;
+		}
+
+		CollisionSphere::CollisionSphere(float _mass, float _radius){
+			mass = _mass;
+			radius = _radius;
+			bt_shape = new btSphereShape(radius);
+		}
+
+		CollisionBox::CollisionBox(float _mass, glm::vec3 _half_extents){
+			mass = _mass;
+			half_extents = _half_extents;
+			bt_shape = new btBoxShape(btVector3(half_extents.x, half_extents.y, half_extents.z));
+		}
+
+		CollisionCone::CollisionCone(float _mass, float _radius, float _height){
+			mass = _mass;
+			radius = _radius;
+			height = _height;
+			bt_shape = new btConeShape(radius, height);
+		}
+
+		CollisionCylinder::CollisionCylinder(float _mass, glm::vec3 _half_extents){
+			mass = _mass;
+			half_extents = _half_extents;
+			bt_shape = new btCylinderShape(btVector3(half_extents.x, half_extents.y, half_extents.z));
+		}
+
+		CollisionPlane::CollisionPlane(float _mass, glm::vec3 _normal, float _constant){
+			mass = _mass;
+			normal = _normal;
+			constant = _constant;
+			bt_shape = new btStaticPlaneShape(btVector3(normal.x, normal.y, normal.z), constant);
+		}
+
+		RigidBody::RigidBody(CollisionShape *_shape){
+			shape = _shape;
+			btDefaultMotionState* ground_motion_state = new btDefaultMotionState(btTransform(btQuaternion(0.0f, 0.0f, 0.0f, 1.0f),btVector3(0.0f, -1.0f, 0.0f)));
+			btRigidBody::btRigidBodyConstructionInfo ground_rigid_body_config_info(0.0f, ground_motion_state, shape->GetBulletShape(),btVector3(0.0f, 0.0f, 0.0f));
+			bt_rigid_body = new btRigidBody(ground_rigid_body_config_info);
+		}
+
+		RigidBody::~RigidBody(void){
+			delete bt_rigid_body;
+			delete shape;
+		}
+
+		btRigidBody *RigidBody::GetBulletBody(void){
+			return bt_rigid_body;
+		}
+
 		Physics::Physics(void){
 			broadphase = new btDbvtBroadphase();
 			configuration = new btDefaultCollisionConfiguration();
@@ -21,6 +93,11 @@ namespace EG{
 
 		void Physics::Update(float frame_time){
 			world->stepSimulation(frame_time, 10);
+		}
+
+		void Physics::AddRigidBody(RigidBody *body){
+			bodies.push_back(body);
+			world->addRigidBody(body->GetBulletBody());
 		}
 	}
 }
