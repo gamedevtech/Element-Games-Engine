@@ -1,1 +1,31 @@
- 
+#include "../ObjectControlAttribute.h"
+
+namespace EG{
+    namespace Game{
+        ObjectAttributeControlRigidBody::ObjectAttributeControlRigidBody(EG::Dynamics::RigidBody *_body){
+            type = EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY;
+            body = _body;
+            connected_to_bullet = false;
+        }
+
+        ObjectAttributeControlRigidBody::~ObjectAttributeControlRigidBody(void){
+            delete body;
+        }
+
+        void ObjectAttributeControlRigidBody::SetBody(EG::Dynamics::RigidBody *_body){
+            body = _body;
+        }
+
+        EG::Dynamics::RigidBody *ObjectAttributeControlRigidBody::GetBody(void){
+            return body;
+        }
+
+        void ObjectAttributeControlRigidBody::SetConnected(bool _connected_to_bullet){
+            connected_to_bullet = _connected_to_bullet;
+        }
+
+        bool ObjectAttributeControlRigidBody::GetConnected(void){
+            return connected_to_bullet;
+        }
+    }
+}

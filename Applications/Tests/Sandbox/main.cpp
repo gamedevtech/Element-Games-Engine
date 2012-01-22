@@ -11,6 +11,7 @@
 #include "../../../Engine/Game/Scene.h"
 #include "../../../Engine/Game/ObjectManager.h"
 #include "../../../Engine/Game/ObjectBasicAttribute.h"
+#include "../../../Engine/Game/ObjectControlAttribute.h"
 #include "../../../Engine/Game/ObjectEmissionAttribute.h"
 #include "../../../Engine/Game/ObjectRenderingAttribute.h"
 #include "../../../Engine/Graphics/Mesh.h"
@@ -43,7 +44,7 @@ int main(int argc, char **argv){
     float **heights = EG::Math::GenerateCubeSphereHeightMap(width, height, noise_generator, "Assets/Textures/generated_planet_height_map.png");
     glm::vec4 **normals = EG::Math::GenerateCubeSphereNormalHeightMap(width, height, heights, "Assets/Textures/generated_planet_normal_map.png");
     EG::Math::ColorGradientSet *gradients = new EG::Math::ColorGradientSet();
-	gradients->AddColorGradient(-1.0f, -0.3f, glm::vec4(0.0f, 0.0f, 0.25f, 1.0f), glm::vec4(0.0f, 0.25f, 1.0f, 1.0f));
+    gradients->AddColorGradient(-1.0f, -0.3f, glm::vec4(0.0f, 0.0f, 0.25f, 1.0f), glm::vec4(0.0f, 0.25f, 1.0f, 1.0f));
     gradients->AddColorGradient(-0.3f, -0.2f, glm::vec4(1.0f, 1.0f, 0.35f, 1.0f), glm::vec4(0.64f, 0.85f, 0.0f, 1.0f));
     gradients->AddColorGradient(-0.2f, 0.0f, glm::vec4(0.64f, 0.85f, 0.0f, 1.0f), glm::vec4(0.14f, 0.55f, 0.1f, 1.0f));
     gradients->AddColorGradient(0.0f, 0.15f, glm::vec4(0.14f, 0.55f, 0.1f, 1.0f), glm::vec4(0.45f, 0.37f, 0.0f, 1.0f));
@@ -117,7 +118,7 @@ int main(int argc, char **argv){
     EG::Graphics::Mesh *regular_sphere = EG::Graphics::GenerateSphere(4, 4);
     scene->GetMeshManager()->Add("sphere", regular_sphere);
     EG::Game::Object *object3 = new EG::Game::Object("SkySphere");
-	texture = new EG::Graphics::Texture("Assets/Textures/starfield.jpg");
+    texture = new EG::Graphics::Texture("Assets/Textures/starfield.jpg");
     scene->GetTextureManager()->AddTexture("starfield_decal", texture);
     object3->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)), glm::vec3(50.0f, 50.0f, 50.0f))));
     material = new EG::Graphics::RenderingMaterial();
@@ -212,53 +213,53 @@ int main(int argc, char **argv){
             material->SetDiffuse(1.0f);
             material->SetAmbient(1.0f);
             material->SetSpecular(1.0f);
-			material->SetColor(glm::vec4(0.1f, 0.3f, 0.7f, 0.75f));
+            material->SetColor(glm::vec4(0.1f, 0.3f, 0.7f, 0.75f));
             material->SetLit(false);
             material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ALPHA_PARTICLE);
             material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "particle");
             material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "billboarding");
             material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "billboarding");
-			//EG::Game::ObjectAttributeBasicTransformation *transformation = new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f)));
+            //EG::Game::ObjectAttributeBasicTransformation *transformation = new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f)));
 
-			glm::vec3 position = glm::vec3(EG::Math::Utility::RandomFloat(-5.0f, 5.0f), EG::Math::Utility::RandomFloat(-5.0f, 5.0f) + 10.0f, EG::Math::Utility::RandomFloat(-5.0f, 5.0f));
-			glm::mat4 trans = glm::translate(glm::mat4(1.0f), position);
-			trans = glm::scale(trans, glm::vec3(5.0f, 5.0f, 5.0f));
-			EG::Game::ObjectAttributeBasicTransformation *transformation = new EG::Game::ObjectAttributeBasicTransformation(trans);
+            glm::vec3 position = glm::vec3(EG::Math::Utility::RandomFloat(-5.0f, 5.0f), EG::Math::Utility::RandomFloat(-5.0f, 5.0f) + 10.0f, EG::Math::Utility::RandomFloat(-5.0f, 5.0f));
+            glm::mat4 trans = glm::translate(glm::mat4(1.0f), position);
+            trans = glm::scale(trans, glm::vec3(5.0f, 5.0f, 5.0f));
+            EG::Game::ObjectAttributeBasicTransformation *transformation = new EG::Game::ObjectAttributeBasicTransformation(trans);
 
             p->AddAttribute(transformation);
             p->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("quad", material));
 
-			/*if (EG::Math::Utility::RandomUnsigned(500) >= 350){
+            /*if (EG::Math::Utility::RandomUnsigned(500) >= 350){
                 EG::Graphics::Light *light = new EG::Graphics::Light();
-				light->SetPosition(position);
+                light->SetPosition(position);
                 light->SetDirection(-glm::vec3(0.2f, 0.2f, 0.2f));
                 light->SetColor(glm::vec3(0.3f, 0.1f, 0.0f));
                 light->SetAttenuation(glm::vec3(0.8f, 0.00125f, 0.0000001f));
                 light->SetRadius(EG::Math::Utility::RandomFloat(0.1f, 1.0f));
                 light->SetCastsShadows(false);
                 p->AddAttribute(new EG::Game::ObjectAttributeEmissionLight(light));
-			}*/
+            }*/
         }
-		void Emit(std::list<EG::Graphics::Particle *> *particles, float frame_time){
-			if (!emitted){
-				for (unsigned int i = 0; i < 50; i++){
-					EG::Graphics::Particle *new_particle = new EG::Graphics::Particle();
-					CreateParticle(new_particle);
-					particles->push_back(new_particle);
-				}
-				emitted = true;
-			}
-		}
+        void Emit(std::list<EG::Graphics::Particle *> *particles, float frame_time){
+            if (!emitted){
+                for (unsigned int i = 0; i < 50; i++){
+                    EG::Graphics::Particle *new_particle = new EG::Graphics::Particle();
+                    CreateParticle(new_particle);
+                    particles->push_back(new_particle);
+                }
+                emitted = true;
+            }
+        }
     private:
         bool emitted;
     };
 
     class TestControllerDef : public EG::Graphics::ParticleController{
     public:
-		TestControllerDef(void){ }
+        TestControllerDef(void){ }
         ~TestControllerDef(void){ }
         void ControlParticle(EG::Graphics::Particle *p, float frame_time){
-			/*float fc = p->GetAttribute("frame_count");
+            /*float fc = p->GetAttribute("frame_count");
             fc += frame_time;
             if (fc > 3.0f){
                 p->SetAlive(false);
@@ -278,9 +279,9 @@ int main(int argc, char **argv){
             if (fc > 2.0f){
                 float alpha_reduction_factor = (3.0f - fc) / 1.0f;
                 mesh_attr->GetMaterial()->SetColor(glm::vec4(color.x, color.y, color.z, color.w * alpha_reduction_factor));
-			}*/
-		}
-	private:
+            }*/
+        }
+    private:
     };
     particle_system->AddAttribute(new EG::Game::ObjectAttributeEmissionParticleSystem(new EG::Graphics::ParticleSystem(new TestControllerDef(), new TestEmitterDef())));
 
@@ -288,6 +289,9 @@ int main(int argc, char **argv){
     EG::Media::ObjectReader reader;
     reader.Read("Assets/Models/test_model.ego", scene);
     EG::Game::Object *read_object = reader.GetLoadedObject();
+    /*EG::Dynamics::CollisionSphere *collision_shape = new EG::Dynamics::CollisionSphere(1.0f, 1.0f);
+    EG::Dynamics::RigidBody *rigid_body = new EG::Dynamics::RigidBody(collision_shape);
+    read_object->AddAttribute(new EG::Game::ObjectAttributeControlRigidBody(rigid_body));*/
     // END TEST
 
     // Add Objects
@@ -295,7 +299,7 @@ int main(int argc, char **argv){
     objects->AddObject(object);
     objects->AddObject(read_object);
     objects->AddObject(object2);
-	objects->AddObject(object3);
+    objects->AddObject(object3);
     //objects->AddObject(object4);
     objects->AddObject(light_object);
     objects->AddObject(light_object2);
