@@ -289,9 +289,9 @@ int main(int argc, char **argv){
     EG::Media::ObjectReader reader;
     reader.Read("Assets/Models/test_model.ego", scene);
     EG::Game::Object *read_object = reader.GetLoadedObject();
-    EG::Dynamics::CollisionSphere *collision_shape = new EG::Dynamics::CollisionSphere(1.0f, 1.0f);
+    /*EG::Dynamics::CollisionSphere *collision_shape = new EG::Dynamics::CollisionSphere(1.0f, 1.0f);
     EG::Dynamics::RigidBody *rigid_body = new EG::Dynamics::RigidBody(collision_shape, glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 2.0f, 1.0f)), glm::vec3(0.1f, 0.1f, 0.1f)));
-    read_object->AddAttribute(new EG::Game::ObjectAttributeControlRigidBody(rigid_body));
+    read_object->AddAttribute(new EG::Game::ObjectAttributeControlRigidBody(rigid_body));*/
     // END TEST
 
     // Add Objects

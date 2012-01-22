@@ -68,7 +68,7 @@ namespace EG{
             bt_trans.setFromOpenGLMatrix(matrix);
             btDefaultMotionState *ground_motion_state = new btDefaultMotionState(bt_trans);
 
-            btRigidBody::btRigidBodyConstructionInfo ground_rigid_body_config_info(0.0f, ground_motion_state, shape->GetBulletShape(), btVector3(0.0f, 0.0f, 0.0f));
+            btRigidBody::btRigidBodyConstructionInfo ground_rigid_body_config_info(shape->GetMass(), ground_motion_state, shape->GetBulletShape(), btVector3(0.0f, 0.0f, 0.0f));
             bt_rigid_body = new btRigidBody(ground_rigid_body_config_info);
         }
 
@@ -98,7 +98,7 @@ namespace EG{
             dispatcher = new btCollisionDispatcher(configuration);
             solver = new btSequentialImpulseConstraintSolver();
             world = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, configuration);
-            world->setGravity(btVector3(0, -10, 0));
+            world->setGravity(btVector3(0.0f, -10.0f, 0.0f));
         }
 
         Physics::~Physics(void){
