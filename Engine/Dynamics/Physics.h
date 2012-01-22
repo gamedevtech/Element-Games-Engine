@@ -96,13 +96,14 @@ namespace EG{
 
         class RigidBody{
             public:
-                RigidBody(CollisionShape *_shape);
+                RigidBody(CollisionShape *_shape, glm::mat4 transformation);
                 ~RigidBody(void);
 
                 btRigidBody *GetBulletBody(void);
                 glm::mat4 GetMotionState(void);
             private:
                 btRigidBody *bt_rigid_body;
+                glm::vec3 local_scaling;
                 CollisionShape *shape;
         };
 

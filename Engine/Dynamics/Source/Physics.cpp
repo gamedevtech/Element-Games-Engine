@@ -58,10 +58,17 @@ namespace EG{
             bt_shape = new btStaticPlaneShape(btVector3(normal.x, normal.y, normal.z), constant);
         }
 
-        RigidBody::RigidBody(CollisionShape *_shape){
+        RigidBody::RigidBody(CollisionShape *_shape, glm::mat4 transformation){
             shape = _shape;
-            btDefaultMotionState* ground_motion_state = new btDefaultMotionState(btTransform(btQuaternion(0.0f, 0.0f, 0.0f, 1.0f),btVector3(0.0f, -1.0f, 0.0f)));
-            btRigidBody::btRigidBodyConstructionInfo ground_rigid_body_config_info(0.0f, ground_motion_state, shape->GetBulletShape(),btVector3(0.0f, 0.0f, 0.0f));
+
+            glm::vec3 scale = glm::vec3(transformation[0][0], transformation[1][1], transformation[2][2]);
+            local_scaling = scale;
+            float *matrix = glm::value_ptr(transformation);
+            btTransform bt_trans;
+            bt_trans.setFromOpenGLMatrix(matrix);
+            btDefaultMotionState *ground_motion_state = new btDefaultMotionState(bt_trans);
+
+            btRigidBody::btRigidBodyConstructionInfo ground_rigid_body_config_info(0.0f, ground_motion_state, shape->GetBulletShape(), btVector3(0.0f, 0.0f, 0.0f));
             bt_rigid_body = new btRigidBody(ground_rigid_body_config_info);
         }
 
@@ -81,6 +88,7 @@ namespace EG{
             btScalar matrix_data[16];
             world_transform.getOpenGLMatrix(matrix_data);
             glm::mat4 out = glm::make_mat4(matrix_data);
+            out = glm::scale(out, local_scaling);
             return out;
         }
 
