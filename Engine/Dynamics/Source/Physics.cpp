@@ -1,4 +1,5 @@
 #include "../Physics.h"
+#include <iostream>
 
 namespace EG{
     namespace Dynamics{
@@ -88,7 +89,7 @@ namespace EG{
             btScalar matrix_data[16];
             world_transform.getOpenGLMatrix(matrix_data);
             glm::mat4 out = glm::make_mat4(matrix_data);
-            out = glm::scale(out, local_scaling);
+            out = glm::scale(glm::mat4(1.0f), local_scaling) * out;
             return out;
         }
 
@@ -99,6 +100,12 @@ namespace EG{
             solver = new btSequentialImpulseConstraintSolver();
             world = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, configuration);
             world->setGravity(btVector3(0.0f, -10.0f, 0.0f));
+
+            btStaticPlaneShape *ground_plane = new btStaticPlaneShape(btVector3(0.0f, 1.0f, 0.0f), 0.0f);
+            btDefaultMotionState *ground_motion_state = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-1,0)));
+            btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0.0f, ground_motion_state, ground_plane, btVector3(0.0f, 0.0f, 0.0f));
+            btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
+            world->addRigidBody(groundRigidBody);
         }
 
         Physics::~Physics(void){
