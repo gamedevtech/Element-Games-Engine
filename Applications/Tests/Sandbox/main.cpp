@@ -105,9 +105,9 @@ int main(int argc, char **argv){
     scene->GetTextureManager()->AddTexture("concrete_decal", texture);
     texture = new EG::Graphics::Texture("Assets/Textures/concrete_normal.jpg");
     scene->GetTextureManager()->AddTexture("concrete_normal", texture);
-    glm::mat4 plane_transform = glm::mat4(1.0f);
-    plane_transform = glm::translate(plane_transform, glm::vec3(-5.0f, -0.101f, -5.0f));
-    plane_transform = glm::scale(plane_transform, glm::vec3(10.0f, 0.1f, 10.0f));
+    glm::mat4 scale = glm::gtx::scale(glm::vec3(10.0f, 0.1f, 10.0f));
+    glm::mat4 translate = glm::gtx::translate(glm::vec3(-5.0f, -0.101f, -5.0f));
+    glm::mat4 plane_transform = translate * scale;
     object2->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(plane_transform));
     //EG::Graphics::RenderingMaterial *material = new EG::Graphics::RenderingMaterial();
     material = new EG::Graphics::RenderingMaterial();
@@ -116,9 +116,9 @@ int main(int argc, char **argv){
     material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "concrete_decal");
     material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, "concrete_normal");
     object2->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("cube", material));
-    EG::Dynamics::CollisionBox *plane_box = new EG::Dynamics::CollisionBox(0.0f, glm::vec3(5.0f, 0.05f, 5.0f));
+    /*EG::Dynamics::CollisionBox *plane_box = new EG::Dynamics::CollisionBox(0.0f, glm::vec3(5.0f, 0.05f, 5.0f));
     EG::Dynamics::RigidBody *plane_body = new EG::Dynamics::RigidBody(plane_box, plane_transform);
-    object2->AddAttribute(new EG::Game::ObjectAttributeControlRigidBody(plane_body));
+    object2->AddAttribute(new EG::Game::ObjectAttributeControlRigidBody(plane_body));*/
 
     // Sky Sphere
     EG::Graphics::Mesh *regular_sphere = EG::Graphics::GenerateSphere(4, 4);
