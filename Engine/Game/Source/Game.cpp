@@ -151,7 +151,6 @@ namespace EG{
                     std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
                     while (attr_iter != attrs->end()){
                         EG::Game::ObjectAttributeEmissionParticleSystem *pattr = static_cast<EG::Game::ObjectAttributeEmissionParticleSystem *>(*attr_iter);
-                        pattr->GetParticleSystem()->Update(time->GetFrameTime());
 
                         EG::Graphics::ParticleSystem *psys = pattr->GetParticleSystem();
                         std::list<EG::Graphics::Particle *> *particles = psys->GetParticles();
@@ -168,6 +167,10 @@ namespace EG{
                                     if (!(rigid_body_attr->GetConnected())){
                                         physics->AddRigidBody(rigid_body_attr->GetBody());
                                         rigid_body_attr->SetConnected(true);
+                                    }
+
+                                    if (!(p->Alive())){
+                                        physics->RemoveRigidBody(rigid_body_attr->GetBody());
                                     }
 
                                     // TODO: Get Motion State From Physics
@@ -191,6 +194,7 @@ namespace EG{
                             ++piter;
                         }
 
+                        pattr->GetParticleSystem()->Update(time->GetFrameTime());
                         ++attr_iter;
                     }
                 }

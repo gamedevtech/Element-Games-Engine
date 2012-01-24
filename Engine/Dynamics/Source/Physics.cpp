@@ -74,6 +74,7 @@ namespace EG{
         }
 
         RigidBody::~RigidBody(void){
+            delete bt_rigid_body->getMotionState();
             delete bt_rigid_body;
             delete shape;
         }
@@ -121,8 +122,11 @@ namespace EG{
         }
 
         void Physics::AddRigidBody(RigidBody *body){
-            bodies.push_back(body);
             world->addRigidBody(body->GetBulletBody());
+        }
+
+        void Physics::RemoveRigidBody(RigidBody *body){
+            world->removeRigidBody(body->GetBulletBody());
         }
     }
 }

@@ -24,6 +24,8 @@ namespace EG{
                         delete static_cast<EG::Game::ObjectAttributeBasicTransformation *>(*attr_iter);
                     }else if (type_key == EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT){
                         delete static_cast<EG::Game::ObjectAttributeEmissionLight *>(*attr_iter);
+                    }else if (type_key == EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY){
+                        delete static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
                     }
                     ++attr_iter;
                 }

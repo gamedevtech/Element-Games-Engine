@@ -114,14 +114,13 @@ namespace EG{
 
                 void Update(float frame_time);
                 void AddRigidBody(RigidBody *body);
+                void RemoveRigidBody(RigidBody *body);
             private:
                 btBroadphaseInterface *broadphase;
                 btDefaultCollisionConfiguration *configuration;
                 btCollisionDispatcher *dispatcher;
                 btSequentialImpulseConstraintSolver *solver;
                 btDiscreteDynamicsWorld *world;
-
-                std::vector<RigidBody *> bodies;
         };
     }
 }
