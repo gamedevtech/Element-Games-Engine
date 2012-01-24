@@ -96,7 +96,7 @@ namespace EG{
 
         class RigidBody{
             public:
-                RigidBody(CollisionShape *_shape, glm::mat4 transformation);
+                RigidBody(CollisionShape *_shape, glm::mat4 transformation, glm::vec3 _local_scaling = glm::vec3(1.0f, 1.0f, 1.0f));
                 ~RigidBody(void);
 
                 btRigidBody *GetBulletBody(void);

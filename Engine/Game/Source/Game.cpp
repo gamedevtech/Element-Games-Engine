@@ -152,6 +152,45 @@ namespace EG{
                     while (attr_iter != attrs->end()){
                         EG::Game::ObjectAttributeEmissionParticleSystem *pattr = static_cast<EG::Game::ObjectAttributeEmissionParticleSystem *>(*attr_iter);
                         pattr->GetParticleSystem()->Update(time->GetFrameTime());
+
+                        EG::Graphics::ParticleSystem *psys = pattr->GetParticleSystem();
+                        std::list<EG::Graphics::Particle *> *particles = psys->GetParticles();
+                        std::list<EG::Graphics::Particle *>::iterator piter = particles->begin();
+                        while (piter != particles->end()){
+                            EG::Graphics::Particle *p = (*piter);
+                            bool has_physics = false;
+                            glm::mat4 motion_state;
+                            if (p->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY)){
+                                std::vector<EG::Game::ObjectAttribute *> *attrs = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY);
+                                std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+                                while (attr_iter != attrs->end()){
+                                    EG::Game::ObjectAttributeControlRigidBody *rigid_body_attr = static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
+                                    if (!(rigid_body_attr->GetConnected())){
+                                        physics->AddRigidBody(rigid_body_attr->GetBody());
+                                        rigid_body_attr->SetConnected(true);
+                                    }
+
+                                    // TODO: Get Motion State From Physics
+                                    EG::Dynamics::RigidBody *body = rigid_body_attr->GetBody();
+                                    motion_state = body->GetMotionState();
+                                    has_physics = true;
+
+                                    ++attr_iter;
+                                }
+                            }
+
+                            if (has_physics && p->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION)){
+                                std::vector<EG::Game::ObjectAttribute *> *attrs = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
+                                std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+                                while (attr_iter != attrs->end()){
+                                    EG::Game::ObjectAttributeBasicTransformation *trans_attr = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(*attr_iter);
+                                    trans_attr->SetTransformation(motion_state);
+                                    ++attr_iter;
+                                }
+                            }
+                            ++piter;
+                        }
+
                         ++attr_iter;
                     }
                 }

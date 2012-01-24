@@ -27,6 +27,7 @@ namespace EG{
                 static unsigned int RandomUnsigned(unsigned int max);
                 static int RandomInteger(int min, int max);
                 static float RandomFloat(float min, float max);
+                static glm::mat4 GenerateTransform(glm::vec3 translate = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f), glm::quat rotation = glm::quat(glm::vec3(0.0f)));
             private:
                 //
         };

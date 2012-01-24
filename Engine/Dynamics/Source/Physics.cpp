@@ -59,11 +59,11 @@ namespace EG{
             bt_shape = new btStaticPlaneShape(btVector3(normal.x, normal.y, normal.z), constant);
         }
 
-        RigidBody::RigidBody(CollisionShape *_shape, glm::mat4 transformation){
+        RigidBody::RigidBody(CollisionShape *_shape, glm::mat4 transformation, glm::vec3 _local_scaling){
             shape = _shape;
 
-            glm::vec3 scale = glm::vec3(transformation[0][0], transformation[1][1], transformation[2][2]);
-            local_scaling = scale;
+            //glm::vec3 scale = glm::vec3(transformation[0][0], transformation[1][1], transformation[2][2]);
+            local_scaling = _local_scaling;
             float *matrix = glm::value_ptr(transformation);
             btTransform bt_trans;
             bt_trans.setFromOpenGLMatrix(matrix);
@@ -89,7 +89,7 @@ namespace EG{
             btScalar matrix_data[16];
             world_transform.getOpenGLMatrix(matrix_data);
             glm::mat4 out = glm::make_mat4(matrix_data);
-            out = glm::scale(glm::mat4(1.0f), local_scaling) * out;
+            out = out * glm::gtx::transform::scale(local_scaling);
             return out;
         }
 
