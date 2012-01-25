@@ -71,6 +71,8 @@ namespace EG{
 
             btRigidBody::btRigidBodyConstructionInfo ground_rigid_body_config_info(shape->GetMass(), ground_motion_state, shape->GetBulletShape(), btVector3(0.0f, 0.0f, 0.0f));
             bt_rigid_body = new btRigidBody(ground_rigid_body_config_info);
+            collision_group = BIT(0);
+            collides_with = BIT(0);
         }
 
         RigidBody::~RigidBody(void){
@@ -106,6 +108,19 @@ namespace EG{
             bt_rigid_body->applyTorque(btVector3(torque.x, torque.y, torque.z));
         }
 
+        void RigidBody::SetCollisionFiltering(int _collision_group, int _collides_with){
+	    collision_group = _collision_group;
+            collides_with = _collides_with;
+        }
+
+        int RigidBody::GetCollisionGroup(void){
+            return collision_group;
+        }
+
+        int RigidBody::GetCollidesWith(void){
+            return collides_with;
+        }
+
         Physics::Physics(void){
             broadphase = new btDbvtBroadphase();
             configuration = new btDefaultCollisionConfiguration();
@@ -134,7 +149,7 @@ namespace EG{
         }
 
         void Physics::AddRigidBody(RigidBody *body){
-            world->addRigidBody(body->GetBulletBody());
+            world->addRigidBody(body->GetBulletBody(), body->GetCollisionGroup(), body->GetCollidesWith());
         }
 
         void Physics::RemoveRigidBody(RigidBody *body){

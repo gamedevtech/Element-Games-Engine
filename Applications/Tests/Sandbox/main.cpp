@@ -27,6 +27,12 @@
 
 EG::Media::ModelLoader *model;
 int main(int argc, char **argv){
+    enum CollisionTypes{
+        COLLIDES_OBJECT = BIT(1),
+        COLLIDES_PARTICLES = BIT(2)
+    };
+    int particles_collides = COLLIDES_OBJECT;
+    int objects_collides = COLLIDES_OBJECT | COLLIDES_PARTICLES;
     // This is just a temporary organization to test classes as they get created!
     EG::Utility::JSON config_file("config.json");
     EG::Utility::Window *window = new EG::Utility::Window(config_file.GetInt("screen.width"), config_file.GetInt("screen.height"), 32, config_file.GetBool("screen.fullscreen"), "Element Games Sandbox");
@@ -119,6 +125,7 @@ int main(int argc, char **argv){
     object2->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("cube", material));
     EG::Dynamics::CollisionBox *plane_box = new EG::Dynamics::CollisionBox(0.0f, glm::vec3(5.0f, 0.05f, 5.0f));
     EG::Dynamics::RigidBody *plane_body = new EG::Dynamics::RigidBody(plane_box, translate, glm::vec3(10.0f, 0.1f, 10.0f));
+    plane_body->SetCollisionFiltering(COLLIDES_OBJECT, objects_collides);
     object2->AddAttribute(new EG::Game::ObjectAttributeControlRigidBody(plane_body));
 
     // Sky Sphere
@@ -206,6 +213,13 @@ int main(int argc, char **argv){
         }
         ~TestEmitterDef(void){ }
         void CreateParticle(EG::Graphics::Particle *p){
+            enum CollisionTypes{
+                COLLIDES_OBJECT = BIT(1),
+                COLLIDES_PARTICLES = BIT(2)
+            };
+            int particles_collides = COLLIDES_OBJECT;
+            int objects_collides = COLLIDES_OBJECT | COLLIDES_PARTICLES;
+
             p->SetAttribute("frame_count", 0.0f);
             p->SetAttribute("alpha", 0.75f);
             p->SetAttribute("x", EG::Math::Utility::RandomFloat(-0.25f, 0.25f));
@@ -246,6 +260,8 @@ int main(int argc, char **argv){
 
             EG::Dynamics::CollisionSphere *psphere = new EG::Dynamics::CollisionSphere(1.0f, psize.x);
             EG::Dynamics::RigidBody *pbody = new EG::Dynamics::RigidBody(psphere, ptranslate, psize);
+            pbody->SetCollisionFiltering(COLLIDES_PARTICLES, particles_collides);
+            pbody->ApplyImpulse(glm::vec3(EG::Math::Utility::RandomFloat(-0.5f, 0.5f), 2.0f, EG::Math::Utility::RandomFloat(-0.5f, 0.5f)));
             p->AddAttribute(new EG::Game::ObjectAttributeControlRigidBody(pbody));
         }
         /*void Emit(std::list<EG::Graphics::Particle *> *particles, float frame_time){
@@ -310,8 +326,9 @@ int main(int argc, char **argv){
     reader.Read("Assets/Models/test_model.ego", scene);
     EG::Game::Object *read_object = reader.GetLoadedObject();
     EG::Dynamics::CollisionBox *collision_shape = new EG::Dynamics::CollisionBox(0.0f, glm::vec3(1.0f, 0.5f, 1.0f));
-    glm::mat4 ship_trans = glm::gtx::transform::translate(0.0f, 1.0f, 0.0f);
+    glm::mat4 ship_trans = glm::gtx::transform::translate(0.0f, 2.0f, 0.0f);
     EG::Dynamics::RigidBody *rigid_body = new EG::Dynamics::RigidBody(collision_shape, ship_trans, glm::vec3(0.02f, 0.02f, 0.02f));
+    rigid_body->SetCollisionFiltering(COLLIDES_OBJECT, COLLIDES_OBJECT);
     read_object->AddAttribute(new EG::Game::ObjectAttributeControlRigidBody(rigid_body));
     // END TEST
 

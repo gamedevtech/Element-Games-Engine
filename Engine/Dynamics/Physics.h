@@ -1,6 +1,8 @@
 #ifndef EG_DYNAMICS_PHYSICS_H
 #define EG_DYNAMICS_PHYSICS_H
 
+#define BIT(x) (1<<(x))
+
 #include <btBulletDynamicsCommon.h>
 #include <vector>
 #include "../Math/Math.h"
@@ -102,6 +104,10 @@ namespace EG{
                 btRigidBody *GetBulletBody(void);
                 glm::mat4 GetMotionState(void);
 
+                void SetCollisionFiltering(int _collision_group, int _collides_with);
+                int GetCollisionGroup(void);
+                int GetCollidesWith(void);
+
                 void ApplyForce(glm::vec3 force_vector, glm::vec3 relative_position = glm::vec3(0.0f, 0.0f, 0.0f));
                 void ApplyImpulse(glm::vec3 impulse_vector, glm::vec3 relative_position = glm::vec3(0.0f, 0.0f, 0.0f));
                 void ApplyTorque(glm::vec3 torque);
@@ -109,6 +115,8 @@ namespace EG{
                 btRigidBody *bt_rigid_body;
                 glm::vec3 local_scaling;
                 CollisionShape *shape;
+                int collision_group;
+                int collides_with;
         };
 
         class Physics{

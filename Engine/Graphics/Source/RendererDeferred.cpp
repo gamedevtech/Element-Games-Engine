@@ -532,7 +532,7 @@ namespace EG{
             temp << 1.0f / frame_time;
             temp.flush();
             glm::vec3 position = glm::vec3(5.0f, 5.0f, -0.1f);
-            glm::vec2 scale = glm::vec2(0.5f, 0.5f);
+            glm::vec2 scale = glm::vec2(1.0f, 1.0f);
 
             glDisable(GL_DEPTH_TEST);
             shaders->Bind("font_rendering");
