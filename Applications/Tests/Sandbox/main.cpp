@@ -201,7 +201,7 @@ int main(int argc, char **argv){
 
     class TestEmitterDef : public EG::Graphics::ParticleEmitter{
     public:
-        TestEmitterDef(void) : EG::Graphics::ParticleEmitter(20.0f){
+        TestEmitterDef(void) : EG::Graphics::ParticleEmitter(10.0f){
             emitted = false;
         }
         ~TestEmitterDef(void){ }
@@ -233,16 +233,16 @@ int main(int argc, char **argv){
             p->AddAttribute(transformation);
             p->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("quad", material));
 
-            if (EG::Math::Utility::RandomUnsigned(500) >= 350){
+            //if (EG::Math::Utility::RandomUnsigned(500) >= 350){
                 EG::Graphics::Light *light = new EG::Graphics::Light();
                 light->SetPosition(position);
                 light->SetDirection(-glm::vec3(0.2f, 0.2f, 0.2f));
                 light->SetColor(glm::vec3(0.3f, 0.1f, 0.0f));
                 light->SetAttenuation(glm::vec3(0.8f, 0.00125f, 0.0000001f));
-                light->SetRadius(EG::Math::Utility::RandomFloat(0.1f, 1.0f));
+                light->SetRadius(1.75f);
                 light->SetCastsShadows(false);
                 p->AddAttribute(new EG::Game::ObjectAttributeEmissionLight(light));
-            }
+            //}
 
             EG::Dynamics::CollisionSphere *psphere = new EG::Dynamics::CollisionSphere(1.0f, psize.x);
             EG::Dynamics::RigidBody *pbody = new EG::Dynamics::RigidBody(psphere, ptranslate, psize);
@@ -274,27 +274,27 @@ int main(int argc, char **argv){
             }
             p->SetAttribute("frame_count", fc);
 
-			std::vector<EG::Game::ObjectAttribute *> *attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
+            std::vector<EG::Game::ObjectAttribute *> *attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
             EG::Game::ObjectAttributeBasicTransformation *transformation = static_cast<EG::Game::ObjectAttributeBasicTransformation *>((*attributes)[0]);
             glm::mat4 t = transformation->GetTransformation();
-			//t = glm::translate(t, glm::vec3(frame_time * p->GetAttribute("x"), frame_time * (1.0f + p->GetAttribute("y")), frame_time * p->GetAttribute("z")));
-			//transformation->SetTransformation(t);
+            //t = glm::translate(t, glm::vec3(frame_time * p->GetAttribute("x"), frame_time * (1.0f + p->GetAttribute("y")), frame_time * p->GetAttribute("z")));
+            //transformation->SetTransformation(t);
 
-			attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+            attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
             EG::Game::ObjectAttributeRenderingMesh *mesh_attr = static_cast<EG::Game::ObjectAttributeRenderingMesh *>((*attributes)[0]);
             glm::vec4 color = mesh_attr->GetMaterial()->GetColor();
 
-			if (p->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT)){
-				attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
-				std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attributes->begin();
-				while (attr_iter != attributes->end()){
-					EG::Game::ObjectAttributeEmissionLight *light_attr = static_cast<EG::Game::ObjectAttributeEmissionLight *>(*attr_iter);
-					EG::Graphics::Light *l = light_attr->GetLight();
-					float *m_data = glm::value_ptr(t);
-					l->SetPosition(glm::vec3(m_data[12], m_data[13], m_data[14]));
-					++attr_iter;
-				}
-			}
+            if (p->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT)){
+                attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
+                std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attributes->begin();
+                while (attr_iter != attributes->end()){
+                    EG::Game::ObjectAttributeEmissionLight *light_attr = static_cast<EG::Game::ObjectAttributeEmissionLight *>(*attr_iter);
+                    EG::Graphics::Light *l = light_attr->GetLight();
+                    float *m_data = glm::value_ptr(t);
+                    l->SetPosition(glm::vec3(m_data[12], m_data[13] + 1.25f, m_data[14]));
+                    ++attr_iter;
+                }
+            }
 
             if (fc > 2.0f){
                 float alpha_reduction_factor = (3.0f - fc) / 1.0f;
@@ -309,10 +309,10 @@ int main(int argc, char **argv){
     EG::Media::ObjectReader reader;
     reader.Read("Assets/Models/test_model.ego", scene);
     EG::Game::Object *read_object = reader.GetLoadedObject();
-	EG::Dynamics::CollisionBox *collision_shape = new EG::Dynamics::CollisionBox(0.0f, glm::vec3(1.0f, 0.5f, 1.0f));
+    EG::Dynamics::CollisionBox *collision_shape = new EG::Dynamics::CollisionBox(0.0f, glm::vec3(1.0f, 0.5f, 1.0f));
     glm::mat4 ship_trans = glm::gtx::transform::translate(0.0f, 1.0f, 0.0f);
     EG::Dynamics::RigidBody *rigid_body = new EG::Dynamics::RigidBody(collision_shape, ship_trans, glm::vec3(0.02f, 0.02f, 0.02f));
-	read_object->AddAttribute(new EG::Game::ObjectAttributeControlRigidBody(rigid_body));
+    read_object->AddAttribute(new EG::Game::ObjectAttributeControlRigidBody(rigid_body));
     // END TEST
 
     // Add Objects
@@ -322,9 +322,9 @@ int main(int argc, char **argv){
     objects->AddObject(object2);
     objects->AddObject(object3);
     //objects->AddObject(object4);
-    objects->AddObject(light_object);
-    objects->AddObject(light_object2);
-    objects->AddObject(light_object3);
+    //objects->AddObject(light_object);
+    //objects->AddObject(light_object2);
+    //objects->AddObject(light_object3);
     objects->AddObject(particle_system);
     //objects->AddObject(dummy_light_object);
     // NOTE: End Test Data

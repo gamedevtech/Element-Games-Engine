@@ -94,13 +94,25 @@ namespace EG{
             return out;
         }
 
+        void RigidBody::ApplyForce(glm::vec3 force_vector, glm::vec3 relative_position){
+            bt_rigid_body->applyForce(btVector3(force_vector.x, force_vector.y, force_vector.z), btVector3(relative_position.x, relative_position.y, relative_position.z));
+        }
+
+        void RigidBody::ApplyImpulse(glm::vec3 impulse_vector, glm::vec3 relative_position){
+            bt_rigid_body->applyImpulse(btVector3(impulse_vector.x, impulse_vector.y, impulse_vector.z), btVector3(relative_position.x, relative_position.y, relative_position.z));
+        }
+
+        void RigidBody::ApplyTorque(glm::vec3 torque){
+            bt_rigid_body->applyTorque(btVector3(torque.x, torque.y, torque.z));
+        }
+
         Physics::Physics(void){
             broadphase = new btDbvtBroadphase();
             configuration = new btDefaultCollisionConfiguration();
             dispatcher = new btCollisionDispatcher(configuration);
             solver = new btSequentialImpulseConstraintSolver();
             world = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, configuration);
-            world->setGravity(btVector3(0.0f, -10.0f, 0.0f));
+            SetGravity(glm::vec3(0.0f, -10.0f, 0.0f));
 
             btStaticPlaneShape *ground_plane = new btStaticPlaneShape(btVector3(0.0f, 1.0f, 0.0f), 0.0f);
             btDefaultMotionState *ground_motion_state = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-1,0)));
@@ -127,6 +139,10 @@ namespace EG{
 
         void Physics::RemoveRigidBody(RigidBody *body){
             world->removeRigidBody(body->GetBulletBody());
+        }
+
+        void Physics::SetGravity(glm::vec3 gravity_vector){
+            world->setGravity(btVector3(gravity_vector.x, gravity_vector.y, gravity_vector.z));
         }
     }
 }

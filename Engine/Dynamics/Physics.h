@@ -101,6 +101,10 @@ namespace EG{
 
                 btRigidBody *GetBulletBody(void);
                 glm::mat4 GetMotionState(void);
+
+                void ApplyForce(glm::vec3 force_vector, glm::vec3 relative_position = glm::vec3(0.0f, 0.0f, 0.0f));
+                void ApplyImpulse(glm::vec3 impulse_vector, glm::vec3 relative_position = glm::vec3(0.0f, 0.0f, 0.0f));
+                void ApplyTorque(glm::vec3 torque);
             private:
                 btRigidBody *bt_rigid_body;
                 glm::vec3 local_scaling;
@@ -115,6 +119,7 @@ namespace EG{
                 void Update(float frame_time);
                 void AddRigidBody(RigidBody *body);
                 void RemoveRigidBody(RigidBody *body);
+                void SetGravity(glm::vec3 gravity_vector);
             private:
                 btBroadphaseInterface *broadphase;
                 btDefaultCollisionConfiguration *configuration;
