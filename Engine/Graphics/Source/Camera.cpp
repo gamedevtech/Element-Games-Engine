@@ -163,5 +163,10 @@ namespace EG{
         glm::mat4 Camera::GetInverseProjectionMatrix(void){
             return inverse_projection_matrix;
         }
+
+	void Camera::SetViewMatrix(glm::mat4 _view_matrix){
+            view_matrix = _view_matrix;
+            inverse_view_matrix = glm::inverse(view_matrix);
+	}
     }
 }

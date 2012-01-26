@@ -21,14 +21,14 @@ namespace EG{
             // Resolution needs to be from config
             rendering_method = RENDERER_SIMPLE;
 
-            if (graphics->CheckVersion(3, 1)){
-            //if (graphics->CheckVersion(4, 1)){
+            //if (graphics->CheckVersion(3, 1)){
+            if (graphics->CheckVersion(4, 1)){
                 if (rendering_method == RENDERER_SIMPLE){
                     rendering_method = RENDERER_DEFERRED;
                 }
             }else{
                 rendering_method = RENDERER_SIMPLE;
-                //graphics->OverrideVersion(2, 1);
+                graphics->OverrideVersion(2, 1);
             }
             if (rendering_method == RENDERER_SIMPLE){
                 renderer = new EG::Graphics::Renderer();
@@ -116,7 +116,20 @@ namespace EG{
                 while (attr_iter != attrs->end()){
                     EG::Game::ObjectAttributeControlRigidBody *body_attr = static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
                     EG::Dynamics::RigidBody *ship_body = body_attr->GetBody();
-                    ship_body->ApplyImpulse(glm::vec3(0.0f, 50.0f * time->GetFrameTime(), 0.0f));
+                    ship_body->ApplyImpulse(glm::vec3(0.0f, 5.0f * time->GetFrameTime(), 0.0f));
+                    btVector3 vel = ship_body->GetBulletBody()->getVelocityInLocalPoint(btVector3(0.0f, 0.0f, 0.0f));
+                    //std::cout << vel.x() << ", " << vel.y() << ", " << vel.z() << std::endl;
+                    ++attr_iter;
+                }
+            }
+            if (input->IsKeyDown(EG::Input::j)){
+                EG::Game::Object *ship = scene->GetObjectManager()->GetObject("Assets/Models/spaceship.3ds");
+                std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY);
+                std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+                while (attr_iter != attrs->end()){
+                    EG::Game::ObjectAttributeControlRigidBody *body_attr = static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
+                    EG::Dynamics::RigidBody *ship_body = body_attr->GetBody();
+                    ship_body->ApplyImpulse(glm::vec3(0.0f, -5.0f * time->GetFrameTime(), 0.0f));
                     btVector3 vel = ship_body->GetBulletBody()->getVelocityInLocalPoint(btVector3(0.0f, 0.0f, 0.0f));
                     //std::cout << vel.x() << ", " << vel.y() << ", " << vel.z() << std::endl;
                     ++attr_iter;
@@ -152,6 +165,7 @@ namespace EG{
                     (static_cast<EG::Graphics::RendererDeferred *>(renderer))->ToggleDOF();
                 }
             }
+
             physics->Update(time->GetFrameTime());
         }
 

@@ -22,6 +22,7 @@ namespace EG{
 				void SetNearFar(glm::vec2 _near_far);
 				void SetFOV(float _fov);
 				void SetCameraType(EG::Graphics::Camera::CameraType _camera_type);
+                                void SetViewMatrix(glm::mat4 _view_matrix);
 
 				void ComputeViewMatrix(void);
 				void ComputeProjectionMatrix(void);

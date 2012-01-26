@@ -128,7 +128,7 @@ namespace EG{
             dispatcher = new btCollisionDispatcher(configuration);
             solver = new btSequentialImpulseConstraintSolver();
             world = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, configuration);
-            SetGravity(glm::vec3(0.0f, -0.9f, 0.0f));
+            SetGravity(glm::vec3(0.0f, 0.0f, 0.0f));
 
             /*btStaticPlaneShape *ground_plane = new btStaticPlaneShape(btVector3(0.0f, 1.0f, 0.0f), 0.0f);
             btDefaultMotionState *ground_motion_state = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-1,0)));
