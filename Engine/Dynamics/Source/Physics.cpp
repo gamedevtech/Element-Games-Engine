@@ -73,6 +73,7 @@ namespace EG{
             bt_rigid_body = new btRigidBody(ground_rigid_body_config_info);
             collision_group = BIT(0);
             collides_with = BIT(0);
+			bt_rigid_body->setActivationState(DISABLE_DEACTIVATION);
         }
 
         RigidBody::~RigidBody(void){
