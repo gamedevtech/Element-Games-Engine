@@ -203,7 +203,7 @@ int main(int argc, char **argv){
     // Particle System
     scene->GetMeshManager()->Add("quad", EG::Graphics::GenerateQuad());
     //scene->GetTextureManager()->AddTexture("particle", new EG::Graphics::Texture("Assets/Textures/nebula_particle.png"));
-    scene->GetTextureManager()->AddTexture("particle", new EG::Graphics::Texture("Assets/Textures/particle.png"));
+    scene->GetTextureManager()->AddTexture("particle", new EG::Graphics::Texture("Assets/Textures/smoke_particle.png"));
     EG::Game::Object *particle_system = new EG::Game::Object("ParticleSystem");
 
     class TestEmitterDef : public EG::Graphics::ParticleEmitter{
@@ -230,16 +230,16 @@ int main(int argc, char **argv){
             material->SetDiffuse(1.0f);
             material->SetAmbient(1.0f);
             material->SetSpecular(1.0f);
-            material->SetColor(glm::vec4(0.7f, 0.3f, 0.1f, 0.75f));
+            material->SetColor(glm::vec4(0.1f, 0.3f, 0.7f, 0.75f));
             material->SetLit(false);
             material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ALPHA_PARTICLE);
             material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "particle");
             material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "billboarding");
             material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "billboarding");
 
-            //glm::vec3 position = glm::vec3(EG::Math::Utility::RandomFloat(-5.0f, 5.0f), EG::Math::Utility::RandomFloat(-5.0f, 5.0f) + 10.0f, EG::Math::Utility::RandomFloat(-5.0f, 5.0f));
-            glm::vec3 position(0.0f, 0.5f, 0.0f);
-            glm::vec3 psize(0.2f, 0.2f, 0.2f);
+            glm::vec3 position = glm::vec3(EG::Math::Utility::RandomFloat(-1.0f, 1.0f), EG::Math::Utility::RandomFloat(-1.0f, 1.0f) + 3.0f, EG::Math::Utility::RandomFloat(-1.0f, 1.0f));
+            //glm::vec3 position(0.0f, 0.5f, 0.0f);
+            glm::vec3 psize(1.2f, 1.2f, 1.2f);
             glm::mat4 pscale = glm::gtx::transform::scale(psize);
             glm::mat4 ptranslate = glm::gtx::transform::translate(position);
             EG::Game::ObjectAttributeBasicTransformation *transformation = new EG::Game::ObjectAttributeBasicTransformation(ptranslate * pscale);
@@ -247,7 +247,7 @@ int main(int argc, char **argv){
             p->AddAttribute(transformation);
             p->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("quad", material));
 
-            //if (EG::Math::Utility::RandomUnsigned(500) >= 350){
+            /*if (EG::Math::Utility::RandomUnsigned(500) >= 350){
                 EG::Graphics::Light *light = new EG::Graphics::Light();
                 light->SetPosition(position);
                 light->SetDirection(-glm::vec3(0.2f, 0.2f, 0.2f));
@@ -256,15 +256,15 @@ int main(int argc, char **argv){
                 light->SetRadius(1.75f);
                 light->SetCastsShadows(false);
                 p->AddAttribute(new EG::Game::ObjectAttributeEmissionLight(light));
-            //}
+            }*/
 
-            EG::Dynamics::CollisionSphere *psphere = new EG::Dynamics::CollisionSphere(1.0f, psize.x);
+            EG::Dynamics::CollisionSphere *psphere = new EG::Dynamics::CollisionSphere(0.0f, psize.x);
             EG::Dynamics::RigidBody *pbody = new EG::Dynamics::RigidBody(psphere, ptranslate, psize);
             pbody->SetCollisionFiltering(COLLIDES_PARTICLES, particles_collides);
-            pbody->ApplyImpulse(glm::vec3(EG::Math::Utility::RandomFloat(-0.5f, 0.5f), 2.0f, EG::Math::Utility::RandomFloat(-0.5f, 0.5f)));
+            //pbody->ApplyImpulse(glm::vec3(EG::Math::Utility::RandomFloat(-0.5f, 0.5f), 2.0f, EG::Math::Utility::RandomFloat(-0.5f, 0.5f)));
             p->AddAttribute(new EG::Game::ObjectAttributeControlRigidBody(pbody));
         }
-        /*void Emit(std::list<EG::Graphics::Particle *> *particles, float frame_time){
+        void Emit(std::list<EG::Graphics::Particle *> *particles, float frame_time){
             if (!emitted){
                 for (unsigned int i = 0; i < 50; i++){
                     EG::Graphics::Particle *new_particle = new EG::Graphics::Particle();
@@ -273,7 +273,7 @@ int main(int argc, char **argv){
                 }
                 emitted = true;
             }
-        }*/
+        }
     private:
         bool emitted;
     };
@@ -283,7 +283,7 @@ int main(int argc, char **argv){
         TestControllerDef(void){ }
         ~TestControllerDef(void){ }
         void ControlParticle(EG::Graphics::Particle *p, float frame_time){
-            float fc = p->GetAttribute("frame_count");
+            /*float fc = p->GetAttribute("frame_count");
             fc += frame_time;
             if (fc > 3.0f){
                 p->SetAlive(false);
@@ -315,7 +315,7 @@ int main(int argc, char **argv){
             if (fc > 2.0f){
                 float alpha_reduction_factor = (3.0f - fc) / 1.0f;
                 mesh_attr->GetMaterial()->SetColor(glm::vec4(color.x, color.y, color.z, color.w * alpha_reduction_factor));
-            }
+            }*/
         }
     private:
     };
@@ -325,7 +325,7 @@ int main(int argc, char **argv){
     EG::Media::ObjectReader reader;
     reader.Read("Assets/Models/test_model.ego", scene);
     EG::Game::Object *read_object = reader.GetLoadedObject();
-    EG::Dynamics::CollisionBox *collision_shape = new EG::Dynamics::CollisionBox(0.0f, glm::vec3(1.0f, 0.5f, 1.0f));
+    EG::Dynamics::CollisionBox *collision_shape = new EG::Dynamics::CollisionBox(10.0f, glm::vec3(1.0f, 0.5f, 1.0f));
     glm::mat4 ship_trans = glm::gtx::transform::translate(0.0f, 2.0f, 0.0f);
     EG::Dynamics::RigidBody *rigid_body = new EG::Dynamics::RigidBody(collision_shape, ship_trans, glm::vec3(0.02f, 0.02f, 0.02f));
     rigid_body->SetCollisionFiltering(COLLIDES_OBJECT, COLLIDES_OBJECT);
@@ -339,9 +339,9 @@ int main(int argc, char **argv){
     objects->AddObject(object2);
     objects->AddObject(object3);
     //objects->AddObject(object4);
-    //objects->AddObject(light_object);
-    //objects->AddObject(light_object2);
-    //objects->AddObject(light_object3);
+    objects->AddObject(light_object);
+    objects->AddObject(light_object2);
+    objects->AddObject(light_object3);
     objects->AddObject(particle_system);
     //objects->AddObject(dummy_light_object);
     // NOTE: End Test Data

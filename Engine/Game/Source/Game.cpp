@@ -83,6 +83,45 @@ namespace EG{
             if (input->IsKeyDown(EG::Input::c)){
                 renderer->GetCamera()->Move(glm::vec3(0.0f, -movement_speed, 0.0f));
             }
+            if (input->IsKeyDown(EG::Input::i)){
+                EG::Game::Object *ship = scene->GetObjectManager()->GetObject("Assets/Models/spaceship.3ds");
+                std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY);
+                std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+                while (attr_iter != attrs->end()){
+                    EG::Game::ObjectAttributeControlRigidBody *body_attr = static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
+                    EG::Dynamics::RigidBody *ship_body = body_attr->GetBody();
+                    ship_body->ApplyImpulse(glm::vec3(-5.0f * time->GetFrameTime(), 0.0f, 0.0f));
+                    btVector3 vel = ship_body->GetBulletBody()->getVelocityInLocalPoint(btVector3(0.0f, 0.0f, 0.0f));
+                    //std::cout << vel.x() << ", " << vel.y() << ", " << vel.z() << std::endl;
+                    ++attr_iter;
+                }
+            }
+            if (input->IsKeyDown(EG::Input::k)){
+                EG::Game::Object *ship = scene->GetObjectManager()->GetObject("Assets/Models/spaceship.3ds");
+                std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY);
+                std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+                while (attr_iter != attrs->end()){
+                    EG::Game::ObjectAttributeControlRigidBody *body_attr = static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
+                    EG::Dynamics::RigidBody *ship_body = body_attr->GetBody();
+                    ship_body->ApplyImpulse(glm::vec3(5.0f * time->GetFrameTime(), 0.0f, 0.0f));
+                    btVector3 vel = ship_body->GetBulletBody()->getVelocityInLocalPoint(btVector3(0.0f, 0.0f, 0.0f));
+                    //std::cout << vel.x() << ", " << vel.y() << ", " << vel.z() << std::endl;
+                    ++attr_iter;
+                }
+            }
+            if (input->IsKeyDown(EG::Input::u)){
+                EG::Game::Object *ship = scene->GetObjectManager()->GetObject("Assets/Models/spaceship.3ds");
+                std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY);
+                std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+                while (attr_iter != attrs->end()){
+                    EG::Game::ObjectAttributeControlRigidBody *body_attr = static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
+                    EG::Dynamics::RigidBody *ship_body = body_attr->GetBody();
+                    ship_body->ApplyImpulse(glm::vec3(0.0f, 50.0f * time->GetFrameTime(), 0.0f));
+                    btVector3 vel = ship_body->GetBulletBody()->getVelocityInLocalPoint(btVector3(0.0f, 0.0f, 0.0f));
+                    //std::cout << vel.x() << ", " << vel.y() << ", " << vel.z() << std::endl;
+                    ++attr_iter;
+                }
+            }
             if (input->IsKeyPressed(EG::Input::t)){
                 if (rendering_method == RENDERER_DEFERRED){
                     (static_cast<EG::Graphics::RendererDeferred *>(renderer))->CycleOutputType();

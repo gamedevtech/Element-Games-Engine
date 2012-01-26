@@ -109,7 +109,7 @@ namespace EG{
         }
 
         void RigidBody::SetCollisionFiltering(int _collision_group, int _collides_with){
-	    collision_group = _collision_group;
+        collision_group = _collision_group;
             collides_with = _collides_with;
         }
 
@@ -127,13 +127,13 @@ namespace EG{
             dispatcher = new btCollisionDispatcher(configuration);
             solver = new btSequentialImpulseConstraintSolver();
             world = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, configuration);
-            SetGravity(glm::vec3(0.0f, -10.0f, 0.0f));
+            SetGravity(glm::vec3(0.0f, -0.9f, 0.0f));
 
-            btStaticPlaneShape *ground_plane = new btStaticPlaneShape(btVector3(0.0f, 1.0f, 0.0f), 0.0f);
+            /*btStaticPlaneShape *ground_plane = new btStaticPlaneShape(btVector3(0.0f, 1.0f, 0.0f), 0.0f);
             btDefaultMotionState *ground_motion_state = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-1,0)));
             btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0.0f, ground_motion_state, ground_plane, btVector3(0.0f, 0.0f, 0.0f));
             btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
-            world->addRigidBody(groundRigidBody);
+            world->addRigidBody(groundRigidBody);*/
         }
 
         Physics::~Physics(void){
