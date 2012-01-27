@@ -336,7 +336,6 @@ int main(int argc, char **argv){
     main_camera->ComputeProjectionMatrix();
     main_camera->SetPosition(glm::vec3(-0.7f, 2.5f, 5.0f));
     main_camera->RotateByMouse(glm::vec2(0.0f, -200.0f));
-    main_camera->SetOffset(glm::vec3(0.0f, 1.5f, 0.0f));
     main_camera->Update();
     main_camera->SetCameraType(EG::Graphics::Camera::CAMERA_FPS);
     //EG::Game::Object *camera_object = new EG::Game::Object("camera");

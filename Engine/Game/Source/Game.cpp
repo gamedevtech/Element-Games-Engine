@@ -92,8 +92,6 @@ namespace EG{
                     EG::Game::ObjectAttributeControlRigidBody *body_attr = static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
                     EG::Dynamics::RigidBody *ship_body = body_attr->GetBody();
                     ship_body->ApplyImpulse(glm::vec3(-5.0f * time->GetFrameTime(), 0.0f, 0.0f));
-                    btVector3 vel = ship_body->GetBulletBody()->getVelocityInLocalPoint(btVector3(0.0f, 0.0f, 0.0f));
-                    //std::cout << vel.x() << ", " << vel.y() << ", " << vel.z() << std::endl;
                     ++attr_iter;
                 }
             }
@@ -105,8 +103,6 @@ namespace EG{
                     EG::Game::ObjectAttributeControlRigidBody *body_attr = static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
                     EG::Dynamics::RigidBody *ship_body = body_attr->GetBody();
                     ship_body->ApplyImpulse(glm::vec3(5.0f * time->GetFrameTime(), 0.0f, 0.0f));
-                    btVector3 vel = ship_body->GetBulletBody()->getVelocityInLocalPoint(btVector3(0.0f, 0.0f, 0.0f));
-                    //std::cout << vel.x() << ", " << vel.y() << ", " << vel.z() << std::endl;
                     ++attr_iter;
                 }
             }
@@ -118,8 +114,6 @@ namespace EG{
                     EG::Game::ObjectAttributeControlRigidBody *body_attr = static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
                     EG::Dynamics::RigidBody *ship_body = body_attr->GetBody();
                     ship_body->ApplyImpulse(glm::vec3(0.0f, 5.0f * time->GetFrameTime(), 0.0f));
-                    btVector3 vel = ship_body->GetBulletBody()->getVelocityInLocalPoint(btVector3(0.0f, 0.0f, 0.0f));
-                    //std::cout << vel.x() << ", " << vel.y() << ", " << vel.z() << std::endl;
                     ++attr_iter;
                 }
             }
@@ -131,8 +125,17 @@ namespace EG{
                     EG::Game::ObjectAttributeControlRigidBody *body_attr = static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
                     EG::Dynamics::RigidBody *ship_body = body_attr->GetBody();
                     ship_body->ApplyImpulse(glm::vec3(0.0f, -5.0f * time->GetFrameTime(), 0.0f));
-                    btVector3 vel = ship_body->GetBulletBody()->getVelocityInLocalPoint(btVector3(0.0f, 0.0f, 0.0f));
-                    //std::cout << vel.x() << ", " << vel.y() << ", " << vel.z() << std::endl;
+                    ++attr_iter;
+                }
+            }
+            if (input->IsKeyDown(EG::Input::y)){
+                EG::Game::Object *ship = scene->GetObjectManager()->GetObject("Assets/Models/spaceship.3ds");
+                std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY);
+                std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+                while (attr_iter != attrs->end()){
+                    EG::Game::ObjectAttributeControlRigidBody *body_attr = static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
+                    EG::Dynamics::RigidBody *ship_body = body_attr->GetBody();
+                    ship_body->ApplyTorque(glm::vec3(50.0f, 50.0f * time->GetFrameTime(), 50.0f));
                     ++attr_iter;
                 }
             }
@@ -173,7 +176,8 @@ namespace EG{
             glm::vec4 pos = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
             while (attr_iter != attrs->end()){
                 EG::Game::ObjectAttributeBasicTransformation *trans_attr = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(*attr_iter);
-                glm::mat4 trans = trans_attr->GetTransformation();
+                glm::mat4 offset = glm::gtx::transform::translate(2.0f, 1.5f, 0.0f);
+                glm::mat4 trans = offset * trans_attr->GetTransformation();
                 pos = trans * pos;
                 ++attr_iter;
             }

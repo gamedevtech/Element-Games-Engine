@@ -106,7 +106,7 @@ namespace EG{
         }
 
         void RigidBody::ApplyTorque(glm::vec3 torque){
-            bt_rigid_body->applyTorque(btVector3(torque.x, torque.y, torque.z));
+            bt_rigid_body->applyTorqueImpulse(btVector3(torque.x, torque.y, torque.z));
         }
 
         void RigidBody::SetCollisionFiltering(int _collision_group, int _collides_with){
