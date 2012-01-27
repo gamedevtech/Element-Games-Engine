@@ -23,5 +23,19 @@ namespace EG{
         EG::Graphics::RenderingMaterial *ObjectAttributeRenderingMesh::GetMaterial(void){
             return material;
         }
+
+	ObjectAttributeRenderingCamera::ObjectAttributeRenderingCamera(EG::Graphics::Camera *_camera){
+		type = EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_CAMERA;
+		camera = _camera;
+	}
+	ObjectAttributeRenderingCamera::~ObjectAttributeRenderingCamera(void){
+		delete camera;
+	}
+	void ObjectAttributeRenderingCamera::SetCamera(EG::Graphics::Camera *_camera){
+		camera = _camera;
+	}
+	EG::Graphics::Camera *ObjectAttributeRenderingCamera::GetCamera(void){
+		return camera;
+	}
     }
 }

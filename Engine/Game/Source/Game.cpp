@@ -2,6 +2,7 @@
 #include "../ObjectBasicAttribute.h"
 #include "../ObjectControlAttribute.h"
 #include "../ObjectEmissionAttribute.h"
+#include "../ObjectRenderingAttribute.h"
 #include "../../Media/AssimpInterface.h"
 #include "../../Graphics/RendererDeferred.h"
 #include "../../Graphics/RendererMultipass.h"
@@ -57,31 +58,31 @@ namespace EG{
         void Game::Update(void){
             float movement_speed = time->GetFrameTime() * 2.0f;
             if (input->IsMouseDown(EG::Input::mouse_right)){
-                renderer->GetCamera()->RotateByMouse(input->GetMouseDelta());
+                scene->GetCurrentCamera()->RotateByMouse(input->GetMouseDelta());
             }
             if (input->IsKeyDown(EG::Input::q)){
-                renderer->GetCamera()->Rotate(glm::vec3(0.0f, 0.0f, -movement_speed));
+                scene->GetCurrentCamera()->Rotate(glm::vec3(0.0f, 0.0f, -movement_speed));
             }
             if (input->IsKeyDown(EG::Input::e)){
-                renderer->GetCamera()->Rotate(glm::vec3(0.0f, 0.0f, movement_speed));
+                scene->GetCurrentCamera()->Rotate(glm::vec3(0.0f, 0.0f, movement_speed));
             }
             if (input->IsKeyDown(EG::Input::w)){
-                renderer->GetCamera()->Move(glm::vec3(0.0f, 0.0f, -movement_speed));
+                scene->GetCurrentCamera()->Move(glm::vec3(0.0f, 0.0f, -movement_speed));
             }
             if (input->IsKeyDown(EG::Input::s)){
-                renderer->GetCamera()->Move(glm::vec3(0.0f, 0.0f, movement_speed));
+                scene->GetCurrentCamera()->Move(glm::vec3(0.0f, 0.0f, movement_speed));
             }
             if (input->IsKeyDown(EG::Input::a)){
-                renderer->GetCamera()->Move(glm::vec3(-movement_speed, 0.0f, 0.0f));
+                scene->GetCurrentCamera()->Move(glm::vec3(-movement_speed, 0.0f, 0.0f));
             }
             if (input->IsKeyDown(EG::Input::d)){
-                renderer->GetCamera()->Move(glm::vec3(movement_speed, 0.0f, 0.0f));
+                scene->GetCurrentCamera()->Move(glm::vec3(movement_speed, 0.0f, 0.0f));
             }
             if (input->IsKeyDown(EG::Input::space)){
-                renderer->GetCamera()->Move(glm::vec3(0.0f, movement_speed, 0.0f));
+                scene->GetCurrentCamera()->Move(glm::vec3(0.0f, movement_speed, 0.0f));
             }
             if (input->IsKeyDown(EG::Input::c)){
-                renderer->GetCamera()->Move(glm::vec3(0.0f, -movement_speed, 0.0f));
+                scene->GetCurrentCamera()->Move(glm::vec3(0.0f, -movement_speed, 0.0f));
             }
             if (input->IsKeyDown(EG::Input::i)){
                 EG::Game::Object *ship = scene->GetObjectManager()->GetObject("Assets/Models/spaceship.3ds");
@@ -164,6 +165,25 @@ namespace EG{
                 if (rendering_method == RENDERER_DEFERRED){
                     (static_cast<EG::Graphics::RendererDeferred *>(renderer))->ToggleDOF();
                 }
+            }
+
+            EG::Game::Object *ship = scene->GetObjectManager()->GetObject("Assets/Models/spaceship.3ds");
+            std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
+            std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+            glm::vec4 pos = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+            while (attr_iter != attrs->end()){
+                EG::Game::ObjectAttributeBasicTransformation *trans_attr = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(*attr_iter);
+                glm::mat4 trans = trans_attr->GetTransformation();
+                pos = trans * pos;
+                ++attr_iter;
+            }
+            attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_CAMERA);
+            attr_iter = attrs->begin();
+            while (attr_iter != attrs->end()){
+                EG::Game::ObjectAttributeRenderingCamera *cam_attr = static_cast<EG::Game::ObjectAttributeRenderingCamera *>(*attr_iter);
+                EG::Graphics::Camera *c = cam_attr->GetCamera();
+                c->SetPosition(glm::vec3(pos.x, pos.y, pos.z));
+                ++attr_iter;
             }
 
             physics->Update(time->GetFrameTime());

@@ -26,31 +26,31 @@ ModelConverter::~ModelConverter(void){
 void ModelConverter::Update(void){
 	float movement_speed = time->GetFrameTime() * 2.0f;
 	if (input->IsMouseDown(EG::Input::mouse_right)){
-		renderer->GetCamera()->RotateByMouse(input->GetMouseDelta() * 2.0f);
+		scene->GetCurrentCamera()->RotateByMouse(input->GetMouseDelta() * 2.0f);
 	}
 	if (input->IsKeyDown(EG::Input::q)){
-		renderer->GetCamera()->Rotate(glm::vec3(0.0f, 0.0f, -movement_speed));
+		scene->GetCurrentCamera()->Rotate(glm::vec3(0.0f, 0.0f, -movement_speed));
 	}
 	if (input->IsKeyDown(EG::Input::e)){
-		renderer->GetCamera()->Rotate(glm::vec3(0.0f, 0.0f, movement_speed));
+		scene->GetCurrentCamera()->Rotate(glm::vec3(0.0f, 0.0f, movement_speed));
 	}
 	if (input->IsKeyDown(EG::Input::w)){
-		renderer->GetCamera()->Move(glm::vec3(0.0f, 0.0f, -movement_speed));
+		scene->GetCurrentCamera()->Move(glm::vec3(0.0f, 0.0f, -movement_speed));
 	}
 	if (input->IsKeyDown(EG::Input::s)){
-		renderer->GetCamera()->Move(glm::vec3(0.0f, 0.0f, movement_speed));
+		scene->GetCurrentCamera()->Move(glm::vec3(0.0f, 0.0f, movement_speed));
 	}
 	if (input->IsKeyDown(EG::Input::a)){
-		renderer->GetCamera()->Move(glm::vec3(-movement_speed, 0.0f, 0.0f));
+		scene->GetCurrentCamera()->Move(glm::vec3(-movement_speed, 0.0f, 0.0f));
 	}
 	if (input->IsKeyDown(EG::Input::d)){
-		renderer->GetCamera()->Move(glm::vec3(movement_speed, 0.0f, 0.0f));
+		scene->GetCurrentCamera()->Move(glm::vec3(movement_speed, 0.0f, 0.0f));
 	}
 	if (input->IsKeyDown(EG::Input::space)){
-		renderer->GetCamera()->Move(glm::vec3(0.0f, movement_speed, 0.0f));
+		scene->GetCurrentCamera()->Move(glm::vec3(0.0f, movement_speed, 0.0f));
 	}
 	if (input->IsKeyDown(EG::Input::c)){
-		renderer->GetCamera()->Move(glm::vec3(0.0f, -movement_speed, 0.0f));
+		scene->GetCurrentCamera()->Move(glm::vec3(0.0f, -movement_speed, 0.0f));
 	}
 	if (input->IsKeyPressed(EG::Input::t)){
 		if (rendering_method == RENDERER_DEFERRED){
@@ -210,7 +210,7 @@ void DecalButtonEventListener::ProcessEvent(EG::Utility::Event &event){
 	std::string new_texture_path = (document->GetElementById("decal")->GetAttribute("value")->Get<Rocket::Core::String>()).CString();
 	new_texture_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(new_texture_path);
 	//std::cout << "DONGLE2" << std::endl;
-	
+
 	if (!(scene->GetTextureManager()->HasTexture(new_texture_path))){
 		EG::Graphics::Texture *texture = new EG::Graphics::Texture(new_texture_path);
 		scene->GetTextureManager()->AddTexture(new_texture_path, texture);

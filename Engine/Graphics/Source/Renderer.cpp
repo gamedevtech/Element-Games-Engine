@@ -25,7 +25,6 @@ namespace EG{
 
         Renderer::~Renderer(void){
             if (initialized){
-                delete camera;
                 delete shaders;
             }
         }
@@ -39,13 +38,6 @@ namespace EG{
             shaders->Add("sphere_cube_map_gradient_decal", "Shaders/Basic/sphere_cube_mapped_with_gradient_decal.vert", "Shaders/Basic/sphere_cube_mapped_with_gradient_decal.frag");
             shaders->Add("sphere_cube_map_gradient_decal_with_lighting", "Shaders/Basic/sphere_cube_mapped_with_gradient_decal_with_lighting.vert", "Shaders/Basic/sphere_cube_mapped_with_gradient_decal_with_lighting.frag");
 
-            camera = new EG::Graphics::Camera(45.0f, glm::ivec2(graphics->GetViewportWidth(), graphics->GetViewportHeight()), glm::vec2(0.1f, 100.0f));
-            camera->ComputeProjectionMatrix();
-            camera->SetPosition(glm::vec3(-0.7f, 2.5f, 5.0f));
-            camera->RotateByMouse(glm::vec2(0.0f, -200.0f));
-            camera->Update();
-            camera->SetCameraType(EG::Graphics::Camera::CAMERA_FPS);
-
             orthographics_projection_matrix = glm::gtc::matrix_transform::ortho(0.0f, float(graphics->GetViewportWidth()), 0.0f, float(graphics->GetViewportHeight()));
 
             initialized = true;
@@ -57,6 +49,7 @@ namespace EG{
         }
 
         void Renderer::RenderLitObject(EG::Game::Scene *scene, EG::Graphics::Light *light, EG::Game::Object *object){
+            EG::Graphics::Camera *camera = scene->GetCurrentCamera();
             // Meshes
             glm::vec3 lp = light->GetPosition();
             glm::vec4 light_position = glm::vec4(lp.x, lp.y, lp.z, 1.0f);
@@ -151,6 +144,7 @@ namespace EG{
         }
 
         void Renderer::RenderObject(EG::Game::Scene *scene, EG::Game::Object *object){
+            EG::Graphics::Camera *camera = scene->GetCurrentCamera();
             // Meshes
             if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH)){
                 std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
@@ -245,6 +239,7 @@ namespace EG{
 
         void Renderer::Render(EG::Game::Scene *scene, float frame_time){
             graphics->BeginFrame();
+            EG::Graphics::Camera *camera = scene->GetCurrentCamera();
             camera->Update();
 
             glDepthFunc(GL_LEQUAL);

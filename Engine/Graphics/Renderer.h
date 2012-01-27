@@ -23,9 +23,6 @@ namespace EG{
                 void RenderObject(EG::Game::Scene *scene, EG::Game::Object *object);
 
                 // TEMP, SHOULD GO IN SCENE MANAGER WHICH SHOULD HOLD A CAMERA MANAGER
-                EG::Graphics::Camera *GetCamera(void){
-                    return camera;
-                }
                 EG::Graphics::ShaderManager *GetShaderManager(void){
                     return shaders;
                 }
@@ -33,7 +30,6 @@ namespace EG{
                 void SetGUI(EG::Utility::RocketInterface *_gui);
             protected:
                 // TEMP, SHOULD GO IN SCENE MANAGER WHICH SHOULD HOLD A CAMERA MANAGER
-                EG::Graphics::Camera *camera;
                 EG::Graphics::ShaderManager *shaders;
                 glm::mat4 orthographics_projection_matrix;
                 bool initialized;

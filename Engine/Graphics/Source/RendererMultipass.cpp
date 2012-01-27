@@ -29,7 +29,6 @@ namespace EG{
 
 		RendererMultipass::~RendererMultipass(void){
 			if (initialized){
-				delete camera;
 				delete shaders;
 			}
 		}
@@ -45,12 +44,6 @@ namespace EG{
 			shaders->Add("gaussian_h", "Shaders/Deferred/gaussian_h.vert", "Shaders/Deferred/gaussian_h.frag");
 			shaders->Add("sphere_cube_map_gradient_decal", "Shaders/Multipass/sphere_cube_mapped_with_gradient_decal.vert", "Shaders/Multipass/sphere_cube_mapped_with_gradient_decal.frag");
 			shaders->Add("sphere_cube_map_gradient_decal_with_lighting", "Shaders/Multipass/sphere_cube_mapped_with_gradient_decal_with_lighting.vert", "Shaders/Multipass/sphere_cube_mapped_with_gradient_decal_with_lighting.frag");
-
-			camera = new EG::Graphics::Camera(45.0f, glm::ivec2(graphics->GetViewportWidth(), graphics->GetViewportHeight()), glm::vec2(0.1f, 100.0f));
-			camera->ComputeProjectionMatrix();
-			camera->SetPosition(glm::vec3(0.0f, 0.0f, 5.0f));
-			camera->Update();
-			camera->SetCameraType(EG::Graphics::Camera::CAMERA_FPS);
 
 			light_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth(), graphics->GetViewportHeight(), 1, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
 			color_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth(), graphics->GetViewportHeight(), 1, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_NONE);

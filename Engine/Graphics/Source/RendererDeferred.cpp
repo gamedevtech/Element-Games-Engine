@@ -35,7 +35,6 @@ namespace EG{
 
         RendererDeferred::~RendererDeferred(void){
             if (initialized){
-                delete camera;
                 delete shaders;
             }
         }
@@ -62,12 +61,6 @@ namespace EG{
             } else {
                 shaders->Add("sphere_cube_mapped_gradient_decal_prepass", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass_no_tessellation.vert", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass_no_tessellation.frag", "", "", "", 4);
             }
-
-            camera = new EG::Graphics::Camera(45.0f, glm::ivec2(graphics->GetViewportWidth(), graphics->GetViewportHeight()), glm::vec2(0.1f, 100.0f));
-            camera->ComputeProjectionMatrix();
-            camera->SetPosition(glm::vec3(0.0f, 0.0f, 5.0f));
-            camera->Update();
-            camera->SetCameraType(EG::Graphics::Camera::CAMERA_FPS);
 
             deferred_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth(), graphics->GetViewportHeight(), 4, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_NONE);
             light_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth(), graphics->GetViewportHeight(), 1, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
@@ -98,6 +91,7 @@ namespace EG{
         }
 
         void RendererDeferred::Render(EG::Game::Scene *scene, float _frame_time){
+            EG::Graphics::Camera *camera = scene->GetCurrentCamera();
             frame_time = _frame_time;
             graphics->BeginFrame();
 
@@ -116,6 +110,7 @@ namespace EG{
         }
 
         void RendererDeferred::RenderObject(EG::Game::Scene *scene, EG::Game::Object *object){
+            EG::Graphics::Camera *camera = scene->GetCurrentCamera();
             // Meshes
             if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH)){
                 std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
@@ -236,6 +231,7 @@ namespace EG{
         }
 
         void RendererDeferred::Prepass(EG::Game::Scene *scene){
+            EG::Graphics::Camera *camera = scene->GetCurrentCamera();
             int draw_buffers[] = {0, 1, 2, 3};
             graphics->StartMultiBufferOffscreenRender(deferred_buffer->GetBufferId(), 4, draw_buffers, graphics->GetViewportWidth(), graphics->GetViewportHeight());
             shaders->Bind("prepass");
@@ -260,6 +256,7 @@ namespace EG{
         }
 
         void RendererDeferred::CalculateLighting(EG::Game::Scene *scene, EG::Graphics::Light *light){
+            EG::Graphics::Camera *camera = scene->GetCurrentCamera();
             glm::vec3 lp = light->GetPosition();
             glm::vec4 light_position = glm::vec4(lp.x, lp.y, lp.z, 1.0f);
             float light_radius = light->GetRadius();
@@ -305,6 +302,7 @@ namespace EG{
         }
 
         void RendererDeferred::Lighting(EG::Game::Scene *scene){
+            EG::Graphics::Camera *camera = scene->GetCurrentCamera();
             graphics->StartOffscreenRender(light_buffer->GetBufferId(), 0, graphics->GetViewportWidth(), graphics->GetViewportHeight());
             shaders->Bind("lighting");
 
@@ -393,6 +391,7 @@ namespace EG{
         }
 
         void RendererDeferred::ComposeScene(EG::Game::Scene *scene){
+            EG::Graphics::Camera *camera = scene->GetCurrentCamera();
             // 2D Output
             if (output_type == EG::Graphics::RendererDeferred::DEFERRED_OUTPUT_PREPASS){
                 shaders->Bind("prepass_debug");
@@ -525,6 +524,7 @@ namespace EG{
         }
 
         void RendererDeferred::Overlays(EG::Game::Scene *scene){
+            EG::Graphics::Camera *camera = scene->GetCurrentCamera();
             std::stringstream temp;
             /*temp << "Frame Time (s): ";
             temp << frame_time;
@@ -691,6 +691,7 @@ namespace EG{
         }
 
         void RendererDeferred::ShadowMapping(EG::Game::Scene *scene){
+            EG::Graphics::Camera *camera = scene->GetCurrentCamera();
             if (shadows_enabled == 1){
                 // I wonder... Does the depth of the scene's camera have to be the same as the depth in the projection matrix of the shadow?
                 // Move To OpenGLInterface

@@ -6,6 +6,7 @@ namespace EG{
             objects = new EG::Game::ObjectManager();
             meshes = new EG::Graphics::MeshManager();
             textures = new EG::Graphics::TextureManager();
+            current_camera = NULL;
 
             // Default Data
             textures->AddTexture("test_decal", new EG::Graphics::Texture("Assets/Textures/test.png"));
@@ -31,6 +32,14 @@ namespace EG{
 
         EG::Graphics::TextureManager *Scene::GetTextureManager(void){
             return textures;
+        }
+
+        void Scene::SetCurrentCamera(EG::Graphics::Camera *camera){
+            current_camera = camera;
+        }
+
+        EG::Graphics::Camera *Scene::GetCurrentCamera(void){
+            return current_camera;
         }
     }
 }

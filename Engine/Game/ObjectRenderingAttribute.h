@@ -4,6 +4,7 @@
 #include <string>
 #include "ObjectAttribute.h"
 #include "../Graphics/RenderingMaterial.h"
+#include "../Graphics/Camera.h"
 
 namespace EG{
 	namespace Game{
@@ -19,6 +20,17 @@ namespace EG{
 			private:
 				std::string mesh_id;
 				EG::Graphics::RenderingMaterial *material;
+		};
+
+		class ObjectAttributeRenderingCamera : public ObjectAttribute{
+			public:
+				ObjectAttributeRenderingCamera(EG::Graphics::Camera *_camera);
+				~ObjectAttributeRenderingCamera(void);
+
+				void SetCamera(EG::Graphics::Camera *_camera);
+				EG::Graphics::Camera *GetCamera(void);
+			private:
+				EG::Graphics::Camera *camera;
 		};
 	}
 }

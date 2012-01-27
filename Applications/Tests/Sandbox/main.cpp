@@ -332,6 +332,17 @@ int main(int argc, char **argv){
     read_object->AddAttribute(new EG::Game::ObjectAttributeControlRigidBody(rigid_body));
     // END TEST
 
+    EG::Graphics::Camera *main_camera = new EG::Graphics::Camera(45.0f, glm::ivec2(graphics->GetViewportWidth(), graphics->GetViewportHeight()), glm::vec2(0.1f, 100.0f));
+    main_camera->ComputeProjectionMatrix();
+    main_camera->SetPosition(glm::vec3(-0.7f, 2.5f, 5.0f));
+    main_camera->RotateByMouse(glm::vec2(0.0f, -200.0f));
+    main_camera->SetOffset(glm::vec3(0.0f, 1.5f, 0.0f));
+    main_camera->Update();
+    main_camera->SetCameraType(EG::Graphics::Camera::CAMERA_FPS);
+    //EG::Game::Object *camera_object = new EG::Game::Object("camera");
+    //camera_object->AddAttribute(new EG::Game::ObjectAttributeRenderingCamera(main_camera));
+    read_object->AddAttribute(new EG::Game::ObjectAttributeRenderingCamera(main_camera));
+
     // Add Objects
     EG::Game::ObjectManager *objects = game->GetScene()->GetObjectManager();
     objects->AddObject(object);
@@ -343,6 +354,8 @@ int main(int argc, char **argv){
     objects->AddObject(light_object2);
     objects->AddObject(light_object3);
     objects->AddObject(particle_system);
+    //objects->AddObject(camera_object);
+    game->GetScene()->SetCurrentCamera(main_camera);
     //objects->AddObject(dummy_light_object);
     // NOTE: End Test Data
 
