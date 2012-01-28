@@ -203,7 +203,7 @@ int main(int argc, char **argv){
     // Particle System
     scene->GetMeshManager()->Add("quad", EG::Graphics::GenerateQuad());
     //scene->GetTextureManager()->AddTexture("particle", new EG::Graphics::Texture("Assets/Textures/nebula_particle.png"));
-	scene->GetTextureManager()->AddTexture("particle", new EG::Graphics::Texture("Assets/Textures/particle.png"));
+    scene->GetTextureManager()->AddTexture("particle", new EG::Graphics::Texture("Assets/Textures/particle.png"));
     EG::Game::Object *particle_system = new EG::Game::Object("ParticleSystem");
 
     class TestEmitterDef : public EG::Graphics::ParticleEmitter{
@@ -336,7 +336,7 @@ int main(int argc, char **argv){
     main_camera->ComputeProjectionMatrix();
     main_camera->SetPosition(glm::vec3(-0.7f, 2.5f, 5.0f));
     main_camera->RotateByMouse(glm::vec2(0.0f, -200.0f));
-    main_camera->SetOffset(glm::vec3(0.0f, 1.5f, 0.0f));
+    //main_camera->SetOffset(glm::vec3(0.0f, 1.5f, 0.0f));
     main_camera->Update();
     main_camera->SetCameraType(EG::Graphics::Camera::CAMERA_FPS);
     //EG::Game::Object *camera_object = new EG::Game::Object("camera");
