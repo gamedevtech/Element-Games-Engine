@@ -203,8 +203,8 @@ int main(int argc, char **argv){
 
     // Particle System
     scene->GetMeshManager()->Add("quad", EG::Graphics::GenerateQuad());
-    //scene->GetTextureManager()->AddTexture("particle", new EG::Graphics::Texture("Assets/Textures/nebula_particle.png"));
-    scene->GetTextureManager()->AddTexture("particle", new EG::Graphics::Texture("Assets/Textures/particle.png"));
+    scene->GetTextureManager()->AddTexture("particle", new EG::Graphics::Texture("Assets/Textures/nebula_particle.png"));
+    //scene->GetTextureManager()->AddTexture("particle", new EG::Graphics::Texture("Assets/Textures/smoke_particle.png"));
     EG::Game::Object *particle_system = new EG::Game::Object("ParticleSystem");
 
     class TestEmitterDef : public EG::Graphics::ParticleEmitter{
