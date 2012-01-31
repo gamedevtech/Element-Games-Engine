@@ -60,26 +60,6 @@ int main(int argc, char **argv){
     material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "starfield_decal");
     sky_sphere->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("sphere", material));
 
-    // Light 0
-    /*EG::Game::Object *light_object = new EG::Game::Object("RedLight");
-    glm::mat4 light_geometry_transform = glm::mat4(1.0f);
-    glm::vec3 light_position = glm::vec3(-4.0f, 5.0f, 5.0f);
-    light_geometry_transform = glm::translate(light_geometry_transform, light_position);
-    light_geometry_transform = glm::scale(light_geometry_transform, glm::vec3(0.1f, 0.1f, 0.1f));
-    light_object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(light_geometry_transform));
-    EG::Graphics::Light *light = new EG::Graphics::Light();
-    light->SetPosition(light_position);
-    light->SetDirection(-light_position);
-    light->SetColor(glm::vec3(1.0f, 0.0f, 0.0f));
-    light->SetAttenuation(glm::vec3(0.8f, 0.00125f, 0.0000001f));
-    light->SetRadius(100.0f);
-    light->SetCastsShadows(true);
-    light_object->AddAttribute(new EG::Game::ObjectAttributeEmissionLight(light));
-    material = new EG::Graphics::RenderingMaterial();
-    material->SetLit(false);
-    material->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f));
-    light_object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("sphere", material));*/
-
     // Light 1
     EG::Game::Object *light_object2 = new EG::Game::Object("GreenLight");
     glm::vec3 light_position2 = glm::vec3(4.0f, 5.0f, 5.0f);
@@ -100,32 +80,11 @@ int main(int argc, char **argv){
     material->SetColor(glm::vec4(1.0f, 1.0f, 1.0f, 0.5f));
     light_object2->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("sphere", material));
 
-    // Light 2
-    /*EG::Game::Object *light_object3 = new EG::Game::Object("BlueLight");
-    glm::vec3 light_position3 = glm::vec3(0.0f, 5.0f, -5.0f);
-    glm::mat4 light_geometry_transform3 = glm::mat4(1.0f);
-    light_geometry_transform3 = glm::translate(light_geometry_transform3, light_position3);
-    light_geometry_transform3 = glm::scale(light_geometry_transform3, glm::vec3(0.1f, 0.1f, 0.1f));
-    light_object3->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(light_geometry_transform3));
-    EG::Graphics::Light *light3 = new EG::Graphics::Light();
-    light3->SetPosition(light_position3);
-    light3->SetDirection(-light_position3);
-    light3->SetColor(glm::vec3(0.0f, 0.0f, 1.0f));
-    light3->SetAttenuation(glm::vec3(0.8f, 0.00125f, 0.0000001f));
-    light3->SetRadius(100.0f);
-    light3->SetCastsShadows(true);
-    light_object3->AddAttribute(new EG::Game::ObjectAttributeEmissionLight(light3));
-    material = new EG::Graphics::RenderingMaterial();
-    material->SetLit(false);
-    material->SetColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
-    light_object3->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("sphere", material));*/
-
     EG::Game::Object *camera_object = new EG::Game::Object("camera");
     EG::Graphics::Camera *main_camera = new EG::Graphics::Camera(45.0f, glm::ivec2(graphics->GetViewportWidth(), graphics->GetViewportHeight()), glm::vec2(0.1f, 100.0f));
     main_camera->ComputeProjectionMatrix();
     main_camera->SetPosition(glm::vec3(-0.7f, 2.5f, 5.0f));
     main_camera->RotateByMouse(glm::vec2(0.0f, -200.0f));
-    //main_camera->SetOffset(glm::vec3(0.0f, 1.5f, 0.0f));
     main_camera->Update();
     main_camera->SetCameraType(EG::Graphics::Camera::CAMERA_FPS);
     camera_object->AddAttribute(new EG::Game::ObjectAttributeRenderingCamera(main_camera));
@@ -134,10 +93,7 @@ int main(int argc, char **argv){
     // Add Objects
     EG::Game::ObjectManager *objects = game->GetScene()->GetObjectManager();
     objects->AddObject(ground_plane);
-    //objects->AddObject(sky_sphere);
-    //objects->AddObject(light_object);
     objects->AddObject(light_object2);
-    //objects->AddObject(light_object3);
     objects->AddObject(camera_object);
 
     while (game->GetWindow()->IsOpened()){
