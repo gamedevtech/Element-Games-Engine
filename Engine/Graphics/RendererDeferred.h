@@ -16,7 +16,7 @@ namespace EG{
                 ~RendererDeferred(void);
 
                 void Initialize(void);
-                void Render(EG::Game::Scene *scene, float _frame_time);
+                void Render(EG::Game::Scene *scene, EG::Utility::Time *time);
                 void CycleOutputType(void);
                 void ToggleSSAO(void);
                 void ToggleBloom(void);
@@ -43,7 +43,7 @@ namespace EG{
                 void Prepass(EG::Game::Scene *scene);
                 void Lighting(EG::Game::Scene *scene);
                 void ComposeScene(EG::Game::Scene *scene);
-                void Overlays(EG::Game::Scene *scene);
+                void Overlays(EG::Game::Scene *scene, EG::Utility::Time *time);
 
                 // Settings
                 DeferredOutputType output_type;

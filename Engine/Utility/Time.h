@@ -13,8 +13,12 @@ namespace EG{
 				void Update(void);
 				float GetFrameTime(void);
 				float GetElapsedTime(void);
+				float GetFPS(void);
 			private:
+				unsigned int frame_counter;
+				float fps_elapsed;
 				unsigned int started, last;
+				float fps;
 				float frame;
 				float elapsed;
 		};

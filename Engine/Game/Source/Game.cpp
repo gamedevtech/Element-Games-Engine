@@ -22,14 +22,14 @@ namespace EG{
             // Resolution needs to be from config
             rendering_method = RENDERER_SIMPLE;
 
-            if (graphics->CheckVersion(3, 1)){
-            //if (graphics->CheckVersion(4, 1)){
+            //if (graphics->CheckVersion(3, 1)){
+            if (graphics->CheckVersion(4, 1)){
                 if (rendering_method == RENDERER_SIMPLE){
                     rendering_method = RENDERER_DEFERRED;
                 }
             }else{
                 rendering_method = RENDERER_SIMPLE;
-                //graphics->OverrideVersion(2, 1);
+                graphics->OverrideVersion(2, 1);
             }
             if (rendering_method == RENDERER_SIMPLE){
                 renderer = new EG::Graphics::Renderer();
@@ -62,11 +62,11 @@ namespace EG{
         void Game::Render(void){
             PostUpdates();
             if (rendering_method == RENDERER_SIMPLE){
-                renderer->Render(scene, time->GetFrameTime());
+                renderer->Render(scene, time);
             }else if (rendering_method == RENDERER_MULTIPASS){
                 (static_cast<EG::Graphics::RendererMultipass *>(renderer))->Render(scene);
             }else if (rendering_method == RENDERER_DEFERRED){
-                (static_cast<EG::Graphics::RendererDeferred *>(renderer))->Render(scene, time->GetFrameTime());
+                (static_cast<EG::Graphics::RendererDeferred *>(renderer))->Render(scene, time);
             }
             window->Display();
             PreUpdates();

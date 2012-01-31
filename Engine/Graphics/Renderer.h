@@ -9,6 +9,7 @@
 #include "../Game/Scene.h"
 #include "../Utility/Font.h"
 #include "../Utility/RocketInterface.h"
+#include "../Utility/Time.h"
 
 namespace EG{
     namespace Graphics{
@@ -18,7 +19,7 @@ namespace EG{
                 ~Renderer(void);
 
                 void Initialize(void);
-                void Render(EG::Game::Scene *scene, float frame_time);
+                void Render(EG::Game::Scene *scene, EG::Utility::Time *time);
                 void RenderLitObject(EG::Game::Scene *scene, EG::Graphics::Light *light, EG::Game::Object *object);
                 void RenderObject(EG::Game::Scene *scene, EG::Game::Object *object);
 

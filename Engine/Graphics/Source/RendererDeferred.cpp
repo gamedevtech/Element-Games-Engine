@@ -90,9 +90,9 @@ namespace EG{
             initialized = true;
         }
 
-        void RendererDeferred::Render(EG::Game::Scene *scene, float _frame_time){
+        void RendererDeferred::Render(EG::Game::Scene *scene, EG::Utility::Time *time){
             EG::Graphics::Camera *camera = scene->GetCurrentCamera();
-            frame_time = _frame_time;
+            frame_time = time->GetFrameTime();
             graphics->BeginFrame();
 
             ShadowMapping(scene);
@@ -106,7 +106,7 @@ namespace EG{
 
             graphics->EndFrame();
             ComposeScene(scene);
-            Overlays(scene);
+            Overlays(scene, time);
         }
 
         void RendererDeferred::RenderObject(EG::Game::Scene *scene, EG::Game::Object *object){
@@ -523,37 +523,13 @@ namespace EG{
             }
         }
 
-        void RendererDeferred::Overlays(EG::Game::Scene *scene){
+        void RendererDeferred::Overlays(EG::Game::Scene *scene, EG::Utility::Time *time){
             EG::Graphics::Camera *camera = scene->GetCurrentCamera();
-            std::stringstream temp;
-            //temp << "Frame Time (s): ";
-            //temp << frame_time;
-            //temp << " ";
-            //temp << 1.0f / frame_time;
-            //temp.flush();
             glm::vec3 position = glm::vec3(5.0f, 5.0f, -0.1f);
             glm::vec2 scale = glm::vec2(1.0f, 1.0f);
 
             glDisable(GL_DEPTH_TEST);
 
-            /*shaders->Bind("font_rendering");
-            shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
-            shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
-            shaders->SetMatrix4("model_matrix", glm::mat4(1.0f));
-            shaders->SetInt("decal", 0);
-            shaders->SetFloat4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-            //glDepthFunc(GL_LEQUAL);
-            glEnable(GL_BLEND);
-            glEnable(GL_TEXTURE_2D);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            //font_manager->DrawText(temp.str(), position, scale, shaders);
-            std::stringstream temp2;
-            temp2 << camera->GetPosition().x << ", " << camera->GetPosition().y << ", " << camera->GetPosition().z;
-            temp2.flush();
-            glm::mat4 trans = glm::gtx::transform::translate(position);
-            shaders->SetMatrix4("model_matrix", trans);
-            font_manager->DrawText(temp2.str());
-            shaders->Unbind();*/
             glEnable(GL_BLEND);
             glEnable(GL_TEXTURE_2D);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -575,7 +551,7 @@ namespace EG{
             shaders->SetMatrix4("model_matrix", glm::gtx::transform::translate(glm::vec3(10.0f, 24.0f, 0.0f)));
             std::stringstream fps;
             fps.precision(3);
-            fps << 1.0f / frame_time;
+            fps << time->GetFPS();
             fps.flush();
             font_manager->DrawText(fps.str());
 

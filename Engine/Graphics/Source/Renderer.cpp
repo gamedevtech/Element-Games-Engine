@@ -238,7 +238,8 @@ namespace EG{
 			}
 		}
 
-		void Renderer::Render(EG::Game::Scene *scene, float frame_time){
+		void Renderer::Render(EG::Game::Scene *scene, EG::Utility::Time *time){
+			float frame_time = time->GetFrameTime();
 			graphics->BeginFrame();
 			EG::Graphics::Camera *camera = scene->GetCurrentCamera();
 			camera->Update();
@@ -367,7 +368,7 @@ namespace EG{
 			shaders->SetMatrix4("model_matrix", glm::gtx::transform::translate(glm::vec3(10.0f, 24.0f, 0.0f)));
 			std::stringstream fps;
 			fps.precision(3);
-			fps << 1.0f / frame_time;
+			fps << time->GetFPS();
 			fps.flush();
 			font_manager->DrawText(fps.str());
 
