@@ -19,7 +19,7 @@ ELSE (WIN32)
 	link_directories(../../../build/Engine)#../../Dependencies/linux/lib)
 ENDIF (WIN32)
 
-add_executable(element_games_sandbox ./main.cpp)
+add_executable(element_games_sandbox ./Sandbox.h ./Sandbox.cpp ./main.cpp)
 IF (WIN32)
 	#NOTHING
 ELSE (WIN32)
