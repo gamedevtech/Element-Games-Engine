@@ -43,7 +43,7 @@ namespace EG{
             shaders = new EG::Graphics::ShaderManager();
             shaders->Add("prepass", "Shaders/Deferred/prepass.vert", "Shaders/Deferred/prepass.frag", "", "", "", 4);
             shaders->Add("prepass_debug", "Shaders/Deferred/prepass_debug.vert", "Shaders/Deferred/prepass_debug.frag");
-            shaders->Add("font_rendering", "Shaders/Deferred/font_rendering.vert", "Shaders/Deferred/font_rendering.frag");
+            shaders->Add("font_rendering", "Shaders/Basic/font_rendering.vert", "Shaders/Basic/font_rendering.frag");
             shaders->Add("lighting", "Shaders/Deferred/lighting.vert", "Shaders/Deferred/lighting.frag");
             shaders->Add("composition", "Shaders/Deferred/composition.vert", "Shaders/Deferred/composition.frag");
             shaders->Add("convolution", "Shaders/Deferred/convolution.vert", "Shaders/Deferred/convolution.frag");
@@ -550,36 +550,36 @@ namespace EG{
             std::stringstream temp2;
             temp2 << camera->GetPosition().x << ", " << camera->GetPosition().y << ", " << camera->GetPosition().z;
             temp2.flush();
-			glm::mat4 trans = glm::gtx::transform::translate(position);
-			shaders->SetMatrix4("model_matrix", trans);
+            glm::mat4 trans = glm::gtx::transform::translate(position);
+            shaders->SetMatrix4("model_matrix", trans);
             font_manager->DrawText(temp2.str());
             shaders->Unbind();*/
             glEnable(GL_BLEND);
             glEnable(GL_TEXTURE_2D);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			shaders->Bind("font_rendering");
-			shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
-			shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
-			shaders->SetMatrix4("model_matrix", glm::gtx::transform::translate(glm::vec3(10.0f, 10.0f, 0.0f)));
+            shaders->Bind("font_rendering");
+            shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
+            shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
+            shaders->SetMatrix4("model_matrix", glm::gtx::transform::translate(glm::vec3(10.0f, 10.0f, 0.0f)));
 
-			graphics->SetActiveTexture(0);
-			shaders->SetInt("decal", 0);
-			shaders->SetFloat4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+            graphics->SetActiveTexture(0);
+            shaders->SetInt("decal", 0);
+            shaders->SetFloat4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
-			std::stringstream campos;
-			campos.precision(3);
-			campos << camera->GetPosition().x << ", " << camera->GetPosition().y << ", " << camera->GetPosition().z;
-			campos.flush();
-			font_manager->DrawText(campos.str());
+            std::stringstream campos;
+            campos.precision(3);
+            campos << camera->GetPosition().x << ", " << camera->GetPosition().y << ", " << camera->GetPosition().z;
+            campos.flush();
+            font_manager->DrawText(campos.str());
 
-			shaders->SetMatrix4("model_matrix", glm::gtx::transform::translate(glm::vec3(10.0f, 24.0f, 0.0f)));
-			std::stringstream fps;
-			fps.precision(3);
-			fps << 1.0f / frame_time;
-			fps.flush();
-			font_manager->DrawText(fps.str());
+            shaders->SetMatrix4("model_matrix", glm::gtx::transform::translate(glm::vec3(10.0f, 24.0f, 0.0f)));
+            std::stringstream fps;
+            fps.precision(3);
+            fps << 1.0f / frame_time;
+            fps.flush();
+            font_manager->DrawText(fps.str());
 
-			shaders->Unbind();
+            shaders->Unbind();
 
             shaders->Bind("gui_rendering");
             shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
