@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include "../../../Engine/Game/Game.h"
+#include "Sandbox.h"
 #include "../../../Engine/Utility/Window.h"
 #include "../../../Engine/Graphics/GraphicsSubsystem.h"
 #include "../../../Engine/Graphics/Renderer.h"
@@ -37,7 +37,8 @@ int main(int argc, char **argv){
     EG::Utility::JSON config_file("config.json");
     EG::Utility::Window *window = new EG::Utility::Window(config_file.GetInt("screen.width"), config_file.GetInt("screen.height"), 32, config_file.GetBool("screen.fullscreen"), "Element Games Sandbox");
     EG::Game::Scene *scene = new EG::Game::Scene();
-    EG::Game::Game *game = new EG::Game::Game(window, scene);
+    //EG::Game::Game *game = new EG::Game::Game(window, scene);
+    Sandbox *game = new Sandbox(window, scene);
 
     EG::Graphics::RenderingMaterial *material;
     EG::Graphics::Mesh *sphere = EG::Graphics::GenerateCubeSphere(4);
@@ -203,7 +204,7 @@ int main(int argc, char **argv){
     // Particle System
     scene->GetMeshManager()->Add("quad", EG::Graphics::GenerateQuad());
     //scene->GetTextureManager()->AddTexture("particle", new EG::Graphics::Texture("Assets/Textures/nebula_particle.png"));
-	scene->GetTextureManager()->AddTexture("particle", new EG::Graphics::Texture("Assets/Textures/particle.png"));
+    scene->GetTextureManager()->AddTexture("particle", new EG::Graphics::Texture("Assets/Textures/particle.png"));
     EG::Game::Object *particle_system = new EG::Game::Object("ParticleSystem");
 
     class TestEmitterDef : public EG::Graphics::ParticleEmitter{
