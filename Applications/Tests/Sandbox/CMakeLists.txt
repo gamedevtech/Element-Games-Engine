@@ -28,7 +28,7 @@ ENDIF (WIN32)
 
 IF (WIN32)
 	IF (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
-		target_link_libraries(element_games_sandbox egengine glew_static glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath RocketCore RocketControls RocketDebugger freetype mingw32 egengine glew_static glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath RocketCore RocketControls RocketDebugger freetype mingw32)
+		target_link_libraries(element_games_sandbox egengine glew_static glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath RocketCore RocketControls RocketDebugger freetype ftgl_static mingw32 egengine glew_static glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath RocketCore RocketControls RocketDebugger freetype ftgl_static mingw32)
 	ENDIF (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
 ELSE (WIN32)
 	target_link_libraries(element_games_sandbox egengine sfml-graphics sfml-window sfml-system sfml-audio sfml-network assimp GLEW glut GLU BulletDynamics BulletCollision LinearMath Xrandr RocketCore RocketControls RocketDebugger ftgl)
