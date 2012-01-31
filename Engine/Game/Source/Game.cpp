@@ -84,7 +84,7 @@ namespace EG{
             if (input->IsKeyDown(EG::Input::c)){
                 scene->GetCurrentCamera()->Move(glm::vec3(0.0f, -movement_speed, 0.0f));
             }
-            if (input->IsKeyDown(EG::Input::i)){
+            /*if (input->IsKeyDown(EG::Input::i)){
                 EG::Game::Object *ship = scene->GetObjectManager()->GetObject("Assets/Models/spaceship.3ds");
                 std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY);
                 std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
@@ -135,7 +135,7 @@ namespace EG{
                     //std::cout << vel.x() << ", " << vel.y() << ", " << vel.z() << std::endl;
                     ++attr_iter;
                 }
-            }
+            }*/
             if (input->IsKeyPressed(EG::Input::t)){
                 if (rendering_method == RENDERER_DEFERRED){
                     (static_cast<EG::Graphics::RendererDeferred *>(renderer))->CycleOutputType();
@@ -167,7 +167,7 @@ namespace EG{
                 }
             }
 
-            EG::Game::Object *ship = scene->GetObjectManager()->GetObject("Assets/Models/spaceship.3ds");
+            /*EG::Game::Object *ship = scene->GetObjectManager()->GetObject("Assets/Models/spaceship.3ds");
             std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
             std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
             glm::vec4 pos = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
@@ -185,7 +185,7 @@ namespace EG{
                 EG::Graphics::Camera *c = cam_attr->GetCamera();
                 c->SetPosition(glm::vec3(pos.x, pos.y, pos.z));
                 ++attr_iter;
-            }
+            }*/
 
             physics->Update(time->GetFrameTime());
         }
