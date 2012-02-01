@@ -4,6 +4,7 @@ namespace EG{
     namespace Graphics{
         Particle::Particle(void) : EG::Game::Object(){
             alive = true;
+            distance_from_camera = 0.0f;
         }
         Particle::~Particle(void){
             attributes.Clear();
@@ -13,6 +14,12 @@ namespace EG{
         }
         bool Particle::Alive(void){
             return alive;
+        }
+        void Particle::SetDistanceFromCamera(float _distance_from_camera){
+            distance_from_camera = _distance_from_camera;
+        }
+        float Particle::GetDistanceFromCamera(void){
+            return distance_from_camera;
         }
         void Particle::SetAttribute(std::string key, float value){
             attributes.Set(key, value);
@@ -51,6 +58,13 @@ namespace EG{
             }
         }
 
+        bool compare_distance(Particle *first, Particle *second){
+            if (first->GetDistanceFromCamera() > second->GetDistanceFromCamera()){
+                return true;
+            }
+            return false;
+        }
+
         ParticleSystem::ParticleSystem(ParticleController *_controller, ParticleEmitter *_emitter){
             controller = _controller;
             emitter = _emitter;
@@ -78,6 +92,8 @@ namespace EG{
                     ++piter;
                 }
             }
+            // TODO : Sort particles here by distance!
+            particles.sort(compare_distance);
         }
         std::list<Particle *> *ParticleSystem::GetParticles(void){
             return &particles;

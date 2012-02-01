@@ -142,7 +142,8 @@ namespace EG{
                         if (material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER) == "billboarding"){
                             billboarding_shader = true;
                             // HACK: Assuming particle systems for now!
-                            glDisable(GL_DEPTH_TEST);
+                            //glDisable(GL_DEPTH_TEST);
+                            glDepthMask(GL_FALSE);
                         }
                         graphics->SetBlendingMode(material->GetBlendingMode());
                     }
@@ -206,7 +207,8 @@ namespace EG{
                         shaders->SetFloat3("camera_position", camera->GetPosition());
 
                         if (billboarding_shader){
-                            glDisable(GL_DEPTH_TEST);
+                            //glDisable(GL_DEPTH_TEST);
+                            glDepthMask(GL_TRUE);
                         }
                     }
                     graphics->SetBlendingMode();

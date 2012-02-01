@@ -169,7 +169,8 @@ namespace EG{
 							shaders->SetInt("height", 1);
 
 							if (material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER) == "billboarding"){
-								glDisable(GL_DEPTH_TEST);
+								//glDisable(GL_DEPTH_TEST);
+								glDepthMask(GL_FALSE);
 								billboarding_shader = true;
 							}
 						}
@@ -215,6 +216,9 @@ namespace EG{
 							shaders->SetMatrix4("view_matrix", camera->GetViewMatrix());
 							shaders->SetInt("decal", 0);
 							shaders->SetInt("height", 1);
+						}
+						if (billboarding_shader){
+							glDepthMask(GL_TRUE);
 						}
 						graphics->SetBlendingMode();
 					}

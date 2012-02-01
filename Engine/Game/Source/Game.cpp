@@ -22,14 +22,14 @@ namespace EG{
             // Resolution needs to be from config
             rendering_method = RENDERER_SIMPLE;
 
-            //if (graphics->CheckVersion(3, 1)){
-            if (graphics->CheckVersion(4, 1)){
+            if (graphics->CheckVersion(3, 1)){
+            //if (graphics->CheckVersion(4, 1)){
                 if (rendering_method == RENDERER_SIMPLE){
                     rendering_method = RENDERER_DEFERRED;
                 }
             }else{
                 rendering_method = RENDERER_SIMPLE;
-                graphics->OverrideVersion(2, 1);
+                //graphics->OverrideVersion(2, 1);
             }
             if (rendering_method == RENDERER_SIMPLE){
                 renderer = new EG::Graphics::Renderer();
@@ -131,6 +131,10 @@ namespace EG{
                                 std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
                                 while (attr_iter != attrs->end()){
                                     EG::Game::ObjectAttributeBasicTransformation *trans_attr = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(*attr_iter);
+                                    glm::mat4 t = trans_attr->GetTransformation();
+                                    glm::vec3 p(t[3][0], t[3][1], t[3][2]);
+                                    glm::vec3 c = scene->GetCurrentCamera()->GetPosition();
+                                    float distance = glm::distance(p, c);
                                     trans_attr->SetTransformation(motion_state);
                                     ++attr_iter;
                                 }
