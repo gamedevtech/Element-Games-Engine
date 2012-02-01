@@ -118,7 +118,7 @@ void Sandbox::Update(void){
         }
     }
 
-    EG::Game::Object *ship = scene->GetObjectManager()->GetObject("Assets/Models/spaceship.3ds");
+    /*EG::Game::Object *ship = scene->GetObjectManager()->GetObject("Assets/Models/spaceship.3ds");
     std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
     std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
     glm::vec4 pos = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
@@ -136,7 +136,7 @@ void Sandbox::Update(void){
         EG::Graphics::Camera *c = cam_attr->GetCamera();
         c->SetPosition(glm::vec3(pos.x, pos.y, pos.z));
         ++attr_iter;
-    }
+    }*/
 
     physics->Update(time->GetFrameTime());
 }
