@@ -19,6 +19,7 @@ namespace EG{
                 std::string GetKey(void);
                 unsigned int GetHashedKey(void);
                 ValueType GetValue(void);
+                ValueType *GetValuePtr(void);
                 void SetValue(ValueType value);
                 StringDictionaryEntry *GetNext(void);
                 void SetNext(StringDictionaryEntry *next);
@@ -61,6 +62,11 @@ namespace EG{
         }
 
         template <class ValueType>
+        ValueType *StringDictionaryEntry<ValueType>::GetValuePtr(void){
+            return &_value;
+        }
+
+        template <class ValueType>
         void StringDictionaryEntry<ValueType>::SetValue(ValueType value){
             _value = value;
         }
@@ -87,6 +93,7 @@ namespace EG{
 
                 void Set(std::string key, HashTableValueType value);
                 HashTableValueType Get(std::string key);
+                HashTableValueType *Ptr(std::string key);
                 //HashTableValueType operator[](std::string key);
                 bool Has(std::string key);
 
@@ -171,6 +178,24 @@ namespace EG{
                     return 0;
                 }else{
                     return entry->GetValue();
+                }
+            }
+        }
+
+        template <class HashTableValueType>
+        HashTableValueType *StringDictionary<HashTableValueType>::Ptr(std::string key){
+            unsigned int hashed_key = HashingFunction(key);
+            if (_table[hashed_key] == NULL){
+                return 0;
+            }else{
+                StringDictionaryEntry<HashTableValueType> *entry = _table[hashed_key];
+                while (entry != NULL && entry->GetKey() != key){
+                    entry = entry->GetNext();
+                }
+                if (entry == NULL){
+                    return 0;
+                }else{
+                    return entry->GetValuePtr();
                 }
             }
         }

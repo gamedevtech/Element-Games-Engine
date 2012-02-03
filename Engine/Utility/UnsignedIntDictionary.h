@@ -18,6 +18,7 @@ namespace EG{
                 unsigned int GetKey(void);
                 unsigned int GetHashedKey(void);
                 ValueType GetValue(void);
+                ValueType *GetValuePtr(void);
                 void SetValue(ValueType value);
                 UnsignedIntDictionaryEntry *GetNext(void);
                 void SetNext(UnsignedIntDictionaryEntry *next);
@@ -60,6 +61,11 @@ namespace EG{
         }
 
         template <class ValueType>
+        ValueType *UnsignedIntDictionaryEntry<ValueType>::GetValuePtr(void){
+            return &_value;
+        }
+
+        template <class ValueType>
         void UnsignedIntDictionaryEntry<ValueType>::SetValue(ValueType value){
             _value = value;
         }
@@ -86,6 +92,7 @@ namespace EG{
 
                 void Set(unsigned int key, HashTableValueType value);
                 HashTableValueType Get(unsigned int key);
+                HashTableValueType *Ptr(unsigned int key);
                 //HashTableValueType operator[](unsigned int key);
                 bool Has(unsigned int key);
 
@@ -170,6 +177,24 @@ namespace EG{
                     return 0;
                 }else{
                     return entry->GetValue();
+                }
+            }
+        }
+
+        template <class HashTableValueType>
+        HashTableValueType *UnsignedIntDictionary<HashTableValueType>::Ptr(unsigned int key){
+            unsigned int hashed_key = HashingFunction(key);
+            if (_table[hashed_key] == NULL){
+                return 0;
+            }else{
+                UnsignedIntDictionaryEntry<HashTableValueType> *entry = _table[hashed_key];
+                while (entry != NULL && entry->GetKey() != key){
+                    entry = entry->GetNext();
+                }
+                if (entry == NULL){
+                    return 0;
+                }else{
+                    return entry->GetValuePtr();
                 }
             }
         }

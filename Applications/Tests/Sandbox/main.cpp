@@ -107,6 +107,17 @@ int main(int argc, char **argv){
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "sphere_cube_mapped_gradient_decal_prepass");
     object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));
 
+    EG::Game::Object *pa = new EG::Game::Object("PlanetAtmosphere");
+    planet_transform = planet_transform * glm::gtx::transform::scale(1.2f, 1.2f, 1.2f);
+    pa->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(planet_transform));
+    material = new EG::Graphics::RenderingMaterial();
+    material->SetLit(false);
+    material->SetColor(glm::vec4(0.25f, 0.25f, 0.5f, 0.5f));
+    material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "planet_atmosphere");
+    material->SetCastsShadows(false);
+    material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ALPHA);
+    pa->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));
+
     // Test Cube2
     EG::Graphics::Mesh *cube = EG::Graphics::GenerateCube();
     scene->GetMeshManager()->Add("cube", cube);
@@ -349,6 +360,7 @@ int main(int argc, char **argv){
     // Add Objects
     EG::Game::ObjectManager *objects = game->GetScene()->GetObjectManager();
     objects->AddObject(object);
+    objects->AddObject(pa);
     objects->AddObject(read_object);
     objects->AddObject(object2);
     objects->AddObject(object3);
