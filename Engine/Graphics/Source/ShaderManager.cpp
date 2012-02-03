@@ -137,20 +137,25 @@ namespace EG{
             shader_bound = false;
         }
 
-        void ShaderManager::AddEngineUniformUsage(std::string shader_id, EngineUniforms variable_name){
+        void ShaderManager::AddEngineUniformUsage(std::string shader_id, EG::Graphics::ShaderManager::EngineUniforms variable_name){
             if (program_objects.Has(shader_id)){
                 unsigned int id = program_objects.Get(shader_id);
-                if (engine_shader_uniforms.Has(id)){
-                    //
+                if (!(engine_shader_uniforms.Has(id))){
+                    std::vector<EG::Graphics::ShaderManager::EngineUniforms> *new_list = new std::vector<EG::Graphics::ShaderManager::EngineUniforms>;
+                    engine_shader_uniforms.Set(id, new_list);
                 }
-                engine_shader_uniforms.Get(id).push_back(variable_name);
+                engine_shader_uniforms.Get(id)->push_back(variable_name);
             }
         }
 
         void ShaderManager::AddObjectUniformUsage(std::string shader_id, std::string variable_name, ShaderUniformTypes variable_type){
             if (program_objects.Has(shader_id)){
                 unsigned int id = program_objects.Get(shader_id);
-                object_shader_uniforms.Get(id).push_back(std::pair<std::string, ShaderUniformTypes>(variable_name, variable_type));
+                if (!(object_shader_uniforms.Has(id))){
+                    std::vector<std::pair<std::string, EG::Graphics::ShaderManager::ShaderUniformTypes> > *new_list = new std::vector<std::pair<std::string, EG::Graphics::ShaderManager::ShaderUniformTypes> >;
+                    object_shader_uniforms.Set(id, new_list);
+                }
+                object_shader_uniforms.Get(id)->push_back(std::pair<std::string, ShaderUniformTypes>(variable_name, variable_type));
             }
         }
 
@@ -158,18 +163,20 @@ namespace EG{
             if (program_objects.Has(shader_id)){
                 unsigned int id = program_objects.Get(shader_id);
                 if (engine_shader_uniforms.Has(id)){
-                    return engine_shader_uniforms.Ptr(id);
+                    return engine_shader_uniforms.Get(id);
                 }
             }
+            return NULL;
         }
 
          std::vector<std::pair<std::string, EG::Graphics::ShaderManager::ShaderUniformTypes> > *ShaderManager::GetObjectUniforms(std::string shader_id){
             if (program_objects.Has(shader_id)){
                 unsigned int id = program_objects.Get(shader_id);
                 if (object_shader_uniforms.Has(id)){
-                    return object_shader_uniforms.Ptr(id);
+                    return object_shader_uniforms.Get(id);
                 }
             }
+            return NULL;
         }
 
         void ShaderManager::PrintProgramLog(unsigned int program_object_id){
