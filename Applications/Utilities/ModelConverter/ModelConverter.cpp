@@ -9,14 +9,15 @@
 #include "../../../Engine/Media/ObjectWriter.h"
 
 ModelConverter::ModelConverter(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
-	gui = new EG::Utility::RocketInterface("Assets/GUIs/model_converter.rml", time, renderer->GetShaderManager(), input, window->GetResolutionWidth(), window->GetResolutionHeight());
+	gui = new EG::GUI::GUI("http://www.google.com");
+	gui->ExecuteScript("window.location = 'http://slashdot.org';");
 	use_gui = true;
 	renderer->SetGUI(gui);
-	LoadModelEventListener *load_model_event_listener = new LoadModelEventListener();
+	/*LoadModelEventListener *load_model_event_listener = new LoadModelEventListener();
 	load_model_event_listener->model_loaded = false;
 	load_model_event_listener->scene = scene;
 	load_model_event_listener->gui = gui;
-	gui->RegisterEventListener("click", "load_model_button", load_model_event_listener);
+	gui->RegisterEventListener("click", "load_model_button", load_model_event_listener);*/
 }
 
 ModelConverter::~ModelConverter(void){
@@ -83,7 +84,7 @@ void ModelConverter::Update(void){
 		}
 	}
 }
-
+/*
 void LoadModelEventListener::ProcessEvent(EG::Utility::Event &event){
 	Rocket::Core::Element *path_element = document->GetElementById("model_path");
 	const Rocket::Core::Variant *path_variant = path_element->GetAttribute("value");
@@ -302,3 +303,4 @@ void SaveFileButtonEventListener::ProcessEvent(EG::Utility::Event &event){
 	writer->Write(file_path);
 	document->GetElementById("model_options")->SetInnerRML(("Model Saved To: " + file_path).c_str());
 }
+*/

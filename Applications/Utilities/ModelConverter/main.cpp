@@ -21,7 +21,6 @@
 #include "../../../Engine/Utility/Time.h"
 #include "../../../Engine/Utility/JSON.h"
 #include "../../../Engine/Media/ModelLoader.h"
-#include "../../../Engine/Utility/GUI.h"
 #include "ModelConverter.h"
 
 EG::Media::ModelLoader *model;
@@ -31,6 +30,8 @@ int main(int argc, char **argv){
     EG::Utility::Window *window = new EG::Utility::Window(config_file.GetInt("screen.width"), config_file.GetInt("screen.height"), 32, config_file.GetBool("screen.fullscreen"), "Element Games Sandbox");
     EG::Game::Scene *scene = new EG::Game::Scene();
     ModelConverter *game = new ModelConverter(window, scene);
+
+    scene->GetMeshManager()->Add("rectangle", EG::Graphics::GenerateQuad());
 
     // Ground Plane
     EG::Graphics::Mesh *cube_mesh = EG::Graphics::GenerateCube();
@@ -97,15 +98,9 @@ int main(int argc, char **argv){
     objects->AddObject(light_object2);
     objects->AddObject(camera_object);
 
-	// TEST DATA //
-	EG::GUI::GUI *gui = new EG::GUI::GUI("http://www.google.com");
-	///////////////
-
     while (game->GetWindow()->IsOpened()){
         game->Update();
-		gui->Update();
         game->Render();
-		gui->Render();
     }
     window->Close();
     std::cout << "Exiting..." << std::endl;

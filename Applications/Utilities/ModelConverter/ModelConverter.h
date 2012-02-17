@@ -4,9 +4,7 @@
 #include "../../../Engine/Media/ModelLoader.h"
 #include "../../../Engine/Game/Object.h"
 #include "../../../Engine/Game/Game.h"
-
-// Switch this to GUI.h when it's all done.
-#include "../../../Engine/Utility/RocketInterface.h"
+#include "../../../Engine/Utility/GUI.h"
 
 class ModelConverter : public EG::Game::Game{
 	public:
@@ -19,7 +17,7 @@ class ModelConverter : public EG::Game::Game{
 		//EG::Media::ModelLoader *model;
 		//EG::Game::Object *model_object;
 };
-
+/*
 class LoadModelEventListener : public EG::Utility::EventListener{
 	public:
 		bool model_loaded;
@@ -74,6 +72,6 @@ class SaveFileButtonEventListener : public EG::Utility::EventListener{
 		EG::Game::Scene *scene;
 		EG::Game::Object *object;
 		void ProcessEvent(EG::Utility::Event &event);
-};
+};*/
 
 #endif

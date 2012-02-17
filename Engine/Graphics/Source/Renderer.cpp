@@ -44,7 +44,7 @@ namespace EG{
 			initialized = true;
 		}
 
-		void Renderer::SetGUI(EG::Utility::RocketInterface *_gui){
+		void Renderer::SetGUI(EG::GUI::GUI *_gui){
 			gui = _gui;
 			gui_set = true;
 		}
@@ -339,7 +339,7 @@ namespace EG{
 			shaders->Bind("font_rendering");
 			shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
 			shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
-			shaders->SetMatrix4("model_matrix", glm::mat4(1.0f));
+			shaders->SetMatrix4("model_matrix", glm::gtx::transform::scale(float(graphics->GetViewportWidth()), float(graphics->GetViewportHeight()), 1.0f));
 			shaders->SetInt("decal", 0);
 			shaders->SetInt("use_decal", 1);
 			shaders->SetFloat4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -348,7 +348,9 @@ namespace EG{
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 			if (gui_set){
-				gui->Draw();
+				gui->Render();
+				graphics->BindTexture(gui->GetTextureId(), 0);
+				scene->GetMeshManager()->Get("rectangle")->Draw();
 			}
 			glDisable(GL_BLEND);
 			glEnable(GL_DEPTH_TEST);

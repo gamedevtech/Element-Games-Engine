@@ -8,7 +8,7 @@
 #include "GraphicsSubsystem.h"
 #include "../Game/Scene.h"
 #include "../Utility/Font.h"
-#include "../Utility/RocketInterface.h"
+#include "../Utility/GUI.h"
 #include "../Utility/Time.h"
 
 namespace EG{
@@ -28,7 +28,7 @@ namespace EG{
                     return shaders;
                 }
 
-                void SetGUI(EG::Utility::RocketInterface *_gui);
+                void SetGUI(EG::GUI::GUI *_gui);
             protected:
                 // TEMP, SHOULD GO IN SCENE MANAGER WHICH SHOULD HOLD A CAMERA MANAGER
                 EG::Graphics::ShaderManager *shaders;
@@ -36,7 +36,7 @@ namespace EG{
                 bool initialized;
 
                 bool gui_set;
-                EG::Utility::RocketInterface *gui;
+                EG::GUI::GUI *gui;
         };
     }
 }

@@ -566,7 +566,9 @@ namespace EG{
             shaders->SetInt("decal", 0);
             shaders->SetFloat4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
             if (gui_set){
-                gui->Draw();
+                gui->Render();
+                graphics->BindTexture(gui->GetTextureId());
+                scene->GetMeshManager()->Get("rectangle")->Draw();
             }
             glDisable(GL_BLEND);
             shaders->Unbind();

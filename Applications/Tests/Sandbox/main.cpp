@@ -44,6 +44,8 @@ int main(int argc, char **argv){
     EG::Graphics::Mesh *sphere = EG::Graphics::GenerateCubeSphere(4);
     scene->GetMeshManager()->Add("planet_sphere", sphere);
 
+    scene->GetMeshManager()->Add("rectangle", EG::Graphics::GenerateQuad());
+
     // NOTE: Test Data
     float width = 256;
     float height = 256;

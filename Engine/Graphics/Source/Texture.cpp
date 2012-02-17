@@ -15,6 +15,14 @@ namespace EG{
 			Load(_file_path, _filtering, anisotropic_param);
 		}
 
+		Texture::Texture(unsigned char *buffer, unsigned int _width, unsigned int _height, bool _filtering, float anisotropic_param){
+			width = _width;
+			height = _height;
+			filtering = false;
+			id = 0;
+			Load(buffer, filtering, anisotropic_param);
+		}
+
 		Texture::~Texture(void){
 			//
 		}
@@ -40,6 +48,17 @@ namespace EG{
 			return 0;
 		}
 
+		unsigned int Texture::Load(unsigned char *buffer, bool _filtering, float anisotropic_param){
+			filtering = _filtering;
+			id = graphics->CreateTexture(buffer, width, height, filtering, anisotropic_param);
+			if (id == 0){
+				std::cout << "Couldn't create image!" << std::endl;
+				return 0;
+			}
+			return id;
+			delete []buffer;
+		}
+
 		std::string Texture::GetFilePath(void){
 			return file_path;
 		}
@@ -54,6 +73,11 @@ namespace EG{
 
 		unsigned int Texture::GetHeight(void){
 			return height;
+		}
+
+		void Texture::UpdateImage(unsigned char *buffer){
+			graphics->BindTexture(id, 0);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 		}
 
 		CubeMap::CubeMap(std::string positive_x_file_path, std::string negative_x_file_path, std::string positive_y_file_path, std::string negative_y_file_path, std::string positive_z_file_path, std::string negative_z_file_path, bool _filtering, float anisotropic_param){
