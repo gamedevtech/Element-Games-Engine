@@ -29,11 +29,11 @@ namespace EG{
 
         class GUI{
             public:
-                GUI(std::string url);
+                GUI(std::string base_directory, std::string url);
                 ~GUI(void);
 
                 //void InjectKey(void);
-		void ExecuteScript(std::string script);
+                void ExecuteScript(std::string script);
                 void Update(void);
                 void Render(void);
                 unsigned int GetTextureId(void);

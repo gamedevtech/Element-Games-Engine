@@ -9,8 +9,8 @@
 #include "../../../Engine/Media/ObjectWriter.h"
 
 ModelConverter::ModelConverter(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
-	gui = new EG::GUI::GUI("Assets/GUIs/ModelConverter/index.html");
-	gui->ExecuteScript("window.location = 'http://slashdot.org';");
+	gui = new EG::GUI::GUI("Assets/GUIs/ModelConverter", "index.html");
+	//gui->ExecuteScript("window.location = 'http://slashdot.org';");
 	use_gui = true;
 	renderer->SetGUI(gui);
 	/*LoadModelEventListener *load_model_event_listener = new LoadModelEventListener();

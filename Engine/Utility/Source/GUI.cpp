@@ -19,7 +19,8 @@ namespace EG{
         }
 
         void WebBuffer::Load(std::string url){
-            web_view->loadURL(url);
+            web_view->loadFile(url);
+            //web_view->loadURL(url);
         }
 
         void WebBuffer::Render(void){
@@ -50,7 +51,7 @@ namespace EG{
 		web_view->executeJavascript(script);
 	}
 
-        GUI::GUI(std::string url){
+        GUI::GUI(std::string base_directory, std::string url){
             Awesomium::WebCoreConfig conf;
             conf.setEnablePlugins(true);
             conf.setSaveCacheAndCookies(false);
@@ -58,6 +59,7 @@ namespace EG{
             web_core = new Awesomium::WebCore(conf);
             Awesomium::WebView *web_view = web_core->createWebView(graphics->GetViewportWidth(), graphics->GetViewportHeight());
             web_buffer = new WebBuffer(graphics->GetViewportWidth(), graphics->GetViewportHeight(), web_view);
+            web_core->setBaseDirectory(base_directory);
             web_buffer->Load(url);
             std::cout << "GUI: " << url << std::endl;
         }
