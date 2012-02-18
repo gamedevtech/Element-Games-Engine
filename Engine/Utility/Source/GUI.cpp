@@ -7,6 +7,7 @@ namespace EG{
             width = _width;
             height = _height;
             web_view = _web_view;
+			web_view->setTransparent(true);
             bpp = 4;
 
             rowspan = width * bpp;
@@ -27,20 +28,20 @@ namespace EG{
             web_view->focus();
             if (web_view->isDirty()){
                 const Awesomium::RenderBuffer* b = web_view->render();
-		for (unsigned int x = 0; x < width; x++){
-			for (unsigned int y = 0; y < height; y++){
-				int source_index = width * y + x;
-				int destination_index = width * (height - (y + 1)) + x;
-				unsigned char *source = &(b->buffer[source_index * 4]);
-				unsigned char *destination = &(buffer[destination_index * 4]);
-				destination[2] = 255 - source[0];
-				destination[1] = 255 - source[1];
-				destination[0] = 255 - source[2];
-				destination[3] = source[3];
+				for (unsigned int x = 0; x < width; x++){
+					for (unsigned int y = 0; y < height; y++){
+						int source_index = width * y + x;
+						int destination_index = width * (height - (y + 1)) + x;
+						unsigned char *source = &(b->buffer[source_index * 4]);
+						unsigned char *destination = &(buffer[destination_index * 4]);
+						destination[2] = 255 - source[0];
+						destination[1] = 255 - source[1];
+						destination[0] = 255 - source[2];
+						destination[3] = source[3];
+					}
+				}
+				texture->UpdateImage(buffer);
 			}
-		}
-		texture->UpdateImage(buffer);
-            }
         }
 
         unsigned int WebBuffer::GetTextureId(void){
