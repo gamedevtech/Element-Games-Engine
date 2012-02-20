@@ -20,7 +20,7 @@ class ModelConverter : public EG::Game::Game{
 
 class LoadModelEventListener : public EG::GUI::ListenerCallback{
 	public:
-		virtual void Call(const Awesomium::JSArguments &args);
+		virtual void Call(const Awesomium::JSArguments &args, Awesomium::JSValue &response);
 };
 /*
 class LoadModelEventListener : public EG::Utility::EventListener{

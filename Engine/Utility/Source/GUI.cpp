@@ -3,6 +3,18 @@
 
 namespace EG{
 	namespace GUI{
+		std::wstring StringToWString(const std::string& s){
+			std::wstring temp(s.length(),L' ');
+			std::copy(s.begin(), s.end(), temp.begin());
+			return temp; 
+		}
+
+		std::string WStringToString(const std::wstring& s){
+			std::string temp(s.length(), ' ');
+			std::copy(s.begin(), s.end(), temp.begin());
+			return temp; 
+		}
+
 		WebListener::WebListener(void){
 			//
 		}
@@ -13,15 +25,18 @@ namespace EG{
 			std::wcout << message << std::endl;
 		}
 		void WebListener::onCallback(Awesomium::WebView* caller, const std::wstring& objectName, const std::wstring& callbackName, const Awesomium::JSArguments& args){
+			//http://forums.wolfire.com/viewtopic.php?f=2&t=6658
 			if (callbacks.count(objectName) > 0){
 				if (callbacks.at(objectName).count(callbackName) > 0){
-					callbacks.at(objectName).at(callbackName)->Call(args);
+					Awesomium::JSValue result;
+					callbacks.at(objectName).at(callbackName)->Call(args, result);
+					caller->executeJavascript(L"window.set_response(" + result.toString() + L");");
+					//caller->setObjectProperty(L"backend", L"result", result);
 				}
 			}
 		}
 		void WebListener::AddCallback(std::wstring callback_object_name, std::wstring callback_name, ListenerCallback *callback){
 			callbacks[callback_object_name][callback_name] = callback;
-			//callbacks.at(callback_object_name).insert(std::pair<std::wstring, ListenerCallback *>(callback_name, callback));
 		}
 		void WebListener::onBeginNavigation(Awesomium::WebView* caller, const std::string& url, const std::wstring& frameName){}
 		void WebListener::onBeginLoading(Awesomium::WebView* caller, const std::string& url, const std::wstring& frameName, int statusCode, const std::wstring& mimeType){}
@@ -48,6 +63,24 @@ namespace EG{
 		void WebListener::onFinishResize(Awesomium::WebView* caller, int width, int height){}
 		void WebListener::onShowJavascriptDialog(Awesomium::WebView* caller, int requestID, int dialogFlags, const std::wstring& message, const std::wstring& defaultPrompt, const std::string& frameURL){}
 
+		Awesomium::ResourceResponse* WebResources::onRequest(Awesomium::WebView *caller, Awesomium::ResourceRequest *request){
+			std::string url = request->getURL();
+			unsigned int last_pos = url.find_last_of('/');
+			std::string path = url.substr(last_pos + 1);
+
+			if ((callbacks.count(path)) > 0){
+				std::cout << "Request Path: " << path << std::endl;
+				Awesomium::ResourceResponse *response = new Awesomium::ResourceResponse();
+				Awesomium::JSArguments args;
+				return callbacks[path].Call(args, response);
+			}else{
+				return Awesomium::ResourceResponse::Create(StringToWString(request->getURL()));
+			}
+		}
+                void WebResources::onResponse(Awesomium::WebView *caller, const std::string &url, int statusCode, const Awesomium::ResourceResponseMetrics &metrics){
+			//
+		}
+
 		WebBuffer::WebBuffer(int _width, int _height, Awesomium::WebView *_web_view){
 			width = _width;
 			height = _height;
@@ -55,7 +88,10 @@ namespace EG{
 			web_view->setTransparent(true);
 			listener = new WebListener();
 			web_view->setListener(listener);
+			resources = new WebResources();
+			web_view->setResourceInterceptor(resources);
 			bpp = 4;
+			web_view->createObject(L"backend");
 
 			rowspan = width * bpp;
 			buffer = new unsigned char[rowspan * height];
@@ -118,10 +154,9 @@ namespace EG{
 			key_event.type = Awesomium::WebKeyboardEvent::TYPE_KEY_UP;
 			web_view->injectKeyboardEvent(key_event);
 		}
-		void WebBuffer::AddCallback(std::wstring callback_object_name, std::wstring callback_name, ListenerCallback *callback){
-			web_view->createObject(callback_object_name);
-			web_view->setObjectCallback(callback_object_name, callback_name);
-			listener->AddCallback(callback_object_name, callback_name, callback);
+		void WebBuffer::AddCallback(std::wstring callback_name, ListenerCallback *callback){
+			web_view->setObjectCallback(L"backend", callback_name);
+			listener->AddCallback(L"backend", callback_name, callback);
 		}
 
 		GUI::GUI(std::string base_directory, std::string url){
@@ -167,8 +202,8 @@ namespace EG{
 		void GUI::InjectKeyPress(int key_press){
 			web_buffer->InjectKeyPress(key_press);
 		}
-		void GUI::AddCallback(std::wstring callback_object_name, std::wstring callback_name, ListenerCallback *callback){
-			web_buffer->AddCallback(callback_object_name, callback_name, callback);
+		void GUI::AddCallback(std::wstring callback_name, ListenerCallback *callback){
+			web_buffer->AddCallback(callback_name, callback);
 		}
 	}
 }

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 #include <Awesomium/WebCore.h>
 #include "../Math/Math.h"
@@ -12,12 +13,15 @@
 
 namespace EG{
 	namespace GUI{
+		std::wstring StringToWString(const std::string& s);
+		std::string WStringToString(const std::wstring& s);
+
 		class ListenerCallback{
 			public:
 				ListenerCallback(void){}
 				~ListenerCallback(void){}
 
-				virtual void Call(const Awesomium::JSArguments &args) = 0;
+				virtual void Call(const Awesomium::JSArguments &args, Awesomium::JSValue &response) = 0;
 		};
 
 		class WebListener : public Awesomium::WebViewListener{
@@ -44,7 +48,7 @@ namespace EG{
 				virtual void onDOMReady(Awesomium::WebView* caller);
 				virtual void onRequestFileChooser(Awesomium::WebView* caller, bool selectMultipleFiles, const std::wstring& title, const std::wstring& defaultPath);
 				virtual void onGetScrollData(Awesomium::WebView* caller, int contentWidth, int contentHeight, int preferredWidth, int scrollX, int scrollY);
-				virtual void onJavascriptConsoleMessage (Awesomium::WebView *caller, const std::wstring &message, int lineNumber, const std::wstring &source);
+				virtual void onJavascriptConsoleMessage(Awesomium::WebView *caller, const std::wstring &message, int lineNumber, const std::wstring &source);
 				virtual void onGetFindResults(Awesomium::WebView* caller, int requestID, int numMatches, const Awesomium::Rect& selection, int curMatch, bool finalUpdate);
 				virtual void onUpdateIME(Awesomium::WebView* caller, Awesomium::IMEState imeState, const Awesomium::Rect& caretRect);
 				virtual void onShowContextMenu(Awesomium::WebView* caller, int mouseX, int mouseY, Awesomium::MediaType type, int mediaState, const std::string& linkURL, const std::string& srcURL, const std::string& pageURL, const std::string& frameURL, const std::wstring& selectionText, bool isEditable, int editFlags);
@@ -54,6 +58,23 @@ namespace EG{
 				virtual void onShowJavascriptDialog(Awesomium::WebView* caller, int requestID, int dialogFlags, const std::wstring& message, const std::wstring& defaultPrompt, const std::string& frameURL);
 			private:
 				std::map<std::wstring, std::map<std::wstring, ListenerCallback *> > callbacks;
+		};
+
+		class WebResourceResponse{
+			public:
+				WebResourceResponse(void){}
+				~WebResourceResponse(void){}
+				virtual void Call(Awesomium::JSArguments &args, Awesomium::ResourceResponse *response) = 0;
+		};
+
+		class WebResources : public Awesomium::ResourceInterceptor{
+			public:
+				WebResources(void){}
+				~WebResources(void){}
+				virtual Awesomium::ResourceResponse* onRequest(Awesomium::WebView *caller, Awesomium::ResourceRequest *request);
+				virtual void onResponse(Awesomium::WebView *caller, const std::string &url, int	statusCode, const Awesomium::ResourceResponseMetrics &metrics);
+			private:
+				std::map<std::string, WebResourceResponse *> callbacks;
 		};
 
 		class WebBuffer{
@@ -70,13 +91,14 @@ namespace EG{
 				void InjectMouseUp(Awesomium::MouseButton button);
 				void InjectKeyPress(Awesomium::WebKeyboardEvent keyboard_event);
 				void InjectKeyPress(int key_code);
-				void AddCallback(std::wstring callback_object_name, std::wstring callback_name, ListenerCallback *callback);
+				void AddCallback(std::wstring callback_name, ListenerCallback *callback);
 			private:
 				EG::Graphics::Texture *texture;
 				unsigned char *buffer;
 				int bpp, rowspan, width, height;
 				Awesomium::WebView *web_view;
 				WebListener *listener;
+				WebResources *resources;
 		};
 
 		class GUI{
@@ -93,7 +115,7 @@ namespace EG{
 				void Update(void);
 				void Render(void);
 				unsigned int GetTextureId(void);
-				void AddCallback(std::wstring callback_object_name, std::wstring callback_name, ListenerCallback *callback);
+				void AddCallback(std::wstring callback_name, ListenerCallback *callback);
 			private:
 				WebBuffer *web_buffer;
 				Awesomium::WebCore *web_core;
