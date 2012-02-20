@@ -9,7 +9,7 @@ namespace EG{
 	namespace Input{
 		typedef enum Key{
 			a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, one, two, three, four, five, six, seven, eight, nine, zero,
-			space, escape, up, down, left, right, back_space
+			space, escape, up, down, left, right, back_space, tab, del
 		} Key;
 
 		typedef enum Mouse{

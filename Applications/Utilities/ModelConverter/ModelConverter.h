@@ -17,6 +17,11 @@ class ModelConverter : public EG::Game::Game{
 		//EG::Media::ModelLoader *model;
 		//EG::Game::Object *model_object;
 };
+
+class LoadModelEventListener : public EG::GUI::ListenerCallback{
+	public:
+		virtual void Call(const Awesomium::JSArguments &args);
+};
 /*
 class LoadModelEventListener : public EG::Utility::EventListener{
 	public:

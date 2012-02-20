@@ -89,24 +89,37 @@ namespace EG{
 
 				std::vector<char> text = input->GetTextEntered();
 				std::vector<char>::iterator text_iter = text.begin();
+				if (input->IsKeyPressed(EG::Input::back_space)) {
+					gui->InjectKeyPress(Awesomium::KeyCodes::AK_BACK);
+				}
+				if (input->IsKeyPressed(EG::Input::del)){
+					gui->InjectKeyPress(Awesomium::KeyCodes::AK_DELETE);
+				}
+				if (input->IsKeyPressed(EG::Input::tab)){
+					gui->InjectKeyPress(Awesomium::KeyCodes::AK_TAB);
+				}
+				if (input->IsKeyPressed(EG::Input::left)){
+					gui->InjectKeyPress(Awesomium::KeyCodes::AK_LEFT);
+				}
+                                if (input->IsKeyPressed(EG::Input::right)){
+                                        gui->InjectKeyPress(Awesomium::KeyCodes::AK_RIGHT);
+                                }
+                                if (input->IsKeyPressed(EG::Input::up)){
+                                        gui->InjectKeyPress(Awesomium::KeyCodes::AK_UP);
+                                }
+                                if (input->IsKeyPressed(EG::Input::down)){
+                                        gui->InjectKeyPress(Awesomium::KeyCodes::AK_DOWN);
+                                }
 				while (text_iter != text.end()){
 					char c = (*text_iter);
 					int cint = int(c);
-					if (cint == 8 || cint == 127){
-						gui->InjectKeyPress(Awesomium::KeyCodes::AK_BACK);
-					}else if (cint == 9){
-						gui->InjectKeyPress(Awesomium::KeyCodes::AK_TAB);
-					}else if (cint == 27){
-						gui->InjectKeyPress(Awesomium::KeyCodes::AK_ESCAPE);
-					}else{
-						Awesomium::WebKeyboardEvent key_event;
-						key_event.text[0] = c;
-						key_event.unmodifiedText[0] = c;
-						key_event.type = Awesomium::WebKeyboardEvent::TYPE_CHAR;
-						key_event.virtualKeyCode = c;
-						key_event.nativeKeyCode = c;
-						gui->InjectKeyPress(key_event);
-					}
+					Awesomium::WebKeyboardEvent key_event;
+					key_event.text[0] = c;
+					key_event.unmodifiedText[0] = c;
+					key_event.type = Awesomium::WebKeyboardEvent::TYPE_CHAR;
+					key_event.virtualKeyCode = c;
+					key_event.nativeKeyCode = c;
+					gui->InjectKeyPress(key_event);
 					++text_iter;
 				}
 

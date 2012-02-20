@@ -10,7 +10,7 @@ namespace EG{
 			//
 		}
 		void WebListener::onJavascriptConsoleMessage (Awesomium::WebView *caller, const std::wstring &message, int lineNumber, const std::wstring &source){
-			std::cout << message.c_str() << std::endl;
+			std::wcout << message << std::endl;
 		}
 		void WebListener::onCallback(Awesomium::WebView* caller, const std::wstring& objectName, const std::wstring& callbackName, const Awesomium::JSArguments& args){
 			if (callbacks.count(objectName) > 0){
@@ -20,7 +20,8 @@ namespace EG{
 			}
 		}
 		void WebListener::AddCallback(std::wstring callback_object_name, std::wstring callback_name, ListenerCallback *callback){
-			callbacks.at(callback_object_name).insert(std::pair<std::wstring, ListenerCallback *>(callback_name, callback));
+			callbacks[callback_object_name][callback_name] = callback;
+			//callbacks.at(callback_object_name).insert(std::pair<std::wstring, ListenerCallback *>(callback_name, callback));
 		}
 		void WebListener::onBeginNavigation(Awesomium::WebView* caller, const std::string& url, const std::wstring& frameName){}
 		void WebListener::onBeginLoading(Awesomium::WebView* caller, const std::string& url, const std::wstring& frameName, int statusCode, const std::wstring& mimeType){}
