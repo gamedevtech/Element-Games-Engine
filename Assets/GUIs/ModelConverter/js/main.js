@@ -1,5 +1,6 @@
-head.js("js/external/jquery-1.7.1.min.js", "js/external/jquery-ui-1.8.17.custom.min.js", "js/external/underscore-min.js", "js/external/backbone-min.js",
+head.js("js/jquery-1.7.1.min.js", "js/jquery-ui-1.8.17.custom.min.js", "js/underscore-min.js", "js/backbone-min.js",
 function() {
-	$("body").html("Some Different Value");
+	$("#load_model_dialog").dialog();
+    console.log("TestLog!");
 });
 

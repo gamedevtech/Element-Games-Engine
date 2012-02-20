@@ -1,11 +1,18 @@
 <html>
     <head>
         <title>Model Converter</title>
-	<script src="js/external/head.min.js" language="javascript" type="text/javascript"></script>
-	<script src="js/main.js" language="javascript" type="text/javascript"></script>
-    <link href="css/main.css" rel="stylesheet" type="text/css">
+        <link type="text/css" href="css/dark-hive/jquery-ui-1.8.17.custom.css" rel="stylesheet" />
+        <link href="css/main.css" rel="stylesheet" type="text/css">
+        <script src="js/head.min.js" language="javascript" type="text/javascript"></script>
+        <script src="js/main.js" language="javascript" type="text/javascript"></script>
     </head>
     <body>
-        <div>Test Rendering</div>
+        <div id="load_model_dialog" title="Load Model">
+            <form>
+                File: <input type="text" id="filename" />
+                <br>
+                <button id="load">Load</button>
+            </form>
+        </div>
     </body>
 </html>
