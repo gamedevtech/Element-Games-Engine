@@ -18,9 +18,9 @@ class ModelConverter : public EG::Game::Game{
 		//EG::Game::Object *model_object;
 };
 
-class LoadModelEventListener : public EG::GUI::ListenerCallback{
+class LoadModelEventListener : public EG::GUI::WebResourceResponse{
 	public:
-		virtual void Call(const Awesomium::JSArguments &args, Awesomium::JSValue &response);
+		virtual std::string Call(std::map<std::string, std::string> args);
 };
 /*
 class LoadModelEventListener : public EG::Utility::EventListener{

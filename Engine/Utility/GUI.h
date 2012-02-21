@@ -64,15 +64,14 @@ namespace EG{
 			public:
 				WebResourceResponse(void){}
 				~WebResourceResponse(void){}
-				virtual void Call(Awesomium::JSArguments &args, Awesomium::ResourceResponse *response) = 0;
+				virtual std::string Call(std::map<std::string, std::string> args);
 		};
 
 		class WebResources : public Awesomium::ResourceInterceptor{
 			public:
-				WebResources(void){}
-				~WebResources(void){}
 				virtual Awesomium::ResourceResponse* onRequest(Awesomium::WebView *caller, Awesomium::ResourceRequest *request);
-				virtual void onResponse(Awesomium::WebView *caller, const std::string &url, int	statusCode, const Awesomium::ResourceResponseMetrics &metrics);
+				virtual void onResponse (Awesomium::WebView *caller, const std::string &url, int statusCode, const Awesomium::ResourceResponseMetrics &metrics);
+		                void AddResponseHandler(std::string url, WebResourceResponse *handler);
 			private:
 				std::map<std::string, WebResourceResponse *> callbacks;
 		};
@@ -92,6 +91,7 @@ namespace EG{
 				void InjectKeyPress(Awesomium::WebKeyboardEvent keyboard_event);
 				void InjectKeyPress(int key_code);
 				void AddCallback(std::wstring callback_name, ListenerCallback *callback);
+                void AddResponseHandler(std::string url, WebResourceResponse *handler);
 			private:
 				EG::Graphics::Texture *texture;
 				unsigned char *buffer;
@@ -116,6 +116,7 @@ namespace EG{
 				void Render(void);
 				unsigned int GetTextureId(void);
 				void AddCallback(std::wstring callback_name, ListenerCallback *callback);
+                void AddResponseHandler(std::string url, WebResourceResponse *handler);
 			private:
 				WebBuffer *web_buffer;
 				Awesomium::WebCore *web_core;

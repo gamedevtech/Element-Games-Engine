@@ -8,9 +8,8 @@
 #include "../../../Engine/Utility/StringMethods.h"
 #include "../../../Engine/Media/ObjectWriter.h"
 
-void LoadModelEventListener::Call(const Awesomium::JSArguments &args, Awesomium::JSValue &response){
-	response = 3.14159;
-	std::cout << "DONGLE" << std::endl;
+std::string LoadModelEventListener::Call(std::map<std::string, std::string> args){
+    return "{\"status\": true}";
 }
 
 ModelConverter::ModelConverter(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
@@ -18,7 +17,8 @@ ModelConverter::ModelConverter(EG::Utility::Window *_window, EG::Game::Scene *_s
 	//gui->ExecuteScript("window.location = 'http://slashdot.org';");
 	use_gui = true;
 	renderer->SetGUI(gui);
-	gui->AddCallback(L"LoadModel", new LoadModelEventListener());
+	//gui->AddCallback(L"LoadModel", new LoadModelEventListener());
+    gui->AddResponseHandler("load_model", new LoadModelEventListener());
 	/*LoadModelEventListener *load_model_event_listener = new LoadModelEventListener();
 	load_model_event_listener->model_loaded = false;
 	load_model_event_listener->scene = scene;

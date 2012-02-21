@@ -1,18 +1,19 @@
 #include "../GUI.h"
 #include "../../Graphics/GraphicsSubsystem.h"
+#include "../StringMethods.h"
 
 namespace EG{
 	namespace GUI{
 		std::wstring StringToWString(const std::string& s){
 			std::wstring temp(s.length(),L' ');
 			std::copy(s.begin(), s.end(), temp.begin());
-			return temp; 
+			return temp;
 		}
 
 		std::string WStringToString(const std::wstring& s){
 			std::string temp(s.length(), ' ');
 			std::copy(s.begin(), s.end(), temp.begin());
-			return temp; 
+			return temp;
 		}
 
 		WebListener::WebListener(void){
@@ -63,23 +64,49 @@ namespace EG{
 		void WebListener::onFinishResize(Awesomium::WebView* caller, int width, int height){}
 		void WebListener::onShowJavascriptDialog(Awesomium::WebView* caller, int requestID, int dialogFlags, const std::wstring& message, const std::wstring& defaultPrompt, const std::string& frameURL){}
 
+		std::string WebResourceResponse::Call(std::map<std::string, std::string> args){
+			return "";
+		}
+
 		Awesomium::ResourceResponse* WebResources::onRequest(Awesomium::WebView *caller, Awesomium::ResourceRequest *request){
 			std::string url = request->getURL();
-			unsigned int last_pos = url.find_last_of('/');
-			std::string path = url.substr(last_pos + 1);
+			//std::cout << "onRequest: " << url << std::endl;
+	                unsigned int fspos = url.find_last_of('/');
+            		unsigned int qpos = url.find_last_of('?');
+	                std::string path = "";
+	                std::string argstr = "";
+                        if (qpos < 0){
+        	                path = url.substr(fspos + 1);
+	                }else{
+		                path = url.substr(fspos + 1, qpos - fspos - 1);
+		                argstr = url.substr(qpos + 1);
+	                }
+	                std::vector<std::string> argtokens = EG::Utility::StringMethods::Tokenize(argstr, "&");
+	                std::vector<std::string>::iterator token_iter = argtokens.begin();
+	                std::map<std::string, std::string> args;
+	                while (token_iter != argtokens.end()){
+		                std::string token = *token_iter;
+		                unsigned int epos = token.find_first_of('=');
+		                std::string name = token.substr(0, epos);
+		                std::string value = token.substr(epos + 1);
+		                args[name] = value;
+		                ++token_iter;
+	                }
 
 			if ((callbacks.count(path)) > 0){
-				std::cout << "Request Path: " << path << std::endl;
-				Awesomium::ResourceResponse *response = new Awesomium::ResourceResponse();
-				Awesomium::JSArguments args;
-				return callbacks[path].Call(args, response);
-			}else{
-				return Awesomium::ResourceResponse::Create(StringToWString(request->getURL()));
+				std::string response = callbacks[path]->Call(args) + '\0';
+				unsigned char *text = reinterpret_cast<unsigned char *>(const_cast<char *>(response.c_str()));
+    				Awesomium::ResourceResponse *resource_response = Awesomium::ResourceResponse::Create(response.size(), text, "application/json");
+                                return resource_response;
 			}
+			return NULL;
 		}
-                void WebResources::onResponse(Awesomium::WebView *caller, const std::string &url, int statusCode, const Awesomium::ResourceResponseMetrics &metrics){
-			//
+		void WebResources::onResponse(Awesomium::WebView *caller, const std::string &url, int statusCode, const Awesomium::ResourceResponseMetrics &metrics){
+			//std::cout << "onResponse: " << url << std::endl;
 		}
+	        void WebResources::AddResponseHandler(std::string url, WebResourceResponse *handler){
+	                callbacks[url] = handler;
+	        }
 
 		WebBuffer::WebBuffer(int _width, int _height, Awesomium::WebView *_web_view){
 			width = _width;
@@ -158,6 +185,9 @@ namespace EG{
 			web_view->setObjectCallback(L"backend", callback_name);
 			listener->AddCallback(L"backend", callback_name, callback);
 		}
+		void WebBuffer::AddResponseHandler(std::string url, WebResourceResponse *handler){
+            resources->AddResponseHandler(url, handler);
+        }
 
 		GUI::GUI(std::string base_directory, std::string url){
 			Awesomium::WebCoreConfig conf;
@@ -169,7 +199,6 @@ namespace EG{
 			web_buffer = new WebBuffer(graphics->GetViewportWidth(), graphics->GetViewportHeight(), web_view);
 			web_core->setBaseDirectory(base_directory);
 			web_buffer->Load(url);
-			std::cout << "GUI: " << url << std::endl;
 		}
 		GUI::~GUI(void){
 			delete web_buffer;
@@ -205,5 +234,8 @@ namespace EG{
 		void GUI::AddCallback(std::wstring callback_name, ListenerCallback *callback){
 			web_buffer->AddCallback(callback_name, callback);
 		}
+        void GUI::AddResponseHandler(std::string url, WebResourceResponse *handler){
+            web_buffer->AddResponseHandler(url, handler);
+        }
 	}
 }

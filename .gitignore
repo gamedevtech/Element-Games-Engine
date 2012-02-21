@@ -11,3 +11,7 @@ generated*.png
 element_games_sandbox
 element_games_model_converter
 *.kde*
+*mat_shipNORMAL*
+AwesomiumProcess
+chrome.pak
+
