@@ -101,15 +101,15 @@ namespace EG{
 				if (input->IsKeyPressed(EG::Input::left)){
 					gui->InjectKeyPress(Awesomium::KeyCodes::AK_LEFT);
 				}
-                                if (input->IsKeyPressed(EG::Input::right)){
-                                        gui->InjectKeyPress(Awesomium::KeyCodes::AK_RIGHT);
-                                }
-                                if (input->IsKeyPressed(EG::Input::up)){
-                                        gui->InjectKeyPress(Awesomium::KeyCodes::AK_UP);
-                                }
-                                if (input->IsKeyPressed(EG::Input::down)){
-                                        gui->InjectKeyPress(Awesomium::KeyCodes::AK_DOWN);
-                                }
+				if (input->IsKeyPressed(EG::Input::right)){
+						gui->InjectKeyPress(Awesomium::KeyCodes::AK_RIGHT);
+				}
+				if (input->IsKeyPressed(EG::Input::up)){
+						gui->InjectKeyPress(Awesomium::KeyCodes::AK_UP);
+				}
+				if (input->IsKeyPressed(EG::Input::down)){
+						gui->InjectKeyPress(Awesomium::KeyCodes::AK_DOWN);
+				}
 				while (text_iter != text.end()){
 					char c = (*text_iter);
 					int cint = int(c);
