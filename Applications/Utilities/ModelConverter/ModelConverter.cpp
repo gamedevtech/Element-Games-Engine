@@ -9,7 +9,17 @@
 #include "../../../Engine/Media/ObjectWriter.h"
 
 std::string LoadModelEventListener::Call(std::map<std::string, std::string> args){
-    return "{\"status\": true}";
+	std::string filename = args["filename"];
+	filename = EG::Utility::StringMethods::SearchAndReplace(filename, "%2F", "/");
+	model = new EG::Media::ModelLoader(scene);
+	model_loaded = model->Load(filename);
+	if (model_loaded){
+		std::cout << "Model Loaded: " << filename << std::endl;
+		return "{\"status\": true}";
+	}else{
+		std::cout << "Model Load Failed!: " << filename << std::endl;
+		return "{\"status\": false}";
+	}
 }
 
 ModelConverter::ModelConverter(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
@@ -18,7 +28,10 @@ ModelConverter::ModelConverter(EG::Utility::Window *_window, EG::Game::Scene *_s
 	use_gui = true;
 	renderer->SetGUI(gui);
 	//gui->AddCallback(L"LoadModel", new LoadModelEventListener());
-    gui->AddResponseHandler("load_model", new LoadModelEventListener());
+	LoadModelEventListener *listener = new LoadModelEventListener();
+	listener->scene = scene;
+	listener->model_loaded = false;
+    gui->AddResponseHandler("load_model", listener);
 	/*LoadModelEventListener *load_model_event_listener = new LoadModelEventListener();
 	load_model_event_listener->model_loaded = false;
 	load_model_event_listener->scene = scene;

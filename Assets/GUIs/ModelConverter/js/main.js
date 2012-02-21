@@ -3,7 +3,9 @@ function() {
     var w = window;
     $("#load_model_dialog").dialog();
     $("#load_model_dialog").find("#load").click(function() {
-        $.get("load_model?filename=" + $("#filename").val(), function(json_raw){
+        var filename = encodeURIComponent($("#filename").val());
+        console.log(filename);
+        $.get("load_model?filename=" + filename, function(json_raw){
             var data = JSON.parse(json_raw.toString());
             if (data['status'] === true) {
                 console.log("RD True!");
