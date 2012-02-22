@@ -333,6 +333,7 @@ int main(int argc, char **argv){
     EG::Dynamics::RigidBody *rigid_body = new EG::Dynamics::RigidBody(collision_shape, ship_trans, glm::vec3(0.02f, 0.02f, 0.02f));
     rigid_body->SetCollisionFiltering(COLLIDES_OBJECT, COLLIDES_OBJECT);
     read_object->AddAttribute(new EG::Game::ObjectAttributeControlRigidBody(rigid_body));
+    std::cout << "Loaded Model: " << read_object->GetObjectName() << std::endl;
     // END TEST
 
     EG::Graphics::Camera *main_camera = new EG::Graphics::Camera(45.0f, glm::ivec2(graphics->GetViewportWidth(), graphics->GetViewportHeight()), glm::vec2(0.1f, 100.0f));

@@ -119,23 +119,25 @@ void Sandbox::Update(void){
     }
 
     EG::Game::Object *ship = scene->GetObjectManager()->GetObject("Assets/Models/spaceship.3ds");
-    std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
-    std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
-    glm::vec4 pos = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-    while (attr_iter != attrs->end()){
-        EG::Game::ObjectAttributeBasicTransformation *trans_attr = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(*attr_iter);
-        glm::mat4 offset = glm::gtx::transform::translate(3.0f, 1.5f, 0.0f);
-        glm::mat4 trans = offset * trans_attr->GetTransformation();
-        pos = trans * pos;
-        ++attr_iter;
-    }
-    attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_CAMERA);
-    attr_iter = attrs->begin();
-    while (attr_iter != attrs->end()){
-        EG::Game::ObjectAttributeRenderingCamera *cam_attr = static_cast<EG::Game::ObjectAttributeRenderingCamera *>(*attr_iter);
-        EG::Graphics::Camera *c = cam_attr->GetCamera();
-        c->SetPosition(glm::vec3(pos.x, pos.y, pos.z));
-        ++attr_iter;
+    if (ship){
+        std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
+        std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+        glm::vec4 pos = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+        while (attr_iter != attrs->end()){
+            EG::Game::ObjectAttributeBasicTransformation *trans_attr = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(*attr_iter);
+            glm::mat4 offset = glm::gtx::transform::translate(3.0f, 1.5f, 0.0f);
+            glm::mat4 trans = offset * trans_attr->GetTransformation();
+            pos = trans * pos;
+            ++attr_iter;
+        }
+        attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_CAMERA);
+        attr_iter = attrs->begin();
+        while (attr_iter != attrs->end()){
+            EG::Game::ObjectAttributeRenderingCamera *cam_attr = static_cast<EG::Game::ObjectAttributeRenderingCamera *>(*attr_iter);
+            EG::Graphics::Camera *c = cam_attr->GetCamera();
+            c->SetPosition(glm::vec3(pos.x, pos.y, pos.z));
+            ++attr_iter;
+        }
     }
 
     physics->Update(time->GetFrameTime());

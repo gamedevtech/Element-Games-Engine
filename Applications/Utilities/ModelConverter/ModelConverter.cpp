@@ -135,6 +135,7 @@ std::string SetDecalCallback::Call(std::map<std::string, std::string> args){
 	if (object){
 		std::string new_texture_path = args["decal"];
 		new_texture_path = EG::Utility::StringMethods::SearchAndReplace(new_texture_path, "%2F", "/");
+                new_texture_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(new_texture_path);
 
 	        if (!(scene->GetTextureManager()->HasTexture(new_texture_path))){
 	                EG::Graphics::Texture *texture = new EG::Graphics::Texture(new_texture_path);
@@ -160,6 +161,7 @@ std::string SetNormalCallback::Call(std::map<std::string, std::string> args){
         if (object){
                 std::string new_texture_path = args["normal"];
                 new_texture_path = EG::Utility::StringMethods::SearchAndReplace(new_texture_path, "%2F", "/");
+                new_texture_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(new_texture_path);
 
                 if (!(scene->GetTextureManager()->HasTexture(new_texture_path))){
                         EG::Graphics::Texture *texture = new EG::Graphics::Texture(new_texture_path);
@@ -185,6 +187,7 @@ std::string SetHeightCallback::Call(std::map<std::string, std::string> args){
         if (object){
                 std::string new_texture_path = args["height"];
                 new_texture_path = EG::Utility::StringMethods::SearchAndReplace(new_texture_path, "%2F", "/");
+                new_texture_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(new_texture_path);
 
                 if (!(scene->GetTextureManager()->HasTexture(new_texture_path))){
                         EG::Graphics::Texture *texture = new EG::Graphics::Texture(new_texture_path);
@@ -210,6 +213,7 @@ std::string SetSpecularCallback::Call(std::map<std::string, std::string> args){
         if (object){
                 std::string new_texture_path = args["specular"];
                 new_texture_path = EG::Utility::StringMethods::SearchAndReplace(new_texture_path, "%2F", "/");
+		new_texture_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(new_texture_path);
 
                 if (!(scene->GetTextureManager()->HasTexture(new_texture_path))){
                         EG::Graphics::Texture *texture = new EG::Graphics::Texture(new_texture_path);
@@ -235,7 +239,7 @@ std::string SaveCallback::Call(std::map<std::string, std::string> args){
 	if (object && scene){
 		std::string file_path = args["output_path"];
 		file_path = EG::Utility::StringMethods::SearchAndReplace(file_path, "%2F", "/");
-        	//file_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(file_path);
+        	file_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(file_path);
 
 	        EG::Media::ObjectWriter *writer = new EG::Media::ObjectWriter(object, scene, file_path, "Assets/Textures/", "Assets/Models/");
 	        writer->Write(file_path);
