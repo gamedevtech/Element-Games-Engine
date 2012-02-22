@@ -11,7 +11,7 @@ namespace EG{
 			//
 		}
 		void WebListener::onJavascriptConsoleMessage (Awesomium::WebView *caller, const std::wstring &message, int lineNumber, const std::wstring &source){
-			std::wcout << message << std::endl;
+			std::wcout << L"(" << lineNumber << L": " << source << ") " << message << std::endl;
 		}
 		void WebListener::onCallback(Awesomium::WebView* caller, const std::wstring& objectName, const std::wstring& callbackName, const Awesomium::JSArguments& args){
 			//http://forums.wolfire.com/viewtopic.php?f=2&t=6658
