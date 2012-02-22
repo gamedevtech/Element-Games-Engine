@@ -7,6 +7,7 @@
 #include "../../../Engine/Game/ObjectRenderingAttribute.h"
 #include "../../../Engine/Utility/StringMethods.h"
 #include "../../../Engine/Media/ObjectWriter.h"
+#include <complex>
 
 std::string LoadModelEventListener::Call(std::map<std::string, std::string> args){
 	std::string filename = args["filename"];
@@ -14,10 +15,50 @@ std::string LoadModelEventListener::Call(std::map<std::string, std::string> args
 	model = new EG::Media::ModelLoader(scene);
 	model_loaded = model->Load(filename);
 	if (model_loaded){
-		std::cout << "Model Loaded: " << filename << std::endl;
-		return "{\"status\": true}";
+		EG::Game::Object *model_object = new EG::Game::Object(filename);
+		model_object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 2.0f, 0.0f)), glm::vec3(0.02f, 0.02f, 0.02f))));
+		model->GetMaterial(0)->SetLit(true);
+		model->GetMaterial(0)->SetCastsShadows(true);
+		model_object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(model->GetMesh(0), model->GetMaterial(0)));
+		scene->GetObjectManager()->AddObject(model_object);
+		std::string out = "{\"status\": true";
+
+		if (model->GetMaterial(0)->GetLit()){
+			out += ", \"lit\": true";
+		} else {
+			out += ", \"lit\": false";
+		}
+		if (model->GetMaterial(0)->GetCastsShadows()){
+			out += ", \"shadows\": true";
+		} else {
+			out += ", \"shadows\": false";
+		}
+		if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL)){
+			std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL))->GetFilePath();
+			out += ", \"decal\": \"" + file_path + "\"";
+		} else {
+			out += ", \"decal\": \"\"";
+		}
+		if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL)){
+			std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL))->GetFilePath();
+			out += ", \"normal\": \"" + file_path + "\"";
+		} else {
+			out += ", \"normal\": \"\"";
+		}
+		if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT)){
+			std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT))->GetFilePath();
+			out += ", \"height\": \"" + file_path + "\"";
+		} else {
+			out += ", \"height\": \"\"";
+		}
+		if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR)){
+			std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR))->GetFilePath();
+			out += ", \"specular\": \"" + file_path + "\"}";
+		} else {
+			out += ", \"specular\": \"\"}";
+		}
+		return out;
 	}else{
-		std::cout << "Model Load Failed!: " << filename << std::endl;
 		return "{\"status\": false}";
 	}
 }

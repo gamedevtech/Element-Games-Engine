@@ -13,9 +13,6 @@
 
 namespace EG{
 	namespace GUI{
-		std::wstring StringToWString(const std::string& s);
-		std::string WStringToString(const std::wstring& s);
-
 		class ListenerCallback{
 			public:
 				ListenerCallback(void){}
