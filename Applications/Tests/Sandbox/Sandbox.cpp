@@ -44,7 +44,7 @@ void Sandbox::Update(void){
         scene->GetCurrentCamera()->Move(glm::vec3(0.0f, -movement_speed, 0.0f));
     }
     if (input->IsKeyDown(EG::Input::i)){
-        EG::Game::Object *ship = scene->GetObjectManager()->GetObject("Assets/Models/spaceship.3ds");
+        EG::Game::Object *ship = scene->GetObjectManager()->GetObject("test_model.ego");
         std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY);
         std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
         while (attr_iter != attrs->end()){
@@ -55,7 +55,7 @@ void Sandbox::Update(void){
         }
     }
     if (input->IsKeyDown(EG::Input::k)){
-        EG::Game::Object *ship = scene->GetObjectManager()->GetObject("Assets/Models/spaceship.3ds");
+        EG::Game::Object *ship = scene->GetObjectManager()->GetObject("test_model.ego");
         std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY);
         std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
         while (attr_iter != attrs->end()){
@@ -66,7 +66,7 @@ void Sandbox::Update(void){
         }
     }
     if (input->IsKeyDown(EG::Input::u)){
-        EG::Game::Object *ship = scene->GetObjectManager()->GetObject("Assets/Models/spaceship.3ds");
+        EG::Game::Object *ship = scene->GetObjectManager()->GetObject("test_model.ego");
         std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY);
         std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
         while (attr_iter != attrs->end()){
@@ -77,7 +77,7 @@ void Sandbox::Update(void){
         }
     }
     if (input->IsKeyDown(EG::Input::j)){
-        EG::Game::Object *ship = scene->GetObjectManager()->GetObject("Assets/Models/spaceship.3ds");
+        EG::Game::Object *ship = scene->GetObjectManager()->GetObject("test_model.ego");
         std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY);
         std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
         while (attr_iter != attrs->end()){
@@ -118,7 +118,7 @@ void Sandbox::Update(void){
         }
     }
 
-    EG::Game::Object *ship = scene->GetObjectManager()->GetObject("Assets/Models/spaceship.3ds");
+    EG::Game::Object *ship = scene->GetObjectManager()->GetObject("test_model.ego");
     if (ship){
         std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
         std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
