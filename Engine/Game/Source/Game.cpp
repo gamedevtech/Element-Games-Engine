@@ -89,7 +89,7 @@ namespace EG{
                 std::vector<char> text = input->GetTextEntered();
                 std::vector<char>::iterator text_iter = text.begin();
                 if (input->IsKeyPressed(EG::Input::back_space)) {
-                    //gui->InjectKeyPress(Awesomium::KeyCodes::AK_BACK);
+                    gui->InjectKeyPress(char(8));
                 }
                 if (input->IsKeyPressed(EG::Input::del)){
                     //gui->InjectKeyPress(Awesomium::KeyCodes::AK_DELETE);
