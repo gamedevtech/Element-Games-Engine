@@ -110,21 +110,21 @@ namespace EG{
 		}
 
 		void GUI::InjectKeyPress(int key_code){
-			/*Awesomium::WebKeyboardEvent key_event;
-			char* buf = new char[20];
+			/*char* buf = new char[20];
 			key_event.virtualKeyCode = key_code;
 			Awesomium::getKeyIdentifierFromVirtualKeyCode(key_event.virtualKeyCode, &buf);
 			strcpy(key_event.keyIdentifier, buf);
-			delete[] buf;
-			key_event.modifiers = 0;
-			key_event.nativeKeyCode = 0;
-			key_event.type = Awesomium::WebKeyboardEvent::TYPE_KEY_DOWN;
-			web_view->injectKeyboardEvent(key_event);
-			key_event.type = Awesomium::WebKeyboardEvent::TYPE_KEY_UP;
-			web_view->injectKeyboardEvent(key_event);*/
+			delete[] buf;*/
 			awe_webkeyboardevent key_event;
-			char *buf = new char[20];
-			//
+			key_event.type = AWE_WKT_KEYDOWN;
+			//key_event.text[0] = key_code;
+			key_event.modifiers = 0;
+			key_event.native_key_code = 0;
+			key_event.virtual_key_code = key_code;
+			key_event.is_system_key = false;
+			awe_webview_inject_keyboard_event(web_view, key_event);
+			key_event.type = AWE_WKT_KEYUP;
+			awe_webview_inject_keyboard_event(web_view, key_event);
 		}
 
 		awe_resource_response *GUI::ResourceInterceptor(awe_webview *caller, awe_resource_request *request){
