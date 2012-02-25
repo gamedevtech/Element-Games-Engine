@@ -9,21 +9,21 @@
 #include "Object.h"
 
 namespace EG{
-	namespace Game{
-		class ObjectManager{
-		public:
-			ObjectManager(void);
-			~ObjectManager(void);
+    namespace Game{
+        class ObjectManager{
+        public:
+            ObjectManager(void);
+            ~ObjectManager(void);
 
-			bool AddObject(EG::Game::Object *object);
-			EG::Game::Object *GetObject(std::string object_name);
-			EG::Game::Object *GetObject(unsigned int object_id);
-			EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *GetObjects(void);
-		private:
-			EG::Utility::UnsignedIntDictionary<EG::Game::Object *> objects_by_id;
-			EG::Utility::StringDictionary<EG::Game::Object *> objects_by_name;
-		};
-	}
+            bool AddObject(EG::Game::Object *object);
+            EG::Game::Object *GetObjectByName(std::string object_name);
+            EG::Game::Object *GetObjectById(unsigned int object_id);
+            EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *GetObjects(void);
+        private:
+            EG::Utility::UnsignedIntDictionary<EG::Game::Object *> objects_by_id;
+            EG::Utility::StringDictionary<EG::Game::Object *> objects_by_name;
+        };
+    }
 }
 
 #endif

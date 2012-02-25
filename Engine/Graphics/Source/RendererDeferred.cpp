@@ -548,14 +548,14 @@ namespace EG{
             campos.precision(3);
             campos << camera->GetPosition().x << ", " << camera->GetPosition().y << ", " << camera->GetPosition().z;
             campos.flush();
-            font_manager->DrawText(campos.str());
+            font_manager->Draw(campos.str());
 
             shaders->SetMatrix4("model_matrix", glm::gtx::transform::translate(glm::vec3(10.0f, 24.0f, 0.0f)));
             std::stringstream fps;
             fps.precision(3);
             fps << time->GetFPS();
             fps.flush();
-            font_manager->DrawText(fps.str());
+            font_manager->Draw(fps.str());
 
             shaders->Unbind();
 
