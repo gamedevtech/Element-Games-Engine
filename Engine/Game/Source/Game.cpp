@@ -112,13 +112,7 @@ namespace EG{
 				while (text_iter != text.end()){
 					char c = (*text_iter);
 					int cint = int(c);
-					/*Awesomium::WebKeyboardEvent key_event;
-					key_event.text[0] = c;
-					key_event.unmodifiedText[0] = c;
-					key_event.type = Awesomium::WebKeyboardEvent::TYPE_CHAR;
-					key_event.virtualKeyCode = c;
-					key_event.nativeKeyCode = c;
-					gui->InjectKeyPress(key_event);*/
+					gui->InjectKeyPress(cint);
 					++text_iter;
 				}
 

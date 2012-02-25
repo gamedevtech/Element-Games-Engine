@@ -42,8 +42,7 @@ namespace EG{
 				void InjectMouseMove(unsigned int x, unsigned int y);
 				void InjectMouseDown(awe_mousebutton button);
 				void InjectMouseUp(awe_mousebutton button);
-				void InjectKeyPress(awe_webkeyboardevent keyboard_event);
-				void InjectKeyPress(int key_code);
+				void InjectKeyPress(char key_code);
 				void AddResponseHandler(std::string url, WebResourceResponse *handler);
 				awe_resource_response *ResourceInterceptor(awe_webview *caller, awe_resource_request *request);
 

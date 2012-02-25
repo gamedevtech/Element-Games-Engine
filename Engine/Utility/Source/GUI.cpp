@@ -105,25 +105,14 @@ namespace EG{
 			awe_webview_inject_mouse_up(web_view, button);
 		}
 
-		void GUI::InjectKeyPress(awe_webkeyboardevent keyboard_event){
-			awe_webview_inject_keyboard_event(web_view, keyboard_event);
-		}
-
-		void GUI::InjectKeyPress(int key_code){
-			/*char* buf = new char[20];
-			key_event.virtualKeyCode = key_code;
-			Awesomium::getKeyIdentifierFromVirtualKeyCode(key_event.virtualKeyCode, &buf);
-			strcpy(key_event.keyIdentifier, buf);
-			delete[] buf;*/
+		void GUI::InjectKeyPress(char key_code){
+			std::cout << "InjectKeyPress: " << key_code << std::endl;
 			awe_webkeyboardevent key_event;
-			key_event.type = AWE_WKT_KEYDOWN;
-			//key_event.text[0] = key_code;
-			key_event.modifiers = 0;
-			key_event.native_key_code = 0;
+			key_event.text[0] = key_code;
+			key_event.unmodified_text[0] = key_code;
+			key_event.type = AWE_WKT_CHAR;
 			key_event.virtual_key_code = key_code;
-			key_event.is_system_key = false;
-			awe_webview_inject_keyboard_event(web_view, key_event);
-			key_event.type = AWE_WKT_KEYUP;
+			key_event.native_key_code = key_code;
 			awe_webview_inject_keyboard_event(web_view, key_event);
 		}
 
