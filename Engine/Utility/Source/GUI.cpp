@@ -117,11 +117,19 @@ namespace EG{
             key_event.text[1] = wkey_codes[1];
             key_event.unmodified_text[0] = wkey_codes[0];
             key_event.unmodified_text[1] = wkey_codes[1];
-            key_event.type = AWE_WKT_CHAR;
-            key_event.is_system_key = false;
             key_event.modifiers = 0;
+            if (key_code == '\b' || key_code == int(127)){
+                key_event.type = AWE_WKT_KEYDOWN;
+                key_event.is_system_key = false;
+                awe_webview_inject_keyboard_event(web_view, key_event);
+                key_event.type = AWE_WKT_KEYUP;
+                awe_webview_inject_keyboard_event(web_view, key_event);
+            }else{
+                key_event.type = AWE_WKT_CHAR;
+                key_event.is_system_key = false;
+                awe_webview_inject_keyboard_event(web_view, key_event);
+            }
             awe_string_destroy(awe_key_codes);
-            awe_webview_inject_keyboard_event(web_view, key_event);
         }
 
         awe_resource_response *GUI::ResourceInterceptor(awe_webview *caller, awe_resource_request *request){

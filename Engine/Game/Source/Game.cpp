@@ -89,13 +89,14 @@ namespace EG{
                 std::vector<char> text = input->GetTextEntered();
                 std::vector<char>::iterator text_iter = text.begin();
                 if (input->IsKeyPressed(EG::Input::back_space)) {
-                    gui->InjectKeyPress(char(8));
+                    gui->InjectKeyPress('\b');
+                    std::cout << "Backspace" << std::endl;
                 }
                 if (input->IsKeyPressed(EG::Input::del)){
-                    //gui->InjectKeyPress(Awesomium::KeyCodes::AK_DELETE);
+                    gui->InjectKeyPress(char(127));
                 }
                 if (input->IsKeyPressed(EG::Input::tab)){
-                    //gui->InjectKeyPress(Awesomium::KeyCodes::AK_TAB);
+                    gui->InjectKeyPress('\t');
                 }
                 if (input->IsKeyPressed(EG::Input::left)){
                     //gui->InjectKeyPress(Awesomium::KeyCodes::AK_LEFT);
