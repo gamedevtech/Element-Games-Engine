@@ -21,7 +21,6 @@ class LoadModelEventListener : public EG::GUI::WebResourceResponse{
 		EG::Game::Scene *scene;
 		EG::Media::ModelLoader *model;
 		EG::Game::Object *model_object;
-		EG::GUI::GUI *gui;
 };
 
 class SetLitCallback : public EG::GUI::WebResourceResponse{
@@ -43,22 +42,22 @@ class SetDecalCallback : public EG::GUI::WebResourceResponse{
 		EG::Game::Scene *scene;
 };
 class SetNormalCallback : public EG::GUI::WebResourceResponse{
-        public:
-                virtual std::string Call(std::map<std::string, std::string> args);
-                EG::Game::Object *object;
-                EG::Game::Scene *scene;
+	public:
+		virtual std::string Call(std::map<std::string, std::string> args);
+		EG::Game::Object *object;
+		EG::Game::Scene *scene;
 };
 class SetHeightCallback : public EG::GUI::WebResourceResponse{
-        public:
-                virtual std::string Call(std::map<std::string, std::string> args);
-                EG::Game::Object *object;
-                EG::Game::Scene *scene;
+	public:
+		virtual std::string Call(std::map<std::string, std::string> args);
+		EG::Game::Object *object;
+		EG::Game::Scene *scene;
 };
 class SetSpecularCallback : public EG::GUI::WebResourceResponse{
-        public:
-                virtual std::string Call(std::map<std::string, std::string> args);
-                EG::Game::Object *object;
-                EG::Game::Scene *scene;
+	public:
+		virtual std::string Call(std::map<std::string, std::string> args);
+		EG::Game::Object *object;
+		EG::Game::Scene *scene;
 };
 
 class SaveCallback : public EG::GUI::WebResourceResponse{

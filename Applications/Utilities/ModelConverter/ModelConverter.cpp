@@ -148,7 +148,7 @@ std::string SetDecalCallback::Call(std::map<std::string, std::string> args){
 	        while (mesh_attribute_iterator != mesh_attributes->end()){
 	                EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
 	                EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
-	
+
 	                material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, new_texture_path);
 	                ++mesh_attribute_iterator;
 	        }
@@ -249,14 +249,11 @@ std::string SaveCallback::Call(std::map<std::string, std::string> args){
 }
 
 ModelConverter::ModelConverter(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
-	gui = new EG::GUI::GUI("Assets/GUIs/ModelConverter", "index.html");
-	use_gui = true;
-	renderer->SetGUI(gui);
+	gui->Initialize("Assets/GUIs/ModelConverter", "index.html");
 
 	LoadModelEventListener *listener = new LoadModelEventListener();
 	listener->scene = scene;
 	listener->model_loaded = false;
-	listener->gui = gui;
 	gui->AddResponseHandler("load_model", listener);
 }
 

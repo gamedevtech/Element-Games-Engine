@@ -11,7 +11,6 @@
 namespace EG{
 	namespace Game{
 		Game::Game(EG::Utility::Window *_window, EG::Game::Scene *_scene){
-			use_gui = false;
 			window = _window;
 			scene = _scene;
 			input = new EG::Input::Input();
@@ -77,12 +76,12 @@ namespace EG{
 		void Game::PostUpdates(void){
 			physics->Update(time->GetFrameTime());
 
-			if (use_gui){
+			if (gui->GetInitialized()){
 				if (input->IsMousePressed(EG::Input::mouse_left)) {
-					gui->InjectMouseDown(Awesomium::LEFT_MOUSE_BTN);
+					gui->InjectMouseDown(AWE_MB_LEFT);
 				}
 				if (input->IsMouseReleased(EG::Input::mouse_left)) {
-					gui->InjectMouseUp(Awesomium::LEFT_MOUSE_BTN);
+					gui->InjectMouseUp(AWE_MB_LEFT);
 				}
 				glm::vec2 mp = input->GetMousePosition();
 				gui->InjectMouseMove((unsigned int)(mp.x), (unsigned int)(mp.y));
@@ -90,36 +89,36 @@ namespace EG{
 				std::vector<char> text = input->GetTextEntered();
 				std::vector<char>::iterator text_iter = text.begin();
 				if (input->IsKeyPressed(EG::Input::back_space)) {
-					gui->InjectKeyPress(Awesomium::KeyCodes::AK_BACK);
+					//gui->InjectKeyPress(Awesomium::KeyCodes::AK_BACK);
 				}
 				if (input->IsKeyPressed(EG::Input::del)){
-					gui->InjectKeyPress(Awesomium::KeyCodes::AK_DELETE);
+					//gui->InjectKeyPress(Awesomium::KeyCodes::AK_DELETE);
 				}
 				if (input->IsKeyPressed(EG::Input::tab)){
-					gui->InjectKeyPress(Awesomium::KeyCodes::AK_TAB);
+					//gui->InjectKeyPress(Awesomium::KeyCodes::AK_TAB);
 				}
 				if (input->IsKeyPressed(EG::Input::left)){
-					gui->InjectKeyPress(Awesomium::KeyCodes::AK_LEFT);
+					//gui->InjectKeyPress(Awesomium::KeyCodes::AK_LEFT);
 				}
 				if (input->IsKeyPressed(EG::Input::right)){
-						gui->InjectKeyPress(Awesomium::KeyCodes::AK_RIGHT);
+					//gui->InjectKeyPress(Awesomium::KeyCodes::AK_RIGHT);
 				}
 				if (input->IsKeyPressed(EG::Input::up)){
-						gui->InjectKeyPress(Awesomium::KeyCodes::AK_UP);
+					//gui->InjectKeyPress(Awesomium::KeyCodes::AK_UP);
 				}
 				if (input->IsKeyPressed(EG::Input::down)){
-						gui->InjectKeyPress(Awesomium::KeyCodes::AK_DOWN);
+					//gui->InjectKeyPress(Awesomium::KeyCodes::AK_DOWN);
 				}
 				while (text_iter != text.end()){
 					char c = (*text_iter);
 					int cint = int(c);
-					Awesomium::WebKeyboardEvent key_event;
+					/*Awesomium::WebKeyboardEvent key_event;
 					key_event.text[0] = c;
 					key_event.unmodifiedText[0] = c;
 					key_event.type = Awesomium::WebKeyboardEvent::TYPE_CHAR;
 					key_event.virtualKeyCode = c;
 					key_event.nativeKeyCode = c;
-					gui->InjectKeyPress(key_event);
+					gui->InjectKeyPress(key_event);*/
 					++text_iter;
 				}
 

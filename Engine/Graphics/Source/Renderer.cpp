@@ -16,7 +16,6 @@ namespace EG{
 	namespace Graphics{
 		Renderer::Renderer(void){
 			initialized = false;
-			gui_set = false;
 			//meshes = new EG::Graphics::MeshManager();
 			//textures = new EG::Graphics::TextureManager();
 			//font_manager;
@@ -42,11 +41,6 @@ namespace EG{
 			orthographics_projection_matrix = glm::gtc::matrix_transform::ortho(0.0f, float(graphics->GetViewportWidth()), 0.0f, float(graphics->GetViewportHeight()));
 
 			initialized = true;
-		}
-
-		void Renderer::SetGUI(EG::GUI::GUI *_gui){
-			gui = _gui;
-			gui_set = true;
 		}
 
 		void Renderer::RenderLitObject(EG::Game::Scene *scene, EG::Graphics::Light *light, EG::Game::Object *object){
@@ -347,7 +341,7 @@ namespace EG{
 			glEnable(GL_TEXTURE_2D);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-			if (gui_set){
+			if (gui->GetInitialized()){
 				gui->Render();
 				graphics->BindTexture(gui->GetTextureId(), 0);
 				scene->GetMeshManager()->Get("rectangle")->Draw();

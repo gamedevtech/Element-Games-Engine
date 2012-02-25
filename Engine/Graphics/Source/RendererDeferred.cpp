@@ -565,7 +565,7 @@ namespace EG{
             shaders->SetMatrix4("model_matrix", glm::gtx::transform::scale(float(graphics->GetViewportWidth()), float(graphics->GetViewportHeight()), 1.0f));
             shaders->SetInt("decal", 0);
             shaders->SetFloat4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-            if (gui_set){
+            if (gui->GetInitialized()){
                 gui->Render();
                 graphics->BindTexture(gui->GetTextureId());
                 scene->GetMeshManager()->Get("rectangle")->Draw();

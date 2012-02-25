@@ -27,16 +27,11 @@ namespace EG{
                 EG::Graphics::ShaderManager *GetShaderManager(void){
                     return shaders;
                 }
-
-                void SetGUI(EG::GUI::GUI *_gui);
             protected:
                 // TEMP, SHOULD GO IN SCENE MANAGER WHICH SHOULD HOLD A CAMERA MANAGER
                 EG::Graphics::ShaderManager *shaders;
                 glm::mat4 orthographics_projection_matrix;
                 bool initialized;
-
-                bool gui_set;
-                EG::GUI::GUI *gui;
         };
     }
 }

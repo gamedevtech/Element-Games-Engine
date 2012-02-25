@@ -4,61 +4,140 @@
 
 namespace EG{
 	namespace GUI{
-		WebListener::WebListener(void){
-			//
-		}
-		WebListener::~WebListener(void){
-			//
-		}
-		void WebListener::onJavascriptConsoleMessage (Awesomium::WebView *caller, const std::wstring &message, int lineNumber, const std::wstring &source){
-			std::wcout << L"(" << lineNumber << L": " << source << ") " << message << std::endl;
-		}
-		void WebListener::onCallback(Awesomium::WebView* caller, const std::wstring& objectName, const std::wstring& callbackName, const Awesomium::JSArguments& args){
-			//http://forums.wolfire.com/viewtopic.php?f=2&t=6658
-			if (callbacks.count(objectName) > 0){
-				if (callbacks.at(objectName).count(callbackName) > 0){
-					Awesomium::JSValue result;
-					callbacks.at(objectName).at(callbackName)->Call(args, result);
-					caller->executeJavascript(L"window.set_response(" + result.toString() + L");");
-					//caller->setObjectProperty(L"backend", L"result", result);
-				}
-			}
-		}
-		void WebListener::AddCallback(std::wstring callback_object_name, std::wstring callback_name, ListenerCallback *callback){
-			callbacks[callback_object_name][callback_name] = callback;
-		}
-		void WebListener::onBeginNavigation(Awesomium::WebView* caller, const std::string& url, const std::wstring& frameName){}
-		void WebListener::onBeginLoading(Awesomium::WebView* caller, const std::string& url, const std::wstring& frameName, int statusCode, const std::wstring& mimeType){}
-		void WebListener::onFinishLoading(Awesomium::WebView* caller){}
-		void WebListener::onReceiveTitle(Awesomium::WebView* caller, const std::wstring& title, const std::wstring& frameName){}
-		void WebListener::onChangeTooltip(Awesomium::WebView* caller, const std::wstring& tooltip){}
-		void WebListener::onChangeCursor(Awesomium::WebView* caller, Awesomium::CursorType cursor){}
-		void WebListener::onChangeKeyboardFocus(Awesomium::WebView* caller, bool isFocused){}
-		void WebListener::onChangeTargetURL(Awesomium::WebView* caller, const std::string& url){}
-		void WebListener::onOpenExternalLink(Awesomium::WebView* caller, const std::string& url, const std::wstring& source){}
-		void WebListener::onRequestDownload(Awesomium::WebView* caller, const std::string& url){}
-		void WebListener::onWebViewCrashed(Awesomium::WebView* caller){}
-		void WebListener::onPluginCrashed(Awesomium::WebView* caller, const std::wstring& pluginName){}
-		void WebListener::onRequestMove(Awesomium::WebView* caller, int x, int y){}
-		void WebListener::onGetPageContents(Awesomium::WebView* caller, const std::string& url, const std::wstring& contents){}
-		void WebListener::onDOMReady(Awesomium::WebView* caller){}
-		void WebListener::onRequestFileChooser(Awesomium::WebView* caller, bool selectMultipleFiles, const std::wstring& title, const std::wstring& defaultPath){}
-		void WebListener::onGetScrollData(Awesomium::WebView* caller, int contentWidth, int contentHeight, int preferredWidth, int scrollX, int scrollY){}
-		void WebListener::onGetFindResults(Awesomium::WebView* caller, int requestID, int numMatches, const Awesomium::Rect& selection, int curMatch, bool finalUpdate){}
-		void WebListener::onUpdateIME(Awesomium::WebView* caller, Awesomium::IMEState imeState, const Awesomium::Rect& caretRect){}
-		void WebListener::onShowContextMenu(Awesomium::WebView* caller, int mouseX, int mouseY, Awesomium::MediaType type, int mediaState, const std::string& linkURL, const std::string& srcURL, const std::string& pageURL, const std::string& frameURL, const std::wstring& selectionText, bool isEditable, int editFlags){}
-		void WebListener::onRequestLogin(Awesomium::WebView* caller, int requestID, const std::string& requestURL, bool isProxy, const std::wstring& hostAndPort, const std::wstring& scheme, const std::wstring& realm){}
-		void WebListener::onChangeHistory(Awesomium::WebView* caller, int backCount, int forwardCount){}
-		void WebListener::onFinishResize(Awesomium::WebView* caller, int width, int height){}
-		void WebListener::onShowJavascriptDialog(Awesomium::WebView* caller, int requestID, int dialogFlags, const std::wstring& message, const std::wstring& defaultPrompt, const std::string& frameURL){}
-
 		std::string WebResourceResponse::Call(std::map<std::string, std::string> args){
 			return "";
 		}
 
-		Awesomium::ResourceResponse* WebResources::onRequest(Awesomium::WebView *caller, Awesomium::ResourceRequest *request){
-			std::string url = request->getURL();
-			//std::cout << "onRequest: " << url << std::endl;
+		// Singleton Stuff
+		GUI *GUI::instance = NULL;
+		GUI *GUI::Instance(void){
+			if (instance == NULL){
+				instance = new GUI();
+			}
+			return instance;
+		}
+
+		GUI::GUI(void){
+			initialized = false;
+		}
+
+		GUI::~GUI(void){
+			awe_webview_destroy(web_view);
+			awe_webcore_shutdown();
+		}
+
+		void GUI::Initialize(std::string base_directory, std::string url){
+			//awe_webcore_initialize_default();
+			awe_webcore_initialize(true, true, true, awe_string_empty(), awe_string_empty(), awe_string_empty(), awe_string_empty(), awe_string_empty(), AWE_LL_NORMAL, false, awe_string_empty(), true, awe_string_empty(), awe_string_empty(), awe_string_empty(), awe_string_empty(), awe_string_empty(), awe_string_empty(), true, 0, false, false, awe_string_empty());
+			awe_string *tempstr = awe_string_create_from_ascii(base_directory.c_str(), base_directory.size());
+			awe_webcore_set_base_directory(tempstr);
+			awe_string_destroy(tempstr);
+			width = graphics->GetViewportWidth();
+			height = graphics->GetViewportHeight();
+			buffer = new unsigned char[width * height * 4];
+			mime_type = awe_string_create_from_ascii("application/json", 16);
+
+			web_view = awe_webcore_create_webview(width, height, false);
+			tempstr = awe_string_create_from_ascii(url.c_str(), url.size());
+			awe_string *tempstr2 = awe_string_create_from_ascii("default", 7);
+			awe_webview_load_file(web_view, tempstr, tempstr2);
+			texture = new EG::Graphics::Texture(buffer, width, height);
+			awe_string_destroy(tempstr);
+			awe_string_destroy(tempstr2);
+
+			awe_webview_set_callback_resource_request(web_view, resource_interceptor);
+			awe_webview_set_callback_js_console_message(web_view, js_console_callback);
+			awe_webview_set_transparent(web_view, true);
+
+			initialized = true;
+		}
+
+		bool GUI::GetInitialized(void){
+			return initialized;
+		}
+
+		void GUI::Update(void){
+			awe_webcore_update();
+		}
+
+		void GUI::Render(void){
+			awe_webview_focus(web_view);
+			if (awe_webview_is_dirty(web_view)){
+				const awe_renderbuffer *b = awe_webview_render(web_view);
+				const unsigned char *bdata = awe_renderbuffer_get_buffer(b);
+				for (unsigned int x = 0; x < width; x++){
+					for (unsigned int y = 0; y < height; y++){
+						int source_index = width * y + x;
+						int destination_index = width * (height - (y + 1)) + x;
+						const unsigned char *source = &(bdata[source_index * 4]);
+						unsigned char *destination = &(buffer[destination_index * 4]);
+						destination[2] = 255 - source[0];
+						destination[1] = 255 - source[1];
+						destination[0] = 255 - source[2];
+						destination[3] = source[3];
+					}
+				}
+				texture->UpdateImage(buffer);
+			}
+		}
+
+		unsigned int GUI::GetTextureId(void){
+			return texture->GetId();
+		}
+
+		void GUI::ExecuteScript(std::string script){
+			awe_string *tempstr = awe_string_create_from_ascii(script.c_str(), script.size());
+			awe_string *tempstr2 = awe_string_create_from_ascii("default", 7);
+			awe_webview_execute_javascript(web_view, tempstr, tempstr2);
+			awe_string_destroy(tempstr);
+			awe_string_destroy(tempstr2);
+		}
+
+		void GUI::InjectMouseMove(unsigned int x, unsigned int y){
+			awe_webview_inject_mouse_move(web_view, x, y);
+		}
+
+		void GUI::InjectMouseDown(awe_mousebutton button){
+			awe_webview_inject_mouse_down(web_view, button);
+		}
+
+		void GUI::InjectMouseUp(awe_mousebutton button){
+			awe_webview_inject_mouse_up(web_view, button);
+		}
+
+		void GUI::InjectKeyPress(awe_webkeyboardevent keyboard_event){
+			awe_webview_inject_keyboard_event(web_view, keyboard_event);
+		}
+
+		void GUI::InjectKeyPress(int key_code){
+			/*Awesomium::WebKeyboardEvent key_event;
+			char* buf = new char[20];
+			key_event.virtualKeyCode = key_code;
+			Awesomium::getKeyIdentifierFromVirtualKeyCode(key_event.virtualKeyCode, &buf);
+			strcpy(key_event.keyIdentifier, buf);
+			delete[] buf;
+			key_event.modifiers = 0;
+			key_event.nativeKeyCode = 0;
+			key_event.type = Awesomium::WebKeyboardEvent::TYPE_KEY_DOWN;
+			web_view->injectKeyboardEvent(key_event);
+			key_event.type = Awesomium::WebKeyboardEvent::TYPE_KEY_UP;
+			web_view->injectKeyboardEvent(key_event);*/
+			awe_webkeyboardevent key_event;
+			char *buf = new char[20];
+			//
+		}
+
+		awe_resource_response *GUI::ResourceInterceptor(awe_webview *caller, awe_resource_request *request){
+			std::string url;
+			awe_string *awe_url = awe_resource_request_get_url(request);
+			unsigned int string_length = awe_string_get_length(awe_url);
+			char *c_url = new char[string_length + 1];
+			awe_string_to_utf8(awe_url, c_url, string_length);
+			c_url[string_length] = '\0';
+			url = c_url;
+			awe_string_destroy(awe_url);
+			delete []c_url;
+
 			unsigned int fspos = url.find_last_of('/');
 			unsigned int qpos = url.find_last_of('?');
 			std::string path = "";
@@ -81,149 +160,31 @@ namespace EG{
 				++token_iter;
 			}
 
-			if ((callbacks.count(path)) > 0){
-				std::string response = callbacks[path]->Call(args);
+			if (resources.Has(path)){
+				std::string response = resources.Get(path)->Call(args);
+				std::cout << "Path: " << path << std::endl;
+				std::cout << "Response: " << response << std::endl;
+				std::cout << "ARG: " << args["filename"] << std::endl;
 				unsigned char *text = reinterpret_cast<unsigned char *>(const_cast<char *>(response.c_str()));
-				Awesomium::ResourceResponse *resource_response = Awesomium::ResourceResponse::Create(response.size(), text, "application/json");
-				return resource_response;
+				return awe_resource_response_create(response.size(), text, mime_type);
 			}
 			return NULL;
 		}
-		void WebResources::onResponse(Awesomium::WebView *caller, const std::string &url, int statusCode, const Awesomium::ResourceResponseMetrics &metrics){
-			//std::cout << "onResponse: " << url << std::endl;
-		}
-			void WebResources::AddResponseHandler(std::string url, WebResourceResponse *handler){
-					callbacks[url] = handler;
-			}
 
-		WebBuffer::WebBuffer(int _width, int _height, Awesomium::WebView *_web_view){
-			width = _width;
-			height = _height;
-			web_view = _web_view;
-			web_view->setTransparent(true);
-			listener = new WebListener();
-			web_view->setListener(listener);
-			resources = new WebResources();
-			web_view->setResourceInterceptor(resources);
-			bpp = 4;
-			web_view->createObject(L"backend");
-
-			rowspan = width * bpp;
-			buffer = new unsigned char[rowspan * height];
-			texture = new EG::Graphics::Texture(buffer, width, height);
-		}
-		WebBuffer::~WebBuffer(void){
-			web_view->destroy();
-		}
-		void WebBuffer::Load(std::string url){
-			web_view->loadFile(url);
-		}
-		void WebBuffer::Render(void){
-			web_view->focus();
-			if (web_view->isDirty()){
-				const Awesomium::RenderBuffer* b = web_view->render();
-				for (unsigned int x = 0; x < width; x++){
-					for (unsigned int y = 0; y < height; y++){
-						int source_index = width * y + x;
-						int destination_index = width * (height - (y + 1)) + x;
-						unsigned char *source = &(b->buffer[source_index * 4]);
-						unsigned char *destination = &(buffer[destination_index * 4]);
-						destination[2] = 255 - source[0];
-						destination[1] = 255 - source[1];
-						destination[0] = 255 - source[2];
-						destination[3] = source[3];
-					}
-				}
-				texture->UpdateImage(buffer);
-			}
-		}
-		unsigned int WebBuffer::GetTextureId(void){
-			return texture->GetId();
-		}
-		void WebBuffer::ExecuteScript(std::string script){
-			web_view->executeJavascript(script);
-		}
-		void WebBuffer::InjectMouseMove(unsigned int x, unsigned int y){
-			web_view->injectMouseMove(x, y);
-		}
-		void WebBuffer::InjectMouseDown(Awesomium::MouseButton button){
-			web_view->injectMouseDown(button);
-		}
-		void WebBuffer::InjectMouseUp(Awesomium::MouseButton button){
-			web_view->injectMouseUp(button);
-		}
-		void WebBuffer::InjectKeyPress(Awesomium::WebKeyboardEvent keyboard_event){
-			web_view->injectKeyboardEvent(keyboard_event);
-		}
-		void WebBuffer::InjectKeyPress(int key_code){
-			Awesomium::WebKeyboardEvent key_event;
-			char* buf = new char[20];
-			key_event.virtualKeyCode = key_code;
-			Awesomium::getKeyIdentifierFromVirtualKeyCode(key_event.virtualKeyCode, &buf);
-			strcpy(key_event.keyIdentifier, buf);
-			delete[] buf;
-			key_event.modifiers = 0;
-			key_event.nativeKeyCode = 0;
-			key_event.type = Awesomium::WebKeyboardEvent::TYPE_KEY_DOWN;
-			web_view->injectKeyboardEvent(key_event);
-			key_event.type = Awesomium::WebKeyboardEvent::TYPE_KEY_UP;
-			web_view->injectKeyboardEvent(key_event);
-		}
-		void WebBuffer::AddCallback(std::wstring callback_name, ListenerCallback *callback){
-			web_view->setObjectCallback(L"backend", callback_name);
-			listener->AddCallback(L"backend", callback_name, callback);
-		}
-		void WebBuffer::AddResponseHandler(std::string url, WebResourceResponse *handler){
-			resources->AddResponseHandler(url, handler);
-		}
-
-		GUI::GUI(std::string base_directory, std::string url){
-			Awesomium::WebCoreConfig conf;
-			conf.setEnablePlugins(true);
-			conf.setSaveCacheAndCookies(false);
-			conf.setLogLevel(Awesomium::LOG_VERBOSE);
-			web_core = new Awesomium::WebCore(conf);
-			Awesomium::WebView *web_view = web_core->createWebView(graphics->GetViewportWidth(), graphics->GetViewportHeight());
-			web_buffer = new WebBuffer(graphics->GetViewportWidth(), graphics->GetViewportHeight(), web_view);
-			web_core->setBaseDirectory(base_directory);
-			web_buffer->Load(url);
-		}
-		GUI::~GUI(void){
-			delete web_buffer;
-			delete web_core;
-		}
-		void GUI::Update(void){
-			web_core->update();
-		}
-		void GUI::Render(void){
-			web_buffer->Render();
-		}
-		unsigned int GUI::GetTextureId(void){
-			return web_buffer->GetTextureId();
-		}
-		void GUI::ExecuteScript(std::string script){
-			web_buffer->ExecuteScript(script);
-		}
-		void GUI::InjectMouseMove(unsigned int x, unsigned int y){
-			web_buffer->InjectMouseMove(x, y);
-		}
-		void GUI::InjectMouseDown(Awesomium::MouseButton button){
-			web_buffer->InjectMouseDown(button);
-		}
-		void GUI::InjectMouseUp(Awesomium::MouseButton button){
-			web_buffer->InjectMouseUp(button);
-		}
-		void GUI::InjectKeyPress(Awesomium::WebKeyboardEvent keyboard_event){
-			web_buffer->InjectKeyPress(keyboard_event);
-		}
-		void GUI::InjectKeyPress(int key_press){
-			web_buffer->InjectKeyPress(key_press);
-		}
-		void GUI::AddCallback(std::wstring callback_name, ListenerCallback *callback){
-			web_buffer->AddCallback(callback_name, callback);
-		}
 		void GUI::AddResponseHandler(std::string url, WebResourceResponse *handler){
-			web_buffer->AddResponseHandler(url, handler);
+			resources.Set(url, handler);
+		}
+
+		awe_resource_response *resource_interceptor(awe_webview *caller, awe_resource_request *request){
+			return gui->ResourceInterceptor(caller, request);
+		}
+
+		void js_console_callback(awe_webview *caller, const awe_string *message, int line_number, const awe_string *source){
+			unsigned int string_length = awe_string_get_length(message);
+			char *c_url = new char[string_length];
+			awe_string_to_utf8(message, c_url, string_length);
+			std::cout << "JSConsole: " << c_url << std::endl;
+			delete []c_url;
 		}
 	}
 }
