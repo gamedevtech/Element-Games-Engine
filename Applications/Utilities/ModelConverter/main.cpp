@@ -31,6 +31,8 @@ int main(int argc, char **argv){
     EG::Game::Scene *scene = new EG::Game::Scene();
     ModelConverter *game = new ModelConverter(window, scene);
 
+    scene->GetMeshManager()->Add("rectangle", EG::Graphics::GenerateQuad());
+
     // Ground Plane
     EG::Graphics::Mesh *cube_mesh = EG::Graphics::GenerateCube();
     scene->GetMeshManager()->Add("cube", cube_mesh);

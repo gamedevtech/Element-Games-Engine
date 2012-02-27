@@ -141,6 +141,8 @@ namespace EG{
 			key_translations.Set(sf::Keyboard::Left, EG::Input::left);
 			key_translations.Set(sf::Keyboard::Right, EG::Input::right);
 			key_translations.Set(sf::Keyboard::Back, EG::Input::back_space);
+			key_translations.Set(sf::Keyboard::Delete, EG::Input::del);
+			key_translations.Set(sf::Keyboard::Tab, EG::Input::tab);
 			mouse_translations.Set(sf::Mouse::Left, EG::Input::mouse_left);
 			mouse_translations.Set(sf::Mouse::Right, EG::Input::mouse_right);
 			mouse_translations.Set(sf::Mouse::Middle, EG::Input::mouse_middle);

@@ -8,7 +8,7 @@
 #include "GraphicsSubsystem.h"
 #include "../Game/Scene.h"
 #include "../Utility/Font.h"
-#include "../Utility/RocketInterface.h"
+#include "../Utility/GUI.h"
 #include "../Utility/Time.h"
 
 namespace EG{
@@ -27,16 +27,11 @@ namespace EG{
                 EG::Graphics::ShaderManager *GetShaderManager(void){
                     return shaders;
                 }
-
-                void SetGUI(EG::Utility::RocketInterface *_gui);
             protected:
                 // TEMP, SHOULD GO IN SCENE MANAGER WHICH SHOULD HOLD A CAMERA MANAGER
                 EG::Graphics::ShaderManager *shaders;
                 glm::mat4 orthographics_projection_matrix;
                 bool initialized;
-
-                bool gui_set;
-                EG::Utility::RocketInterface *gui;
         };
     }
 }

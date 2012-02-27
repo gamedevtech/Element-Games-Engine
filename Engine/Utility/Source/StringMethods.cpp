@@ -56,6 +56,28 @@ namespace EG{
 				}
 				return tokens;
 			}
+
+			std::string SearchAndReplace(const std::string &string_to_parse, const std::string &search_for, const std::string &replace_with){
+				std::string output = string_to_parse;
+				std::string::size_type found = output.find(search_for);
+				while (found != std::string::npos){
+					output.replace(found, search_for.length(), replace_with);
+					found = output.find(search_for);
+				}
+				return output;
+			}
+
+			std::wstring StringToWString(const std::string& s){
+				std::wstring temp(s.length(),L' ');
+				std::copy(s.begin(), s.end(), temp.begin());
+				return temp;
+			}
+
+			std::string WStringToString(const std::wstring& s){
+				std::string temp(s.length(), ' ');
+				std::copy(s.begin(), s.end(), temp.begin());
+				return temp;
+			}
 		}
 	}
 }

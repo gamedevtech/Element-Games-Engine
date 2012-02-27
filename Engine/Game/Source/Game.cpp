@@ -9,189 +9,226 @@
 #include "../../Utility/UnsignedIntDictionary.h"
 
 namespace EG{
-    namespace Game{
-        Game::Game(EG::Utility::Window *_window, EG::Game::Scene *_scene){
-            use_gui = false;
-            window = _window;
-            scene = _scene;
-            input = new EG::Input::Input();
-            sfml_interface->SetInput(input);
-            time = new EG::Utility::Time();
-            graphics->Initialize(window->GetResolutionWidth(), window->GetResolutionHeight());
+	namespace Game{
+		Game::Game(EG::Utility::Window *_window, EG::Game::Scene *_scene){
+			window = _window;
+			scene = _scene;
+			input = new EG::Input::Input();
+			sfml_interface->SetInput(input);
+			time = new EG::Utility::Time();
+			graphics->Initialize(window->GetResolutionWidth(), window->GetResolutionHeight());
 
-            // Resolution needs to be from config
-            rendering_method = RENDERER_SIMPLE;
+			// Resolution needs to be from config
+			rendering_method = RENDERER_SIMPLE;
 
-            //if (graphics->CheckVersion(3, 1)){
-            if (graphics->CheckVersion(4, 1)){
-                if (rendering_method == RENDERER_SIMPLE){
-                    rendering_method = RENDERER_DEFERRED;
-                }
-            }else{
-                rendering_method = RENDERER_SIMPLE;
-                graphics->OverrideVersion(2, 1);
-            }
-            if (rendering_method == RENDERER_SIMPLE){
-                renderer = new EG::Graphics::Renderer();
-                renderer->Initialize();
-            }else if (rendering_method == RENDERER_MULTIPASS){
-                renderer = new EG::Graphics::RendererMultipass();
-                (static_cast<EG::Graphics::RendererMultipass *>(renderer))->Initialize();
-            }else if (rendering_method == RENDERER_DEFERRED){
-                renderer = new EG::Graphics::RendererDeferred();
-                (static_cast<EG::Graphics::RendererDeferred *>(renderer))->Initialize();
-            }
-            //gui = new EG::GUI::GUI();
+			if (graphics->CheckVersion(3, 1)){
+			//if (graphics->CheckVersion(4, 1)){
+				if (rendering_method == RENDERER_SIMPLE){
+					rendering_method = RENDERER_DEFERRED;
+				}
+			}else{
+				rendering_method = RENDERER_SIMPLE;
+				//graphics->OverrideVersion(2, 1);
+			}
+			if (rendering_method == RENDERER_SIMPLE){
+				renderer = new EG::Graphics::Renderer();
+				renderer->Initialize();
+			}else if (rendering_method == RENDERER_MULTIPASS){
+				renderer = new EG::Graphics::RendererMultipass();
+				(static_cast<EG::Graphics::RendererMultipass *>(renderer))->Initialize();
+			}else if (rendering_method == RENDERER_DEFERRED){
+				renderer = new EG::Graphics::RendererDeferred();
+				(static_cast<EG::Graphics::RendererDeferred *>(renderer))->Initialize();
+			}
+			//gui = new EG::GUI::GUI();
 
-            physics = new EG::Dynamics::Physics();
+			physics = new EG::Dynamics::Physics();
 
-            time->Update();
-            if (use_gui){
-                gui->Update();
-            }
-        }
+			time->Update();
+		}
 
-        Game::~Game(void){
-            //
-        }
+		Game::~Game(void){
+			//
+		}
 
-        void Game::Update(void){
-            //
-        }
+		void Game::Update(void){
+			//
+		}
 
-        void Game::Render(void){
-            PostUpdates();
-            if (rendering_method == RENDERER_SIMPLE){
-                renderer->Render(scene, time);
-            }else if (rendering_method == RENDERER_MULTIPASS){
-                (static_cast<EG::Graphics::RendererMultipass *>(renderer))->Render(scene);
-            }else if (rendering_method == RENDERER_DEFERRED){
-                (static_cast<EG::Graphics::RendererDeferred *>(renderer))->Render(scene, time);
-            }
-            window->Display();
-            PreUpdates();
-        }
+		void Game::Render(void){
+			PostUpdates();
+			if (rendering_method == RENDERER_SIMPLE){
+				renderer->Render(scene, time);
+			}else if (rendering_method == RENDERER_MULTIPASS){
+				(static_cast<EG::Graphics::RendererMultipass *>(renderer))->Render(scene);
+			}else if (rendering_method == RENDERER_DEFERRED){
+				(static_cast<EG::Graphics::RendererDeferred *>(renderer))->Render(scene, time);
+			}
+			window->Display();
+			PreUpdates();
+		}
 
-        void Game::PreUpdates(void){
-            time->Update();
-            window->Update();
-        }
+		void Game::PreUpdates(void){
+			time->Update();
+			window->Update();
+		}
 
-        void Game::PostUpdates(void){
-            physics->Update(time->GetFrameTime());
-            if (use_gui){
-                gui->Update();
-            }
+		void Game::PostUpdates(void){
+			physics->Update(time->GetFrameTime());
 
-            input->Update();
+			if (gui->GetInitialized()){
+				if (input->IsMousePressed(EG::Input::mouse_left)) {
+					gui->InjectMouseDown(AWE_MB_LEFT);
+				}
+				if (input->IsMouseReleased(EG::Input::mouse_left)) {
+					gui->InjectMouseUp(AWE_MB_LEFT);
+				}
+				glm::vec2 mp = input->GetMousePosition();
+				gui->InjectMouseMove((unsigned int)(mp.x), (unsigned int)(mp.y));
 
-            EG::Utility::UnsignedIntDictionaryKeysIterator object_iter = scene->GetObjectManager()->GetObjects()->GetKeysBegin();
-            while (object_iter != scene->GetObjectManager()->GetObjects()->GetKeysEnd()){
-                unsigned int object_id = (*object_iter);
-                EG::Game::Object *object = scene->GetObjectManager()->GetObject(object_id);
+				std::vector<char> text = input->GetTextEntered();
+				std::vector<char>::iterator text_iter = text.begin();
+				if (input->IsKeyPressed(EG::Input::back_space)) {
+					gui->InjectKeyPress('\b');
+					std::cout << "Backspace" << std::endl;
+				}
+				if (input->IsKeyPressed(EG::Input::del)){
+					gui->InjectKeyPress(char(127));
+				}
+				if (input->IsKeyPressed(EG::Input::tab)){
+					gui->InjectKeyPress('\t');
+				}
+				if (input->IsKeyPressed(EG::Input::left)){
+					//gui->InjectKeyPress(Awesomium::KeyCodes::AK_LEFT);
+				}
+				if (input->IsKeyPressed(EG::Input::right)){
+					//gui->InjectKeyPress(Awesomium::KeyCodes::AK_RIGHT);
+				}
+				if (input->IsKeyPressed(EG::Input::up)){
+					//gui->InjectKeyPress(Awesomium::KeyCodes::AK_UP);
+				}
+				if (input->IsKeyPressed(EG::Input::down)){
+					//gui->InjectKeyPress(Awesomium::KeyCodes::AK_DOWN);
+				}
+				while (text_iter != text.end()){
+					char c = (*text_iter);
+					int cint = int(c);
+					gui->InjectKeyPress(cint);
+					++text_iter;
+				}
 
-                if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM)){
-                    std::vector<EG::Game::ObjectAttribute *> *attrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM);
-                    std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
-                    while (attr_iter != attrs->end()){
-                        EG::Game::ObjectAttributeEmissionParticleSystem *pattr = static_cast<EG::Game::ObjectAttributeEmissionParticleSystem *>(*attr_iter);
+				gui->Update();
+			}
 
-                        EG::Graphics::ParticleSystem *psys = pattr->GetParticleSystem();
-                        std::list<EG::Graphics::Particle *> *particles = psys->GetParticles();
-                        std::list<EG::Graphics::Particle *>::iterator piter = particles->begin();
-                        while (piter != particles->end()){
-                            EG::Graphics::Particle *p = (*piter);
-                            bool has_physics = false;
-                            glm::mat4 motion_state;
-                            if (p->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY)){
-                                std::vector<EG::Game::ObjectAttribute *> *attrs = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY);
-                                std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
-                                while (attr_iter != attrs->end()){
-                                    EG::Game::ObjectAttributeControlRigidBody *rigid_body_attr = static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
-                                    if (!(rigid_body_attr->GetConnected())){
-                                        physics->AddRigidBody(rigid_body_attr->GetBody());
-                                        rigid_body_attr->SetConnected(true);
-                                    }
+			input->Update();
 
-                                    if (!(p->Alive())){
-                                        physics->RemoveRigidBody(rigid_body_attr->GetBody());
-                                    }
+			EG::Utility::UnsignedIntDictionaryKeysIterator object_iter = scene->GetObjectManager()->GetObjects()->GetKeysBegin();
+			while (object_iter != scene->GetObjectManager()->GetObjects()->GetKeysEnd()){
+				unsigned int object_id = (*object_iter);
+				EG::Game::Object *object = scene->GetObjectManager()->GetObjectById(object_id);
 
-                                    // TODO: Get Motion State From Physics
-                                    EG::Dynamics::RigidBody *body = rigid_body_attr->GetBody();
-                                    motion_state = body->GetMotionState();
-                                    has_physics = true;
+				if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM)){
+					std::vector<EG::Game::ObjectAttribute *> *attrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM);
+					std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+					while (attr_iter != attrs->end()){
+						EG::Game::ObjectAttributeEmissionParticleSystem *pattr = static_cast<EG::Game::ObjectAttributeEmissionParticleSystem *>(*attr_iter);
 
-                                    ++attr_iter;
-                                }
-                            }
+						EG::Graphics::ParticleSystem *psys = pattr->GetParticleSystem();
+						std::list<EG::Graphics::Particle *> *particles = psys->GetParticles();
+						std::list<EG::Graphics::Particle *>::iterator piter = particles->begin();
+						while (piter != particles->end()){
+							EG::Graphics::Particle *p = (*piter);
+							bool has_physics = false;
+							glm::mat4 motion_state;
+							if (p->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY)){
+								std::vector<EG::Game::ObjectAttribute *> *attrs = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY);
+								std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+								while (attr_iter != attrs->end()){
+									EG::Game::ObjectAttributeControlRigidBody *rigid_body_attr = static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
+									if (!(rigid_body_attr->GetConnected())){
+										physics->AddRigidBody(rigid_body_attr->GetBody());
+										rigid_body_attr->SetConnected(true);
+									}
 
-                            if (has_physics && p->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION)){
-                                std::vector<EG::Game::ObjectAttribute *> *attrs = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
-                                std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
-                                while (attr_iter != attrs->end()){
-                                    EG::Game::ObjectAttributeBasicTransformation *trans_attr = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(*attr_iter);
-                                    glm::mat4 t = trans_attr->GetTransformation();
-                                    glm::vec3 p(t[3][0], t[3][1], t[3][2]);
-                                    glm::vec3 c = scene->GetCurrentCamera()->GetPosition();
-                                    float distance = glm::distance(p, c);
-                                    trans_attr->SetTransformation(motion_state);
-                                    ++attr_iter;
-                                }
-                            }
-                            ++piter;
-                        }
+									if (!(p->Alive())){
+										physics->RemoveRigidBody(rigid_body_attr->GetBody());
+									}
 
-                        pattr->GetParticleSystem()->Update(time->GetFrameTime());
-                        ++attr_iter;
-                    }
-                }
+									// TODO: Get Motion State From Physics
+									EG::Dynamics::RigidBody *body = rigid_body_attr->GetBody();
+									motion_state = body->GetMotionState();
+									has_physics = true;
 
-                bool has_physics = false;
-                glm::mat4 motion_state;
-                if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY)){
-                    std::vector<EG::Game::ObjectAttribute *> *attrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY);
-                    std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
-                    while (attr_iter != attrs->end()){
-                        EG::Game::ObjectAttributeControlRigidBody *rigid_body_attr = static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
-                        if (!(rigid_body_attr->GetConnected())){
-                            physics->AddRigidBody(rigid_body_attr->GetBody());
-                            rigid_body_attr->SetConnected(true);
-                        }
+									++attr_iter;
+								}
+							}
 
-                        // TODO: Get Motion State From Physics
-                        EG::Dynamics::RigidBody *body = rigid_body_attr->GetBody();
-                        motion_state = body->GetMotionState();
-                        has_physics = true;
+							if (has_physics && p->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION)){
+								std::vector<EG::Game::ObjectAttribute *> *attrs = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
+								std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+								while (attr_iter != attrs->end()){
+									EG::Game::ObjectAttributeBasicTransformation *trans_attr = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(*attr_iter);
+									glm::mat4 t = trans_attr->GetTransformation();
+									glm::vec3 p(t[3][0], t[3][1], t[3][2]);
+									glm::vec3 c = scene->GetCurrentCamera()->GetPosition();
+									float distance = glm::distance(p, c);
+									trans_attr->SetTransformation(motion_state);
+									++attr_iter;
+								}
+							}
+							++piter;
+						}
 
-                        ++attr_iter;
-                    }
-                }
+						pattr->GetParticleSystem()->Update(time->GetFrameTime());
+						++attr_iter;
+					}
+				}
 
-                if (has_physics && object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION)){
-                    std::vector<EG::Game::ObjectAttribute *> *attrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
-                    std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
-                    while (attr_iter != attrs->end()){
-                        EG::Game::ObjectAttributeBasicTransformation *trans_attr = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(*attr_iter);
-                        trans_attr->SetTransformation(motion_state);
-                        ++attr_iter;
-                    }
-                }
+				bool has_physics = false;
+				glm::mat4 motion_state;
+				if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY)){
+					std::vector<EG::Game::ObjectAttribute *> *attrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY);
+					std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+					while (attr_iter != attrs->end()){
+						EG::Game::ObjectAttributeControlRigidBody *rigid_body_attr = static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
+						if (!(rigid_body_attr->GetConnected())){
+							physics->AddRigidBody(rigid_body_attr->GetBody());
+							rigid_body_attr->SetConnected(true);
+						}
 
-                ++object_iter;
-            }
-        }
+						// TODO: Get Motion State From Physics
+						EG::Dynamics::RigidBody *body = rigid_body_attr->GetBody();
+						motion_state = body->GetMotionState();
+						has_physics = true;
 
-        EG::Utility::Window *Game::GetWindow(void){
-            return window;
-        }
+						++attr_iter;
+					}
+				}
 
-        EG::Game::Scene *Game::GetScene(void){
-            return scene;
-        }
+				if (has_physics && object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION)){
+					std::vector<EG::Game::ObjectAttribute *> *attrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
+					std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+					while (attr_iter != attrs->end()){
+						EG::Game::ObjectAttributeBasicTransformation *trans_attr = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(*attr_iter);
+						trans_attr->SetTransformation(motion_state);
+						++attr_iter;
+					}
+				}
 
-        EG::Graphics::Renderer *Game::GetRenderer(void){
-            return renderer;
-        }
-    }
+				++object_iter;
+			}
+		}
+
+		EG::Utility::Window *Game::GetWindow(void){
+			return window;
+		}
+
+		EG::Game::Scene *Game::GetScene(void){
+			return scene;
+		}
+
+		EG::Graphics::Renderer *Game::GetRenderer(void){
+			return renderer;
+		}
+	}
 }

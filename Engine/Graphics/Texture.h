@@ -9,13 +9,16 @@ namespace EG{
 		class Texture{
 			public:
 				Texture(std::string _file_path = "", bool _filtering = true, float anisotropic_param = 16.0f);
+				Texture(unsigned char *buffer, unsigned int _width, unsigned int _height, bool _filtering = true, float anisotropic_param = 16.0f);
 				~Texture(void);
 
 				unsigned int Load(std::string _file_path = "", bool _filtering = true, float anisotropic_param = 16.0f);
+				unsigned int Load(unsigned char *buffer, bool _filtering = true, float anisotropic_param = 16.0f);
 				unsigned int GetId(void);
 				std::string GetFilePath(void);
 				unsigned int GetWidth(void);
 				unsigned int GetHeight(void);
+				void UpdateImage(unsigned char *buffer);
 			private:
 				unsigned int width, height;
 				bool filtering;

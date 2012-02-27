@@ -7,16 +7,254 @@
 #include "../../../Engine/Game/ObjectRenderingAttribute.h"
 #include "../../../Engine/Utility/StringMethods.h"
 #include "../../../Engine/Media/ObjectWriter.h"
+#include <complex>
+
+std::string LoadModelEventListener::Call(std::map<std::string, std::string> args){
+	std::string filename = args["filename"];
+	filename = EG::Utility::StringMethods::SearchAndReplace(filename, "%2F", "/");
+	model = new EG::Media::ModelLoader(scene);
+	model_loaded = model->Load(filename);
+	if (model_loaded){
+		model_object = new EG::Game::Object(filename);
+
+		SetLitCallback *litcallback = new SetLitCallback();
+		litcallback->object = model_object;
+		gui->AddResponseHandler("set_lit", litcallback);
+
+		SetShadowsCallback *shadowscallback = new SetShadowsCallback();
+		shadowscallback->object = model_object;
+		gui->AddResponseHandler("set_shadows", shadowscallback);
+
+		SetDecalCallback *decalcallback = new SetDecalCallback();
+		decalcallback->object = model_object;
+		decalcallback->scene = scene;
+		gui->AddResponseHandler("set_decal", decalcallback);
+
+                SetNormalCallback *normalcallback = new SetNormalCallback();
+                normalcallback->object = model_object;
+                normalcallback->scene = scene;
+                gui->AddResponseHandler("set_normal", normalcallback);
+
+                SetHeightCallback *heightcallback = new SetHeightCallback();
+                heightcallback->object = model_object;
+                heightcallback->scene = scene;
+                gui->AddResponseHandler("set_height", heightcallback);
+
+                SetSpecularCallback *specularcallback = new SetSpecularCallback();
+                specularcallback->object = model_object;
+                specularcallback->scene = scene;
+                gui->AddResponseHandler("set_specular", specularcallback);
+
+		SaveCallback *savecallback = new SaveCallback();
+		savecallback->object = model_object;
+		savecallback->scene = scene;
+		gui->AddResponseHandler("save_model", savecallback);
+
+		model_object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 2.0f, 0.0f)), glm::vec3(0.02f, 0.02f, 0.02f))));
+		model->GetMaterial(0)->SetLit(true);
+		model->GetMaterial(0)->SetCastsShadows(true);
+		model_object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(model->GetMesh(0), model->GetMaterial(0)));
+		scene->GetObjectManager()->AddObject(model_object);
+		std::string out = "{\"status\": true";
+
+		if (model->GetMaterial(0)->GetLit()){
+			out += ", \"lit\": true";
+		} else {
+			out += ", \"lit\": false";
+		}
+		if (model->GetMaterial(0)->GetCastsShadows()){
+			out += ", \"shadows\": true";
+		} else {
+			out += ", \"shadows\": false";
+		}
+		if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL)){
+			std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL))->GetFilePath();
+			out += ", \"decal\": \"" + file_path + "\"";
+		} else {
+			out += ", \"decal\": \"\"";
+		}
+		if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL)){
+			std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL))->GetFilePath();
+			out += ", \"normal\": \"" + file_path + "\"";
+		} else {
+			out += ", \"normal\": \"\"";
+		}
+		if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT)){
+			std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT))->GetFilePath();
+			out += ", \"height\": \"" + file_path + "\"";
+		} else {
+			out += ", \"height\": \"\"";
+		}
+		if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR)){
+			std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR))->GetFilePath();
+			out += ", \"specular\": \"" + file_path + "\"}";
+		} else {
+			out += ", \"specular\": \"\"}";
+		}
+		return out;
+	}else{
+		return "{\"status\": false}";
+	}
+}
+
+std::string SetLitCallback::Call(std::map<std::string, std::string> args){
+	if (object){
+		std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+	        std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
+	        while (mesh_attribute_iterator != mesh_attributes->end()){
+	                EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
+	                EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
+
+	                bool lit_status = material->GetLit();
+	                material->SetLit(!lit_status);
+	                ++mesh_attribute_iterator;
+	        }
+		return "{\"status\": true}";
+	}
+	return "{\"status\": false}";
+}
+
+std::string SetShadowsCallback::Call(std::map<std::string, std::string> args){
+	if (object){
+		std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+                std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
+                while (mesh_attribute_iterator != mesh_attributes->end()){
+                        EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
+                        EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
+
+                        bool shadows_status = material->GetCastsShadows();
+                        material->SetCastsShadows(!shadows_status);
+                        ++mesh_attribute_iterator;
+                }
+                return "{\"status\": true}";
+        }
+        return "{\"status\": false}";
+}
+
+std::string SetDecalCallback::Call(std::map<std::string, std::string> args){
+	if (object){
+		std::string new_texture_path = args["decal"];
+		new_texture_path = EG::Utility::StringMethods::SearchAndReplace(new_texture_path, "%2F", "/");
+                new_texture_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(new_texture_path);
+
+	        if (!(scene->GetTextureManager()->HasTexture(new_texture_path))){
+	                EG::Graphics::Texture *texture = new EG::Graphics::Texture(new_texture_path);
+	                scene->GetTextureManager()->AddTexture(new_texture_path, texture);
+	        }
+
+	        // Meshes
+	        std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+	        std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
+	        while (mesh_attribute_iterator != mesh_attributes->end()){
+	                EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
+	                EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
+
+	                material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, new_texture_path);
+	                ++mesh_attribute_iterator;
+	        }
+		return "{\"status\": true}";
+	}
+	return "{\"status\": false}";
+}
+
+std::string SetNormalCallback::Call(std::map<std::string, std::string> args){
+        if (object){
+                std::string new_texture_path = args["normal"];
+                new_texture_path = EG::Utility::StringMethods::SearchAndReplace(new_texture_path, "%2F", "/");
+                new_texture_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(new_texture_path);
+
+                if (!(scene->GetTextureManager()->HasTexture(new_texture_path))){
+                        EG::Graphics::Texture *texture = new EG::Graphics::Texture(new_texture_path);
+                        scene->GetTextureManager()->AddTexture(new_texture_path, texture);
+                }
+
+                // Meshes
+                std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+                std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
+                while (mesh_attribute_iterator != mesh_attributes->end()){
+                        EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
+                        EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
+
+                        material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, new_texture_path);
+                        ++mesh_attribute_iterator;
+                }
+                return "{\"status\": true}";
+        }
+        return "{\"status\": false}";
+}
+
+std::string SetHeightCallback::Call(std::map<std::string, std::string> args){
+        if (object){
+                std::string new_texture_path = args["height"];
+                new_texture_path = EG::Utility::StringMethods::SearchAndReplace(new_texture_path, "%2F", "/");
+                new_texture_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(new_texture_path);
+
+                if (!(scene->GetTextureManager()->HasTexture(new_texture_path))){
+                        EG::Graphics::Texture *texture = new EG::Graphics::Texture(new_texture_path);
+                        scene->GetTextureManager()->AddTexture(new_texture_path, texture);
+                }
+
+                // Meshes
+                std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+                std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
+                while (mesh_attribute_iterator != mesh_attributes->end()){
+                        EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
+                        EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
+
+                        material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT, new_texture_path);
+                        ++mesh_attribute_iterator;
+                }
+                return "{\"status\": true}";
+        }
+        return "{\"status\": false}";
+}
+
+std::string SetSpecularCallback::Call(std::map<std::string, std::string> args){
+        if (object){
+                std::string new_texture_path = args["specular"];
+                new_texture_path = EG::Utility::StringMethods::SearchAndReplace(new_texture_path, "%2F", "/");
+		new_texture_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(new_texture_path);
+
+                if (!(scene->GetTextureManager()->HasTexture(new_texture_path))){
+                        EG::Graphics::Texture *texture = new EG::Graphics::Texture(new_texture_path);
+                        scene->GetTextureManager()->AddTexture(new_texture_path, texture);
+                }
+
+                // Meshes
+                std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+                std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
+                while (mesh_attribute_iterator != mesh_attributes->end()){
+                        EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
+                        EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
+
+                        material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR, new_texture_path);
+                        ++mesh_attribute_iterator;
+                }
+                return "{\"status\": true}";
+        }
+        return "{\"status\": false}";
+}
+
+std::string SaveCallback::Call(std::map<std::string, std::string> args){
+	if (object && scene){
+		std::string file_path = args["output_path"];
+		file_path = EG::Utility::StringMethods::SearchAndReplace(file_path, "%2F", "/");
+        	file_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(file_path);
+
+	        EG::Media::ObjectWriter *writer = new EG::Media::ObjectWriter(object, scene, file_path, "Assets/Textures/", "Assets/Models/");
+	        writer->Write(file_path);
+		return "{\"status\": true}";
+	}
+	return "{\"status\": false}";
+}
 
 ModelConverter::ModelConverter(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
-	gui = new EG::Utility::RocketInterface("Assets/GUIs/model_converter.rml", time, renderer->GetShaderManager(), input, window->GetResolutionWidth(), window->GetResolutionHeight());
-	use_gui = true;
-	renderer->SetGUI(gui);
-	LoadModelEventListener *load_model_event_listener = new LoadModelEventListener();
-	load_model_event_listener->model_loaded = false;
-	load_model_event_listener->scene = scene;
-	load_model_event_listener->gui = gui;
-	gui->RegisterEventListener("click", "load_model_button", load_model_event_listener);
+	gui->Initialize("Assets/GUIs/ModelConverter", "index.html");
+
+	LoadModelEventListener *listener = new LoadModelEventListener();
+	listener->scene = scene;
+	listener->model_loaded = false;
+	gui->AddResponseHandler("load_model", listener);
 }
 
 ModelConverter::~ModelConverter(void){
@@ -84,221 +322,3 @@ void ModelConverter::Update(void){
 	}
 }
 
-void LoadModelEventListener::ProcessEvent(EG::Utility::Event &event){
-	Rocket::Core::Element *path_element = document->GetElementById("model_path");
-	const Rocket::Core::Variant *path_variant = path_element->GetAttribute("value");
-	if (path_variant){
-		std::string model_path = (path_variant->Get<Rocket::Core::String>()).CString();
-		model_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(model_path);
-		model = new EG::Media::ModelLoader(scene);
-		model_loaded = model->Load(model_path);
-		if (model_loaded){
-			EG::Game::Object *model_object = new EG::Game::Object(model_path);
-			model_object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 2.0f, 0.0f)), glm::vec3(0.02f, 0.02f, 0.02f))));
-			model->GetMaterial(0)->SetLit(true);
-			model->GetMaterial(0)->SetCastsShadows(true);
-			model_object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(model->GetMesh(0), model->GetMaterial(0)));
-			scene->GetObjectManager()->AddObject(model_object);
-			document->GetElementById("load_model_inputs")->SetInnerRML((model_path + ":").c_str());
-
-			// Add new controls to RML
-			std::string model_options_rml = "Object Name: <input type=\"text\" id=\"object_name\" /><br /><br />Is Lit: <input type=\"checkbox\" id=\"lit\" />";
-			model_options_rml += "&nbsp;&nbsp;&nbsp;&nbsp;Casts Shadows: <input type=\"checkbox\" id=\"shadows\" /><br />";
-			model_options_rml += "<br />Decal: <input type=\"text\" id=\"decal\" />&nbsp;<button id=\"decal_button\">Set</button><br />";
-			model_options_rml += "<br />Normal: <input type=\"text\" id=\"normal\" />&nbsp;<button id=\"normal_button\">Set</button><br />";
-			model_options_rml += "<br />Height: <input type=\"text\" id=\"height\" />&nbsp;<button id=\"height_button\">Set</button><br />";
-			model_options_rml += "<br />Specular: <input type=\"text\" id=\"specular\" />&nbsp;<button id=\"specular_button\">Set</button><br /><br /><br />";
-			model_options_rml += "<br />Images Output Path: <input type=\"text\" id=\"images_output_path\" value=\"Assets/Textures/\"/><br />Model Output Path: <input type=\"text\" id=\"model_output_path\" value=\"Assets/Models/\" />";
-			model_options_rml += "<br />Save As: <input type=\"text\" id=\"file_out\" />&nbsp;<button id=\"save_button\">Save</button>";
-			document->GetElementById("model_options")->SetInnerRML(model_options_rml.c_str());
-
-			// Values
-			document->GetElementById("object_name")->SetAttribute("value", model_object->GetObjectName().c_str());
-			if (model->GetMaterial(0)->GetLit()){
-				document->GetElementById("lit")->SetAttribute("checked", "checked");
-			}
-			if (model->GetMaterial(0)->GetCastsShadows()){
-				document->GetElementById("shadows")->SetAttribute("checked", "checked");
-			}
-			if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL)){
-				std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL))->GetFilePath();
-				document->GetElementById("decal")->SetAttribute("value", file_path.c_str());
-			}
-			if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL)){
-				std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL))->GetFilePath();
-				document->GetElementById("normal")->SetAttribute("value", file_path.c_str());
-			}
-			if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT)){
-				std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT))->GetFilePath();
-				document->GetElementById("height")->SetAttribute("value", file_path.c_str());
-			}
-			if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR)){
-				std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR))->GetFilePath();
-				document->GetElementById("specular")->SetAttribute("value", file_path.c_str());
-			}
-
-			// Event Listeners
-			SetLitEventListener *lit_event_listener = new SetLitEventListener();
-			lit_event_listener->object = model_object;
-			gui->RegisterEventListener("click", "lit", lit_event_listener);
-
-			SetShadowsEventListener *shadows_event_listener = new SetShadowsEventListener();
-			shadows_event_listener->object = model_object;
-			gui->RegisterEventListener("click", "shadows", shadows_event_listener);
-
-			DecalButtonEventListener *decal_button_event_listener = new DecalButtonEventListener();
-			decal_button_event_listener->object = model_object;
-			decal_button_event_listener->scene = scene;
-			gui->RegisterEventListener("click", "decal_button", decal_button_event_listener);
-
-			NormalButtonEventListener *normal_button_event_listener = new NormalButtonEventListener();
-			normal_button_event_listener->object = model_object;
-			normal_button_event_listener->scene = scene;
-			gui->RegisterEventListener("click", "normal_button", normal_button_event_listener);
-
-			HeightButtonEventListener *height_button_event_listener = new HeightButtonEventListener();
-			height_button_event_listener->object = model_object;
-			height_button_event_listener->scene = scene;
-			gui->RegisterEventListener("click", "height_button", height_button_event_listener);
-
-			SpecularButtonEventListener *specular_button_event_listener = new SpecularButtonEventListener();
-			specular_button_event_listener->object = model_object;
-			specular_button_event_listener->scene = scene;
-			gui->RegisterEventListener("click", "specular_button", specular_button_event_listener);
-
-			SaveFileButtonEventListener *save_event_listener = new SaveFileButtonEventListener();
-			save_event_listener->object = model_object;
-			save_event_listener->scene = scene;
-			gui->RegisterEventListener("click", "save_button", save_event_listener);
-		}else{
-			document->GetElementById("loading_output_error")->SetInnerRML("Model Doesn't Exist Apparently... note: paths must be from where you ran this executable!");
-		}
-	}
-}
-
-void SetLitEventListener::ProcessEvent(EG::Utility::Event &event){
-	// Meshes
-	std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
-	std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
-	while (mesh_attribute_iterator != mesh_attributes->end()){
-		EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
-		EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
-
-		bool lit_status = material->GetLit();
-		material->SetLit(!lit_status);
-		++mesh_attribute_iterator;
-	}
-}
-
-void SetShadowsEventListener::ProcessEvent(EG::Utility::Event &event){
-	// Meshes
-	std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
-	std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
-	while (mesh_attribute_iterator != mesh_attributes->end()){
-		EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
-		EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
-
-		bool shadows_status = material->GetCastsShadows();
-		material->SetCastsShadows(!shadows_status);
-		++mesh_attribute_iterator;
-	}
-}
-
-void DecalButtonEventListener::ProcessEvent(EG::Utility::Event &event){
-	// See if texture is already loaded... if not, load it
-	//std::cout << "DONGLE" << std::endl;
-	std::string new_texture_path = (document->GetElementById("decal")->GetAttribute("value")->Get<Rocket::Core::String>()).CString();
-	new_texture_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(new_texture_path);
-	//std::cout << "DONGLE2" << std::endl;
-
-	if (!(scene->GetTextureManager()->HasTexture(new_texture_path))){
-		EG::Graphics::Texture *texture = new EG::Graphics::Texture(new_texture_path);
-		scene->GetTextureManager()->AddTexture(new_texture_path, texture);
-	}
-
-	// Meshes
-	std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
-	std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
-	while (mesh_attribute_iterator != mesh_attributes->end()){
-		EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
-		EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
-
-		material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, new_texture_path);
-		++mesh_attribute_iterator;
-	}
-}
-
-void NormalButtonEventListener::ProcessEvent(EG::Utility::Event &event){
-	// See if texture is already loaded... if not, load it
-	std::string new_texture_path = (document->GetElementById("normal")->GetAttribute("value")->Get<Rocket::Core::String>()).CString();
-	new_texture_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(new_texture_path);
-
-	if (!(scene->GetTextureManager()->HasTexture(new_texture_path))){
-		EG::Graphics::Texture *texture = new EG::Graphics::Texture(new_texture_path);
-		scene->GetTextureManager()->AddTexture(new_texture_path, texture);
-	}
-
-	// Meshes
-	std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
-	std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
-	while (mesh_attribute_iterator != mesh_attributes->end()){
-		EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
-		EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
-
-		material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, new_texture_path);
-		++mesh_attribute_iterator;
-	}
-}
-
-void HeightButtonEventListener::ProcessEvent(EG::Utility::Event &event){
-	// See if texture is already loaded... if not, load it
-	std::string new_texture_path = (document->GetElementById("height")->GetAttribute("value")->Get<Rocket::Core::String>()).CString();
-	new_texture_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(new_texture_path);
-
-	if (!(scene->GetTextureManager()->HasTexture(new_texture_path))){
-		EG::Graphics::Texture *texture = new EG::Graphics::Texture(new_texture_path);
-		scene->GetTextureManager()->AddTexture(new_texture_path, texture);
-	}
-
-	// Meshes
-	std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
-	std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
-	while (mesh_attribute_iterator != mesh_attributes->end()){
-		EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
-		EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
-
-		material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT, new_texture_path);
-		++mesh_attribute_iterator;
-	}
-}
-
-void SpecularButtonEventListener::ProcessEvent(EG::Utility::Event &event){
-	// See if texture is already loaded... if not, load it
-	std::string new_texture_path = (document->GetElementById("specular")->GetAttribute("value")->Get<Rocket::Core::String>()).CString();
-	new_texture_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(new_texture_path);
-
-	if (!(scene->GetTextureManager()->HasTexture(new_texture_path))){
-		EG::Graphics::Texture *texture = new EG::Graphics::Texture(new_texture_path);
-		scene->GetTextureManager()->AddTexture(new_texture_path, texture);
-	}
-
-	// Meshes
-	std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
-	std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
-	while (mesh_attribute_iterator != mesh_attributes->end()){
-		EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
-		EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
-
-		material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR, new_texture_path);
-		++mesh_attribute_iterator;
-	}
-}
-
-void SaveFileButtonEventListener::ProcessEvent(EG::Utility::Event &event){
-	std::string file_path = (document->GetElementById("file_out")->GetAttribute("value")->Get<Rocket::Core::String>()).CString();
-	file_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(file_path);
-
-	EG::Media::ObjectWriter *writer = new EG::Media::ObjectWriter(object, scene, document->GetElementById("object_name")->GetAttribute("value")->Get<Rocket::Core::String>().CString(), document->GetElementById("images_output_path")->GetAttribute("value")->Get<Rocket::Core::String>().CString(), document->GetElementById("model_output_path")->GetAttribute("value")->Get<Rocket::Core::String>().CString());
-	writer->Write(file_path);
-	document->GetElementById("model_options")->SetInnerRML(("Model Saved To: " + file_path).c_str());
-}

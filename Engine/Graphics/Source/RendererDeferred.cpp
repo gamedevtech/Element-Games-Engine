@@ -53,7 +53,7 @@ namespace EG{
             shaders->Add("luminance", "Shaders/Deferred/luminance.vert", "Shaders/Deferred/luminance.frag");
             shaders->Add("shadow_map", "Shaders/Deferred/shadow_map.vert", "Shaders/Deferred/shadow_map.frag");
             shaders->Add("depth_debug", "Shaders/Deferred/depth_debug.vert", "Shaders/Deferred/depth_debug.frag");
-            shaders->Add("gui_rendering", "Shaders/Deferred/gui_renderer.vert", "Shaders/Deferred/gui_renderer.frag");
+            shaders->Add("gui_rendering", "Shaders/Deferred/font_rendering.vert", "Shaders/Deferred/font_rendering.frag");
             shaders->Add("dof", "Shaders/Deferred/dof.vert", "Shaders/Deferred/dof.frag");
             shaders->Add("billboarding", "Shaders/Deferred/billboarding.vert", "Shaders/Deferred/billboarding.frag", "", "", "", 4);
             if (graphics->CheckVersion(4, 1)){
@@ -548,25 +548,27 @@ namespace EG{
             campos.precision(3);
             campos << camera->GetPosition().x << ", " << camera->GetPosition().y << ", " << camera->GetPosition().z;
             campos.flush();
-            font_manager->DrawText(campos.str());
+            font_manager->Draw(campos.str());
 
             shaders->SetMatrix4("model_matrix", glm::gtx::transform::translate(glm::vec3(10.0f, 24.0f, 0.0f)));
             std::stringstream fps;
             fps.precision(3);
             fps << time->GetFPS();
             fps.flush();
-            font_manager->DrawText(fps.str());
+            font_manager->Draw(fps.str());
 
             shaders->Unbind();
 
             shaders->Bind("gui_rendering");
             shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
             shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
-            shaders->SetMatrix4("model_matrix", glm::mat4(1.0f));
+            shaders->SetMatrix4("model_matrix", glm::gtx::transform::scale(float(graphics->GetViewportWidth()), float(graphics->GetViewportHeight()), 1.0f));
             shaders->SetInt("decal", 0);
             shaders->SetFloat4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-            if (gui_set){
-                gui->Draw();
+            if (gui->GetInitialized()){
+                gui->Render();
+                graphics->BindTexture(gui->GetTextureId());
+                scene->GetMeshManager()->Get("rectangle")->Draw();
             }
             glDisable(GL_BLEND);
             shaders->Unbind();

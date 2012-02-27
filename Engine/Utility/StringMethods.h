@@ -11,6 +11,9 @@ namespace EG{
 			std::string GetFilenameFromPath(std::string path);
 			std::vector<std::string> Tokenize(const std::string& string_to_parse, const std::string& delimiters = " ");
 			float *ConvertStringToFloatArray(std::string float_string);
+			std::string SearchAndReplace(const std::string &string_to_parse, const std::string &search_for, const std::string &replace_with);
+			std::wstring StringToWString(const std::string& s);
+			std::string WStringToString(const std::wstring& s);
 		}
 	}
 }
