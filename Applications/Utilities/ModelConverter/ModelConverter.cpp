@@ -290,35 +290,5 @@ void ModelConverter::Update(void){
 	if (input->IsKeyDown(EG::Input::c)){
 		scene->GetCurrentCamera()->Move(glm::vec3(0.0f, -movement_speed, 0.0f));
 	}
-	if (input->IsKeyPressed(EG::Input::t)){
-		if (rendering_method == RENDERER_DEFERRED){
-			(static_cast<EG::Graphics::RendererDeferred *>(renderer))->CycleOutputType();
-		}
-	}
-	if (input->IsKeyPressed(EG::Input::b)){
-		if (rendering_method == RENDERER_DEFERRED){
-			(static_cast<EG::Graphics::RendererDeferred *>(renderer))->ToggleBloom();
-		}
-	}
-	if (input->IsKeyPressed(EG::Input::o)){
-		if (rendering_method == RENDERER_DEFERRED){
-			(static_cast<EG::Graphics::RendererDeferred *>(renderer))->ToggleSSAO();
-		}
-	}
-	if (input->IsKeyPressed(EG::Input::n)){
-		if (rendering_method == RENDERER_DEFERRED){
-			(static_cast<EG::Graphics::RendererDeferred *>(renderer))->ToggleNormalMapping();
-		}
-	}
-	if (input->IsKeyPressed(EG::Input::m)){
-		if (rendering_method == RENDERER_DEFERRED){
-			(static_cast<EG::Graphics::RendererDeferred *>(renderer))->ToggleShadowMapping();
-		}
-	}
-	if (input->IsKeyPressed(EG::Input::f)){
-		if (rendering_method == RENDERER_DEFERRED){
-			(static_cast<EG::Graphics::RendererDeferred *>(renderer))->ToggleDOF();
-		}
-	}
 }
 

@@ -28,7 +28,7 @@ namespace EG{
 				}
 			}else{
 				rendering_method = RENDERER_SIMPLE;
-				//graphics->OverrideVersion(2, 1);
+				graphics->OverrideVersion(2, 1);
 			}
 			if (rendering_method == RENDERER_SIMPLE){
 				renderer = new EG::Graphics::Renderer();

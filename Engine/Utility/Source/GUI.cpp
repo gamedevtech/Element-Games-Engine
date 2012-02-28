@@ -116,18 +116,19 @@ namespace EG{
 			awe_string_to_wide(awe_key_codes, &wkey_code, 2);
 			key_event.text[0] = wkey_code;
 			key_event.text[1] = NULL;
-			key_event.unmodified_text[0] = NULL;
+			key_event.virtual_key_code = key_code;
+			key_event.virtual_key_code = NULL;
+			key_event.unmodified_text[0] = key_code;
+			key_event.unmodified_text[1] = NULL;
 			key_event.native_key_code = 0;
 			key_event.modifiers = 0;
 			key_event.type = AWE_WKT_CHAR;
 			key_event.is_system_key = false;
 			awe_webview_inject_keyboard_event(web_view, key_event);
-			if (key_code == '\b' || key_code == int(127)){
-				key_event.type = AWE_WKT_KEYDOWN;
-				awe_webview_inject_keyboard_event(web_view, key_event);
-				key_event.type = AWE_WKT_KEYUP;
-				awe_webview_inject_keyboard_event(web_view, key_event);
-			}
+			key_event.type = AWE_WKT_KEYDOWN;
+			awe_webview_inject_keyboard_event(web_view, key_event);
+			key_event.type = AWE_WKT_KEYUP;
+			awe_webview_inject_keyboard_event(web_view, key_event);
 			awe_string_destroy(awe_key_codes);
 		}
 
