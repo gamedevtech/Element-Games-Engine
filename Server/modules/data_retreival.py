@@ -7,7 +7,8 @@ class DataRetreival:
         self.request_index = {
             '0000': 'ping',
             '0001': 'send_message',
-            '0002': 'get_surroundings'
+            '0002': 'login',
+            '0003': 'get_surroundings'
         }
 
     def HandleRequest(self, request_data):
@@ -18,6 +19,17 @@ class DataRetreival:
                 return 'pong'
             elif request_type == 'send_message':
                 return 'Mesage Received: %s' % message
+            elif request_type == 'login':
+                creds = message.split(':')
+                username = creds[0]
+                password = creds[1]
+                print username
+                print password
+                row = self.db.FindOne('users', {'username': username, 'password': password})
+                print row
+                if row:
+                    return "success"
+                return "failure"
             elif request_type == 'get_surroundings':
                 position = message.split(':')
                 position[0] = float(position[0])
