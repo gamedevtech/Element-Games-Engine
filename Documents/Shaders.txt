@@ -1,0 +1,46 @@
+Shader Documentation
+-------------------------------------------------------------------------------
+
+Shaders work by the engine parsing the uniforms of a shader script and building
+hash tables of it's required uniforms whether they be built into the engine or
+a parameter as part of the object being rendered.
+
+For instance, a common built in engine parameter that you'll generally pull
+in as a uniform in your own shaders is the model matrix which describes the
+position, scale and rotation of the object being rendered, even if it's a
+simple 2d rectangle. You would simply use the appropriate name in the shader
+itself specified by the following documention, here's an example...
+
+uniform mat4 model_matrix;
+
+The engine will do a pre-pass on the shaders source and detect these special
+variables that are requied, and automatically pass them in.
+
+You can also specify your own variables as mentioned...
+
+uniform float character_health;
+
+This would be parsed as something that should be pulled in from the objects
+attributes. So in this case if you do not have an object basic float attribute
+bound to the object, it will report a runtime error.
+
+So here are the built in variables broken down by renderer type and rendering
+stage.
+
+Basic Multipass Renderer:
+[Stage] Object Rendering:
+vertex shader:
+projection_matrix: This matrix is passed in to describe the view perspective projection matrix. This includes things like FOV, Render Near and Far, etc.
+view_matrix:       This matrix is passed in to describe the camera's orientation and position.
+model_matrix:      This matrix is passed in to describe the object being rendered's orientation, size and position.
+normal_matrix:     This matrix is a special matrix generated from the model matrix which is used to transform normals to the surface to the proper view space for rendering.
+light_position:    The position of the current light being passed over.
+camera_position:   The current position of the camera for the current point of view.
+
+fragment shader:
+decal:             The decal texture of the object being rendered.
+light_attenuation: The attenuation coefficients of the current light being passed over.
+light_radius:      The maximum attenuated radius of the current light being passed over.
+light_color:       The color of the light being passed over.
+
+TODO: finish this documentation...
