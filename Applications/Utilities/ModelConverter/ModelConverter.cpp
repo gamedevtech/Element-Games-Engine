@@ -30,20 +30,20 @@ std::string LoadModelEventListener::Call(std::map<std::string, std::string> args
 		decalcallback->scene = scene;
 		gui->AddResponseHandler("set_decal", decalcallback);
 
-                SetNormalCallback *normalcallback = new SetNormalCallback();
-                normalcallback->object = model_object;
-                normalcallback->scene = scene;
-                gui->AddResponseHandler("set_normal", normalcallback);
+		SetNormalCallback *normalcallback = new SetNormalCallback();
+		normalcallback->object = model_object;
+		normalcallback->scene = scene;
+		gui->AddResponseHandler("set_normal", normalcallback);
 
-                SetHeightCallback *heightcallback = new SetHeightCallback();
-                heightcallback->object = model_object;
-                heightcallback->scene = scene;
-                gui->AddResponseHandler("set_height", heightcallback);
+		SetHeightCallback *heightcallback = new SetHeightCallback();
+		heightcallback->object = model_object;
+		heightcallback->scene = scene;
+		gui->AddResponseHandler("set_height", heightcallback);
 
-                SetSpecularCallback *specularcallback = new SetSpecularCallback();
-                specularcallback->object = model_object;
-                specularcallback->scene = scene;
-                gui->AddResponseHandler("set_specular", specularcallback);
+		SetSpecularCallback *specularcallback = new SetSpecularCallback();
+		specularcallback->object = model_object;
+		specularcallback->scene = scene;
+		gui->AddResponseHandler("set_specular", specularcallback);
 
 		SaveCallback *savecallback = new SaveCallback();
 		savecallback->object = model_object;
