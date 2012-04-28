@@ -1,0 +1,13 @@
+cmake_minimum_required(VERSION 2.6)
+IF (WIN32)
+	IF (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
+		include_directories(../Dependencies/Windows/include/)
+	ENDIF (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
+ELSE (WIN32)
+	include_directories(../Dependencies/Linux/include/)
+	include_directories(../Engine/)
+ENDIF (WIN32)
+
+add_library(pyegengine SHARED Scripting.h Scripting.cpp)
+#target_link_libraries(pyegengine egengine python2.7 boost_python)
+target_link_libraries(pyegengine python2.7 boost_python)

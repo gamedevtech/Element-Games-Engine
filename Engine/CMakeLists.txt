@@ -144,5 +144,5 @@ set(SRCS
 	./Utility/Source/StringMethods.cpp
 )
 
-add_library(egengine STATIC ${SRCS})
+add_library(egengine SHARED ${SRCS})
 target_link_libraries(egengine)
