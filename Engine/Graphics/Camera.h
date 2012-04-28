@@ -12,6 +12,7 @@ namespace EG{
 					CAMERA_DEFAULT
 				};
 
+// 				Camera(float _fov, float _view_width, float _view_height, float _near, float _far);
 				Camera(float _fov, glm::ivec2 _view_size, glm::vec2 _near_far);
 				~Camera(void);
 

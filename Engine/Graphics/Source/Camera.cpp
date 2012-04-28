@@ -6,7 +6,25 @@
 
 namespace EG{
     namespace Graphics{
-        Camera::Camera(float _fov, glm::ivec2 _view_size, glm::vec2 _near_far){
+// 		Camera::Camera(float _fov, float _view_width, float _view_height, float _near, float _far){
+//             offset = glm::vec3(0.0f, 0.0f, 0.0f);
+//             position = glm::vec3(0.0f, 0.0f, 0.0f);
+//             orientation = glm::quat(glm::vec3(0.0f, 0.0f, 0.0f));
+//             view_matrix = glm::mat4(1.0f);
+//
+//             fov = _fov;
+//             view_size = glm::ivec2(_view_width, _view_height);
+//             near_far = glm::vec2;
+//
+//             camera_type = CAMERA_DEFAULT;
+//
+//             // TODO: Implement these!
+//             fps_constraints = glm::vec2(0.1f, (PI / 2.0f) - 0.1f);
+//             invert_y = false;
+//             mouse_x_roll = false;
+// 		}
+
+        Camera::Camera(const float _fov, const glm::ivec2 _view_size, const glm::vec2 _near_far){
             offset = glm::vec3(0.0f, 0.0f, 0.0f);
             position = glm::vec3(0.0f, 0.0f, 0.0f);
             orientation = glm::quat(glm::vec3(0.0f, 0.0f, 0.0f));

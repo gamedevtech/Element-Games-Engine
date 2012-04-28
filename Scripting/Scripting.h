@@ -2,6 +2,8 @@
 #define EG_SCRIPTING_H
 
 #include <boost/python.hpp>
-//#include "../Game/Game.h"
+#include "../Engine/Game/Game.h"
+
+#define BOOST_PYTHON_STATIC_MODULE
 
 #endif
