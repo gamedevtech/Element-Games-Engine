@@ -18,6 +18,7 @@ namespace EG{
             bool AddObject(EG::Game::Object *object);
             EG::Game::Object *GetObjectByName(std::string object_name);
             EG::Game::Object *GetObjectById(unsigned int object_id);
+            unsigned int GetObjectCount(void);
             EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *GetObjects(void);
         private:
             EG::Utility::UnsignedIntDictionary<EG::Game::Object *> objects_by_id;

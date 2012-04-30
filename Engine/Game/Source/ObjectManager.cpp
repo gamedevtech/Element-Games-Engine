@@ -29,9 +29,13 @@ namespace EG{
             }
 
             object->SetObjectId(object_id);
-            objects_by_id.Set(object->GetObjectId(), object);
+            objects_by_id.Set(object_id, object);
 
             return true;
+        }
+
+        unsigned int ObjectManager::GetObjectCount(void){
+            return objects_by_id.GetKeys()->size();
         }
 
         EG::Game::Object *ObjectManager::GetObjectByName(std::string object_name){
