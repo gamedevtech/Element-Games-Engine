@@ -12,8 +12,6 @@ def main():
 	ca = eg.ObjectAttributeRenderingCamera(c)
 	o.AddAttribute(ca)
 	s.GetObjectManager().AddObject(o)
-	#print s.GetObjectManager().GetObjectById(o.GetObjectId()).GetObjectId()
-	#print "DOngle"
 	c.ComputeProjectionMatrix()
 	s.SetCurrentCamera(c)
 
