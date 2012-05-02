@@ -18,7 +18,16 @@ BOOST_PYTHON_MODULE(pyegengine) {
         .def_readwrite("y", &glm::vec4::y)
         .def_readwrite("z", &glm::vec4::z)
         .def_readwrite("w", &glm::vec4::w);
-    class_<glm::mat4>("mat4", init<>());
+    class_<glm::mat4>("mat4", init<>())
+        .def(init<glm::vec4, glm::vec4, glm::vec4, glm::vec4>());
+        //.def(init<float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float>());
+
+    def("translate", glm::gtc::matrix_transform::translate<float>);
+    def("translate", glm::gtc::matrix_transform::translate<double>);
+    def("scale", glm::gtc::matrix_transform::scale<float>);
+    def("scale", glm::gtc::matrix_transform::scale<double>);
+    def("rotate", glm::gtc::matrix_transform::rotate<float>);
+    def("rotate", glm::gtc::matrix_transform::rotate<double>);
 
     enum_<EG::Input::Key>("InputKey")
         .value("w", EG::Input::w)
@@ -89,6 +98,12 @@ BOOST_PYTHON_MODULE(pyegengine) {
         .def("Update", &EG::Graphics::Camera::Update)
         .def("Move", &EG::Graphics::Camera::Move);
 
+    enum_<EG::Graphics::RenderingMaterial::RenderingMaterialTextureType>("TextureType")
+        .value("decal", EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL)
+        .value("normal", EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL)
+        .value("height", EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT)
+        .value("specular", EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR);
+
     class_<EG::Graphics::RenderingMaterial>("RenderingMaterial", init<>())
         .def("SetLit", &EG::Graphics::RenderingMaterial::SetLit)
         .def("SetTranslucent", &EG::Graphics::RenderingMaterial::SetTranslucent)
@@ -144,4 +159,9 @@ BOOST_PYTHON_MODULE(pyegengine) {
         .def("GetFrameTime", &EG::Utility::Time::GetFrameTime)
         .def("GetElapsedTime", &EG::Utility::Time::GetElapsedTime)
         .def("GetFPS", &EG::Utility::Time::GetFPS);
+
+    class_<EG::Graphics::Texture>("Texture", init<std::string, bool, float>());
+
+    class_<EG::Graphics::TextureManager>("TextureManager", init<>())
+        .def("AddTexture", &EG::Graphics::TextureManager::AddTexture);
 }
