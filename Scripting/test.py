@@ -3,11 +3,10 @@ import pyegengine as eg
 class TestGame(eg.Game):
     def __init__(self, window, scene):
         eg.Game.__init__(self, window, scene)
-        print "Setting Up"
 
     def Update(self):
         movement_speed = self.GetTime().GetFrameTime() * 20.0;
-        if (self.GetInput().IsMouseDown(eg.InputMouse.left)):
+        if (self.GetInput().IsMouseDown(eg.InputMouse.right)):
             self.GetScene().GetCurrentCamera().RotateByMouse(self.GetInput().GetMouseDelta())
         if (self.GetInput().IsKeyDown(eg.InputKey.w)):
             self.GetScene().GetCurrentCamera().Move(eg.vec3(0.0, 0.0, -movement_speed))
@@ -31,8 +30,6 @@ def main():
     # Setup Camera Object
     camera = eg.Camera(45.0, eg.ivec2(800, 600), eg.vec2(0.01, 150.0))
     camera.ComputeProjectionMatrix()
-    camera.SetPosition(eg.vec3(0.0, 0.0, -2.0))
-    camera.RotateByMouse(eg.vec2(0.0, -200.0))
     camera.Update()
     camera.ComputeViewMatrix()
     scene.SetCurrentCamera(camera)

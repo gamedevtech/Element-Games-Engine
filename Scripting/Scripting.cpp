@@ -38,7 +38,9 @@ BOOST_PYTHON_MODULE(pyegengine) {
         .value("c", EG::Input::c);
 
     enum_<EG::Input::Mouse>("InputMouse")
-        .value("left", EG::Input::mouse_left);
+        .value("left", EG::Input::mouse_left)
+        .value("right", EG::Input::mouse_right)
+        .value("middle", EG::Input::mouse_middle);
 
     class_<EG::Input::Input>("Input", init<>())
         .def("Update", &EG::Input::Input::Update)
