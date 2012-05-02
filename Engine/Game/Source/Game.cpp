@@ -230,5 +230,13 @@ namespace EG{
         EG::Graphics::Renderer *Game::GetRenderer(void){
             return renderer;
         }
+
+        EG::Input::Input *Game::GetInput(void){
+            return input;
+        }
+
+        EG::Utility::Time *Game::GetTime(void){
+            return time;
+        }
     }
 }

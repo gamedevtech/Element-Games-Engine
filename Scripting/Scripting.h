@@ -7,6 +7,7 @@
 #include "../Engine/Game/ObjectControlAttribute.h"
 #include "../Engine/Game/ObjectEmissionAttribute.h"
 #include "../Engine/Game/ObjectRenderingAttribute.h"
+#include "../Engine/Graphics/MeshGenerator.h"
 
 #define BOOST_PYTHON_STATIC_MODULE
 

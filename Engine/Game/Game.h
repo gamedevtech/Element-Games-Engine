@@ -27,6 +27,8 @@ namespace EG{
 				EG::Game::Scene *GetScene(void);
 				EG::Utility::Window *GetWindow(void);
 				EG::Graphics::Renderer *GetRenderer(void);
+                EG::Input::Input *GetInput(void);
+                EG::Utility::Time *GetTime(void);
 			protected:
 				EG::Utility::Window *window;
 				EG::Graphics::Renderer *renderer;
