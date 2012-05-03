@@ -5,7 +5,7 @@ class TestGame(eg.Game):
         eg.Game.__init__(self, window, scene)
 
     def Update(self):
-        movement_speed = self.GetTime().GetFrameTime() * 20.0;
+        movement_speed = self.GetTime().GetFrameTime() * 20.0
         if (self.GetInput().IsMouseDown(eg.InputMouse.right)):
             self.GetScene().GetCurrentCamera().RotateByMouse(self.GetInput().GetMouseDelta())
         if (self.GetInput().IsKeyDown(eg.InputKey.w)):

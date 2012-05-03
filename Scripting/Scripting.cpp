@@ -29,6 +29,7 @@ BOOST_PYTHON_MODULE(pyegengine) {
     def("rotate", glm::gtc::matrix_transform::rotate<float>);
     def("rotate", glm::gtc::matrix_transform::rotate<double>);
 
+    // Finish
     enum_<EG::Input::Key>("InputKey")
         .value("w", EG::Input::w)
         .value("a", EG::Input::a)
@@ -42,6 +43,7 @@ BOOST_PYTHON_MODULE(pyegengine) {
         .value("right", EG::Input::mouse_right)
         .value("middle", EG::Input::mouse_middle);
 
+    // Done
     class_<EG::Input::Input>("Input", init<>())
         .def("Update", &EG::Input::Input::Update)
         .def("KeyPressed", &EG::Input::Input::KeyPressed)
@@ -64,12 +66,14 @@ BOOST_PYTHON_MODULE(pyegengine) {
 
     class_<EG::Graphics::Mesh>("Mesh", init<EG::Graphics::TriangleMesh *>()); // TODO: Expose More
 
+    // Done
     def("GenerateCube", &EG::Graphics::GenerateCube, return_value_policy<reference_existing_object>());
     def("GeneratePlane", &EG::Graphics::GeneratePlane, return_value_policy<reference_existing_object>());
     def("GenerateSphere", &EG::Graphics::GenerateSphere, return_value_policy<reference_existing_object>());
     def("GenerateCubeSphere", &EG::Graphics::GenerateCubeSphere, return_value_policy<reference_existing_object>());
     def("GenerateQuad", &EG::Graphics::GenerateQuad, return_value_policy<reference_existing_object>());
 
+    // Done
     class_<EG::Utility::Window>("Window", init<float, float, unsigned int, bool, std::string>())
         .def("IsOpened", &EG::Utility::Window::IsOpened)
         .def("Update", &EG::Utility::Window::Update)
@@ -78,6 +82,7 @@ BOOST_PYTHON_MODULE(pyegengine) {
         .def("GetResolutionHeight", &EG::Utility::Window::GetResolutionHeight)
         .def("GetResolutionWidth", &EG::Utility::Window::GetResolutionWidth);
 
+    // Done
     class_<EG::Game::Scene>("Scene", init<>())
         .def("SetCurrentCamera", &EG::Game::Scene::SetCurrentCamera)
         .def("GetCurrentCamera", &EG::Game::Scene::GetCurrentCamera, return_value_policy<reference_existing_object>())
@@ -85,27 +90,51 @@ BOOST_PYTHON_MODULE(pyegengine) {
         .def("GetMeshManager", &EG::Game::Scene::GetMeshManager, return_value_policy<reference_existing_object>())
         .def("GetTextureManager", &EG::Game::Scene::GetTextureManager, return_value_policy<reference_existing_object>());
 
+    // Done
     class_<EG::Game::Game>("Game", init<EG::Utility::Window *, EG::Game::Scene *>())
         .def("Update", &EG::Game::Game::Update)
         .def("Render", &EG::Game::Game::Render)
         .def("GetInput", &EG::Game::Game::GetInput, return_value_policy<reference_existing_object>())
         .def("GetScene", &EG::Game::Game::GetScene, return_value_policy<reference_existing_object>())
-        .def("GetTime", &EG::Game::Game::GetTime, return_value_policy<reference_existing_object>());
+        .def("GetTime", &EG::Game::Game::GetTime, return_value_policy<reference_existing_object>())
+        .def("GetWindow", &EG::Game::Game::GetWindow, return_value_policy<reference_existing_object>())
+        .def("GetRenderer", &EG::Game::Game::GetRenderer, return_value_policy<reference_existing_object>());
 
+    // Done
     class_<EG::Graphics::Camera>("Camera", init<float, glm::ivec2, glm::vec2>())
         .def("ComputeProjectionMatrix", &EG::Graphics::Camera::ComputeProjectionMatrix)
         .def("ComputeViewMatrix", &EG::Graphics::Camera::ComputeViewMatrix)
         .def("SetPosition", &EG::Graphics::Camera::SetPosition)
         .def("RotateByMouse", &EG::Graphics::Camera::RotateByMouse)
         .def("Update", &EG::Graphics::Camera::Update)
-        .def("Move", &EG::Graphics::Camera::Move);
+        .def("Move", &EG::Graphics::Camera::Move)
+        .def("SetOffset", &EG::Graphics::Camera::SetOffset)
+        .def("SetOrientation", &EG::Graphics::Camera::SetOrientation)
+        .def("SetViewSize", &EG::Graphics::Camera::SetViewSize)
+        .def("SetNearFar", &EG::Graphics::Camera::SetNearFar)
+        .def("SetFOV", &EG::Graphics::Camera::SetFOV)
+        .def("SetCameraType", &EG::Graphics::Camera::SetCameraType)
+        .def("SetViewMatrix", &EG::Graphics::Camera::SetViewMatrix)
+        .def("Rotate", &EG::Graphics::Camera::Rotate)
+        .def("GetPosition", &EG::Graphics::Camera::GetPosition)
+        .def("GetOffset", &EG::Graphics::Camera::GetOffset)
+        .def("GetOrientation", &EG::Graphics::Camera::GetOrientation)
+        .def("GetViewSize", &EG::Graphics::Camera::GetViewSize)
+        .def("GetNearFar", &EG::Graphics::Camera::GetNearFar)
+        .def("GetFOV", &EG::Graphics::Camera::GetFOV)
+        .def("GetViewMatrix", &EG::Graphics::Camera::GetViewMatrix)
+        .def("GetInverseViewMatrix", &EG::Graphics::Camera::GetInverseViewMatrix)
+        .def("GetProjectionMatrix", &EG::Graphics::Camera::GetProjectionMatrix)
+        .def("GetInverseProjectionMatrix", &EG::Graphics::Camera::GetInverseProjectionMatrix);
 
+    // Done
     enum_<EG::Graphics::RenderingMaterial::RenderingMaterialTextureType>("TextureType")
         .value("decal", EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL)
         .value("normal", EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL)
         .value("height", EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT)
         .value("specular", EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR);
 
+    // Done
     class_<EG::Graphics::RenderingMaterial>("RenderingMaterial", init<>())
         .def("SetLit", &EG::Graphics::RenderingMaterial::SetLit)
         .def("SetTranslucent", &EG::Graphics::RenderingMaterial::SetTranslucent)
@@ -135,35 +164,84 @@ BOOST_PYTHON_MODULE(pyegengine) {
         .def("SetBlendingMode", &EG::Graphics::RenderingMaterial::SetBlendingMode)
         .def("GetBlendingMode", &EG::Graphics::RenderingMaterial::GetBlendingMode, return_value_policy<return_by_value>());
 
+    // Object Attributes TODO: Getters and setters
     class_<EG::Game::ObjectAttribute>("ObjectAttribute", init<>())
         .def("GetType", &EG::Game::ObjectAttribute::GetType, return_value_policy<return_by_value>());
-
+    class_<EG::Game::ObjectAttributeBasicTransformation, bases<EG::Game::ObjectAttribute> >("ObjectAttributeBasicTransformation", init<glm::mat4>());
+    class_<EG::Game::ObjectAttributeBasicString, bases<EG::Game::ObjectAttribute> >("ObjectAttributeBasicString", init<std::string, std::string>());
+    class_<EG::Game::ObjectAttributeBasicInteger, bases<EG::Game::ObjectAttribute> >("ObjectAttributeBasicInteger", init<std::string, int>());
+    class_<EG::Game::ObjectAttributeBasicFloat, bases<EG::Game::ObjectAttribute> >("ObjectAttributeBasicFloat", init<std::string, float>());
     class_<EG::Game::ObjectAttributeRenderingMesh, bases<EG::Game::ObjectAttribute> >("ObjectAttributeRenderingMesh", init<std::string, EG::Graphics::RenderingMaterial *>());
     class_<EG::Game::ObjectAttributeRenderingCamera, bases<EG::Game::ObjectAttribute> >("ObjectAttributeRenderingCamera", init<EG::Graphics::Camera *>());
-    class_<EG::Game::ObjectAttributeBasicTransformation, bases<EG::Game::ObjectAttribute> >("ObjectAttributeBasicTransformation", init<glm::mat4>());
+    class_<EG::Game::ObjectAttributeEmissionLight, bases<EG::Game::ObjectAttribute> >("ObjectAttributeEmissionLight", init<EG::Graphics::Light *>());
+    class_<EG::Game::ObjectAttributeEmissionParticleSystem, bases<EG::Game::ObjectAttribute> >("ObjectAttributeEmissionParticleSystem", init<EG::Graphics::ParticleSystem *>());
+    class_<EG::Game::ObjectAttributeControlRigidBody, bases<EG::Game::ObjectAttribute> >("ObjectAttributeControlRigidBody", init<EG::Dynamics::RigidBody *>());
 
+    // Done
     class_<EG::Game::Object>("Object", init<std::string>())
         .def("GetObjectId", &EG::Game::Object::GetObjectId)
         .def("GetObjectName", &EG::Game::Object::GetObjectName)
-        .def("AddAttribute", &EG::Game::Object::AddAttribute);
+        .def("AddAttribute", &EG::Game::Object::AddAttribute)
+        .def("GetAttributes", &EG::Game::Object::GetAttributes, return_value_policy<reference_existing_object>())
+        .def("GetAttributesByType", &EG::Game::Object::GetAttributesByType, return_value_policy<reference_existing_object>())
+        .def("HasAttributesOfType", &EG::Game::Object::HasAttributesOfType);
 
+    // Done
     class_<EG::Game::ObjectManager>("ObjectManager", init<>())
         .def("AddObject", &EG::Game::ObjectManager::AddObject)
         .def("GetObjectById", &EG::Game::ObjectManager::GetObjectById, return_value_policy<reference_existing_object>())
         .def("GetObjectByName", &EG::Game::ObjectManager::GetObjectByName, return_value_policy<reference_existing_object>())
-        .def("GetObjectCount", &EG::Game::ObjectManager::GetObjectCount);
+        .def("GetObjectCount", &EG::Game::ObjectManager::GetObjectCount)
+        .def("GetObjects", &EG::Game::ObjectManager::GetObjects, return_value_policy<reference_existing_object>());
 
+    // Done
     class_<EG::Graphics::MeshManager>("MeshManager", init<>())
-        .def("Add", &EG::Graphics::MeshManager::Add);
+        .def("Add", &EG::Graphics::MeshManager::Add)
+        .def("Get", &EG::Graphics::MeshManager::Get, return_value_policy<reference_existing_object>());
 
+    // Done
+    class_<EG::Graphics::Light>("Light", init<>())
+        .def("SetColor", &EG::Graphics::Light::SetColor)
+        .def("SetAttenuation", &EG::Graphics::Light::SetAttenuation)
+        .def("SetPosition", &EG::Graphics::Light::SetPosition)
+        .def("SetDirection", &EG::Graphics::Light::SetDirection)
+        .def("SetCastsShadows", &EG::Graphics::Light::SetCastsShadows)
+        .def("SetRadius", &EG::Graphics::Light::SetRadius)
+        .def("SetSpotAngle", &EG::Graphics::Light::SetSpotAngle)
+        .def("GetColor", &EG::Graphics::Light::GetColor)
+        .def("GetAttenuation", &EG::Graphics::Light::GetAttenuation)
+        .def("GetPosition", &EG::Graphics::Light::GetPosition)
+        .def("GetDirection", &EG::Graphics::Light::GetDirection)
+        .def("GetCastsShadows", &EG::Graphics::Light::GetCastsShadows)
+        .def("GetRadius", &EG::Graphics::Light::GetRadius)
+        .def("GetSpotAngle", &EG::Graphics::Light::GetSpotAngle)
+        .def("GetShadowMapResolution", &EG::Graphics::Light::GetShadowMapResolution)
+        .def("Update", &EG::Graphics::Light::Update)
+        .def("GetProjectionMatrix", &EG::Graphics::Light::GetProjectionMatrix)
+        .def("GetViewMatrix", &EG::Graphics::Light::GetViewMatrix)
+        .def("GetShadowBuffer", &EG::Graphics::Light::GetShadowBuffer, return_value_policy<reference_existing_object>());
+
+    // Done
     class_<EG::Utility::Time>("Time", init<>())
         .def("Update", &EG::Utility::Time::Update)
         .def("GetFrameTime", &EG::Utility::Time::GetFrameTime)
         .def("GetElapsedTime", &EG::Utility::Time::GetElapsedTime)
         .def("GetFPS", &EG::Utility::Time::GetFPS);
 
-    class_<EG::Graphics::Texture>("Texture", init<std::string, bool, float>());
+    // Need to figure out default params, and also overloaded load function, which I neglected so far
+    class_<EG::Graphics::Texture>("Texture", init<std::string, bool, float>())
+        .def("GetId", &EG::Graphics::Texture::GetId)
+        .def("GetFilePath", &EG::Graphics::Texture::GetFilePath)
+        .def("GetWidth", &EG::Graphics::Texture::GetWidth)
+        .def("GetHeight", &EG::Graphics::Texture::GetHeight)
+        .def("UpdateImage", &EG::Graphics::Texture::UpdateImage);
 
+    // Done
     class_<EG::Graphics::TextureManager>("TextureManager", init<>())
-        .def("AddTexture", &EG::Graphics::TextureManager::AddTexture);
+        .def("AddTexture", &EG::Graphics::TextureManager::AddTexture)
+        .def("AddCubeMap", &EG::Graphics::TextureManager::AddCubeMap)
+        .def("HasTexture", &EG::Graphics::TextureManager::HasTexture)
+        .def("HasCubeMap", &EG::Graphics::TextureManager::HasCubeMap)
+        .def("GetTexture", &EG::Graphics::TextureManager::GetTexture, return_value_policy<reference_existing_object>())
+        .def("GetCubeMap", &EG::Graphics::TextureManager::GetCubeMap, return_value_policy<reference_existing_object>());
 }
