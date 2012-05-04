@@ -346,6 +346,7 @@ namespace EG{
                 graphics->BindTexture(gui->GetTextureId(), 0);
                 scene->GetMeshManager()->Get("rectangle")->Draw();
             }
+
             glDisable(GL_BLEND);
             glEnable(GL_DEPTH_TEST);
             shaders->Unbind();
@@ -373,6 +374,27 @@ namespace EG{
             font_manager->Draw(fps.str());
 
             shaders->Unbind();
+
+            // LOGO
+            glDisable(GL_DEPTH_TEST);
+            glEnable(GL_BLEND);
+            glEnable(GL_TEXTURE_2D);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            shaders->Bind("textured");
+            glm::mat4 scale_mat = glm::scale(glm::mat4(1.0f), glm::vec3(128.0f, 128.0f, 128.0f));
+            glm::mat4 trans_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 32.0f, 0.0f));
+            shaders->SetMatrix4("model_matrix", trans_mat * scale_mat);
+            shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
+            shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
+            shaders->SetInt("decal", 0);
+            shaders->SetInt("height", 1);
+            shaders->SetFloat4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+            graphics->BindTexture(scene->GetTextureManager()->GetTexture("eglogo")->GetId(), 0);
+            scene->GetMeshManager()->Get("rectangle")->Draw();
+            shaders->Unbind();
+            glDisable(GL_BLEND);
+            glEnable(GL_DEPTH_TEST);
+            // END LOGO
         }
     }
 }

@@ -157,8 +157,7 @@ namespace EG{
 				unsigned char *sixels = (unsigned char *)(sfml_image.GetPixelsPtr());
 				for (unsigned int i = 0; i < (*height); i++){
 					for (unsigned int j = 0; j < (*width); j++){
-						//unsigned int source_index = (((*height) - i) * (*width) * 4) + (((*width) - j) * 4);
-						unsigned int source_index = (i * (*width) * 4) + (j * 4);
+                        unsigned int source_index = (((*height) - i) * (*width) * 4) + (j * 4);
 						unsigned int dest_index = (i * (*width) * 4) + (j * 4);
 						pixels[dest_index] = sixels[source_index];
 						pixels[dest_index + 1] = sixels[source_index + 1];
