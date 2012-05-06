@@ -133,6 +133,9 @@ namespace EG{
                 void PrintProgramLog(unsigned int program_object_id);
                 void PrintShaderLog(unsigned int shader_object_id);
                 std::ofstream shader_log;
+
+                std::vector<std::pair<std::string, std::string> > FindUniforms(char **source, int *sizes, int line_count);
+                void InterpretShaderVariables(EG::Graphics::ShaderSource *shader_source, std::string shader_id);
         };
     }
 }

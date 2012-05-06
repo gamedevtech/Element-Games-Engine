@@ -100,6 +100,8 @@ namespace EG{
                 tessellation_evaluation_shader_objects.Set(SHADER_PROGRAM_OBJECT, object_ids[TESSELLATION_EVALUATION_SHADER_OBJECT]);
             }
 
+            InterpretShaderVariables(sources, shader_id);
+
             //delete sources; // Crashes when switching Rendering Pipelines
 
             return true;
@@ -343,5 +345,49 @@ namespace EG{
             SetMatrix4(variable_name, (float *)(glm::value_ptr(matrix)));
         }
 
+        // Type, Name
+        std::vector<std::pair<std::string, std::string> > ShaderManager::FindUniforms(char **source, int *sizes, int line_count){
+            std::vector<std::pair<std::string, std::string> > results;
+            for (unsigned int i = 0; i < line_count; i++){
+                unsigned int line_size = sizes[i];
+                char *line_c_str = source[i];
+                std::string line(line_c_str);
+                int pos = line.find("void");
+                if (pos != -1){
+                    break;
+                }
+                pos = line.find("uniform");
+                if (pos != -1){
+                    int type_pos = line.find_first_not_of(' ', pos + 7);
+                    int after_type_pos = line.find_first_of(' ', type_pos);
+                    std::string type = line.substr(type_pos, after_type_pos - type_pos);
+                    int name_pos = line.find_first_not_of(' ', after_type_pos);
+                    int semi_pos = line.find_first_of(';', after_type_pos);
+                    std::string name = line.substr(name_pos, semi_pos - name_pos);
+                    results.push_back(std::pair<std::string, std::string>(type, name));
+                    std::cout << type << ":" << name << std::endl;
+                }
+            }
+            return results;
+        }
+
+        void ShaderManager::InterpretShaderVariables(EG::Graphics::ShaderSource *sources, std::string shader_id) {
+            std::vector<std::pair<std::string, std::string> > results;
+            if (sources->vertex_shader_line_count > 0) {
+                results = FindUniforms(sources->vertex_shader_source, sources->vertex_shader_line_sizes, sources->vertex_shader_line_count);
+            }
+            if (sources->fragment_shader_line_count> 0) {
+                results = FindUniforms(sources->fragment_shader_source, sources->fragment_shader_line_sizes, sources->fragment_shader_line_count);
+            }
+            if (sources->geometry_shader_line_count > 0) {
+                results = FindUniforms(sources->geometry_shader_source, sources->geometry_shader_line_sizes, sources->geometry_shader_line_count);
+            }
+            if (sources->tessellation_control_shader_line_count > 0) {
+                results = FindUniforms(sources->tessellation_control_shader_source, sources->tessellation_control_shader_line_sizes, sources->tessellation_control_shader_line_count);
+            }
+            if (sources->tessellation_evaluation_shader_line_count > 0) {
+                results = FindUniforms(sources->tessellation_evaluation_shader_source, sources->tessellation_evaluation_shader_line_sizes, sources->tessellation_evaluation_shader_line_count);
+            }
+        }
     }
 }
