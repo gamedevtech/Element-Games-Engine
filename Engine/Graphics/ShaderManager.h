@@ -60,7 +60,9 @@ namespace EG{
                     ENGINE_DEPTH_MAP = 31,
                     ENGINE_RESOLUTION = 32,
                     ENGINE_NEAR_FAR = 33,
-                    ENGINE_SPECULAR_MAP = 34
+                    ENGINE_SPECULAR_MAP = 34,
+                    ENGINE_PROJECTION_MATRIX = 35,
+                    ENGINE_VIEW_MATRIX = 36
                 };
 
                 enum ShaderUniformTypes{

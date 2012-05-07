@@ -152,7 +152,7 @@ namespace EG{
         }
 
         void ShaderManager::AddObjectUniformUsage(std::string shader_id, std::string variable_name, ShaderUniformTypes variable_type){
-            std::cout << "Variable Name: " << variable_name << std::endl;
+            std::cout << shader_id << ": " << variable_name << std::endl;
             if (program_objects.Has(shader_id)){
                 unsigned int id = program_objects.Get(shader_id);
                 if (!(object_shader_uniforms.Has(id))){
@@ -413,10 +413,13 @@ namespace EG{
         }
 
         void ShaderManager::CreateUniformStringTranslations(void){
+            engine_uniform_string_translations.Set("projection_matrix", EG::Graphics::ShaderManager::ENGINE_PROJECTION_MATRIX);
             // replace both of these with just projection matrix
             engine_uniform_string_translations.Set("perspective_matrix", EG::Graphics::ShaderManager::ENGINE_PERSPECTIVE_MATRIX);
             engine_uniform_string_translations.Set("ortho_matrix", EG::Graphics::ShaderManager::ENGINE_ORTHO_MATRIX);
             engine_uniform_string_translations.Set("camera_matrix", EG::Graphics::ShaderManager::ENGINE_CAMERA_MATRIX);
+            engine_uniform_string_translations.Set("camera_position", EG::Graphics::ShaderManager::ENGINE_CAMERA_POSITION);
+            engine_uniform_string_translations.Set("view_matrix", EG::Graphics::ShaderManager::ENGINE_VIEW_MATRIX);
             engine_uniform_string_translations.Set("model_matrix", EG::Graphics::ShaderManager::ENGINE_MODEL_MATRIX);
             engine_uniform_string_translations.Set("normal_matrix", EG::Graphics::ShaderManager::ENGINE_NORMAL_MATRIX);
             engine_uniform_string_translations.Set("light_position", EG::Graphics::ShaderManager::ENGINE_LIGHT_POSITION);
