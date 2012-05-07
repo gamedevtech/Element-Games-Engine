@@ -168,14 +168,14 @@ namespace EG{
         HashTableValueType StringDictionary<HashTableValueType>::Get(std::string key){
             unsigned int hashed_key = HashingFunction(key);
             if (_table[hashed_key] == NULL){
-                return 0;
+                return HashTableValueType(0);
             }else{
                 StringDictionaryEntry<HashTableValueType> *entry = _table[hashed_key];
                 while (entry != NULL && entry->GetKey() != key){
                     entry = entry->GetNext();
                 }
                 if (entry == NULL){
-                    return 0;
+                    return HashTableValueType(0);
                 }else{
                     return entry->GetValue();
                 }

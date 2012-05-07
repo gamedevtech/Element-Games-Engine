@@ -10,6 +10,7 @@ namespace EG{
             shader_log.open("shaders.log", std::fstream::out);
             shader_log.close();
             shader_log.open("shaders.log", std::fstream::out | std::fstream::app);
+            CreateUniformStringTranslations();
         }
         ShaderManager::~ShaderManager(void){
             EG::Utility::StringDictionaryKeysIterator shader_iterator = program_objects.GetKeysBegin();
@@ -151,6 +152,7 @@ namespace EG{
         }
 
         void ShaderManager::AddObjectUniformUsage(std::string shader_id, std::string variable_name, ShaderUniformTypes variable_type){
+            std::cout << "Variable Name: " << variable_name << std::endl;
             if (program_objects.Has(shader_id)){
                 unsigned int id = program_objects.Get(shader_id);
                 if (!(object_shader_uniforms.Has(id))){
@@ -365,29 +367,100 @@ namespace EG{
                     int semi_pos = line.find_first_of(';', after_type_pos);
                     std::string name = line.substr(name_pos, semi_pos - name_pos);
                     results.push_back(std::pair<std::string, std::string>(type, name));
-                    std::cout << type << ":" << name << std::endl;
+                    //std::cout << type << ":" << name << std::endl;
                 }
             }
             return results;
+        }
+
+        void ShaderManager::StoreShaderUniforms(std::string shader_id, std::vector<std::pair<std::string, std::string> > params){
+            std::vector<std::pair<std::string, std::string> >::iterator params_iter = params.begin();
+            while (params_iter != params.end()){
+                std::pair<std::string, std::string> variable = (*params_iter);
+                std::string type = variable.first;
+                std::string name = variable.second;
+                if (engine_uniform_string_translations.Has(name)){
+                    AddEngineUniformUsage(shader_id, engine_uniform_string_translations.Get(name));
+                } else if (uniform_type_translations.Has(type)){
+                    AddObjectUniformUsage(shader_id, name, uniform_type_translations.Get(type));
+                }
+                ++params_iter;
+            }
         }
 
         void ShaderManager::InterpretShaderVariables(EG::Graphics::ShaderSource *sources, std::string shader_id) {
             std::vector<std::pair<std::string, std::string> > results;
             if (sources->vertex_shader_line_count > 0) {
                 results = FindUniforms(sources->vertex_shader_source, sources->vertex_shader_line_sizes, sources->vertex_shader_line_count);
+                StoreShaderUniforms(shader_id, results);
             }
             if (sources->fragment_shader_line_count> 0) {
                 results = FindUniforms(sources->fragment_shader_source, sources->fragment_shader_line_sizes, sources->fragment_shader_line_count);
+                StoreShaderUniforms(shader_id, results);
             }
             if (sources->geometry_shader_line_count > 0) {
                 results = FindUniforms(sources->geometry_shader_source, sources->geometry_shader_line_sizes, sources->geometry_shader_line_count);
+                StoreShaderUniforms(shader_id, results);
             }
             if (sources->tessellation_control_shader_line_count > 0) {
                 results = FindUniforms(sources->tessellation_control_shader_source, sources->tessellation_control_shader_line_sizes, sources->tessellation_control_shader_line_count);
+                StoreShaderUniforms(shader_id, results);
             }
             if (sources->tessellation_evaluation_shader_line_count > 0) {
                 results = FindUniforms(sources->tessellation_evaluation_shader_source, sources->tessellation_evaluation_shader_line_sizes, sources->tessellation_evaluation_shader_line_count);
+                StoreShaderUniforms(shader_id, results);
             }
+        }
+
+        void ShaderManager::CreateUniformStringTranslations(void){
+            // replace both of these with just projection matrix
+            engine_uniform_string_translations.Set("perspective_matrix", EG::Graphics::ShaderManager::ENGINE_PERSPECTIVE_MATRIX);
+            engine_uniform_string_translations.Set("ortho_matrix", EG::Graphics::ShaderManager::ENGINE_ORTHO_MATRIX);
+            engine_uniform_string_translations.Set("camera_matrix", EG::Graphics::ShaderManager::ENGINE_CAMERA_MATRIX);
+            engine_uniform_string_translations.Set("model_matrix", EG::Graphics::ShaderManager::ENGINE_MODEL_MATRIX);
+            engine_uniform_string_translations.Set("normal_matrix", EG::Graphics::ShaderManager::ENGINE_NORMAL_MATRIX);
+            engine_uniform_string_translations.Set("light_position", EG::Graphics::ShaderManager::ENGINE_LIGHT_POSITION);
+            engine_uniform_string_translations.Set("light_radius", EG::Graphics::ShaderManager::ENGINE_LIGHT_RADIUS);
+            engine_uniform_string_translations.Set("light_attenuation", EG::Graphics::ShaderManager::ENGINE_LIGHT_ATTENUATION);
+            engine_uniform_string_translations.Set("light_color", EG::Graphics::ShaderManager::ENGINE_LIGHT_COLOR);
+            engine_uniform_string_translations.Set("decal_map", EG::Graphics::ShaderManager::ENGINE_DECAL_MAP);
+            engine_uniform_string_translations.Set("height_map", EG::Graphics::ShaderManager::ENGINE_HEIGHT_MAP);
+            engine_uniform_string_translations.Set("normal_map", EG::Graphics::ShaderManager::ENGINE_NORMAL_MAP);
+            engine_uniform_string_translations.Set("specular_map", EG::Graphics::ShaderManager::ENGINE_SPECULAR_MAP);
+            engine_uniform_string_translations.Set("depth_map", EG::Graphics::ShaderManager::ENGINE_DEPTH_MAP);
+            engine_uniform_string_translations.Set("normal_mapping_enabled", EG::Graphics::ShaderManager::ENGINE_NORMAL_MAPPING_ENABLED);
+            engine_uniform_string_translations.Set("shadow_mapping_enabled", EG::Graphics::ShaderManager::ENGINE_SHADOW_MAPPING_ENABLED);
+            engine_uniform_string_translations.Set("material_color", EG::Graphics::ShaderManager::ENGINE_MATERIAL_COLOR);
+            engine_uniform_string_translations.Set("material_specularity", EG::Graphics::ShaderManager::ENGINE_MATERIAL_SPECULARITY);
+            engine_uniform_string_translations.Set("receives_lighting", EG::Graphics::ShaderManager::ENGINE_RECEIVES_LIGHTING);
+            engine_uniform_string_translations.Set("shadow_mapping_bias", EG::Graphics::ShaderManager::ENGINE_SHADOW_MAPPING_BIAS);
+            engine_uniform_string_translations.Set("shadow_mapping_size", EG::Graphics::ShaderManager::ENGINE_SHADOW_MAPPING_SIZE);
+            engine_uniform_string_translations.Set("position_buffer", EG::Graphics::ShaderManager::ENGINE_POSITION_BUFFER);
+            engine_uniform_string_translations.Set("normal_buffer", EG::Graphics::ShaderManager::ENGINE_NORMAL_BUFFER);
+            engine_uniform_string_translations.Set("transparent_buffer", EG::Graphics::ShaderManager::ENGINE_TRANSPARENT_BUFFER);
+            engine_uniform_string_translations.Set("color_buffer", EG::Graphics::ShaderManager::ENGINE_COLOR_BUFFER);
+            engine_uniform_string_translations.Set("bloom_buffer", EG::Graphics::ShaderManager::ENGINE_BLOOM_BUFFER);
+            engine_uniform_string_translations.Set("ssao_buffer", EG::Graphics::ShaderManager::ENGINE_SSAO_BUFFER);
+            engine_uniform_string_translations.Set("luminance", EG::Graphics::ShaderManager::ENGINE_LUMINANCE);
+            engine_uniform_string_translations.Set("bloom_scale", EG::Graphics::ShaderManager::ENGINE_BLOOM_SCALE);
+            engine_uniform_string_translations.Set("ssao_enabled", EG::Graphics::ShaderManager::ENGINE_SSAO_ENABLED);
+            engine_uniform_string_translations.Set("bloom_enabled", EG::Graphics::ShaderManager::ENGINE_BLOOM_ENABLED);
+            engine_uniform_string_translations.Set("luminance_scale", EG::Graphics::ShaderManager::ENGINE_LUMINANCE_SCALE);
+            engine_uniform_string_translations.Set("resolution", EG::Graphics::ShaderManager::ENGINE_RESOLUTION);
+            engine_uniform_string_translations.Set("near_far", EG::Graphics::ShaderManager::ENGINE_NEAR_FAR);
+            uniform_type_translations.Set("sampler2D", EG::Graphics::ShaderManager::UNIFORM_TEXTURE);
+            uniform_type_translations.Set("samplerCube", EG::Graphics::ShaderManager::UNIFORM_CUBEMAP);
+            uniform_type_translations.Set("int", EG::Graphics::ShaderManager::UNIFORM_INT);
+            uniform_type_translations.Set("ivec2", EG::Graphics::ShaderManager::UNIFORM_INT2);
+            uniform_type_translations.Set("ivec3", EG::Graphics::ShaderManager::UNIFORM_INT3);
+            uniform_type_translations.Set("ivec4", EG::Graphics::ShaderManager::UNIFORM_INT4);
+            uniform_type_translations.Set("float", EG::Graphics::ShaderManager::UNIFORM_FLOAT);
+            uniform_type_translations.Set("vec2", EG::Graphics::ShaderManager::UNIFORM_FLOAT2);
+            uniform_type_translations.Set("vec3", EG::Graphics::ShaderManager::UNIFORM_FLOAT3);
+            uniform_type_translations.Set("vec4", EG::Graphics::ShaderManager::UNIFORM_FLOAT4);
+            uniform_type_translations.Set("mat2", EG::Graphics::ShaderManager::UNIFORM_MAT2);
+            uniform_type_translations.Set("mat3", EG::Graphics::ShaderManager::UNIFORM_MAT3);
+            uniform_type_translations.Set("mat4", EG::Graphics::ShaderManager::UNIFORM_MAT4);
         }
     }
 }

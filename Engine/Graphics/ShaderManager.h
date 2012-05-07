@@ -59,7 +59,8 @@ namespace EG{
                     ENGINE_LUMINANCE_SCALE = 30,
                     ENGINE_DEPTH_MAP = 31,
                     ENGINE_RESOLUTION = 32,
-                    ENGINE_NEAR_FAR = 33
+                    ENGINE_NEAR_FAR = 33,
+                    ENGINE_SPECULAR_MAP = 34
                 };
 
                 enum ShaderUniformTypes{
@@ -134,8 +135,12 @@ namespace EG{
                 void PrintShaderLog(unsigned int shader_object_id);
                 std::ofstream shader_log;
 
+                void StoreShaderUniforms(std::string shader_id, std::vector<std::pair<std::string, std::string> > params);
                 std::vector<std::pair<std::string, std::string> > FindUniforms(char **source, int *sizes, int line_count);
                 void InterpretShaderVariables(EG::Graphics::ShaderSource *shader_source, std::string shader_id);
+                EG::Utility::StringDictionary<EngineUniforms> engine_uniform_string_translations;
+                EG::Utility::StringDictionary<ShaderUniformTypes> uniform_type_translations;
+                void CreateUniformStringTranslations(void);
         };
     }
 }
