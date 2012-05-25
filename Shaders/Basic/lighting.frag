@@ -1,5 +1,5 @@
-uniform sampler2D decal;
-uniform sampler2D height;
+uniform sampler2D decal_map;
+uniform sampler2D height_map;
 uniform vec3 light_attenuation;
 uniform float light_radius;
 uniform vec3 light_color;
@@ -13,7 +13,7 @@ void main(){
 	float light_factor = 0.0;
 	vec3 normal_vector = normalize(normal);
 	vec3 light_vector = normalize(light);
-	vec4 color_out = texture2D(decal, gl_TexCoord[0].st);
+    vec4 color_out = texture2D(decal_map, gl_TexCoord[0].st);
 
 	float normal_dot_light_vector = max(dot(normal_vector, light_vector), 0.0);
 	if (normal_dot_light_vector > 0.0){

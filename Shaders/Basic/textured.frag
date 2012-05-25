@@ -1,7 +1,7 @@
-uniform sampler2D decal;
-uniform sampler2D height; // ignore
-uniform vec4 color;
+uniform sampler2D decal_map;
+uniform sampler2D height_map; // ignore
+uniform vec4 material_color;
 
 void main(){
-	gl_FragColor = texture2D(decal, gl_TexCoord[0].st) * color;
+    gl_FragColor = texture2D(decal_map, gl_TexCoord[0].st) * material_color;
 }

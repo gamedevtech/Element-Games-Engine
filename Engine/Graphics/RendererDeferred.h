@@ -30,7 +30,7 @@ namespace EG{
                 EG::Graphics::OffscreenBuffer *hdr_buffer;
                 EG::Graphics::OffscreenBuffer *ssao_buffer;
                 EG::Graphics::OffscreenBuffer *composition_buffer;
-                glm::mat4 orthographics_projection_matrix;
+                //glm::mat4 orthographics_projection_matrix; // created in base renderer
                 EG::Graphics::Mesh *rectangle;
                 EG::Graphics::Mesh *light_sphere;
 
@@ -48,20 +48,20 @@ namespace EG{
                 // Settings
                 DeferredOutputType output_type;
                 float frame_time;
-                unsigned int ssao_enabled, bloom_enabled, normal_mapping_enabled, shadows_enabled, dof_enabled;
+                //unsigned int ssao_enabled, bloom_enabled, normal_mapping_enabled, shadows_enabled, dof_enabled;
                 unsigned int luminance_buffer_sample_min_x;
                 unsigned int luminance_buffer_sample_min_y;
                 unsigned int luminance_buffer_sample_max_x;
                 unsigned int luminance_buffer_sample_max_y;
-                float luminance_buffer[1024];
+                float luminance_buffer[1024];/*
                 float luminance;
                 float bloom_scale;
-                float luminance_scale;
+                float luminance_scale;*/
                 float target_luminance;
                 float luminance_time_multiplier;
                 float shadow_mapping_offset_0;
                 float shadow_mapping_offset_1;
-                glm::mat4 shadow_mapping_bias;
+                //glm::mat4 shadow_mapping_bias;
 
                 // Debugging
                 EG::Graphics::Light *debug_shadow_map_light;

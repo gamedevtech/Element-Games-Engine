@@ -1,5 +1,5 @@
-uniform sampler2D decal;
-uniform samplerCube height;
+uniform sampler2D decal_map;
+uniform samplerCube height_map;
 uniform vec3 light_attenuation;
 uniform float light_radius;
 uniform vec3 light_color;
@@ -14,8 +14,8 @@ void main(){
 	//float light_factor = 0.0;
 	vec3 normal_vector = normalize(normal);
 	vec3 light_vector = normalize(light);
-	float gradient_index = textureCube(height, normalize(texcoord)).r;
-	vec4 color_out = texture2D(decal, vec2(gradient_index, 0.5));
+	float gradient_index = textureCube(height_map, normalize(texcoord)).r;
+	vec4 color_out = texture2D(decal_map, vec2(gradient_index, 0.5));
 
 	float normal_dot_light_vector = max(dot(normal_vector, light_vector), 0.0);
 	float diffuse_factor = 0.0;
