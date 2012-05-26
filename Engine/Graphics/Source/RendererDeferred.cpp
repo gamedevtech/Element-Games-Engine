@@ -123,20 +123,17 @@ namespace EG{
                     bool custom_shader = false;
                     bool billboarding_shader = false;
                     if (material->HasShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER)){
-                        custom_shader = true;
-                        shaders->Unbind();
-                        shaders->Bind(material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER));
-                        if (material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER) == "sphere_cube_mapped_gradient_decal_prepass" && graphics->CheckVersion(4, 1)) {
-                            tessellation_shader = true;
+                        std::string shader_id = material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER);
+                        if (shader_id != current_shader_id) {
+                            custom_shader = true;
+                            shaders->Unbind();
+                            current_shader_id = shader_id;
+                            shaders->Bind(current_shader_id);
+                            if (current_shader_id == "sphere_cube_mapped_gradient_decal_prepass" && graphics->CheckVersion(4, 1)) {
+                                tessellation_shader = true;
+                            }
+                            BindShaderBeginUniforms(current_shader_id, scene, NULL);
                         }
-
-                        shaders->SetMatrix4("projection_matrix", camera->GetProjectionMatrix());
-                        shaders->SetMatrix4("view_matrix", camera->GetViewMatrix());
-                        shaders->SetInt("decal_map", 0);
-                        shaders->SetInt("normal_map", 1);
-                        shaders->SetInt("height_map", 2);
-                        shaders->SetInt("normal_mapping_enabled", normal_mapping_enabled);
-                        shaders->SetFloat3("camera_position", camera->GetPosition());
 
                         // HACK: This should really be reading some other attribute, so others can write their own billboarding shaders!!!
                         if (material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER) == "billboarding"){
@@ -146,42 +143,21 @@ namespace EG{
                             glDepthMask(GL_FALSE);
                         }
                         graphics->SetBlendingMode(material->GetBlendingMode());
+                    } else {
+                        if (current_shader_id != "prepass") {
+                            current_shader_id = "prepass";
+                            shaders->Unbind();
+                            shaders->Bind(current_shader_id);
+                            BindShaderBeginUniforms(current_shader_id, scene, NULL); // TODO: REUSE THIS WHERE THE SHADER IS INITIALLY BOUND TOO!
+                        }
                     }
-
-                    if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL)){
-                        graphics->BindTexture(scene->GetTextureManager()->GetTexture(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL))->GetId(), 0);
-                    }else if (material->HasCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL)){
-                        graphics->BindCubeMap(scene->GetTextureManager()->GetCubeMap(material->GetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL))->GetId(), 0);
-                    }else{
-                        graphics->BindTexture(scene->GetTextureManager()->GetTexture("default_decal")->GetId(), 0);
-                    }
-                    if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL)){
-                        graphics->BindTexture(scene->GetTextureManager()->GetTexture(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL))->GetId(), 1);
-                    }else if (material->HasCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL)){
-                        graphics->BindCubeMap(scene->GetTextureManager()->GetCubeMap(material->GetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL))->GetId(), 1);
-                    }else{
-                        graphics->BindTexture(scene->GetTextureManager()->GetTexture("default_normal")->GetId(), 1);
-                    }
-                    if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT)){
-                        graphics->BindTexture(scene->GetTextureManager()->GetTexture(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT))->GetId(), 2);
-                    }else if (material->HasCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT)){
-                        graphics->BindCubeMap(scene->GetTextureManager()->GetCubeMap(material->GetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT))->GetId(), 2);
-                    }else{
-                        graphics->BindTexture(scene->GetTextureManager()->GetTexture("default_height")->GetId(), 2);
-                    }
-
-                    shaders->SetFloat("material_specularity", material->GetSpecular());
-                    shaders->SetFloat4("material_color", material->GetColor());
-                    unsigned int object_lit = (material->GetLit())?1:0;
-                    shaders->SetInt("object_is_lit", object_lit);
 
                     // Transformation
                     std::vector<EG::Game::ObjectAttribute *> *transformation_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
                     EG::Game::ObjectAttributeBasicTransformation *transformation_attribute = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(transformation_attributes->at(0));
                     glm::mat4 transformation = transformation_attribute->GetTransformation();
-                    glm::mat4 normal_matrix = EG::Math::Utility::GenerateNormalMatrix(transformation);
-                    shaders->SetMatrix4("model_matrix", transformation);
-                    shaders->SetMatrix4("normal_matrix", normal_matrix);
+                    BindEngineShaderUniforms(object, current_shader_id, "Prepass", transformation, material, scene);
+                    BindCustomShaderUniforms(object, current_shader_id);
 
                     EG::Graphics::Mesh *mesh = scene->GetMeshManager()->Get(mesh_attribute->GetMeshId());
                     if (mesh){
@@ -194,22 +170,9 @@ namespace EG{
                         }
                     }
 
-                    if (custom_shader){
-                        shaders->Unbind();
-                        shaders->Bind("prepass");
-
-                        shaders->SetMatrix4("projection_matrix", camera->GetProjectionMatrix());
-                        shaders->SetMatrix4("view_matrix", camera->GetViewMatrix());
-                        shaders->SetInt("decal_map", 0);
-                        shaders->SetInt("normal_map", 1);
-                        shaders->SetInt("height_map", 2);
-                        shaders->SetInt("normal_mapping_enabled", normal_mapping_enabled);
-                        shaders->SetFloat3("camera_position", camera->GetPosition());
-
-                        if (billboarding_shader){
-                            //glDisable(GL_DEPTH_TEST);
-                            glDepthMask(GL_TRUE);
-                        }
+                    if (billboarding_shader){
+                        //glDisable(GL_DEPTH_TEST);
+                        glDepthMask(GL_TRUE);
                     }
                     graphics->SetBlendingMode();
                     ++mesh_attribute_iterator;
@@ -236,15 +199,17 @@ namespace EG{
             EG::Graphics::Camera *camera = scene->GetCurrentCamera();
             int draw_buffers[] = {0, 1, 2, 3};
             graphics->StartMultiBufferOffscreenRender(deferred_buffer->GetBufferId(), 4, draw_buffers, graphics->GetViewportWidth(), graphics->GetViewportHeight());
-            shaders->Bind("prepass");
+            current_shader_id = "prepass";
+            shaders->Bind(current_shader_id);
 
-            shaders->SetMatrix4("projection_matrix", camera->GetProjectionMatrix());
+            /*shaders->SetMatrix4("projection_matrix", camera->GetProjectionMatrix());
             shaders->SetMatrix4("view_matrix", camera->GetViewMatrix());
             shaders->SetInt("decal_map", 0);
             shaders->SetInt("normal_map", 1);
             shaders->SetInt("height_map", 2);
             shaders->SetInt("normal_mapping_enabled", normal_mapping_enabled);
-            shaders->SetFloat3("camera_position", camera->GetPosition());
+            shaders->SetFloat3("camera_position", camera->GetPosition());*/
+            BindShaderBeginUniforms(current_shader_id, scene, NULL);
 
             // Render Objects
             EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();

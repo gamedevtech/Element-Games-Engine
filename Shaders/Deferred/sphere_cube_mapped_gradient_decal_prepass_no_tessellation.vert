@@ -1,4 +1,5 @@
-#version 140
+//#version 410
+#version 130
 
 uniform mat4 projection_matrix;
 uniform mat4 view_matrix;

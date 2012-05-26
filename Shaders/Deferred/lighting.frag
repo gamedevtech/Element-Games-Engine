@@ -1,4 +1,5 @@
-#version 150
+//#version 150
+#version 130
 
 smooth in vec2 texcoord;
 

@@ -332,6 +332,7 @@ namespace EG{
             if (uniforms == NULL) {
                 return;
             }
+            std::cout << shader_id << ": " << object->GetObjectName() << std::endl;
             std::vector<std::pair<std::string, EG::Graphics::ShaderManager::ShaderUniformTypes> >::iterator uniform_iter = uniforms->begin();
             std::vector<EG::Game::ObjectAttribute *> *attrs;
             std::vector<EG::Game::ObjectAttribute *>::iterator attrs_iter;
@@ -392,19 +393,6 @@ namespace EG{
 
             current_shader_id = "lighting";
             shaders->Bind(current_shader_id);
-
-//             shaders->Bind("lighting");
-//             shaders->SetMatrix4("projection_matrix", camera->GetProjectionMatrix());
-//             shaders->SetMatrix4("view_matrix", camera->GetViewMatrix());
-//             shaders->SetFloat3("camera_position", camera->GetPosition());
-//             shaders->SetInt("decal_map", 0);
-//             shaders->SetInt("height_map", 1);
-
-            // Ambient Pass
-            /*shaders->SetFloat3("light_color", 0.0f, 0.0f, 0.0f);
-            shaders->SetFloat4("light_position", 0.0f, 0.0f, 0.0f, 1.0f);
-            shaders->SetFloat3("light_attenuation", 1.0f, 1.0f, 1.0f);
-            shaders->SetFloat("light_radius", 0.0000001f);*/
 
             EG::Graphics::Light blank_light;
             blank_light.SetAttenuation(glm::vec3(1.0f, 1.0f, 1.0f));

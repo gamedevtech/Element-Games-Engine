@@ -14,7 +14,7 @@ uniform sampler2D height_map;
 uniform float material_specularity;
 uniform vec4 material_color;
 uniform int normal_mapping_enabled;
-uniform int object_is_lit;
+uniform int receives_lighting;
 uniform vec3 camera_position;
 
 // TODO: Must use glBindFragDataLocation(GLuint program, GLuint colorNumber /* this is really just the index of the output */, const char *out_name); to set these up in the code for >gl3 renderers in the shader loading!
@@ -24,7 +24,7 @@ out vec4 fragment2;
 out vec4 fragment3;
 
 void main(){
-	if (object_is_lit == 1){
+    if (receives_lighting == 1){
 		// Position and Specular Factor
 		fragment0 = vec4(position, material_specularity);
 
