@@ -31,6 +31,7 @@ namespace EG{
             protected:
                 bool initialized;
 
+                std::string current_shader_id;
                 void BindCustomShaderUniforms(EG::Game::Object *object, std::string shader_id);
                 void BindShaderBeginUniforms(std::string shader_id, EG::Game::Scene *scene, EG::Graphics::Light *light);
                 void BindEngineShaderUniforms(EG::Game::Object *object, std::string shader_id, std::string phase, glm::mat4 transform, EG::Graphics::RenderingMaterial *material, EG::Game::Scene *scene);
