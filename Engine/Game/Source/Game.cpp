@@ -21,7 +21,7 @@ namespace EG{
             // Resolution needs to be from config
             rendering_method = RENDERER_SIMPLE;
 
-            if (graphics->CheckVersion(3, 0)){
+            if (graphics->CheckVersion(3, 1)){
             //if (graphics->CheckVersion(4, 1)){
                 if (rendering_method == RENDERER_SIMPLE){
                     rendering_method = RENDERER_DEFERRED;
