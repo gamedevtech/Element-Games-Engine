@@ -457,9 +457,9 @@ namespace EG{
             shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
             shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
             shaders->SetMatrix4("model_matrix", glm::gtx::transform::scale(float(graphics->GetViewportWidth()), float(graphics->GetViewportHeight()), 1.0f));
-            shaders->SetInt("decal", 0);
+            shaders->SetInt("decal_map", 0);
             shaders->SetInt("use_decal", 1);
-            shaders->SetFloat4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+            shaders->SetFloat4("material_color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
             glEnable(GL_BLEND);
             glEnable(GL_TEXTURE_2D);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -480,8 +480,8 @@ namespace EG{
             shaders->SetMatrix4("model_matrix", glm::gtx::transform::translate(glm::vec3(10.0f, 10.0f, 0.0f)));
 
             graphics->SetActiveTexture(0);
-            shaders->SetInt("decal", 0);
-            shaders->SetFloat4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+            shaders->SetInt("decal_map", 0);
+            shaders->SetFloat4("material_color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
             std::stringstream campos;
             campos.precision(3);
