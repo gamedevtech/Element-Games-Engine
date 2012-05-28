@@ -425,6 +425,7 @@ namespace EG{
                         object_iterator = objects->GetKeysBegin();
                         while (object_iterator != objects->GetKeysEnd()){
                             EG::Game::Object *object = objects->Get(*object_iterator);
+                            BindShaderBeginUniforms(current_shader_id, scene, light);
                             RenderLitObject(scene, light, object);
                             ++object_iterator;
                         }
