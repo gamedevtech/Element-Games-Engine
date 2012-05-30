@@ -22,9 +22,7 @@ namespace EG{
             }
 
             std::cout << "Loading " << file_path << std::endl;
-            //aiNode *root = ai_scene->mRootNode;
             for (unsigned int i = 0; i < ai_scene->mNumMeshes; i++){
-                //std::cout << "Mesh Index: " << i << std::endl;
                 const struct aiMesh *mesh = ai_scene->mMeshes[i];
                 const struct aiMaterial *material = ai_scene->mMaterials[mesh->mMaterialIndex];
 
@@ -33,6 +31,8 @@ namespace EG{
                 count += 1;
             }
 
+            std::cout << "Done." << std::endl;
+
             return true;
         }
 
@@ -40,17 +40,42 @@ namespace EG{
             if (ai_mesh->HasFaces()){
                 std::string mesh_name = file_path + std::string(ai_mesh->mName.data);
                 EG::Graphics::Triangle *faces = new EG::Graphics::Triangle[ai_mesh->mNumFaces];
+
+                // Skeletal Structure
+                std::map<std::string, glm::mat4> *bone_transforms = new std::map<std::string, glm::mat4>;
+                std::map<unsigned int, std::vector<std::pair<std::string, float> > > vertex_weights;
+                if (ai_mesh->HasBones()) {
+                    for (unsigned int i = 0; i < ai_mesh->mNumBones; i++) {
+                        const struct aiBone *bone = ai_mesh->mBones[i];
+                        glm::mat4 offset_transform;
+                        for (unsigned int i = 0; i < 4; i++) {
+                            for (unsigned int j = 0; j < 4; j++) {
+                                offset_transform[i][j] = bone->mOffsetMatrix[i][j];
+                                std::cout << bone->mOffsetMatrix[i][j] << std::endl;
+                            }
+                        }
+                        (*bone_transforms)[std::string(bone->mName.data)] = offset_transform;
+                        for (unsigned int weight_index = 0; weight_index < bone->mNumWeights; weight_index++) {
+                            aiVertexWeight weight = bone->mWeights[weight_index];
+                            std::vector<std::pair<std::string, float> > vw = vertex_weights[weight.mVertexId];
+                            vw.push_back(std::pair<std::string, float>(bone->mName.data, weight.mWeight));
+                        }
+                    }
+                }
+
                 for (unsigned int i = 0; i < ai_mesh->mNumFaces; i++){
                     const aiFace *ai_face = &(ai_mesh->mFaces[i]);
                     // For each vertex which is garanteed to be 3 because we always triangulate!
                     for (unsigned int v = 0; v < /*3*/ai_face->mNumIndices; v++){
                         unsigned int vertex_index = ai_face->mIndices[v];
                         aiVector3D vertex = ai_mesh->mVertices[vertex_index];
-                        //aiVector3D normal = ai_mesh->mNormals[vertex_index];
                         aiVector3D texcoord = ai_mesh->mTextureCoords[0][vertex_index];
 
                         faces[i].vertices[2 - v] = glm::vec4(vertex.x, vertex.y, vertex.z, 1.0f);
                         faces[i].texcoords[2 - v] = glm::vec4(texcoord.x, texcoord.y, 1.0f, 1.0f);
+                        if (ai_mesh->HasBones()) {
+                            faces[i].weights[2 - v] = vertex_weights[vertex_index];
+                        }
                     }
                 }
                 EG::Graphics::TriangleMesh *tmesh = new EG::Graphics::TriangleMesh(ai_mesh->mNumFaces, faces, /*false, false*/true, true, true, true, true, true);

@@ -1,0 +1,21 @@
+// Creator: Ultimate Unwrap3D Pro v3.18
+// Time: Tue Sep 29 08:52:34 2009
+
+material flowers_DF_tga_Smoothing
+{
+   technique
+   {
+      pass
+      {
+         ambient 0.200000 0.200000 0.200000 1.000000
+         diffuse 1.000000 1.000000 1.000000 1.000000
+         specular 0.200000 0.200000 0.200000 1.000000 20.000000
+         emissive 0.000000 0.000000 0.000000 1.000000
+
+         texture_unit
+         {
+            texture flowers_DF.tga
+         }
+      }
+   }
+}

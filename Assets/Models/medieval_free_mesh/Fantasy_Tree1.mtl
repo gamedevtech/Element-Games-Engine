@@ -1,0 +1,2004 @@
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF.tga
+map_bump Tree_H.tga
+bump Tree_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF.tga
+map_bump Tree_H.tga
+bump Tree_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF.tga
+map_bump Tree_H.tga
+bump Tree_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf2_DF
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf2_DF.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0.05 0.05 0.05
+Ni 1
+Ns 19
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf2_DF
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf2_DF.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0.05 0.05 0.05
+Ni 1
+Ns 19
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf2_DF
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf2_DF.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0.05 0.05 0.05
+Ni 1
+Ns 19
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree4_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_04.tga
+map_bump Tree_04_H.tga
+bump Tree_04_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree4_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_04.tga
+map_bump Tree_04_H.tga
+bump Tree_04_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree4_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_04.tga
+map_bump Tree_04_H.tga
+bump Tree_04_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree4_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree4_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree4_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF.tga
+map_bump Tree_H.tga
+bump Tree_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF.tga
+map_bump Tree_H.tga
+bump Tree_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF.tga
+map_bump Tree_H.tga
+bump Tree_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf3_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf3_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF.tga
+map_bump Tree_H.tga
+bump Tree_H.tga
+
+newmtl Leaf3_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf3_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF.tga
+map_bump Tree_H.tga
+bump Tree_H.tga
+
+newmtl Leaf3_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf3_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF.tga
+map_bump Tree_H.tga
+bump Tree_H.tga
+
+newmtl Leaf3_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf3_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf3_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf3_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf3_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf3_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF.tga
+map_bump Tree_H.tga
+bump Tree_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF.tga
+map_bump Tree_H.tga
+bump Tree_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF.tga
+map_bump Tree_H.tga
+bump Tree_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf3_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf3_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf3_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf3_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf3_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf3_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf2_DF
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf2_DF.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0.05 0.05 0.05
+Ni 1
+Ns 19
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf2_DF
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf2_DF.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0.05 0.05 0.05
+Ni 1
+Ns 19
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf2_DF
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf2_DF.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0.05 0.05 0.05
+Ni 1
+Ns 19
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf5_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf5_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf5_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf5_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf5_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf5_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0.05 0.05 0.05
+Ni 1
+Ns 19
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0.05 0.05 0.05
+Ni 1
+Ns 19
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree2_DF
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0.05 0.05 0.05
+Ni 1
+Ns 19
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf5_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf5_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF.tga
+map_bump Tree_H.tga
+bump Tree_H.tga
+
+newmtl Leaf5_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf5_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF.tga
+map_bump Tree_H.tga
+bump Tree_H.tga
+
+newmtl Leaf5_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf5_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF.tga
+map_bump Tree_H.tga
+bump Tree_H.tga
+
+newmtl Leaf5_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf5_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf5_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf5_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf5_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf5_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree2
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0.05 0.05 0.05
+Ni 1
+Ns 19
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree2
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0.05 0.05 0.05
+Ni 1
+Ns 19
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree2
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0.05 0.05 0.05
+Ni 1
+Ns 19
+Tf 1 1 1
+d 1
+map_Kd Tree_DF_02.tga
+map_bump Tree_02_H.tga
+bump Tree_02_H.tga
+
+newmtl Tree6
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0.05 0.05 0.05
+Ni 1
+Ns 19
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Tree6
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0.05 0.05 0.05
+Ni 1
+Ns 19
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Tree6
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0.05 0.05 0.05
+Ni 1
+Ns 19
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree5
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0.05 0.05 0.05
+Ni 1
+Ns 19
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree5
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0.05 0.05 0.05
+Ni 1
+Ns 19
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree5
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0.05 0.05 0.05
+Ni 1
+Ns 19
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree3
+Ka 0 0 0
+Kd 0.8 0.8 0.8
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree3
+Ka 0 0 0
+Kd 0.8 0.8 0.8
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree3
+Ka 0 0 0
+Kd 0.8 0.8 0.8
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Tree4
+Ka 0 0 0
+Kd 0.8 0.8 0.8
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Tree4
+Ka 0 0 0
+Kd 0.8 0.8 0.8
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Tree4
+Ka 0 0 0
+Kd 0.8 0.8 0.8
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree1
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF.tga
+map_bump Tree_H.tga
+bump Tree_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree1
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF.tga
+map_bump Tree_H.tga
+bump Tree_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree1
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Tree_DF.tga
+map_bump Tree_H.tga
+bump Tree_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree1
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree1
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+
+newmtl Leaf_DF
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd Leaf_DF.tga
+map_bump Leaf_H.tga
+bump Leaf_H.tga
+
+newmtl Tree1
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd tree_07_D.tga
+map_bump tree_07_H.tga
+bump tree_07_H.tga
+

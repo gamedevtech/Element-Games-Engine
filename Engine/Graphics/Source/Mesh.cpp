@@ -115,10 +115,11 @@ namespace EG{
 			bitangents[2] = face_bitangent;
 		}
 
-		TriangleMesh::TriangleMesh(unsigned int _triangle_count, Triangle *_triangles, bool compute_face_normals, bool compute_vertex_normals, bool compute_face_tangents, bool compute_vertex_tangents, bool compute_face_bitangents, bool compute_vertex_bitangents){
+		TriangleMesh::TriangleMesh(unsigned int _triangle_count, Triangle *_triangles, bool compute_face_normals, bool compute_vertex_normals, bool compute_face_tangents, bool compute_vertex_tangents, bool compute_face_bitangents, bool compute_vertex_bitangents, std::map<std::string, glm::mat4> *_bone_transforms){
 			has_vertices = true;
 			has_texcoords = true;
 			triangle_count = _triangle_count;
+            bone_transforms = _bone_transforms;
 			for (unsigned int i = 0; i < triangle_count; i++){
 				triangles.push_back(_triangles[i]);
 			}
@@ -305,6 +306,10 @@ namespace EG{
 		bool TriangleMesh::HasBitangents(void){
 			return has_bitangents;
 		}
+
+		std::map<std::string, glm::mat4> *TriangleMesh::GetBoneTransformations(void) {
+            return bone_transforms;
+        }
 
 		Mesh::Mesh(TriangleMesh *triangle_mesh){
 			GenerateMeshFromTriangleArrayMesh(triangle_mesh);

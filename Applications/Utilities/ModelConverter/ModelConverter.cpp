@@ -14,6 +14,7 @@ std::string LoadModelEventListener::Call(std::map<std::string, std::string> args
 	filename = EG::Utility::StringMethods::SearchAndReplace(filename, "%2F", "/");
 	model = new EG::Media::ModelLoader(scene);
 	model_loaded = model->Load(filename);
+    std::cout << "Model Loaded!!!" << std::endl;
 	if (model_loaded){
 		model_object = new EG::Game::Object(filename);
 
@@ -50,47 +51,52 @@ std::string LoadModelEventListener::Call(std::map<std::string, std::string> args
 		savecallback->scene = scene;
 		gui->AddResponseHandler("save_model", savecallback);
 
+        // TODO: Loop through the meshes and perhaps combine them into one, and get the transforms right, if not, then just make transforms available as an option on a mesh as well!
 		model_object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 2.0f, 0.0f)), glm::vec3(0.02f, 0.02f, 0.02f))));
-		model->GetMaterial(0)->SetLit(true);
-		model->GetMaterial(0)->SetCastsShadows(true);
-		model_object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(model->GetMesh(0), model->GetMaterial(0)));
-		scene->GetObjectManager()->AddObject(model_object);
-		std::string out = "{\"status\": true";
+        for (unsigned int i = 0; i < model->GetMeshMaterialPairCount(); i++) {
+            std::cout << "Mesh Material Index: " << i << std::endl;
+            model->GetMaterial(i)->SetLit(true);
+            model->GetMaterial(i)->SetCastsShadows(true);
+            model_object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(model->GetMesh(i), model->GetMaterial(i)));
+        }
+        scene->GetObjectManager()->AddObject(model_object);
 
-		if (model->GetMaterial(0)->GetLit()){
-			out += ", \"lit\": true";
-		} else {
-			out += ", \"lit\": false";
-		}
-		if (model->GetMaterial(0)->GetCastsShadows()){
-			out += ", \"shadows\": true";
-		} else {
-			out += ", \"shadows\": false";
-		}
-		if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL)){
-			std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL))->GetFilePath();
-			out += ", \"decal\": \"" + file_path + "\"";
-		} else {
-			out += ", \"decal\": \"\"";
-		}
-		if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL)){
-			std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL))->GetFilePath();
-			out += ", \"normal\": \"" + file_path + "\"";
-		} else {
-			out += ", \"normal\": \"\"";
-		}
-		if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT)){
-			std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT))->GetFilePath();
-			out += ", \"height\": \"" + file_path + "\"";
-		} else {
-			out += ", \"height\": \"\"";
-		}
-		if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR)){
-			std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR))->GetFilePath();
-			out += ", \"specular\": \"" + file_path + "\"}";
-		} else {
-			out += ", \"specular\": \"\"}";
-		}
+        std::string out = "{\"status\": true";
+
+        if (model->GetMaterial(0)->GetLit()){
+            out += ", \"lit\": true";
+        } else {
+            out += ", \"lit\": false";
+        }
+        if (model->GetMaterial(0)->GetCastsShadows()){
+            out += ", \"shadows\": true";
+        } else {
+            out += ", \"shadows\": false";
+        }
+        if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL)){
+            std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL))->GetFilePath();
+            out += ", \"decal\": \"" + file_path + "\"";
+        } else {
+            out += ", \"decal\": \"\"";
+        }
+        if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL)){
+            std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL))->GetFilePath();
+            out += ", \"normal\": \"" + file_path + "\"";
+        } else {
+            out += ", \"normal\": \"\"";
+        }
+        if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT)){
+            std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT))->GetFilePath();
+            out += ", \"height\": \"" + file_path + "\"";
+        } else {
+            out += ", \"height\": \"\"";
+        }
+        if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR)){
+            std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR))->GetFilePath();
+            out += ", \"specular\": \"" + file_path + "\"}";
+        } else {
+            out += ", \"specular\": \"\"}";
+        }
 		return out;
 	}else{
 		return "{\"status\": false}";

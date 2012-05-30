@@ -1,0 +1,1986 @@
+newmtl wood_plank_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl wood_plank_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl window_glass_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd window_glass_01a.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl window_glass_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd window_glass_01a.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl window_glass_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd window_glass_01.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl window_glass_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd window_glass_01.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl metal01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0.25 0.25 0.25
+Ni 1
+Ns 250
+Tf 1 1 1
+d 1
+map_Kd metal01_d.tga
+map_bump metal01_h.tga
+bump metal01_h.tga
+
+newmtl wood_plank_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl metal01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0.25 0.25 0.25
+Ni 1
+Ns 250
+Tf 1 1 1
+d 1
+map_Kd metal01_d.tga
+map_bump metal01_h.tga
+bump metal01_h.tga
+
+newmtl wood_plank_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl wood_rough_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_rough_01.tga
+map_bump wood_rough_01_H.tga
+bump wood_rough_01_H.tga
+
+newmtl bricks_old_08
+Ka 0 0 0
+Kd 1 1 1
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old_08.tga
+map_bump bricks_old_08_H.tga
+bump bricks_old_08_H.tga
+
+newmtl door_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd door_01.tga
+map_bump door_01_H.tga
+bump door_01_H.tga
+
+newmtl ivy19_DF
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd ivy19_DF.tga
+
+newmtl metal_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0.4 0.4 0.4
+Ni 1
+Ns 250
+Tf 1 1 1
+d 1
+map_Kd metal01_d.tga
+map_bump metal01_h.tga
+bump metal01_h.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl window_glass_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd window_glass_01a.tga
+
+newmtl wood_rough_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_rough_01.tga
+map_bump wood_rough_01_H.tga
+bump wood_rough_01_H.tga
+
+newmtl bricks_old_08
+Ka 0 0 0
+Kd 1 1 1
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old_08.tga
+map_bump bricks_old_08_H.tga
+bump bricks_old_08_H.tga
+
+newmtl door_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd door_01.tga
+map_bump door_01_H.tga
+bump door_01_H.tga
+
+newmtl metal_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0.4 0.4 0.4
+Ni 1
+Ns 250
+Tf 1 1 1
+d 1
+map_Kd metal01_d.tga
+map_bump metal01_h.tga
+bump metal01_h.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl window_glass_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd window_glass_01a.tga
+
+newmtl wood_rough_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_rough_01.tga
+map_bump wood_rough_01_H.tga
+bump wood_rough_01_H.tga
+
+newmtl bricks_old_08
+Ka 0 0 0
+Kd 1 1 1
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old_08.tga
+map_bump bricks_old_08_H.tga
+bump bricks_old_08_H.tga
+
+newmtl door_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd door_01.tga
+map_bump door_01_H.tga
+bump door_01_H.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl window_glass_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd window_glass_01a.tga
+
+newmtl wood_rough_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_rough_01.tga
+map_bump wood_rough_01_H.tga
+bump wood_rough_01_H.tga
+
+newmtl wood_plank_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl wood_plank_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl metal_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0.4 0.4 0.4
+Ni 1
+Ns 250
+Tf 1 1 1
+d 1
+map_Kd metal01_d.tga
+map_bump metal01_h.tga
+bump metal01_h.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl wood_rough
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_rough_01.tga
+map_bump wood_rough_01_H.tga
+bump wood_rough_01_H.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl wood_rough
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_rough_01.tga
+map_bump wood_rough_01_H.tga
+bump wood_rough_01_H.tga
+
+newmtl bricks_old_04
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old_04.tga
+map_bump bricks_old_04_H.tga
+bump bricks_old_04_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl door_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd door_01.tga
+map_bump door_01_H.tga
+bump door_01_H.tga
+
+newmtl ivy19_DF
+Ka 0 0 0
+Kd 0.588 0.588 0.588
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd ivy19_DF.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl shields
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd shields.tga
+
+newmtl win_shut_04
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd win_shut_04.tga
+map_bump win_shut_04_H.tga
+bump win_shut_04_H.tga
+
+newmtl window_glass_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd window_glass_01a.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl bricks_old_04
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old_04.tga
+map_bump bricks_old_04_H.tga
+bump bricks_old_04_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl door_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd door_01.tga
+map_bump door_01_H.tga
+bump door_01_H.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl shields
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd shields.tga
+
+newmtl win_shut_04
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd win_shut_04.tga
+map_bump win_shut_04_H.tga
+bump win_shut_04_H.tga
+
+newmtl window_glass_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd window_glass_01a.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl bricks_old_04
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old_04.tga
+map_bump bricks_old_04_H.tga
+bump bricks_old_04_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl door_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd door_01.tga
+map_bump door_01_H.tga
+bump door_01_H.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl window_glass_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd window_glass_01a.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl bricks_old_04
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old_04.tga
+map_bump bricks_old_04_H.tga
+bump bricks_old_04_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl door_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd door_01.tga
+map_bump door_01_H.tga
+bump door_01_H.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl bricks_old06
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old06.tga
+map_bump bricks_old06_H.tga
+bump bricks_old06_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl door_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd door_01.tga
+map_bump door_01_H.tga
+bump door_01_H.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl shields
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd shields.tga
+
+newmtl win_shut_03
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd win_shut_03.tga
+map_bump win_shut_03_H.tga
+bump win_shut_03_H.tga
+
+newmtl window_glass_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd window_glass_01a.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl bricks_old06
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old06.tga
+map_bump bricks_old06_H.tga
+bump bricks_old06_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl door_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd door_01.tga
+map_bump door_01_H.tga
+bump door_01_H.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl win_shut_03
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd win_shut_03.tga
+map_bump win_shut_03_H.tga
+bump win_shut_03_H.tga
+
+newmtl window_glass_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd window_glass_01a.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl bricks_old06
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old06.tga
+map_bump bricks_old06_H.tga
+bump bricks_old06_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl door_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd door_01.tga
+map_bump door_01_H.tga
+bump door_01_H.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl win_shut_03
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd win_shut_03.tga
+map_bump win_shut_03_H.tga
+bump win_shut_03_H.tga
+
+newmtl bricks_old_04
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old_04.tga
+map_bump bricks_old_04_H.tga
+bump bricks_old_04_H.tga
+
+newmtl bricks_old06
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old06.tga
+map_bump bricks_old06_H.tga
+bump bricks_old06_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl door_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd door_01.tga
+map_bump door_01_H.tga
+bump door_01_H.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl window_glass_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd window_glass_01a.tga
+
+newmtl wood_plank_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl bricks_old_04
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old_04.tga
+map_bump bricks_old_04_H.tga
+bump bricks_old_04_H.tga
+
+newmtl bricks_old06
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old06.tga
+map_bump bricks_old06_H.tga
+bump bricks_old06_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl door_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd door_01.tga
+map_bump door_01_H.tga
+bump door_01_H.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl window_glass_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd window_glass_01a.tga
+
+newmtl wood_plank_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl bricks_old_04
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old_04.tga
+map_bump bricks_old_04_H.tga
+bump bricks_old_04_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl door_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd door_01.tga
+map_bump door_01_H.tga
+bump door_01_H.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl bricks_old_04
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old_04.tga
+map_bump bricks_old_04_H.tga
+bump bricks_old_04_H.tga
+
+newmtl bricks_old06
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old06.tga
+map_bump bricks_old06_H.tga
+bump bricks_old06_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl window_glass_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd window_glass_01a.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl bricks_old_04
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old_04.tga
+map_bump bricks_old_04_H.tga
+bump bricks_old_04_H.tga
+
+newmtl bricks_old06
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old06.tga
+map_bump bricks_old06_H.tga
+bump bricks_old06_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl window_glass_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd window_glass_01a.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl bricks_old_04
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old_04.tga
+map_bump bricks_old_04_H.tga
+bump bricks_old_04_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl window_glass_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd window_glass_01a.tga
+
+newmtl bricks_old06
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old06.tga
+map_bump bricks_old06_H.tga
+bump bricks_old06_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl win_shut_03
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd win_shut_03.tga
+map_bump win_shut_03_H.tga
+bump win_shut_03_H.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl bricks_old06
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old06.tga
+map_bump bricks_old06_H.tga
+bump bricks_old06_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl win_shut_03
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd win_shut_03.tga
+map_bump win_shut_03_H.tga
+bump win_shut_03_H.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl window_glass_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd window_glass_01a.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl con_dirt_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl roof_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd roof_01.tga
+map_bump roof_01_H.tga
+bump roof_01_H.tga
+
+newmtl bricks_old06
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd bricks_old06.tga
+map_bump bricks_old06_H.tga
+bump bricks_old06_H.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl shields
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd shields.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl shields
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd shields.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl shields
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd shields.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl shields
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd shields.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl metal01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0.25 0.25 0.25
+Ni 1
+Ns 250
+Tf 1 1 1
+d 1
+map_Kd metal01_d.tga
+map_bump metal01_h.tga
+bump metal01_h.tga
+
+newmtl wood_plank_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+
+newmtl bricks_old_08
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd con_dirt_01.tga
+map_bump con_dirt_01_h.tga
+bump con_dirt_01_h.tga
+
+newmtl metal_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0.4 0.4 0.4
+Ni 1
+Ns 250
+Tf 1 1 1
+d 1
+map_Kd metal01_d.tga
+map_bump metal01_h.tga
+bump metal01_h.tga
+
+newmtl wood_planks_01
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd wood_planks_01.tga
+map_bump wood_planks_01_H.tga
+bump wood_planks_01_H.tga
+

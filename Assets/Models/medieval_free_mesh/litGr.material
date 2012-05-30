@@ -1,0 +1,29 @@
+material 
+{
+	technique
+	{
+		pass
+		{
+		}
+	}
+}
+
+material 1.Mat0Tex0
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 0 0
+			diffuse 0.8 0.8 0.8
+			specular 1 1 1 66.56
+			emissive 0 0 0
+
+			texture_unit
+			{
+				texture C:\new packs\deynord Bushes\bushes_final\export6SimpleBush\litGrC.tga
+				filtering point point point
+			}
+		}
+	}
+}
