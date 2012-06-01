@@ -34,12 +34,12 @@ namespace EG{
                 glm::vec4 bitangents[3];	// per vertex bitangents
 
                 // skeletal information
-                std::vector<std::pair<std::string, float> > weights[3];
+                std::vector<std::pair<unsigned int, float> > weights[3];
         };
 
         class TriangleMesh{
             public:
-                TriangleMesh(unsigned int _triangle_count, Triangle *_triangles, bool compute_face_normals = false, bool compute_vertex_normals = false, bool compute_face_tangents = false, bool compute_vertex_tangents = false, bool compute_face_bitangents = false, bool compute_vertex_bitangents = false, std::map<std::string, glm::mat4> *_bone_transforms = NULL);
+                TriangleMesh(unsigned int _triangle_count, Triangle *_triangles, bool compute_face_normals = false, bool compute_vertex_normals = false, bool compute_face_tangents = false, bool compute_vertex_tangents = false, bool compute_face_bitangents = false, bool compute_vertex_bitangents = false, bool _has_skeleton = false);
                 ~TriangleMesh(void);
 
                 int GenerateFaceNormals(void);
@@ -51,18 +51,18 @@ namespace EG{
 
                 unsigned int GetTriangleCount(void);
                 std::vector<Triangle> *GetTriangles(void);
-                std::map<std::string, glm::mat4> *GetBoneTransformations(void);
+                std::map<unsigned int, glm::mat4> *GetBoneTransformations(void);
 
                 bool HasVertices(void);
                 bool HasTexCoords(void);
                 bool HasNormals(void);
                 bool HasBinormals(void);
                 bool HasBitangents(void);
+                bool HasSkeleton(void);
             private:
                 unsigned int triangle_count;
                 std::vector<Triangle> triangles;
-                std::map<std::string, glm::mat4> *bone_transforms;
-                bool has_vertices, has_texcoords, has_normals, has_binormals, has_bitangents;
+                bool has_vertices, has_texcoords, has_normals, has_binormals, has_bitangents, has_skeleton;
         };
 
         class Mesh{
@@ -78,19 +78,26 @@ namespace EG{
                 float *GetNormals(void);
                 float *GetBinormals(void);
                 float *GetBitangents(void);
+                float *GetWeights(void);
+                unsigned int *GetWeightVertexIndices(void);
                 bool HasVertices(void);
                 bool HasNormals(void);
                 bool HasTexCoords(void);
                 bool HasBinormals(void);
                 bool HasBitangents(void);
+                bool HasSkeleton(void);
 
                 void Draw(void);
             private:
                 // Mesh Data
                 float *vertices, *texcoords, *normals, *binormals, *bitangents;
-                bool has_vertices, has_texcoords, has_normals, has_binormals, has_bitangents;
+                bool has_vertices, has_texcoords, has_normals, has_binormals, has_bitangents, has_skeleton;
                 unsigned int vertex_count;
                 unsigned int stride;
+
+                // Skeletal Data
+                unsigned int *weight_vertex_indices;
+                float *weights;
 
                 // Buffer Data
                 unsigned int *vertex_buffer_object_ids;

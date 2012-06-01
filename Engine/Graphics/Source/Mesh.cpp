@@ -115,11 +115,11 @@ namespace EG{
 			bitangents[2] = face_bitangent;
 		}
 
-		TriangleMesh::TriangleMesh(unsigned int _triangle_count, Triangle *_triangles, bool compute_face_normals, bool compute_vertex_normals, bool compute_face_tangents, bool compute_vertex_tangents, bool compute_face_bitangents, bool compute_vertex_bitangents, std::map<std::string, glm::mat4> *_bone_transforms){
+		TriangleMesh::TriangleMesh(unsigned int _triangle_count, Triangle *_triangles, bool compute_face_normals, bool compute_vertex_normals, bool compute_face_tangents, bool compute_vertex_tangents, bool compute_face_bitangents, bool compute_vertex_bitangents, bool _has_skeleton){
 			has_vertices = true;
 			has_texcoords = true;
 			triangle_count = _triangle_count;
-            bone_transforms = _bone_transforms;
+            has_skeleton = _has_skeleton;
 			for (unsigned int i = 0; i < triangle_count; i++){
 				triangles.push_back(_triangles[i]);
 			}
@@ -306,9 +306,8 @@ namespace EG{
 		bool TriangleMesh::HasBitangents(void){
 			return has_bitangents;
 		}
-
-		std::map<std::string, glm::mat4> *TriangleMesh::GetBoneTransformations(void) {
-            return bone_transforms;
+		bool TriangleMesh::HasSkeleton(void){
+            return has_skeleton;
         }
 
 		Mesh::Mesh(TriangleMesh *triangle_mesh){
@@ -326,6 +325,7 @@ namespace EG{
 			has_normals = _has_normals;
 			has_binormals = _has_binormals;
 			has_bitangents = _has_bitangents;
+            has_skeleton = false;
 
 			if (has_vertices){
 				vertices = _vertices;
@@ -401,12 +401,12 @@ namespace EG{
 		}
 
 		void Mesh::Draw(void){
-			graphics->DrawMesh(&vertex_array_object_id, vertex_buffer_object_ids, vertex_count, has_vertices, has_texcoords, has_normals, has_binormals, has_bitangents);
+			graphics->DrawMesh(&vertex_array_object_id, vertex_buffer_object_ids, vertex_count, has_vertices, has_texcoords, has_normals, has_binormals, has_bitangents, has_skeleton);
 		}
 
 		void Mesh::GenerateBuffer(void){
 			vertex_buffer_object_ids = new unsigned int[5];
-			graphics->GenerateMeshBuffer(&vertex_array_object_id, vertex_buffer_object_ids, vertex_count, has_vertices, vertices, has_texcoords, texcoords, has_normals, normals, has_binormals, binormals, has_bitangents, bitangents);
+			graphics->GenerateMeshBuffer(&vertex_array_object_id, vertex_buffer_object_ids, vertex_count, has_vertices, vertices, has_texcoords, texcoords, has_normals, normals, has_binormals, binormals, has_bitangents, bitangents, has_skeleton, weight_vertex_indices, weights);
 		}
 
 		void Mesh::GenerateMeshFromTriangleArrayMesh(EG::Graphics::TriangleMesh *triangle_mesh){
@@ -415,6 +415,7 @@ namespace EG{
 			has_normals = triangle_mesh->HasNormals();
 			has_binormals = triangle_mesh->HasBinormals();
 			has_bitangents = triangle_mesh->HasBitangents();
+            has_skeleton = triangle_mesh->HasSkeleton();
 
 			vertex_count = triangle_mesh->GetTriangleCount() * 3;
 			vertices = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
@@ -426,6 +427,8 @@ namespace EG{
 			}
 			binormals = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
 			bitangents = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
+            weights = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
+            weight_vertex_indices = new unsigned int[triangle_mesh->GetTriangleCount() * 3 * 4];
 
 			unsigned int index = 0, normal_index = 0;
 			std::vector<Triangle>::iterator triangle_iterator = triangle_mesh->GetTriangles()->begin();
@@ -466,6 +469,15 @@ namespace EG{
 						bitangents[index + 2] = triangle.bitangents[i].z;
 						bitangents[index + 3] = triangle.bitangents[i].w;
 					}
+
+					if (has_skeleton){
+                        std::vector<std::pair<unsigned int, float> > *w = &(triangle.weights[i]);
+                        for (unsigned int i = 0; i < w->size() && i < 4; i++) {
+                            weight_vertex_indices[index + i] = (*w)[i].first;
+                            weights[index + i] = (*w)[i].second;
+                        }
+                    }
+
 					index += 4;
 				}
 

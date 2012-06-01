@@ -58,8 +58,8 @@ namespace EG{
 
 				// Mesh Methods
 				void SetUsingTessellation(bool _using_tessellation);
-				void GenerateMeshBuffer(unsigned int *vertex_array_object_id, unsigned int *vertex_buffer_object_ids, unsigned int vertex_count, bool has_vertices, float *vertices, bool has_texcoords, float *texcoords, bool has_normals, float *normals, bool has_binormals, float *binormals, bool has_bitangents, float *bitangents);
-				void DrawMesh(unsigned int *vertex_array_object_id, unsigned int *vertex_buffer_object_ids, unsigned int vertex_count, bool vertices, bool texcoords, bool normals, bool binormals, bool bitangents);
+				void GenerateMeshBuffer(unsigned int *vertex_array_object_id, unsigned int *vertex_buffer_object_ids, unsigned int vertex_count, bool has_vertices, float *vertices, bool has_texcoords, float *texcoords, bool has_normals, float *normals, bool has_binormals, float *binormals, bool has_bitangents, float *bitangents, bool has_skeleton, unsigned int *weight_vertex_indices, float *weights);
+				void DrawMesh(unsigned int *vertex_array_object_id, unsigned int *vertex_buffer_object_ids, unsigned int vertex_count, bool vertices, bool texcoords, bool normals, bool binormals, bool bitangents, bool skeleton);
 
 				// Textures
 				void SetActiveTexture(unsigned int texture_index = 0);

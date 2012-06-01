@@ -525,7 +525,7 @@ namespace EG{
             }
         }
 
-        void OpenGLInterface::GenerateMeshBuffer(unsigned int *vertex_array_object_id, unsigned int *vertex_buffer_object_ids, unsigned int vertex_count, bool has_vertices, float *vertices, bool has_texcoords, float *texcoords, bool has_normals, float *normals, bool has_binormals, float *binormals, bool has_bitangents, float *bitangents){
+        void OpenGLInterface::GenerateMeshBuffer(unsigned int *vertex_array_object_id, unsigned int *vertex_buffer_object_ids, unsigned int vertex_count, bool has_vertices, float *vertices, bool has_texcoords, float *texcoords, bool has_normals, float *normals, bool has_binormals, float *binormals, bool has_bitangents, float *bitangents, bool has_skeleton, unsigned int *weight_vertex_indices, float *weights){
             unsigned int count = vertex_count * 4 * sizeof(float);
             unsigned int normal_count = vertex_count * 3 * sizeof(float);
             if (version_major >= 3 && version_minor >= 0){
@@ -583,6 +583,20 @@ namespace EG{
                     glEnableVertexAttribArray(4);
                 }
 
+                if (has_skeleton){
+                    glGenBuffers(1, &vertex_buffer_object_ids[VBO_WEIGHTS]);
+                    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_object_ids[VBO_WEIGHTS]);
+                    glBufferData(GL_ARRAY_BUFFER, count, weights, GL_STATIC_DRAW);
+                    glVertexAttribPointer((GLuint)4, 4, GL_FLOAT, GL_FALSE, 0, 0);
+                    glEnableVertexAttribArray(5);
+
+                    glGenBuffers(1, &vertex_buffer_object_ids[VBO_WEIGHT_VERTEX_INDICES]);
+                    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_object_ids[VBO_WEIGHT_VERTEX_INDICES]);
+                    glBufferData(GL_ARRAY_BUFFER, count, weight_vertex_indices, GL_STATIC_DRAW);
+                    glVertexAttribPointer((GLuint)4, 4, GL_UNSIGNED_INT, GL_FALSE, 0, 0);
+                    glEnableVertexAttribArray(5);
+                }
+
                 glBindBuffer(GL_ARRAY_BUFFER, 0);
                 glBindVertexArray(0);
                 ErrorCheck("After >=GL3 Mesh Creation");
@@ -631,12 +645,24 @@ namespace EG{
                     }
                 }*/
 
+                if (has_skeleton){
+                    glGenBuffersARB(1, &vertex_buffer_object_ids[VBO_WEIGHTS]);
+                    glBindBufferARB(GL_ARRAY_BUFFER_ARB, vertex_buffer_object_ids[VBO_WEIGHTS]);
+                    glBufferDataARB(GL_ARRAY_BUFFER_ARB, count, weights, GL_STATIC_DRAW_ARB);
+                    glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+
+                    glGenBuffersARB(1, &vertex_buffer_object_ids[VBO_WEIGHT_VERTEX_INDICES]);
+                    glBindBufferARB(GL_ARRAY_BUFFER_ARB, vertex_buffer_object_ids[VBO_WEIGHT_VERTEX_INDICES]);
+                    glBufferDataARB(GL_ARRAY_BUFFER_ARB, count, weight_vertex_indices, GL_STATIC_DRAW_ARB);
+                    glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+                }
+
                 ErrorCheck("After Mesh Buffer Creation");
                 glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
             }
         }
 
-        void OpenGLInterface::DrawMesh(unsigned int *vertex_array_object_id, unsigned int *vertex_buffer_object_ids, unsigned int vertex_count, bool using_tessellation, bool vertices, bool texcoords, bool normals, bool binormals, bool bitangents){
+        void OpenGLInterface::DrawMesh(unsigned int *vertex_array_object_id, unsigned int *vertex_buffer_object_ids, unsigned int vertex_count, bool using_tessellation, bool vertices, bool texcoords, bool normals, bool binormals, bool bitangents, bool skeleton){
             if (version_major >= 3 && version_minor >= 0){
                 glBindVertexArray(*vertex_array_object_id);
                 // NOTE: Can I just always pass defaults like this, and the arrays will override?
@@ -692,6 +718,20 @@ namespace EG{
                         glTexCoordPointer(4, GL_FLOAT, 0, (char *)NULL);
                     }
                 }*/
+
+                if (skeleton) {
+                    SetActiveTexture(2);
+                    glEnable(GL_TEXTURE_2D);
+                    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+                    glBindBufferARB(GL_ARRAY_BUFFER_ARB, vertex_buffer_object_ids[VBO_WEIGHTS]);
+                    glTexCoordPointer(4, GL_FLOAT, 0, (char *)NULL);
+
+                    SetActiveTexture(3);
+                    glEnable(GL_TEXTURE_2D);
+                    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+                    glBindBufferARB(GL_ARRAY_BUFFER_ARB, vertex_buffer_object_ids[VBO_WEIGHT_VERTEX_INDICES]);
+                    glTexCoordPointer(4, GL_UNSIGNED_INT, 0, (char *)NULL);
+                }
 
                 SetActiveTexture(0);
                 glDrawArrays(GL_TRIANGLES, 0, vertex_count);

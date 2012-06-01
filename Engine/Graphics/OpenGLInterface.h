@@ -21,7 +21,9 @@ namespace EG{
                     VBO_TEXCOORDS = 1,
                     VBO_NORMALS = 2,
                     VBO_BINORMALS = 3,
-                    VBO_BITANGENTS = 4
+                    VBO_BITANGENTS = 4,
+                    VBO_WEIGHTS = 5,
+                    VBO_WEIGHT_VERTEX_INDICES = 6
                 };
 
                 OpenGLInterface(void);
@@ -69,8 +71,8 @@ namespace EG{
                 void ShaderSetMatrix4(unsigned int variable_location, float *data);
                 bool BasicShadersSupported(void);
 
-                void GenerateMeshBuffer(unsigned int *vertex_array_object_id, unsigned int *vertex_buffer_object_ids, unsigned int vertex_count, bool has_vertices, float *vertices, bool has_texcoords, float *texcoords, bool has_normals, float *normals, bool has_binormals, float *binormals, bool has_bitangents, float *bitangents);
-                void DrawMesh(unsigned int *vertex_array_object_id, unsigned int *vertex_buffer_object_ids, unsigned int vertex_count, bool using_tessellation, bool vertices = false, bool texcoords = false, bool normals = false, bool binormals = false, bool bitangents = false);
+                void GenerateMeshBuffer(unsigned int *vertex_array_object_id, unsigned int *vertex_buffer_object_ids, unsigned int vertex_count, bool has_vertices, float *vertices, bool has_texcoords, float *texcoords, bool has_normals, float *normals, bool has_binormals, float *binormals, bool has_bitangents, float *bitangents, bool has_skeleton, unsigned int *weight_vertex_indices, float *weights);
+                void DrawMesh(unsigned int *vertex_array_object_id, unsigned int *vertex_buffer_object_ids, unsigned int vertex_count, bool using_tessellation, bool vertices = false, bool texcoords = false, bool normals = false, bool binormals = false, bool bitangents = false, bool skeleton = false);
 
                 void SetActiveTexture(unsigned int texture_index = 0);
                 void BindTexture(unsigned int texture_id, unsigned int texture_index = 0);

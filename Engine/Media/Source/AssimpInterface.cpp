@@ -42,8 +42,10 @@ namespace EG{
                 EG::Graphics::Triangle *faces = new EG::Graphics::Triangle[ai_mesh->mNumFaces];
 
                 // Skeletal Structure
-                std::map<std::string, glm::mat4> *bone_transforms = new std::map<std::string, glm::mat4>;
-                std::map<unsigned int, std::vector<std::pair<std::string, float> > > vertex_weights;
+                unsigned int bone_id = 0;
+                std::map<std::string, unsigned int> bone_name_map;
+                std::map<unsigned int, glm::mat4> *bone_transforms = new std::map<unsigned int, glm::mat4>;
+                std::map<unsigned int, std::vector<std::pair<unsigned int, float> > > vertex_weights;
                 if (ai_mesh->HasBones()) {
                     for (unsigned int i = 0; i < ai_mesh->mNumBones; i++) {
                         const struct aiBone *bone = ai_mesh->mBones[i];
@@ -51,17 +53,31 @@ namespace EG{
                         for (unsigned int i = 0; i < 4; i++) {
                             for (unsigned int j = 0; j < 4; j++) {
                                 offset_transform[i][j] = bone->mOffsetMatrix[i][j];
-                                std::cout << bone->mOffsetMatrix[i][j] << std::endl;
                             }
                         }
-                        (*bone_transforms)[std::string(bone->mName.data)] = offset_transform;
+                        std::string bone_name_str = std::string(bone->mName.data);
+                        if (bone_name_map.count(bone_name_str) < 1) {
+                            bone_name_map[bone_name_str] = bone_id;
+                            bone_id += 1;
+                        }
+                        (*bone_transforms)[bone_name_map[bone_name_str]] = offset_transform;
                         for (unsigned int weight_index = 0; weight_index < bone->mNumWeights; weight_index++) {
                             aiVertexWeight weight = bone->mWeights[weight_index];
-                            std::vector<std::pair<std::string, float> > vw = vertex_weights[weight.mVertexId];
-                            vw.push_back(std::pair<std::string, float>(bone->mName.data, weight.mWeight));
+                            vertex_weights[weight.mVertexId].push_back(std::pair<unsigned int, float>(bone_name_map[bone_name_str], weight.mWeight));
                         }
                     }
                 }
+
+                /*std::map<unsigned int, std::vector<std::pair<std::string, float> > >::iterator wi = vertex_weights.begin();
+                while (wi != vertex_weights.end()) {
+                    std::cout << "Vertex Index: " << wi->first << " with " << wi->second.size() << " weights." << std::endl;
+                    std::vector<std::pair<std::string, float> >::iterator wvi = wi->second.begin();
+                    while (wvi != wi->second.end()) {
+                        std::cout << "Bone Name: " << wvi->first << " weight float: " << wvi->second << std::endl;
+                        ++wvi;
+                    }
+                    ++wi;
+                }*/
 
                 for (unsigned int i = 0; i < ai_mesh->mNumFaces; i++){
                     const aiFace *ai_face = &(ai_mesh->mFaces[i]);
