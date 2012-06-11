@@ -14,6 +14,8 @@ namespace EG{
         }
 
         bool AssimpInterface::Load(std::string _file_path){
+            std::cout << "Loading " << file_path << std::endl;
+
             Assimp::Importer importer;
             file_path = _file_path;
             ai_scene = importer.ReadFile(file_path, /*aiProcess_CalcTangentSpace | */aiProcess_Triangulate | /*aiProcess_JoinIdenticalVertices | */aiProcess_SortByPType);
@@ -21,7 +23,10 @@ namespace EG{
                 return false;
             }
 
-            std::cout << "Loading " << file_path << std::endl;
+            if (ai_scene->HasAnimations()) {
+                LoadSkeleton(ai_scene);
+            }
+
             for (unsigned int i = 0; i < ai_scene->mNumMeshes; i++){
                 const struct aiMesh *mesh = ai_scene->mMeshes[i];
                 const struct aiMaterial *material = ai_scene->mMaterials[mesh->mMaterialIndex];
@@ -31,9 +36,79 @@ namespace EG{
                 count += 1;
             }
 
+            if (ai_scene->HasAnimations()) {
+                for (unsigned int i = 0; i < ai_scene->mNumAnimations; i++) {
+                    LoadAnimation(ai_scene->mAnimations[i], i);
+                }
+            }
+
             std::cout << "Done." << std::endl;
 
             return true;
+        }
+
+        void AssimpInterface::LoadSkeleton(const aiScene *ai_scene){
+            // Get Bone List, store in bone_name_map
+            unsigned int bone_id = 0;
+            for (unsigned int i = 0; i < ai_scene->mNumAnimations; i++) {
+                aiAnimation *ai_animation = ai_scene->mAnimations[i];
+                for (unsigned int j = 0; j < ai_animation->mNumChannels; j++) {
+                    aiNodeAnim *channel = ai_animation->mChannels[j];
+                    std::string bone_name(channel->mNodeName.data);
+                    if (bone_name_map.count(bone_name) < 1) {
+                        bone_name_map[bone_name] = bone_id;
+                        bone_names.push_back(bone_name);
+                        std::cout << "Found Bone: " << bone_name << std::endl;
+                        bone_id += 1;
+                    }
+                }
+            }
+            bone_count = bone_id;
+
+            bind_pose_skeleton = new EG::Dynamics::Skeleton();
+            RecursiveLoadSkeleton(ai_scene->mRootNode, NULL);
+            /*std::vector<EG::Dynamics::Bone *>::iterator bi = bind_pose_skeleton->GetBones()->begin();
+            while (bi != bind_pose_skeleton->GetBones()->end()) {
+                std::cout << "Bone Array: " << (*bi)->GetId() << std::endl;
+                bi++;
+            }*/
+            bind_pose_skeleton->PrintRecursive();
+        }
+
+        void AssimpInterface::RecursiveLoadSkeleton(const aiNode *parent_node, EG::Dynamics::Bone *parent_bone) {
+            std::string node_name(parent_node->mName.data);
+            //std::cout << "Node Name: " << node_name << std::endl;
+            // compare node name against bones
+            EG::Dynamics::Bone *this_bone = NULL;
+            if (bone_name_map.count(node_name) > 0) {
+                unsigned int bone_id = bone_name_map[node_name];
+                std::cout << "Is Bone: " << bone_id << std::endl;
+                aiMatrix4x4 ai_trans = parent_node->mTransformation;
+                glm::mat4 trans = glm::mat4(1.0f);
+                for (unsigned int i = 0; i < 4; i++) {
+                    for (unsigned int j = 0; j < 4; j++) {
+                        trans[i][j] = parent_node->mTransformation[i][j];
+                    }
+                }
+                this_bone = new EG::Dynamics::Bone(bone_id, trans);
+                if (parent_bone == NULL) {
+                    std::cout << "HERE" << std::endl;
+                    bind_pose_skeleton->SetRoot(this_bone);
+                } else {
+                    parent_bone->AddChild(this_bone);
+                }
+                bind_pose_skeleton->AddBone(this_bone);
+                for (unsigned int i = 0; i < parent_node->mNumChildren; i++) {
+                    //std::cout << "Child: " << parent_node->mChildren[i]->mName.data << std::endl;
+                    RecursiveLoadSkeleton(parent_node->mChildren[i], this_bone);
+                }
+            }
+            if (parent_bone == NULL) {
+                for (unsigned int i = 0; i < parent_node->mNumChildren; i++) {
+                    //std::cout << "Child: " << parent_node->mChildren[i]->mName.data << std::endl;
+                    RecursiveLoadSkeleton(parent_node->mChildren[i], NULL);
+                }
+            }
         }
 
         void AssimpInterface::LoadMesh(const aiMesh *ai_mesh, unsigned int index){
@@ -42,9 +117,6 @@ namespace EG{
                 EG::Graphics::Triangle *faces = new EG::Graphics::Triangle[ai_mesh->mNumFaces];
 
                 // Skeletal Structure
-                unsigned int bone_id = 0;
-                std::map<std::string, unsigned int> bone_name_map;
-                std::map<unsigned int, glm::mat4> *bone_transforms = new std::map<unsigned int, glm::mat4>;
                 std::map<unsigned int, std::vector<std::pair<unsigned int, float> > > vertex_weights;
                 if (ai_mesh->HasBones()) {
                     for (unsigned int i = 0; i < ai_mesh->mNumBones; i++) {
@@ -56,28 +128,13 @@ namespace EG{
                             }
                         }
                         std::string bone_name_str = std::string(bone->mName.data);
-                        if (bone_name_map.count(bone_name_str) < 1) {
-                            bone_name_map[bone_name_str] = bone_id;
-                            bone_id += 1;
-                        }
-                        (*bone_transforms)[bone_name_map[bone_name_str]] = offset_transform;
+                        //bone_transformations[index][bone_name_map[bone_name_str]] = offset_transform;
                         for (unsigned int weight_index = 0; weight_index < bone->mNumWeights; weight_index++) {
                             aiVertexWeight weight = bone->mWeights[weight_index];
                             vertex_weights[weight.mVertexId].push_back(std::pair<unsigned int, float>(bone_name_map[bone_name_str], weight.mWeight));
                         }
                     }
                 }
-
-                /*std::map<unsigned int, std::vector<std::pair<std::string, float> > >::iterator wi = vertex_weights.begin();
-                while (wi != vertex_weights.end()) {
-                    std::cout << "Vertex Index: " << wi->first << " with " << wi->second.size() << " weights." << std::endl;
-                    std::vector<std::pair<std::string, float> >::iterator wvi = wi->second.begin();
-                    while (wvi != wi->second.end()) {
-                        std::cout << "Bone Name: " << wvi->first << " weight float: " << wvi->second << std::endl;
-                        ++wvi;
-                    }
-                    ++wi;
-                }*/
 
                 for (unsigned int i = 0; i < ai_mesh->mNumFaces; i++){
                     const aiFace *ai_face = &(ai_mesh->mFaces[i]);
@@ -156,6 +213,20 @@ namespace EG{
                 material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR, texture_path);
             }
             materials.Set(index, material);
+        }
+
+        void AssimpInterface::LoadAnimation(const aiAnimation *ai_animation, unsigned int index) {
+            std::string animation_name(ai_animation->mName.data);
+            double duration = ai_animation->mDuration;
+            //std::cout << "Animation: " << animation_name << " " << duration << std::endl;
+            // NOTE: What are Mesh Channels For?
+            for (unsigned int j = 0; j < ai_animation->mNumChannels; j++) {
+                aiNodeAnim *channel = ai_animation->mChannels[j];
+                std::string bone_name(channel->mNodeName.data);
+                unsigned int bone_id = bone_name_map[bone_name];
+                //std::cout << "Bone: " << bone_name << std::endl;
+                //std::cout << channel->mNumPositionKeys << ' ' << channel->mNumRotationKeys << ' ' << channel->mNumScalingKeys << std::endl;
+            }
         }
     }
 }

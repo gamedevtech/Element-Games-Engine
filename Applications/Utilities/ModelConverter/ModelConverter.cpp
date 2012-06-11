@@ -57,7 +57,8 @@ std::string LoadModelEventListener::Call(std::map<std::string, std::string> args
             std::cout << "Mesh Material Index: " << i << std::endl;
             model->GetMaterial(i)->SetLit(true);
             model->GetMaterial(i)->SetCastsShadows(true);
-            model_object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(model->GetMesh(i), model->GetMaterial(i)));
+            EG::Game::ObjectAttributeRenderingMesh *rm = new EG::Game::ObjectAttributeRenderingMesh(model->GetMesh(i), model->GetMaterial(i));
+            model_object->AddAttribute(rm);
         }
         scene->GetObjectManager()->AddObject(model_object);
 

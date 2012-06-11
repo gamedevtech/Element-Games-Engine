@@ -27,5 +27,19 @@ namespace EG{
         bool ObjectAttributeControlRigidBody::GetConnected(void){
             return connected_to_bullet;
         }
+
+        ObjectAttributeAnimationState::ObjectAttributeAnimationState(EG::Dynamics::AnimationState *_state){
+            type = EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_ANIMATION;
+            animation_state = _state;
+        }
+        ObjectAttributeAnimationState::~ObjectAttributeAnimationState(void){
+            delete animation_state;
+        }
+        void ObjectAttributeAnimationState::SetAnimationState(EG::Dynamics::AnimationState *_state){
+            animation_state = _state;
+        }
+        EG::Dynamics::AnimationState *ObjectAttributeAnimationState::GetAnimationState(void){
+            return animation_state;
+        }
     }
 }
