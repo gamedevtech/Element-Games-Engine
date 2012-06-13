@@ -128,7 +128,6 @@ set(SRCS
 	./Utility/Font.h
 	./Utility/Text.h
 	./Utility/JSON.h
-	./Utility/RocketInterface.h
 	./Utility/GUI.h
 	./Utility/Dictionary.h
 	./Utility/StringDictionary.h
@@ -139,7 +138,6 @@ set(SRCS
 	./Utility/Source/Time.cpp
 	./Utility/Source/Font.cpp
 	./Utility/Source/Text.cpp
-	./Utility/Source/RocketInterface.cpp
 	./Utility/Source/GUI.cpp
 	./Utility/Source/StringMethods.cpp
 )
