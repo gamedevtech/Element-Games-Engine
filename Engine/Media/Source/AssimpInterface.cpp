@@ -16,6 +16,7 @@ namespace EG{
         bool AssimpInterface::Load(std::string _file_path){
             std::cout << "Loading " << file_path << std::endl;
 
+            // Use Assimp to Load The Scene
             Assimp::Importer importer;
             file_path = _file_path;
             ai_scene = importer.ReadFile(file_path, /*aiProcess_CalcTangentSpace | */aiProcess_Triangulate | /*aiProcess_JoinIdenticalVertices | */aiProcess_SortByPType);
@@ -23,93 +24,175 @@ namespace EG{
                 return false;
             }
 
+            // Load Animations
             if (ai_scene->HasAnimations()) {
+                // Find Bones in Meshes
+                LoadBones(ai_scene);
+                // Build Skeleton
                 LoadSkeleton(ai_scene);
+                // Load Keyframe Information
+                EG::Dynamics::Animations *animations = new EG::Dynamics::Animations();
+                for (unsigned int i = 0; i < ai_scene->mNumAnimations; i++) {
+                    animations->Add(LoadAnimation(ai_scene->mAnimations[i], i));
+                }
             }
 
+            // Load Meshes and Materials
             for (unsigned int i = 0; i < ai_scene->mNumMeshes; i++){
                 const struct aiMesh *mesh = ai_scene->mMeshes[i];
                 const struct aiMaterial *material = ai_scene->mMaterials[mesh->mMaterialIndex];
 
                 LoadMaterial(material, i);
+                // TODO: Go back and find this meshes node and get it's local transformation
                 LoadMesh(mesh, i);
                 count += 1;
             }
 
-            if (ai_scene->HasAnimations()) {
-                for (unsigned int i = 0; i < ai_scene->mNumAnimations; i++) {
-                    LoadAnimation(ai_scene->mAnimations[i], i);
-                }
-            }
-
             std::cout << "Done." << std::endl;
-
             return true;
         }
 
-        void AssimpInterface::LoadSkeleton(const aiScene *ai_scene){
-            // Get Bone List, store in bone_name_map
+        // Skeletal Functions
+        void AssimpInterface::LoadBones(const aiScene *ai_scene){
             unsigned int bone_id = 0;
-            for (unsigned int i = 0; i < ai_scene->mNumAnimations; i++) {
-                aiAnimation *ai_animation = ai_scene->mAnimations[i];
-                for (unsigned int j = 0; j < ai_animation->mNumChannels; j++) {
-                    aiNodeAnim *channel = ai_animation->mChannels[j];
-                    std::string bone_name(channel->mNodeName.data);
-                    if (bone_name_map.count(bone_name) < 1) {
-                        bone_name_map[bone_name] = bone_id;
-                        bone_names.push_back(bone_name);
-                        std::cout << "Found Bone: " << bone_name << std::endl;
-                        bone_id += 1;
+            for (unsigned int mesh_index = 0; mesh_index < ai_scene->mNumMeshes; mesh_index++) {
+                aiMesh *ai_mesh = ai_scene->mMeshes[mesh_index];
+                if (ai_mesh->HasBones()) {
+                    for (unsigned int bone_index = 0; bone_index < ai_mesh->mNumBones; bone_index++) {
+                        aiBone *ai_bone = ai_mesh->mBones[bone_index];
+                        std::string bone_name(ai_bone->mName.data);
+                        if (bone_name_map.count(bone_name) < 1) {
+                            bone_name_map[bone_name] = bone_id;
+                            bone_names.push_back(bone_name);
+                            bone_id += 1;
+                        }
                     }
                 }
             }
             bone_count = bone_id;
+        }
 
+        aiNode *AssimpInterface::FindRootBone(const aiScene *ai_scene) {
+            std::vector<std::string>::iterator bi = bone_names.begin();
+            std::string root_bone;
+            aiNode *root_bone_node;
+            unsigned int lowest_separation = 99999999;
+            while (bi != bone_names.end()) {
+                std::string name = (*bi);
+                unsigned int separation = 0;
+                aiNode *bone_node = ai_scene->mRootNode->FindNode(name.c_str());
+                aiNode *original_bone_node = bone_node;
+                while (bone_node != NULL) {
+                    separation += 1;
+                    bone_node = bone_node->mParent;
+                }
+                if (separation < lowest_separation) {
+                    lowest_separation = separation;
+                    root_bone = name;
+                    root_bone_node = original_bone_node;
+                }
+                ++bi;
+            }
+            return root_bone_node;
+        }
+
+        void AssimpInterface::LoadSkeleton(const aiScene *ai_scene){
             bind_pose_skeleton = new EG::Dynamics::Skeleton();
-            RecursiveLoadSkeleton(ai_scene->mRootNode, NULL);
-            /*std::vector<EG::Dynamics::Bone *>::iterator bi = bind_pose_skeleton->GetBones()->begin();
-            while (bi != bind_pose_skeleton->GetBones()->end()) {
-                std::cout << "Bone Array: " << (*bi)->GetId() << std::endl;
-                bi++;
-            }*/
+
+            aiNode *root_bone_node = FindRootBone(ai_scene);
+
+            // Now Recurively Add Child Bones
+            BuildSkeleton(root_bone_node, NULL);
             bind_pose_skeleton->PrintRecursive();
         }
 
-        void AssimpInterface::RecursiveLoadSkeleton(const aiNode *parent_node, EG::Dynamics::Bone *parent_bone) {
-            std::string node_name(parent_node->mName.data);
-            //std::cout << "Node Name: " << node_name << std::endl;
-            // compare node name against bones
-            EG::Dynamics::Bone *this_bone = NULL;
-            if (bone_name_map.count(node_name) > 0) {
-                unsigned int bone_id = bone_name_map[node_name];
-                std::cout << "Is Bone: " << bone_id << std::endl;
-                aiMatrix4x4 ai_trans = parent_node->mTransformation;
-                glm::mat4 trans = glm::mat4(1.0f);
-                for (unsigned int i = 0; i < 4; i++) {
-                    for (unsigned int j = 0; j < 4; j++) {
-                        trans[i][j] = parent_node->mTransformation[i][j];
-                    }
-                }
-                this_bone = new EG::Dynamics::Bone(bone_id, trans);
-                if (parent_bone == NULL) {
-                    std::cout << "HERE" << std::endl;
-                    bind_pose_skeleton->SetRoot(this_bone);
-                } else {
-                    parent_bone->AddChild(this_bone);
-                }
-                bind_pose_skeleton->AddBone(this_bone);
-                for (unsigned int i = 0; i < parent_node->mNumChildren; i++) {
-                    //std::cout << "Child: " << parent_node->mChildren[i]->mName.data << std::endl;
-                    RecursiveLoadSkeleton(parent_node->mChildren[i], this_bone);
-                }
+        void AssimpInterface::BuildSkeleton(aiNode *current, EG::Dynamics::Bone *parent) {
+            unsigned int bone_id = bone_name_map[std::string(current->mName.data)];
+            glm::mat4 transformation = ConvertMatrix(current->mTransformation);
+            EG::Dynamics::Bone *bone = new EG::Dynamics::Bone(bone_id, transformation);
+            if (parent == NULL) {
+                bind_pose_skeleton->SetRoot(bone);
+            } else {
+                parent->AddChild(bone);
             }
-            if (parent_bone == NULL) {
-                for (unsigned int i = 0; i < parent_node->mNumChildren; i++) {
-                    //std::cout << "Child: " << parent_node->mChildren[i]->mName.data << std::endl;
-                    RecursiveLoadSkeleton(parent_node->mChildren[i], NULL);
-                }
+            bind_pose_skeleton->AddBone(bone);
+            for (unsigned int child_index = 0; child_index < current->mNumChildren; child_index++) {
+                BuildSkeleton(current->mChildren[child_index], bone);
             }
         }
+
+        EG::Dynamics::Animation *AssimpInterface::LoadAnimation(const aiAnimation *ai_animation, unsigned int index) {
+            std::string animation_name(ai_animation->mName.data);
+            double duration = ai_animation->mDuration;
+            double ticks_per_second = ai_animation->mTicksPerSecond;
+            std::cout << "Animation: " << animation_name << " " << duration << " " << ticks_per_second << std::endl;
+
+            unsigned int frame_count;
+            if (ai_animation->mNumChannels > 0) {
+                frame_count = ai_animation->mChannels[0]->mNumPositionKeys;
+            }
+            EG::Dynamics::KeyFrame *frames = new EG::Dynamics::KeyFrame[frame_count];
+            EG::Dynamics::Skeleton *frame_skeletons = new EG::Dynamics::Skeleton[frame_count];
+
+            for (unsigned int frame_index = 0; frame_index < frame_count; frame_index++) {
+                std::map<unsigned int, glm::mat4> transforms;
+                double frame_duration = 0.0;
+                for (unsigned int bone_index = 0; bone_index < ai_animation->mNumChannels; bone_index++) {
+                    aiNodeAnim *channel = ai_animation->mChannels[bone_index];
+                    std::string bone_name(channel->mNodeName.data);
+                    unsigned int bone_id = bone_name_map[bone_name];
+
+                    aiVectorKey pos_key = channel->mPositionKeys[frame_index];
+                    frame_duration = pos_key.mTime;
+                    aiVector3D position = pos_key.mValue;
+
+                    aiQuatKey rot_key = channel->mRotationKeys[frame_index];
+                    aiQuaternion rotation = rot_key.mValue;
+
+                    aiVectorKey scale_key = channel->mScalingKeys[frame_index];
+                    aiVector3D scaling = scale_key.mValue;
+
+                    glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, position.z));
+                    transform *= glm::gtx::quaternion::toMat4(glm::quat(rotation.x, rotation.y, rotation.z, rotation.w));
+                    transform = glm::scale(transform, glm::vec3(scaling.x, scaling.y, scaling.z));
+                    transforms[bone_id] = transform;
+                }
+                BuildFrameSkeleton(&(frame_skeletons[frame_index]), &transforms);
+                frames[frame_index].SetSkeleton(&(frame_skeletons[frame_index]));
+                frames[frame_index].SetDuration(float(frame_duration));
+                frames[frame_index].SetIndex(frame_index);
+            }
+
+            EG::Dynamics::Animation *animation = new EG::Dynamics::Animation(animation_name, duration, frames);
+            return animation;
+        }
+
+        void AssimpInterface::BuildFrameSkeleton(EG::Dynamics::Skeleton *skeleton,
+                                                                    std::map<unsigned int, glm::mat4> *transforms) {
+            BuildFrameSkeletonRecursive(transforms, skeleton, NULL, bind_pose_skeleton->GetRoot());
+        }
+
+        void AssimpInterface::BuildFrameSkeletonRecursive(std::map<unsigned int, glm::mat4> *transforms,
+                                                 EG::Dynamics::Skeleton *skeleton,
+                                                 EG::Dynamics::Bone *parent_bone,
+                                                 EG::Dynamics::Bone *ref_bone) {
+            unsigned int ref_bone_id = ref_bone->GetId();
+            glm::mat4 frame_transform = (*transforms)[ref_bone_id];
+            EG::Dynamics::Bone *bone = new EG::Dynamics::Bone(ref_bone_id, frame_transform);
+            if (parent_bone == NULL) {
+                skeleton->SetRoot(bone);
+            } else {
+                parent_bone->AddChild(bone);
+            }
+            skeleton->AddBone(bone);
+
+            std::vector<EG::Dynamics::Bone *>::iterator bi = ref_bone->GetChildren()->begin();
+            while (bi != ref_bone->GetChildren()->end()) {
+                BuildFrameSkeletonRecursive(transforms, skeleton, bone, (*bi));
+                ++bi;
+            }
+        }
+        ///////////////////////
 
         void AssimpInterface::LoadMesh(const aiMesh *ai_mesh, unsigned int index){
             if (ai_mesh->HasFaces()){
@@ -215,18 +298,14 @@ namespace EG{
             materials.Set(index, material);
         }
 
-        void AssimpInterface::LoadAnimation(const aiAnimation *ai_animation, unsigned int index) {
-            std::string animation_name(ai_animation->mName.data);
-            double duration = ai_animation->mDuration;
-            //std::cout << "Animation: " << animation_name << " " << duration << std::endl;
-            // NOTE: What are Mesh Channels For?
-            for (unsigned int j = 0; j < ai_animation->mNumChannels; j++) {
-                aiNodeAnim *channel = ai_animation->mChannels[j];
-                std::string bone_name(channel->mNodeName.data);
-                unsigned int bone_id = bone_name_map[bone_name];
-                //std::cout << "Bone: " << bone_name << std::endl;
-                //std::cout << channel->mNumPositionKeys << ' ' << channel->mNumRotationKeys << ' ' << channel->mNumScalingKeys << std::endl;
-            }
+        glm::mat4 AssimpInterface::ConvertMatrix(aiMatrix4x4 in) {
+            aiQuaternion rotation;
+            aiVector3D scaling, position;
+            in.Decompose(scaling, rotation, position);
+            glm::mat4 out = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, position.z));
+            out *= glm::gtx::quaternion::toMat4(glm::quat(rotation.x, rotation.y, rotation.z, rotation.w));
+            out = glm::scale(out, glm::vec3(scaling.x, scaling.y, scaling.z));
+            return out;
         }
     }
 }

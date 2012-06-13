@@ -33,12 +33,31 @@ namespace EG{
                 std::string file_path;
                 EG::Game::Scene *scene;
                 const aiScene *ai_scene;
+                aiNode *root_node;
 
+                // Utility Functions
+                glm::mat4 ConvertMatrix(aiMatrix4x4 in);
+                aiNode *FindNode(std::string find_name, glm::mat4 &t);
+
+                // Skeletal Loaders
+                void LoadBones(const aiScene *ai_scene);
+                aiNode *FindRootBone(const aiScene *ai_scene);
                 void LoadSkeleton(const aiScene *ai_scene);
-                void RecursiveLoadSkeleton(const aiNode *parent_node, EG::Dynamics::Bone *parent_bone);
+                void BuildSkeleton(aiNode *current, EG::Dynamics::Bone *parent);
+
+                // Mesh and Material Loaders
                 void LoadMesh(const aiMesh *ai_mesh, unsigned int index);
                 void LoadMaterial(const aiMaterial *ai_material, unsigned int index);
-                void LoadAnimation(const aiAnimation *ai_animation, unsigned int index);
+
+                // Animation Loaders
+                EG::Dynamics::Animation *LoadAnimation(const aiAnimation *ai_animation,
+                                                       unsigned int index);
+                void BuildFrameSkeleton(EG::Dynamics::Skeleton *skeleton,
+                                        std::map<unsigned int, glm::mat4> *transforms);
+                void BuildFrameSkeletonRecursive(std::map< unsigned int, glm::core::type::mat4 > *transforms,
+                                        EG::Dynamics::Skeleton *skeleton,
+                                        EG::Dynamics::Bone *bone,
+                                        EG::Dynamics::Bone *ref_bone);
 
                 unsigned int count;
                 EG::Utility::Dictionary<unsigned int, std::string> meshes;

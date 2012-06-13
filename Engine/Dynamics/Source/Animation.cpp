@@ -58,6 +58,15 @@ namespace EG{
         KeyFrame::~KeyFrame(void){
             //
         }
+        void KeyFrame::SetDuration(float _duration){
+            duration = _duration;
+        }
+        void KeyFrame::SetIndex(float _index){
+            index = _index;
+        }
+        void KeyFrame::SetSkeleton(Skeleton *_skeleton){
+            skeleton = _skeleton;
+        }
         unsigned int KeyFrame::GetIndex(void){
             return index;
         }
