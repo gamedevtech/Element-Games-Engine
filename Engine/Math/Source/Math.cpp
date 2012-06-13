@@ -62,9 +62,9 @@ namespace EG{
         }
 
         glm::mat4 Utility::GenerateTransform(glm::vec3 translate, glm::vec3 scale, glm::quat rotation){
-            glm::mat4 translation_matrix = glm::gtx::transform::translate(translate);
-            glm::mat4 scaling_matrix = glm::gtx::transform::scale(scale);
-            glm::mat4 rotation_matrix = glm::gtx::quaternion::toMat4(rotation);
+            glm::mat4 translation_matrix = glm::translate(translate);
+            glm::mat4 scaling_matrix = glm::scale(scale);
+            glm::mat4 rotation_matrix = glm::toMat4(rotation);
             return rotation_matrix * translation_matrix * scaling_matrix;
         }
     }

@@ -4,7 +4,7 @@ IF (WIN32)
 		include_directories(../Dependencies/Windows/include/)
 	ENDIF (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
 ELSE (WIN32)
-	include_directories(../Dependencies/Linux/include/)
+	include_directories(/usr/local/include/)
 ENDIF (WIN32)
 
 set(SRCS

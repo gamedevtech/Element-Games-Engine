@@ -72,7 +72,7 @@ int main(int argc, char **argv){
 
     // Planet Sorta
     EG::Game::Object *object = new EG::Game::Object("Planet");
-    glm::mat4 planet_transform = glm::gtx::transform::translate(-5.0f, 5.0f, -5.0f);
+    glm::mat4 planet_transform = glm::translate(-5.0f, 5.0f, -5.0f);
     object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(planet_transform));
 
     std::string images[6];
@@ -108,7 +108,7 @@ int main(int argc, char **argv){
     object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));
 
     EG::Game::Object *pa = new EG::Game::Object("PlanetAtmosphere");
-    planet_transform = planet_transform * glm::gtx::transform::scale(1.2f, 1.2f, 1.2f);
+    planet_transform = planet_transform * glm::scale(1.2f, 1.2f, 1.2f);
     pa->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(planet_transform));
     material = new EG::Graphics::RenderingMaterial();
     material->SetLit(false);
@@ -126,8 +126,8 @@ int main(int argc, char **argv){
     scene->GetTextureManager()->AddTexture("concrete_decal", texture);
     texture = new EG::Graphics::Texture("Assets/Textures/concrete_normal.jpg");
     scene->GetTextureManager()->AddTexture("concrete_normal", texture);
-    glm::mat4 scale = glm::gtx::transform::scale(10.0f, 0.1f, 10.0f);
-    glm::mat4 translate = glm::gtx::transform::translate(-5.0f, -0.101f, -5.0f);
+    glm::mat4 scale = glm::scale(10.0f, 0.1f, 10.0f);
+    glm::mat4 translate = glm::translate(-5.0f, -0.101f, -5.0f);
     glm::mat4 plane_transform = translate * scale;
     object2->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(plane_transform));
     //EG::Graphics::RenderingMaterial *material = new EG::Graphics::RenderingMaterial();
@@ -148,7 +148,7 @@ int main(int argc, char **argv){
     EG::Game::Object *object3 = new EG::Game::Object("SkySphere");
     texture = new EG::Graphics::Texture("Assets/Textures/starfield.jpg");
     scene->GetTextureManager()->AddTexture("starfield_decal", texture);
-    scale = glm::gtx::transform::scale(50.0f, 50.0f, 50.0f);
+    scale = glm::scale(50.0f, 50.0f, 50.0f);
     object3->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(scale));
     material = new EG::Graphics::RenderingMaterial();
     material->SetLit(false);
@@ -159,8 +159,8 @@ int main(int argc, char **argv){
     // Light 0
     EG::Game::Object *light_object = new EG::Game::Object("RedLight");
     glm::vec3 light_position = glm::vec3(-4.0f, 5.0f, 5.0f);
-    translate = glm::gtx::transform::translate(light_position);
-    scale = glm::gtx::transform::scale(0.1f, 0.1f, 0.1f);
+    translate = glm::translate(light_position);
+    scale = glm::scale(0.1f, 0.1f, 0.1f);
     light_object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(translate * scale));
     EG::Graphics::Light *light = new EG::Graphics::Light();
     light->SetPosition(light_position);
@@ -179,7 +179,7 @@ int main(int argc, char **argv){
     // Light 1
     EG::Game::Object *light_object2 = new EG::Game::Object("GreenLight");
     glm::vec3 light_position2 = glm::vec3(4.0f, 5.0f, 5.0f);
-    translate = glm::gtx::transform::translate(light_position2);
+    translate = glm::translate(light_position2);
     light_object2->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(translate * scale));
     EG::Graphics::Light *light2 = new EG::Graphics::Light();
     light2->SetPosition(light_position2);
@@ -198,7 +198,7 @@ int main(int argc, char **argv){
     // Light 2
     EG::Game::Object *light_object3 = new EG::Game::Object("BlueLight");
     glm::vec3 light_position3 = glm::vec3(0.0f, 5.0f, -5.0f);
-    translate = glm::gtx::transform::translate(light_position3);
+    translate = glm::translate(light_position3);
     light_object3->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(translate * scale));
     EG::Graphics::Light *light3 = new EG::Graphics::Light();
     light3->SetPosition(light_position3);
@@ -254,8 +254,8 @@ int main(int argc, char **argv){
             glm::vec3 position = glm::vec3(EG::Math::Utility::RandomFloat(-1.0f, 1.0f), EG::Math::Utility::RandomFloat(-1.0f, 1.0f) + 3.0f, EG::Math::Utility::RandomFloat(-1.0f, 1.0f));
             //glm::vec3 position(0.0f, 0.5f, 0.0f);
             glm::vec3 psize(1.2f, 1.2f, 1.2f);
-            glm::mat4 pscale = glm::gtx::transform::scale(psize);
-            glm::mat4 ptranslate = glm::gtx::transform::translate(position);
+            glm::mat4 pscale = glm::scale(psize);
+            glm::mat4 ptranslate = glm::translate(position);
             EG::Game::ObjectAttributeBasicTransformation *transformation = new EG::Game::ObjectAttributeBasicTransformation(ptranslate * pscale);
 
             p->AddAttribute(transformation);
@@ -340,7 +340,7 @@ int main(int argc, char **argv){
     reader.Read("Assets/Models/test_model.ego", scene);
     EG::Game::Object *read_object = reader.GetLoadedObject();
     EG::Dynamics::CollisionBox *collision_shape = new EG::Dynamics::CollisionBox(10.0f, glm::vec3(1.0f, 0.5f, 1.0f));
-    glm::mat4 ship_trans = glm::gtx::transform::translate(0.0f, 2.0f, 0.0f);
+    glm::mat4 ship_trans = glm::translate(0.0f, 2.0f, 0.0f);
     EG::Dynamics::RigidBody *rigid_body = new EG::Dynamics::RigidBody(collision_shape, ship_trans, glm::vec3(0.02f, 0.02f, 0.02f));
     rigid_body->SetCollisionFiltering(COLLIDES_OBJECT, COLLIDES_OBJECT);
     read_object->AddAttribute(new EG::Game::ObjectAttributeControlRigidBody(rigid_body));

@@ -93,7 +93,7 @@ namespace EG{
             btScalar matrix_data[16];
             world_transform.getOpenGLMatrix(matrix_data);
             glm::mat4 out = glm::make_mat4(matrix_data);
-            out = out * glm::gtx::transform::scale(local_scaling);
+            out = out * glm::scale(local_scaling);
             return out;
         }
 

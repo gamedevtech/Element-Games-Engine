@@ -88,7 +88,7 @@ namespace EG{
 			if (direction.x > 0.0f || direction.y > 0.0f || direction.z > 0.0f){
 				temp = position + direction;
 			}
-			view_matrix = glm::gtc::matrix_transform::lookAt(position, temp, glm::vec3(0.0f, 1.0f, 0.0f));
+			view_matrix = glm::lookAt(position, temp, glm::vec3(0.0f, 1.0f, 0.0f));
 		}
 
 		glm::mat4 Light::GetProjectionMatrix(void){

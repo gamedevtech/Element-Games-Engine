@@ -125,7 +125,7 @@ void Sandbox::Update(void){
         glm::vec4 pos = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
         while (attr_iter != attrs->end()){
             EG::Game::ObjectAttributeBasicTransformation *trans_attr = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(*attr_iter);
-            glm::mat4 offset = glm::gtx::transform::translate(3.0f, 1.5f, 0.0f);
+            glm::mat4 offset = glm::translate(3.0f, 1.5f, 0.0f);
             glm::mat4 trans = offset * trans_attr->GetTransformation();
             pos = trans * pos;
             ++attr_iter;

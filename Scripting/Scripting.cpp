@@ -22,12 +22,13 @@ BOOST_PYTHON_MODULE(pyegengine) {
         .def(init<glm::vec4, glm::vec4, glm::vec4, glm::vec4>());
         //.def(init<float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float>());
 
-    def("translate", glm::gtc::matrix_transform::translate<float>);
+    /*def("translate", glm::gtc::matrix_transform::translate<float>);
     def("translate", glm::gtc::matrix_transform::translate<double>);
     def("scale", glm::gtc::matrix_transform::scale<float>);
     def("scale", glm::gtc::matrix_transform::scale<double>);
     def("rotate", glm::gtc::matrix_transform::rotate<float>);
-    def("rotate", glm::gtc::matrix_transform::rotate<double>);
+    def("rotate", glm::gtc::matrix_transform::rotate<double>);*/
+    // Those were broken again, since the glm upgrade to 0.9.3
 
     // Finish
     enum_<EG::Input::Key>("InputKey")

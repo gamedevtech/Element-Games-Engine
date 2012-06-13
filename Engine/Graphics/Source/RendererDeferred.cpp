@@ -68,7 +68,7 @@ namespace EG{
             hdr_buffer = new EG::Graphics::OffscreenBuffer(16, 16, 1, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
             ssao_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth() / 2.0f, graphics->GetViewportHeight() / 2.0f, 3, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
             composition_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth(), graphics->GetViewportHeight(), 1, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
-            orthographics_projection_matrix = glm::gtc::matrix_transform::ortho(0.0f, float(graphics->GetViewportWidth()), 0.0f, float(graphics->GetViewportHeight()));
+            orthographics_projection_matrix = glm::ortho(0.0f, float(graphics->GetViewportWidth()), 0.0f, float(graphics->GetViewportHeight()));
 
             /* Renderer Settings */
             ssao_enabled = 1;
@@ -503,7 +503,7 @@ namespace EG{
             shaders->Bind("font_rendering");
             shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
             shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
-            shaders->SetMatrix4("model_matrix", glm::gtx::transform::translate(glm::vec3(10.0f, 10.0f, 0.0f)));
+            shaders->SetMatrix4("model_matrix", glm::translate(glm::vec3(10.0f, 10.0f, 0.0f)));
 
             graphics->SetActiveTexture(0);
             shaders->SetInt("decal", 0);
@@ -515,7 +515,7 @@ namespace EG{
             campos.flush();
             font_manager->Draw(campos.str());
 
-            shaders->SetMatrix4("model_matrix", glm::gtx::transform::translate(glm::vec3(10.0f, 24.0f, 0.0f)));
+            shaders->SetMatrix4("model_matrix", glm::translate(glm::vec3(10.0f, 24.0f, 0.0f)));
             std::stringstream fps;
             fps.precision(3);
             fps << time->GetFPS();
@@ -527,7 +527,7 @@ namespace EG{
             shaders->Bind("gui_rendering");
             shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
             shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
-            shaders->SetMatrix4("model_matrix", glm::gtx::transform::scale(float(graphics->GetViewportWidth()), float(graphics->GetViewportHeight()), 1.0f));
+            shaders->SetMatrix4("model_matrix", glm::scale(float(graphics->GetViewportWidth()), float(graphics->GetViewportHeight()), 1.0f));
             shaders->SetInt("decal", 0);
             shaders->SetFloat4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
             if (gui->GetInitialized()){

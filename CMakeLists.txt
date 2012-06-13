@@ -18,7 +18,7 @@ IF (WIN32)
 		#link_directories(Dependencies/Windows/library/debug)
 	ENDIF (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
 ELSE (WIN32)
-	include_directories(Dependencies/Linux/include ${CMAKE_CURRENT_BINARY_DIR})
+	include_directories(/usr/local/include/ ${CMAKE_CURRENT_BINARY_DIR})
 	#link_directories(Dependencies/Linux/lib)
 ENDIF (WIN32)
 

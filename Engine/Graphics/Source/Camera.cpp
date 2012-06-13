@@ -47,7 +47,7 @@ namespace EG{
         }
 
         void Camera::ComputeViewMatrix(void){
-            glm::mat4 rotation_matrix = glm::gtx::quaternion::toMat4(-orientation);
+            glm::mat4 rotation_matrix = glm::toMat4(-orientation);
             glm::mat4 offset_matrix = glm::translate(glm::mat4(1.0f), -offset);
             glm::mat4 translation_matrix = glm::translate(glm::mat4(1.0f), -position);
             view_matrix = offset_matrix * rotation_matrix * translation_matrix;
@@ -87,13 +87,13 @@ namespace EG{
         void Camera::Rotate(glm::vec3 angles){
             if (camera_type == CAMERA_FPS){
                 // TODO: implement constraints
-                glm::quat quat_x = glm::gtx::quaternion::angleAxis(angles.x * (180.0f / float(PI)), glm::vec3(1.0f, 0.0f, 0.0f));
-                glm::quat quat_y = glm::gtx::quaternion::angleAxis(angles.y * (180.0f / float(PI)), glm::vec3(0.0f, 1.0f, 0.0f));
+                glm::quat quat_x = glm::angleAxis(angles.x * (180.0f / float(PI)), glm::vec3(1.0f, 0.0f, 0.0f));
+                glm::quat quat_y = glm::angleAxis(angles.y * (180.0f / float(PI)), glm::vec3(0.0f, 1.0f, 0.0f));
                 orientation = quat_x * orientation * quat_y;
-                glm::gtc::quaternion::normalize(orientation);
+                glm::normalize(orientation);
             }else{
                 orientation = glm::quat(angles) * orientation;
-                glm::gtc::quaternion::normalize(orientation);
+                glm::normalize(orientation);
             }
         }
 

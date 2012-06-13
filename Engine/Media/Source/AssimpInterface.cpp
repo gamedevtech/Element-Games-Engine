@@ -153,7 +153,7 @@ namespace EG{
                     aiVector3D scaling = scale_key.mValue;
 
                     glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, position.z));
-                    transform *= glm::gtx::quaternion::toMat4(glm::quat(rotation.x, rotation.y, rotation.z, rotation.w));
+                    transform *= glm::toMat4(glm::quat(rotation.x, rotation.y, rotation.z, rotation.w));
                     transform = glm::scale(transform, glm::vec3(scaling.x, scaling.y, scaling.z));
                     transforms[bone_id] = transform;
                 }
@@ -302,10 +302,9 @@ namespace EG{
             aiQuaternion rotation;
             aiVector3D scaling, position;
             in.Decompose(scaling, rotation, position);
-            glm::mat4 out = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, position.z));
-            out *= glm::gtx::quaternion::toMat4(glm::quat(rotation.x, rotation.y, rotation.z, rotation.w));
-            out = glm::scale(out, glm::vec3(scaling.x, scaling.y, scaling.z));
-            return out;
+            return EG::Math::Utility::GenerateTransform(glm::vec3(position.x, position.y, position.z),
+                                                        glm::vec3(scaling.x, scaling.y, scaling.z),
+                                                        glm::quat(rotation.x, rotation.y, rotation.z, rotation.w));
         }
     }
 }

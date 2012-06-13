@@ -5,7 +5,7 @@ IF (WIN32)
 	ENDIF (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
 ELSE (WIN32)
 	add_definitions(-shared)
-	include_directories(../Dependencies/Linux/include/)
+	include_directories(/usr/local/include/)
 	include_directories(../Engine/)
 ENDIF (WIN32)
 

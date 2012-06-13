@@ -47,7 +47,7 @@ namespace EG{
             shaders->Add("sphere_cube_map_gradient_decal_with_lighting", "Shaders/Basic/sphere_cube_mapped_with_gradient_decal_with_lighting.vert", "Shaders/Basic/sphere_cube_mapped_with_gradient_decal_with_lighting.frag");
             shaders->Add("planet_atmosphere", "Shaders/Basic/planet_atmosphere.vert", "Shaders/Basic/planet_atmosphere.frag");
 
-            orthographics_projection_matrix = glm::gtc::matrix_transform::ortho(0.0f, float(graphics->GetViewportWidth()), 0.0f, float(graphics->GetViewportHeight()));
+            orthographics_projection_matrix = glm::ortho(0.0f, float(graphics->GetViewportWidth()), 0.0f, float(graphics->GetViewportHeight()));
 
             initialized = true;
         }
@@ -457,7 +457,7 @@ namespace EG{
             shaders->Bind("font_rendering");
             shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
             shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
-            shaders->SetMatrix4("model_matrix", glm::gtx::transform::scale(float(graphics->GetViewportWidth()), float(graphics->GetViewportHeight()), 1.0f));
+            shaders->SetMatrix4("model_matrix", glm::scale(float(graphics->GetViewportWidth()), float(graphics->GetViewportHeight()), 1.0f));
             shaders->SetInt("decal_map", 0);
             shaders->SetInt("use_decal", 1);
             shaders->SetFloat4("material_color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -478,7 +478,7 @@ namespace EG{
             shaders->Bind("font_rendering");
             shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
             shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
-            shaders->SetMatrix4("model_matrix", glm::gtx::transform::translate(glm::vec3(10.0f, 10.0f, 0.0f)));
+            shaders->SetMatrix4("model_matrix", glm::translate(glm::vec3(10.0f, 10.0f, 0.0f)));
 
             graphics->SetActiveTexture(0);
             shaders->SetInt("decal_map", 0);
@@ -490,7 +490,7 @@ namespace EG{
             campos.flush();
             font_manager->Draw(campos.str());
 
-            shaders->SetMatrix4("model_matrix", glm::gtx::transform::translate(glm::vec3(10.0f, 24.0f, 0.0f)));
+            shaders->SetMatrix4("model_matrix", glm::translate(glm::vec3(10.0f, 24.0f, 0.0f)));
             std::stringstream fps;
             fps.precision(3);
             fps << time->GetFPS();

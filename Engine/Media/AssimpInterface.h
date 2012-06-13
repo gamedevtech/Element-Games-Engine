@@ -54,7 +54,7 @@ namespace EG{
                                                        unsigned int index);
                 void BuildFrameSkeleton(EG::Dynamics::Skeleton *skeleton,
                                         std::map<unsigned int, glm::mat4> *transforms);
-                void BuildFrameSkeletonRecursive(std::map< unsigned int, glm::core::type::mat4 > *transforms,
+                void BuildFrameSkeletonRecursive(std::map< unsigned int, glm::mat4 > *transforms,
                                         EG::Dynamics::Skeleton *skeleton,
                                         EG::Dynamics::Bone *bone,
                                         EG::Dynamics::Bone *ref_bone);
