@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include "../../Game/ObjectRenderingAttribute.h"
+#include "../../Game/ObjectControlAttribute.h"
 #include "../../Game/ObjectBasicAttribute.h"
 #include "../../Game/ObjectEmissionAttribute.h"
 #include "../../Graphics/MeshManager.h"
@@ -308,6 +309,19 @@ namespace EG{
                         r = 1;
                     }
                     shaders->SetInt("receives_lighting", r);
+                }else if (variable == EG::Graphics::ShaderManager::ENGINE_BONE_TRANSFORMS) {
+                    if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_ANIMATION)) {
+                        shaders->SetInt("has_animations", 1);
+                    } else {
+                        shaders->SetInt("has_animations", 0);
+                    }
+                }else if (variable == EG::Graphics::ShaderManager::ENGINE_BONE_TRANSFORMS) {
+                    if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_ANIMATION)) {
+                        std::cout << "Sending Bone Transforms" << std::endl;
+                        EG::Dynamics::AnimationState *animations = (static_cast<EG::Game::ObjectAttributeControlAnimationState *>(object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_ANIMATION)->at(0)))->GetAnimationState();
+                        std::vector<glm::mat4> transforms = animations->GetTransforms();
+                        shaders->SetMatrix4("bone_transforms", transforms);
+                    }
                 }
                 ++uniform_iter;
             }

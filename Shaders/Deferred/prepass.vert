@@ -10,6 +10,8 @@ in vec4 vertex_normal;
 in vec4 vertex_texcoord;
 in vec4 vertex_binormal;
 in vec4 vertex_bitangent;
+// weights
+// weight indices
 
 smooth out vec3 position;
 smooth out vec3 normal;

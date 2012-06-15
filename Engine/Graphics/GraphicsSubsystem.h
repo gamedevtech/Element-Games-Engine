@@ -54,7 +54,7 @@ namespace EG{
 				void ShaderSetFloatV(unsigned int variable_location, int size, float *data);
 				void ShaderSetMatrix2(unsigned int variable_location, float *data);
 				void ShaderSetMatrix3(unsigned int variable_location, float *data);
-				void ShaderSetMatrix4(unsigned int variable_location, float *data);
+				void ShaderSetMatrix4(unsigned int variable_location, float *data, unsigned int count = 1);
 
 				// Mesh Methods
 				void SetUsingTessellation(bool _using_tessellation);

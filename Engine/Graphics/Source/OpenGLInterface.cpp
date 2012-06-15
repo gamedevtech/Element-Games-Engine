@@ -250,6 +250,8 @@ namespace EG{
                 glBindAttribLocation(object_ids[3], 2, "vertex_texcoord");
                 glBindAttribLocation(object_ids[3], 3, "vertex_binormal");
                 glBindAttribLocation(object_ids[3], 4, "vertex_bitangent");
+                glBindAttribLocation(object_ids[3], 5, "vertex_weights");
+                glBindAttribLocation(object_ids[3], 6, "vertex_weight_indices");
                 if (fragment_outputs == 1){
                     glBindFragDataLocation(object_ids[3], 0, "fragment_output");
                 }else{
@@ -517,11 +519,11 @@ namespace EG{
             }
         }
 
-        void OpenGLInterface::ShaderSetMatrix4(unsigned int variable_location, float *data){
+        void OpenGLInterface::ShaderSetMatrix4(unsigned int variable_location, float *data, unsigned int count){
             if (version_major >= 2 && version_minor >= 0){
-                glUniformMatrix4fv(variable_location, 1, GL_FALSE, data);
+                glUniformMatrix4fv(variable_location, count, GL_FALSE, data);
             }else{
-                glUniformMatrix4fvARB(variable_location, 1, GL_FALSE, data);
+                glUniformMatrix4fvARB(variable_location, count, GL_FALSE, data);
             }
         }
 

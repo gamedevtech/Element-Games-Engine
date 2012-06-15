@@ -94,10 +94,11 @@ namespace EG{
             }
         }
 
-        Animation::Animation(std::string animation_name, float _duration, KeyFrame *_frames){
+        Animation::Animation(std::string animation_name, float _duration, KeyFrame *_frames, unsigned int _frame_count){
             duration = _duration;
             name = animation_name;
             frames = _frames;
+            frame_count = _frame_count;
         }
         Animation::~Animation(void){
             //
@@ -110,6 +111,9 @@ namespace EG{
         }
         KeyFrame *Animation::GetFrames(void){
             return frames;
+        }
+        unsigned int Animation::GetFrameCount(void) {
+            return frame_count;
         }
 
         Animations::Animations(void){
@@ -124,16 +128,94 @@ namespace EG{
         Animation *Animations::Get(std::string name){
             return animations[name];
         }
+        void Animations::SetBindPose(Skeleton *_bind_pose_skeleton){
+            bind_pose = _bind_pose_skeleton;
+        }
+        Skeleton *Animations::GetBindPose(void){
+            return bind_pose;
+        }
 
         AnimationState::AnimationState(Animations *_animations){
-            current_animation = "default";
+            current_animation = "";
             animations = _animations;
+            animation_time = 0.0f;
         }
         AnimationState::~AnimationState(void){
             //
         }
         void AnimationState::SetAnimation(std::string animation){
             current_animation = animation;
+        }
+        std::string AnimationState::GetAnimation(void){
+            return current_animation;
+        }
+        Animations *AnimationState::GetAnimations(void){
+            return animations;
+        }
+        void AnimationState::Update(float frame_time){
+            //std::cout << "Frame Time Animations: " << frame_time << std::endl;
+            EG::Dynamics::Animation *animation = animations->Get(current_animation);
+            //std::cout << "Current Animation: " << current_animation << std::endl;
+
+            float animation_duration = animation->GetDuration();
+            //std::cout << "Animation Duration: " << animation_duration << std::endl;
+            animation_time += frame_time;
+            if (animation_time > animation_duration) {
+                animation_time = glm::mod(animation_time, animation_duration);
+            }
+
+            unsigned int frame_count = animation->GetFrameCount();
+            EG::Dynamics::KeyFrame *key_frames = animation->GetFrames();
+            float frame_time_sum = 0.0f;
+            unsigned int frame_index = 0;
+            for (frame_index = 0; frame_index < frame_count; frame_index++) {
+                frame_time_sum += key_frames[frame_index].GetDuration();
+                if (animation_time < frame_time_sum) {
+                    break;
+                }
+            }
+            unsigned int previous_frame_index = frame_index - 1;
+            if (frame_index == 0) {
+                previous_frame_index = frame_count - 1;
+            }
+            //std::cout << "Animation Time: " << animation_time << std::endl;
+            std::cout << "Frame Index: " << frame_index << " / " << frame_count << std::endl;
+
+            EG::Dynamics::Skeleton *post_frame = key_frames[frame_index].GetSkeleton();
+            EG::Dynamics::Skeleton *prev_frame = key_frames[previous_frame_index].GetSkeleton();
+
+            float previous_frame_sum = frame_time_sum - key_frames[frame_index].GetDuration();
+            float temp_animation_time = animation_time - previous_frame_sum;
+            float interpolation_factor = temp_animation_time / key_frames[frame_index].GetDuration();
+            std::cout << "Interpolation Factor: " << interpolation_factor << std::endl;
+
+            glm::mat4 bind_trans = glm::mat4(1.0f);
+            glm::mat4 start_trans = glm::mat4(1.0f);
+            glm::mat4 end_trans = glm::mat4(1.0f);
+            Interpolate(bind_trans, animations->GetBindPose()->GetRoot(), start_trans, prev_frame->GetRoot(), end_trans, post_frame->GetRoot(), interpolation_factor);
+        }
+        void AnimationState::Interpolate(glm::mat4 &bind_trans, Bone *bone, glm::mat4 &start_trans, Bone *start, glm::mat4 &end_trans, Bone *end, float i) {
+            bind_trans *= bone->GetOffset();
+            start_trans *= start->GetOffset();
+            const glm::mat4 tmp_start_trans = bind_trans * start_trans;
+            end_trans *= end->GetOffset();
+            const glm::mat4 tmp_end_trans = bind_trans * end_trans;
+            transforms[bone->GetId()] = EG::Math::Utility::Interpolate(tmp_start_trans, tmp_end_trans, i);//glm::interpolate(tmp_start_trans, tmp_end_trans, i);
+
+            std::vector<Bone *> *bones = bone->GetChildren();
+            std::vector<Bone *> *start_bones = start->GetChildren();
+            std::vector<Bone *> *end_bones = end->GetChildren();
+            for (unsigned int bone_index = 0; bone_index < bones->size(); bone_index++) {
+                Interpolate(bind_trans, (*bones)[bone_index], start_trans, (*start_bones)[bone_index], end_trans, (*end_bones)[bone_index], i);
+            }
+        }
+        std::vector<glm::mat4> AnimationState::GetTransforms(void) {
+            unsigned int size = transforms.size();
+            std::vector<glm::mat4> out;
+            for (unsigned int i = 0; i < size; i++) {
+                out.push_back(transforms[i]);
+            }
+            return out;
         }
     }
 }

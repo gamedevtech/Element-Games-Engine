@@ -22,10 +22,10 @@ namespace EG{
                 bool connected_to_bullet;
         };
 
-        class ObjectAttributeAnimationState : public ObjectAttribute{
+        class ObjectAttributeControlAnimationState : public ObjectAttribute{
             public:
-                ObjectAttributeAnimationState(EG::Dynamics::AnimationState *_state);
-                ~ObjectAttributeAnimationState(void);
+                ObjectAttributeControlAnimationState(EG::Dynamics::AnimationState *_state);
+                ~ObjectAttributeControlAnimationState(void);
 
                 void SetAnimationState(EG::Dynamics::AnimationState *_state);
                 EG::Dynamics::AnimationState *GetAnimationState(void);

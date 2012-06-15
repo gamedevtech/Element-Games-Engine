@@ -2,13 +2,20 @@
 #define EG_MATH_H
 
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_inverse.hpp>
+
 #include <glm/gtc/matrix_access.hpp>
+#include <glm/gtc/matrix_integer.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/noise.hpp>
 #include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/random.hpp>
+#include <glm/gtc/swizzle.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/transform.hpp>
+// #include <glm/gtx/matrix_interpolation.hpp>
 
 // NOTE: Remember... Rotate then Translate then Scale!
 
@@ -28,6 +35,7 @@ namespace EG{
                 static int RandomInteger(int min, int max);
                 static float RandomFloat(float min, float max);
                 static glm::mat4 GenerateTransform(glm::vec3 translate = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f), glm::quat rotation = glm::quat(glm::vec3(0.0f)));
+                static glm::mat4 Interpolate(glm::mat4 begin, glm::mat4 end, float factor);
             private:
                 //
         };

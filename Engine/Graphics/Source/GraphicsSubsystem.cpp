@@ -157,8 +157,8 @@ namespace EG{
 			opengl_interface->ShaderSetMatrix3(variable_location, data);
 		}
 
-		void GraphicsSubsystem::ShaderSetMatrix4(unsigned int variable_location, float *data){
-			opengl_interface->ShaderSetMatrix4(variable_location, data);
+		void GraphicsSubsystem::ShaderSetMatrix4(unsigned int variable_location, float *data, unsigned int count){
+			opengl_interface->ShaderSetMatrix4(variable_location, data, count);
 		}
 
 		void GraphicsSubsystem::SetUsingTessellation(bool _using_tessellation){

@@ -62,7 +62,9 @@ namespace EG{
                     ENGINE_NEAR_FAR = 33,
                     ENGINE_SPECULAR_MAP = 34,
                     ENGINE_PROJECTION_MATRIX = 35,
-                    ENGINE_VIEW_MATRIX = 36
+                    ENGINE_VIEW_MATRIX = 36,
+                    ENGINE_BONE_TRANSFORMS = 37,
+                    ENGINE_HAS_ANIMATIONS = 38
                 };
 
                 enum ShaderUniformTypes{
@@ -110,7 +112,7 @@ namespace EG{
                 void SetFloatV(const char *variable_name, int size, float *data);
                 void SetMatrix2(const char *variable_name, float *data);
                 void SetMatrix3(const char *variable_name, float *data);
-                void SetMatrix4(const char *variable_name, float *data);
+                void SetMatrix4(const char *variable_name, float *data, unsigned int count = 1);
                 void SetInt2(const char *variable_name, glm::ivec2 values);
                 void SetInt3(const char *variable_name, glm::ivec3 values);
                 void SetInt4(const char *variable_name, glm::ivec4 values);
@@ -120,6 +122,7 @@ namespace EG{
                 void SetMatrix2(const char *variable_name, glm::mat2 matrix);
                 void SetMatrix3(const char *variable_name, glm::mat3 matrix);
                 void SetMatrix4(const char *variable_name, glm::mat4 matrix);
+                void SetMatrix4(const char *variable_name, std::vector<glm::mat4> matrix);
             private:
                 bool shader_bound;
                 unsigned int current_program_object_id;

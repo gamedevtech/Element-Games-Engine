@@ -68,7 +68,7 @@ namespace EG{
                 void ShaderSetFloatV(unsigned int variable_location, int size, float *data);
                 void ShaderSetMatrix2(unsigned int variable_location, float *data);
                 void ShaderSetMatrix3(unsigned int variable_location, float *data);
-                void ShaderSetMatrix4(unsigned int variable_location, float *data);
+                void ShaderSetMatrix4(unsigned int variable_location, float *data, unsigned int count = 1);
                 bool BasicShadersSupported(void);
 
                 void GenerateMeshBuffer(unsigned int *vertex_array_object_id, unsigned int *vertex_buffer_object_ids, unsigned int vertex_count, bool has_vertices, float *vertices, bool has_texcoords, float *texcoords, bool has_normals, float *normals, bool has_binormals, float *binormals, bool has_bitangents, float *bitangents, bool has_skeleton, unsigned int *weight_vertex_indices, float *weights);

@@ -304,10 +304,10 @@ namespace EG{
             }
         }
 
-        void ShaderManager::SetMatrix4(const char *variable_name, float *data){
+        void ShaderManager::SetMatrix4(const char *variable_name, float *data, unsigned int count){
             if (shader_bound){
                 unsigned int variable_location = GetVariableLocation(variable_name);
-                graphics->ShaderSetMatrix4(variable_location, data);
+                graphics->ShaderSetMatrix4(variable_location, data, count);
             }
         }
 
@@ -347,6 +347,19 @@ namespace EG{
             SetMatrix4(variable_name, (float *)(glm::value_ptr(matrix)));
         }
 
+        void ShaderManager::SetMatrix4(const char *variable_name, std::vector<glm::mat4> matrix){
+            float *data = new float[matrix.size() * 16];
+            unsigned int index = 0;
+            for (unsigned int i = 0; i < matrix.size(); i++) {
+                float *tdata = (float *)(glm::value_ptr(matrix[i]));
+                for (unsigned int j = 0; j < 16; j++) {
+                    data[index] = tdata[j];
+                    index += 1;
+                }
+            }
+            SetMatrix4(variable_name, data, matrix.size());
+        }
+
         // Type, Name
         std::vector<std::pair<std::string, std::string> > ShaderManager::FindUniforms(char **source, int *sizes, int line_count){
             std::vector<std::pair<std::string, std::string> > results;
@@ -366,6 +379,9 @@ namespace EG{
                     int name_pos = line.find_first_not_of(' ', after_type_pos);
                     int semi_pos = line.find_first_of(';', after_type_pos);
                     std::string name = line.substr(name_pos, semi_pos - name_pos);
+                    // Strip [\d+]
+                    int bracket_pos = name.find_first_of('[');
+                    name = name.substr(0, bracket_pos);
                     results.push_back(std::pair<std::string, std::string>(type, name));
                     //std::cout << type << ":" << name << std::endl;
                 }
@@ -451,6 +467,8 @@ namespace EG{
             engine_uniform_string_translations.Set("luminance_scale", EG::Graphics::ShaderManager::ENGINE_LUMINANCE_SCALE);
             engine_uniform_string_translations.Set("resolution", EG::Graphics::ShaderManager::ENGINE_RESOLUTION);
             engine_uniform_string_translations.Set("near_far", EG::Graphics::ShaderManager::ENGINE_NEAR_FAR);
+            engine_uniform_string_translations.Set("bone_transforms", EG::Graphics::ShaderManager::ENGINE_BONE_TRANSFORMS);
+            engine_uniform_string_translations.Set("has_animations", EG::Graphics::ShaderManager::ENGINE_HAS_ANIMATIONS);
             uniform_type_translations.Set("sampler2D", EG::Graphics::ShaderManager::UNIFORM_TEXTURE);
             uniform_type_translations.Set("samplerCube", EG::Graphics::ShaderManager::UNIFORM_CUBEMAP);
             uniform_type_translations.Set("int", EG::Graphics::ShaderManager::UNIFORM_INT);

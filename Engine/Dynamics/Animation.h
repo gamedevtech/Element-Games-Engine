@@ -65,16 +65,18 @@ namespace EG{
 
         class Animation{
             public:
-                Animation(std::string animation_name, float _duration, KeyFrame *_frames);
+                Animation(std::string animation_name, float _duration, KeyFrame *_frames, unsigned int _frame_count);
                 ~Animation(void);
 
                 float GetDuration(void);
                 std::string GetName(void);
                 KeyFrame *GetFrames(void);
+                unsigned int GetFrameCount(void);
             private:
                 float duration;
                 std::string name;
                 KeyFrame *frames;
+                unsigned int frame_count;
         };
 
         class Animations{
@@ -84,7 +86,10 @@ namespace EG{
 
                 void Add(Animation *_animation);
                 Animation *Get(std::string name);
+                void SetBindPose(Skeleton *_bind_pose_skeleton);
+                Skeleton *GetBindPose(void);
             private:
+                EG::Dynamics::Skeleton *bind_pose;
                 std::map<std::string, Animation *> animations;
         };
 
@@ -94,9 +99,16 @@ namespace EG{
                 ~AnimationState(void);
 
                 void SetAnimation(std::string animation);
+                std::string GetAnimation(void);
+                Animations *GetAnimations(void);
+                void Update(float frame_time);
+                std::vector<glm::mat4> GetTransforms(void);
+                void Interpolate(glm::mat4 &bind_trans, Bone *bone, glm::mat4 &start_trans, Bone *start, glm::mat4 &end_trans, Bone *end, float i);
             private:
                 std::string current_animation;
                 Animations *animations;
+                float animation_time;
+                std::map<unsigned int, glm::mat4> transforms;
         };
     }
 }

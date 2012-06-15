@@ -7,6 +7,7 @@ namespace EG{
         AssimpInterface::AssimpInterface(EG::Game::Scene *_scene){
             scene = _scene;
             count = 0;
+            has_animations = false;
         }
 
         AssimpInterface::~AssimpInterface(void){
@@ -26,12 +27,14 @@ namespace EG{
 
             // Load Animations
             if (ai_scene->HasAnimations()) {
+                has_animations = true;
                 // Find Bones in Meshes
                 LoadBones(ai_scene);
                 // Build Skeleton
                 LoadSkeleton(ai_scene);
                 // Load Keyframe Information
-                EG::Dynamics::Animations *animations = new EG::Dynamics::Animations();
+                animations = new EG::Dynamics::Animations();
+                animations->SetBindPose(bind_pose_skeleton);
                 for (unsigned int i = 0; i < ai_scene->mNumAnimations; i++) {
                     animations->Add(LoadAnimation(ai_scene->mAnimations[i], i));
                 }
@@ -163,7 +166,7 @@ namespace EG{
                 frames[frame_index].SetIndex(frame_index);
             }
 
-            EG::Dynamics::Animation *animation = new EG::Dynamics::Animation(animation_name, duration, frames);
+            EG::Dynamics::Animation *animation = new EG::Dynamics::Animation(animation_name, duration, frames, frame_count);
             return animation;
         }
 

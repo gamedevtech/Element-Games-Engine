@@ -3,6 +3,7 @@
 #include "../../../Engine/Graphics/RendererMultipass.h"
 #include "../../../Engine/Graphics/RendererDeferred.h"
 #include "../../../Engine/Game/ObjectBasicAttribute.h"
+#include "../../../Engine/Game/ObjectControlAttribute.h"
 #include "../../../Engine/Game/ObjectEmissionAttribute.h"
 #include "../../../Engine/Game/ObjectRenderingAttribute.h"
 #include "../../../Engine/Utility/StringMethods.h"
@@ -10,55 +11,60 @@
 #include <complex>
 
 std::string LoadModelEventListener::Call(std::map<std::string, std::string> args){
-	std::string filename = args["filename"];
-	filename = EG::Utility::StringMethods::SearchAndReplace(filename, "%2F", "/");
-	model = new EG::Media::ModelLoader(scene);
-	model_loaded = model->Load(filename);
+    std::string filename = args["filename"];
+    filename = EG::Utility::StringMethods::SearchAndReplace(filename, "%2F", "/");
+    model = new EG::Media::ModelLoader(scene);
+    model_loaded = model->Load(filename);
     std::cout << "Model Loaded!!!" << std::endl;
-	if (model_loaded){
-		model_object = new EG::Game::Object(filename);
+    if (model_loaded){
+        model_object = new EG::Game::Object(filename);
 
-		SetLitCallback *litcallback = new SetLitCallback();
-		litcallback->object = model_object;
-		gui->AddResponseHandler("set_lit", litcallback);
+        SetLitCallback *litcallback = new SetLitCallback();
+        litcallback->object = model_object;
+        gui->AddResponseHandler("set_lit", litcallback);
 
-		SetShadowsCallback *shadowscallback = new SetShadowsCallback();
-		shadowscallback->object = model_object;
-		gui->AddResponseHandler("set_shadows", shadowscallback);
+        SetShadowsCallback *shadowscallback = new SetShadowsCallback();
+        shadowscallback->object = model_object;
+        gui->AddResponseHandler("set_shadows", shadowscallback);
 
-		SetDecalCallback *decalcallback = new SetDecalCallback();
-		decalcallback->object = model_object;
-		decalcallback->scene = scene;
-		gui->AddResponseHandler("set_decal", decalcallback);
+        SetDecalCallback *decalcallback = new SetDecalCallback();
+        decalcallback->object = model_object;
+        decalcallback->scene = scene;
+        gui->AddResponseHandler("set_decal", decalcallback);
 
-		SetNormalCallback *normalcallback = new SetNormalCallback();
-		normalcallback->object = model_object;
-		normalcallback->scene = scene;
-		gui->AddResponseHandler("set_normal", normalcallback);
+        SetNormalCallback *normalcallback = new SetNormalCallback();
+        normalcallback->object = model_object;
+        normalcallback->scene = scene;
+        gui->AddResponseHandler("set_normal", normalcallback);
 
-		SetHeightCallback *heightcallback = new SetHeightCallback();
-		heightcallback->object = model_object;
-		heightcallback->scene = scene;
-		gui->AddResponseHandler("set_height", heightcallback);
+        SetHeightCallback *heightcallback = new SetHeightCallback();
+        heightcallback->object = model_object;
+        heightcallback->scene = scene;
+        gui->AddResponseHandler("set_height", heightcallback);
 
-		SetSpecularCallback *specularcallback = new SetSpecularCallback();
-		specularcallback->object = model_object;
-		specularcallback->scene = scene;
-		gui->AddResponseHandler("set_specular", specularcallback);
+        SetSpecularCallback *specularcallback = new SetSpecularCallback();
+        specularcallback->object = model_object;
+        specularcallback->scene = scene;
+        gui->AddResponseHandler("set_specular", specularcallback);
 
-		SaveCallback *savecallback = new SaveCallback();
-		savecallback->object = model_object;
-		savecallback->scene = scene;
-		gui->AddResponseHandler("save_model", savecallback);
+        SaveCallback *savecallback = new SaveCallback();
+        savecallback->object = model_object;
+        savecallback->scene = scene;
+        gui->AddResponseHandler("save_model", savecallback);
 
         // TODO: Loop through the meshes and perhaps combine them into one, and get the transforms right, if not, then just make transforms available as an option on a mesh as well!
-		model_object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 2.0f, 0.0f)), glm::vec3(0.02f, 0.02f, 0.02f))));
+        model_object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 2.0f, 0.0f)), glm::vec3(0.02f, 0.02f, 0.02f))));
         for (unsigned int i = 0; i < model->GetMeshMaterialPairCount(); i++) {
             std::cout << "Mesh Material Index: " << i << std::endl;
             model->GetMaterial(i)->SetLit(true);
             model->GetMaterial(i)->SetCastsShadows(true);
             EG::Game::ObjectAttributeRenderingMesh *rm = new EG::Game::ObjectAttributeRenderingMesh(model->GetMesh(i), model->GetMaterial(i));
             model_object->AddAttribute(rm);
+        }
+        if (model->HasAnimations()) {
+            EG::Dynamics::AnimationState *animation_state = new EG::Dynamics::AnimationState(model->GetAnimations());
+            EG::Game::ObjectAttributeControlAnimationState *attrib = new EG::Game::ObjectAttributeControlAnimationState(animation_state);
+            model_object->AddAttribute(attrib);
         }
         scene->GetObjectManager()->AddObject(model_object);
 
@@ -98,44 +104,44 @@ std::string LoadModelEventListener::Call(std::map<std::string, std::string> args
         } else {
             out += ", \"specular\": \"\"}";
         }
-		return out;
-	}else{
-		return "{\"status\": false}";
-	}
+        return out;
+    }else{
+        return "{\"status\": false}";
+    }
 }
 
 std::string SetLitCallback::Call(std::map<std::string, std::string> args){
-	if (object){
-		std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
-	        std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
-	        while (mesh_attribute_iterator != mesh_attributes->end()){
-	                EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
-	                EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
+    if (object){
+        std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+        std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
+        while (mesh_attribute_iterator != mesh_attributes->end()){
+            EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
+            EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
 
-	                bool lit_status = material->GetLit();
-	                material->SetLit(!lit_status);
-	                ++mesh_attribute_iterator;
-	        }
-		return "{\"status\": true}";
-	}
-	return "{\"status\": false}";
+            bool lit_status = material->GetLit();
+            material->SetLit(!lit_status);
+            ++mesh_attribute_iterator;
+        }
+        return "{\"status\": true}";
+    }
+    return "{\"status\": false}";
 }
 
 std::string SetShadowsCallback::Call(std::map<std::string, std::string> args){
-	if (object){
-		std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
-                std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
-                while (mesh_attribute_iterator != mesh_attributes->end()){
-                        EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
-                        EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
+    if (object){
+        std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+        std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
+        while (mesh_attribute_iterator != mesh_attributes->end()){
+            EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
+            EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
 
-                        bool shadows_status = material->GetCastsShadows();
-                        material->SetCastsShadows(!shadows_status);
-                        ++mesh_attribute_iterator;
-                }
-                return "{\"status\": true}";
+            bool shadows_status = material->GetCastsShadows();
+            material->SetCastsShadows(!shadows_status);
+            ++mesh_attribute_iterator;
         }
-        return "{\"status\": false}";
+        return "{\"status\": true}";
+    }
+    return "{\"status\": false}";
 }
 
 std::string SetDecalCallback::Call(std::map<std::string, std::string> args){

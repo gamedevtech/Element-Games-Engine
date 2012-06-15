@@ -67,5 +67,29 @@ namespace EG{
             glm::mat4 rotation_matrix = glm::toMat4(rotation);
             return rotation_matrix * translation_matrix * scaling_matrix;
         }
+
+        glm::mat4 Utility::Interpolate(glm::mat4 begin, glm::mat4 end, float factor) {
+            glm::vec3 pos_begin = glm::vec3(begin[3][0], begin[3][1], begin[3][2]);
+            glm::vec3 pos_end = glm::vec3(end[3][0], end[3][1], end[3][2]);
+            glm::vec3 pos_result = glm::mix(pos_begin, pos_end, factor);
+
+            glm::vec3 scale_begin = glm::vec3(
+                sqrt(begin[0][0] * begin[0][0] + begin[1][0] * begin[1][0] + begin[2][0] * begin[2][0]),
+                sqrt(begin[0][1] * begin[0][1] + begin[1][1] * begin[1][1] + begin[2][1] * begin[2][1]),
+                sqrt(begin[0][2] * begin[0][2] + begin[1][2] * begin[1][2] + begin[2][2] * begin[2][2])
+            );
+            glm::vec3 scale_end = glm::vec3(
+                sqrt(end[0][0] * end[0][0] + end[1][0] * end[1][0] + end[2][0] * end[2][0]),
+                sqrt(end[0][1] * end[0][1] + end[1][1] * end[1][1] + end[2][1] * end[2][1]),
+                sqrt(end[0][2] * end[0][2] + end[1][2] * end[1][2] + end[2][2] * end[2][2])
+            );
+            glm::vec3 scale_result = glm::mix(scale_begin, scale_end, factor);
+
+            glm::quat rot_begin = glm::toQuat(begin);
+            glm::quat rot_end = glm::toQuat(end);
+            glm::quat rot_result = glm::mix(rot_begin, rot_end, factor);
+
+            return GenerateTransform(pos_result, scale_result, rot_result);
+        }
     }
 }

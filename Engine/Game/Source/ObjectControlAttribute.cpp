@@ -28,17 +28,17 @@ namespace EG{
             return connected_to_bullet;
         }
 
-        ObjectAttributeAnimationState::ObjectAttributeAnimationState(EG::Dynamics::AnimationState *_state){
+        ObjectAttributeControlAnimationState::ObjectAttributeControlAnimationState(EG::Dynamics::AnimationState *_state){
             type = EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_ANIMATION;
             animation_state = _state;
         }
-        ObjectAttributeAnimationState::~ObjectAttributeAnimationState(void){
+        ObjectAttributeControlAnimationState::~ObjectAttributeControlAnimationState(void){
             delete animation_state;
         }
-        void ObjectAttributeAnimationState::SetAnimationState(EG::Dynamics::AnimationState *_state){
+        void ObjectAttributeControlAnimationState::SetAnimationState(EG::Dynamics::AnimationState *_state){
             animation_state = _state;
         }
-        EG::Dynamics::AnimationState *ObjectAttributeAnimationState::GetAnimationState(void){
+        EG::Dynamics::AnimationState *ObjectAttributeControlAnimationState::GetAnimationState(void){
             return animation_state;
         }
     }

@@ -29,6 +29,12 @@ namespace EG{
                 EG::Graphics::RenderingMaterial *GetMaterial(unsigned int index){
                     return materials.Get(index);
                 }
+                EG::Dynamics::Animations *GetAnimations(void){
+                    return animations;
+                }
+                bool HasAnimations(void){
+                    return has_animations;
+                }
             private:
                 std::string file_path;
                 EG::Game::Scene *scene;
@@ -63,6 +69,8 @@ namespace EG{
                 EG::Utility::Dictionary<unsigned int, std::string> meshes;
                 EG::Utility::Dictionary<unsigned int, EG::Graphics::RenderingMaterial *> materials;
                 std::map<unsigned int, std::map<unsigned int, glm::mat4> > bone_transformations;
+                EG::Dynamics::Animations *animations;
+                bool has_animations;
 
                 // Bone Name and Count Info
                 unsigned int bone_count;

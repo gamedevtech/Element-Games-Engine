@@ -183,6 +183,12 @@ namespace EG{
                     }
                 }
 
+                if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_ANIMATION)) {
+                    EG::Dynamics::AnimationState *animations = (static_cast<EG::Game::ObjectAttributeControlAnimationState *>(object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_ANIMATION)->at(0)))->GetAnimationState();
+                    animations->Update(time->GetFrameTime());
+                    //std::cout << "HERE" << std::endl;
+                }
+
                 bool has_physics = false;
                 glm::mat4 motion_state;
                 if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY)){
