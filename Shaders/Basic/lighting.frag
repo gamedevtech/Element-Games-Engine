@@ -8,6 +8,7 @@ varying vec3 normal;
 varying vec3 light;
 varying vec3 view;
 varying float light_distance;
+varying float weight_used;
 
 void main(){
     float light_factor = 0.0;
@@ -24,4 +25,8 @@ void main(){
 
     color_out *= vec4((light_color * light_factor), 1.0);
     gl_FragColor = color_out;
+
+    if (weight_used > 0.5) {
+        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    }
 }

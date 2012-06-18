@@ -179,7 +179,7 @@ namespace EG{
                 previous_frame_index = frame_count - 1;
             }
             //std::cout << "Animation Time: " << animation_time << std::endl;
-            std::cout << "Frame Index: " << frame_index << " / " << frame_count << std::endl;
+//             std::cout << "Frame Index: " << frame_index << " / " << frame_count << std::endl;
 
             EG::Dynamics::Skeleton *post_frame = key_frames[frame_index].GetSkeleton();
             EG::Dynamics::Skeleton *prev_frame = key_frames[previous_frame_index].GetSkeleton();
@@ -187,7 +187,7 @@ namespace EG{
             float previous_frame_sum = frame_time_sum - key_frames[frame_index].GetDuration();
             float temp_animation_time = animation_time - previous_frame_sum;
             float interpolation_factor = temp_animation_time / key_frames[frame_index].GetDuration();
-            std::cout << "Interpolation Factor: " << interpolation_factor << std::endl;
+//             std::cout << "Interpolation Factor: " << interpolation_factor << std::endl;
 
             glm::mat4 bind_trans = glm::mat4(1.0f);
             glm::mat4 start_trans = glm::mat4(1.0f);

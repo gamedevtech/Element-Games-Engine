@@ -106,7 +106,7 @@ namespace EG{
 
             // Now Recurively Add Child Bones
             BuildSkeleton(root_bone_node, NULL);
-            bind_pose_skeleton->PrintRecursive();
+            //bind_pose_skeleton->PrintRecursive();
         }
 
         void AssimpInterface::BuildSkeleton(aiNode *current, EG::Dynamics::Bone *parent) {
@@ -222,6 +222,7 @@ namespace EG{
                     }
                 }
 
+                bool has_skeleton = false;
                 for (unsigned int i = 0; i < ai_mesh->mNumFaces; i++){
                     const aiFace *ai_face = &(ai_mesh->mFaces[i]);
                     // For each vertex which is garanteed to be 3 because we always triangulate!
@@ -233,11 +234,12 @@ namespace EG{
                         faces[i].vertices[2 - v] = glm::vec4(vertex.x, vertex.y, vertex.z, 1.0f);
                         faces[i].texcoords[2 - v] = glm::vec4(texcoord.x, texcoord.y, 1.0f, 1.0f);
                         if (ai_mesh->HasBones()) {
+                            has_skeleton = true;
                             faces[i].weights[2 - v] = vertex_weights[vertex_index];
                         }
                     }
                 }
-                EG::Graphics::TriangleMesh *tmesh = new EG::Graphics::TriangleMesh(ai_mesh->mNumFaces, faces, /*false, false*/true, true, true, true, true, true);
+                EG::Graphics::TriangleMesh *tmesh = new EG::Graphics::TriangleMesh(ai_mesh->mNumFaces, faces, /*false, false*/true, true, true, true, true, true, has_skeleton);
                 std::cout << tmesh->GetTriangles()->at(0).tangents[0].x << ' ' << tmesh->GetTriangles()->at(0).tangents[0].y << ' ' << tmesh->GetTriangles()->at(0).tangents[0].z << ' ' << tmesh->GetTriangles()->at(0).tangents[0].w << std::endl;
                 std::cout << tmesh->GetTriangles()->at(0).bitangents[0].x << ' ' << tmesh->GetTriangles()->at(0).bitangents[0].y << ' ' << tmesh->GetTriangles()->at(0).bitangents[0].z << ' ' << tmesh->GetTriangles()->at(0).bitangents[0].w << std::endl;
                 scene->GetMeshManager()->Add(mesh_name, new EG::Graphics::Mesh(tmesh));

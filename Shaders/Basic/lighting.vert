@@ -11,9 +11,11 @@ varying vec3 normal;
 varying vec3 light;
 varying vec3 view;
 varying float light_distance;
+varying float weight_used;
 
 void main(){
     vec3 transformed_vertex = vec3(0.0);
+    weight_used = 0.0;
 
     if (has_animations == 1) {
         gl_TexCoord[2] = gl_MultiTexCoord2; // weights
@@ -29,6 +31,7 @@ void main(){
         }
         weight_bone_index = int(gl_TexCoord[3][1]);
         if (weight_bone_index < 1000) {
+            weight_used = 1.0;
             temp_vertex += (bone_transforms[weight_bone_index] * temp_vertex) * gl_TexCoord[2][1];
         }
         weight_bone_index = int(gl_TexCoord[3][2]);
@@ -42,6 +45,7 @@ void main(){
 
         transformed_vertex = (model_matrix * temp_vertex).xyz;
         normal = (normal_matrix * vec4(gl_Normal.xyz, 1.0)).xyz;
+        transformed_vertex = (model_matrix * gl_Vertex).xyz;
     } else {
         normal = (normal_matrix * vec4(gl_Normal.xyz, 1.0)).xyz;
         transformed_vertex = (model_matrix * gl_Vertex).xyz;
@@ -54,7 +58,7 @@ void main(){
     light_distance = length(light_vector);
     light = normalize(light_vector);
 
-    gl_Position = projection_matrix * view_matrix * model_matrix * gl_Vertex;
+    gl_Position = projection_matrix * view_matrix * vec4(transformed_vertex, 1.0);//model_matrix * gl_Vertex;
     gl_FrontColor = gl_Color;
     gl_TexCoord[0] = gl_MultiTexCoord0;
 }

@@ -120,6 +120,7 @@ namespace EG{
             has_texcoords = true;
             triangle_count = _triangle_count;
             has_skeleton = _has_skeleton;
+            std::cout << "Tri Mesh Has Skeleton: " << has_skeleton << std::endl;
             for (unsigned int i = 0; i < triangle_count; i++){
                 triangles.push_back(_triangles[i]);
             }
@@ -416,6 +417,7 @@ namespace EG{
             has_binormals = triangle_mesh->HasBinormals();
             has_bitangents = triangle_mesh->HasBitangents();
             has_skeleton = triangle_mesh->HasSkeleton();
+            std::cout << "Has Skeleton: " << has_skeleton << std::endl;
 
             vertex_count = triangle_mesh->GetTriangleCount() * 3;
             vertices = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
@@ -472,12 +474,13 @@ namespace EG{
 
                     if (has_skeleton){
                         std::vector<std::pair<unsigned int, float> > *w = &(triangle.weights[i]);
+                        std::cout << "Weights: " << w->size() << std::endl;
                         for (unsigned int i = 0; i < 4; i++) {
                             if (i < w->size() - 1) {
-                                weight_vertex_indices[index + i] = (*w)[i].first;
+                                weight_vertex_indices[index + i] = float((*w)[i].first);
                                 weights[index + i] = (*w)[i].second;
                             } else {
-                                weight_vertex_indices[index + i] = 10000;
+                                weight_vertex_indices[index + i] = 10000.0f;
                                 weights[index + i] = 0.0f;
                             }
                         }

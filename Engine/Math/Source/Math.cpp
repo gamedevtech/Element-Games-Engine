@@ -89,7 +89,9 @@ namespace EG{
             glm::quat rot_end = glm::toQuat(end);
             glm::quat rot_result = glm::mix(rot_begin, rot_end, factor);
 
-            return GenerateTransform(pos_result, scale_result, rot_result);
+            glm::mat4 result = GenerateTransform(pos_result, scale_result, rot_result);
+            //PrintMat4(result);
+            return result;
         }
     }
 }

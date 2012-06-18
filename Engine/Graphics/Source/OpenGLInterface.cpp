@@ -732,7 +732,7 @@ namespace EG{
                     glEnable(GL_TEXTURE_2D);
                     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
                     glBindBufferARB(GL_ARRAY_BUFFER_ARB, vertex_buffer_object_ids[VBO_WEIGHT_VERTEX_INDICES]);
-                    glTexCoordPointer(4, GL_UNSIGNED_INT, 0, (char *)NULL);
+                    glTexCoordPointer(4, GL_FLOAT, 0, (char *)NULL);
                 }
 
                 SetActiveTexture(0);
