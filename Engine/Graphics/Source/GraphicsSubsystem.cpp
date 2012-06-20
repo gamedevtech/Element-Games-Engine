@@ -169,8 +169,8 @@ namespace EG{
             opengl_interface->GenerateMeshBuffer(vertex_array_object_id, vertex_buffer_object_ids, vertex_count, has_vertices, vertices, has_texcoords, texcoords, has_normals, normals, has_binormals, binormals, has_bitangents, bitangents, has_skeleton, weight_vertex_indices, weights);
 		}
 
-		void GraphicsSubsystem::DrawMesh(unsigned int *vertex_array_object_id, unsigned int *vertex_buffer_object_ids, unsigned int vertex_count, bool vertices, bool texcoords, bool normals, bool binormals, bool bitangents, bool skeleton){
-			opengl_interface->DrawMesh(vertex_array_object_id, vertex_buffer_object_ids, vertex_count, using_tessellation, vertices, texcoords, normals, binormals, bitangents, skeleton);
+		void GraphicsSubsystem::DrawMesh(unsigned int *vertex_array_object_id, unsigned int vertex_count){
+			opengl_interface->DrawMesh(vertex_array_object_id, vertex_count, using_tessellation);
 		}
 
 		void GraphicsSubsystem::SetActiveTexture(unsigned int texture_index){

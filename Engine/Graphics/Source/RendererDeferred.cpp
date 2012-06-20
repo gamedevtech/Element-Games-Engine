@@ -56,9 +56,9 @@ namespace EG{
             shaders->Add("gui_rendering", "Shaders/Deferred/font_rendering.vert", "Shaders/Deferred/font_rendering.frag");
             shaders->Add("dof", "Shaders/Deferred/dof.vert", "Shaders/Deferred/dof.frag");
             shaders->Add("billboarding", "Shaders/Deferred/billboarding.vert", "Shaders/Deferred/billboarding.frag", "", "", "", 4);
-            if (graphics->CheckVersion(4, 1)){
+            if (graphics->CheckVersion(4, 1)) {
                 shaders->Add("sphere_cube_mapped_gradient_decal_prepass", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass.vert", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass.frag", "", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass.cont", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass.eval", 4);
-            } else {
+            } else if (graphics->CheckVersion(3, 1)) {
                 shaders->Add("sphere_cube_mapped_gradient_decal_prepass", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass_no_tessellation.vert", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass_no_tessellation.frag", "", "", "", 4);
             }
 
@@ -71,11 +71,11 @@ namespace EG{
             orthographics_projection_matrix = glm::ortho(0.0f, float(graphics->GetViewportWidth()), 0.0f, float(graphics->GetViewportHeight()));
 
             /* Renderer Settings */
-            ssao_enabled = 1;
-            bloom_enabled = 1;
-            normal_mapping_enabled = 1;
-            shadows_enabled = 1;
-            dof_enabled = 1;
+            ssao_enabled = 0;
+            bloom_enabled = 0;
+            normal_mapping_enabled = 0;
+            shadows_enabled = 0;
+            dof_enabled = 0;
             // HDR
             luminance_buffer_sample_min_x = 4;
             luminance_buffer_sample_min_y = 4;
@@ -118,13 +118,12 @@ namespace EG{
                 while (mesh_attribute_iterator != mesh_attributes->end()){
                     EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
                     EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
-                    //if (material->GetLit()){
                     bool tessellation_shader = false;
                     bool custom_shader = false;
                     bool billboarding_shader = false;
                     if (material->HasShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER)){
                         std::string shader_id = material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER);
-                        if (shader_id != current_shader_id) {
+                        if (shaders->Has(shader_id) && shader_id != current_shader_id) {
                             custom_shader = true;
                             shaders->Unbind();
                             current_shader_id = shader_id;
@@ -201,14 +200,6 @@ namespace EG{
             graphics->StartMultiBufferOffscreenRender(deferred_buffer->GetBufferId(), 4, draw_buffers, graphics->GetViewportWidth(), graphics->GetViewportHeight());
             current_shader_id = "prepass";
             shaders->Bind(current_shader_id);
-
-            /*shaders->SetMatrix4("projection_matrix", camera->GetProjectionMatrix());
-            shaders->SetMatrix4("view_matrix", camera->GetViewMatrix());
-            shaders->SetInt("decal_map", 0);
-            shaders->SetInt("normal_map", 1);
-            shaders->SetInt("height_map", 2);
-            shaders->SetInt("normal_mapping_enabled", normal_mapping_enabled);
-            shaders->SetFloat3("camera_position", camera->GetPosition());*/
             BindShaderBeginUniforms(current_shader_id, scene, NULL);
 
             // Render Objects

@@ -1,3 +1,5 @@
+#version 130
+
 uniform mat4 projection_matrix;
 uniform mat4 view_matrix;
 uniform mat4 model_matrix;
@@ -7,48 +9,51 @@ uniform vec3 camera_position;
 uniform int has_animations;
 uniform mat4 bone_transforms[60];
 
-varying vec3 normal;
-varying vec3 light;
-varying vec3 view;
-varying float light_distance;
-varying float weight_used;
+in vec4 vertex_position;
+in vec4 vertex_normal;
+in vec4 vertex_texcoord;
+in vec4 vertex_binormal;
+in vec4 vertex_bitangent;
+in vec4 vertex_weights;
+in ivec4 vertex_weight_indices;
 
-void main(){
+smooth out vec3 normal;
+smooth out vec3 light;
+smooth out vec3 view;
+smooth out float light_distance;
+smooth out vec2 texcoord;
+smooth out vec3 binormal;
+smooth out vec3 bitangent;
+
+void main() {
     vec3 transformed_vertex = vec3(0.0);
-    weight_used = 0.0;
 
     if (has_animations == 1) {
         gl_TexCoord[2] = gl_MultiTexCoord2; // weights
         gl_TexCoord[3] = gl_MultiTexCoord3; // weight indices
 
-        vec4 temp_vertex = vec4(gl_Vertex);
-        vec4 temp_normal = vec4(gl_Normal, 1.0);
+        vec4 temp_vertex = vec4(vertex_position);
+        vec4 temp_normal = vec4(vertex_normal.xyz, 1.0);
 
         // do for all four
-        int weight_bone_index = int(gl_TexCoord[3][0]);
-        if (weight_bone_index < 1000) {
-            temp_vertex += (bone_transforms[weight_bone_index] * temp_vertex) * gl_TexCoord[2][0];
+        if (vertex_weight_indices[0] < 1000) {
+            temp_vertex += (bone_transforms[vertex_weight_indices[0]] * temp_vertex) * vertex_weights[0];
         }
-        weight_bone_index = int(gl_TexCoord[3][1]);
-        if (weight_bone_index < 1000) {
-            weight_used = 1.0;
-            temp_vertex += (bone_transforms[weight_bone_index] * temp_vertex) * gl_TexCoord[2][1];
+        if (vertex_weight_indices[1] < 1000) {
+            temp_vertex += (bone_transforms[vertex_weight_indices[1]] * temp_vertex) * vertex_weights[1];
         }
-        weight_bone_index = int(gl_TexCoord[3][2]);
-        if (weight_bone_index < 1000) {
-            temp_vertex += (bone_transforms[weight_bone_index] * temp_vertex) * gl_TexCoord[2][2];
+        if (vertex_weight_indices[2] < 1000) {
+            temp_vertex += (bone_transforms[vertex_weight_indices[2]] * temp_vertex) * vertex_weights[2];
         }
-        weight_bone_index = int(gl_TexCoord[3][3]);
-        if (weight_bone_index < 1000) {
-            temp_vertex += (bone_transforms[weight_bone_index] * temp_vertex) * gl_TexCoord[2][3];
+        if (vertex_weight_indices[3] < 1000) {
+            temp_vertex += (bone_transforms[vertex_weight_indices[3]] * temp_vertex) * vertex_weights[3];
         }
 
         transformed_vertex = (model_matrix * temp_vertex).xyz;
-        normal = (normal_matrix * vec4(gl_Normal.xyz, 1.0)).xyz;
-        transformed_vertex = (model_matrix * gl_Vertex).xyz;
+        normal = normalize((normal_matrix * vec4(vertex_normal.xyz, 0.0)).xyz);
     } else {
-        normal = (normal_matrix * vec4(gl_Normal.xyz, 1.0)).xyz;
-        transformed_vertex = (model_matrix * gl_Vertex).xyz;
+        transformed_vertex = (model_matrix * vertex_position).xyz;
+        normal = normalize((normal_matrix * vec4(vertex_normal.xyz, 0.0)).xyz);
     }
 
     vec3 light_vector = transformed_vertex - light_position.xyz;
@@ -58,7 +63,6 @@ void main(){
     light_distance = length(light_vector);
     light = normalize(light_vector);
 
-    gl_Position = projection_matrix * view_matrix * vec4(transformed_vertex, 1.0);//model_matrix * gl_Vertex;
-    gl_FrontColor = gl_Color;
-    gl_TexCoord[0] = gl_MultiTexCoord0;
+    texcoord = vertex_texcoord.st;
+    gl_Position = projection_matrix * view_matrix * vec4(transformed_vertex, 1.0);
 }

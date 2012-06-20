@@ -145,29 +145,29 @@ std::string SetShadowsCallback::Call(std::map<std::string, std::string> args){
 }
 
 std::string SetDecalCallback::Call(std::map<std::string, std::string> args){
-	if (object){
-		std::string new_texture_path = args["decal"];
-		new_texture_path = EG::Utility::StringMethods::SearchAndReplace(new_texture_path, "%2F", "/");
+    if (object){
+        std::string new_texture_path = args["decal"];
+        new_texture_path = EG::Utility::StringMethods::SearchAndReplace(new_texture_path, "%2F", "/");
                 new_texture_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(new_texture_path);
 
-	        if (!(scene->GetTextureManager()->HasTexture(new_texture_path))){
-	                EG::Graphics::Texture *texture = new EG::Graphics::Texture(new_texture_path);
-	                scene->GetTextureManager()->AddTexture(new_texture_path, texture);
-	        }
+            if (!(scene->GetTextureManager()->HasTexture(new_texture_path))){
+                    EG::Graphics::Texture *texture = new EG::Graphics::Texture(new_texture_path);
+                    scene->GetTextureManager()->AddTexture(new_texture_path, texture);
+            }
 
-	        // Meshes
-	        std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
-	        std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
-	        while (mesh_attribute_iterator != mesh_attributes->end()){
-	                EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
-	                EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
+            // Meshes
+            std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+            std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
+            while (mesh_attribute_iterator != mesh_attributes->end()){
+                    EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
+                    EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
 
-	                material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, new_texture_path);
-	                ++mesh_attribute_iterator;
-	        }
-		return "{\"status\": true}";
-	}
-	return "{\"status\": false}";
+                    material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, new_texture_path);
+                    ++mesh_attribute_iterator;
+            }
+        return "{\"status\": true}";
+    }
+    return "{\"status\": false}";
 }
 
 std::string SetNormalCallback::Call(std::map<std::string, std::string> args){
@@ -226,7 +226,7 @@ std::string SetSpecularCallback::Call(std::map<std::string, std::string> args){
         if (object){
                 std::string new_texture_path = args["specular"];
                 new_texture_path = EG::Utility::StringMethods::SearchAndReplace(new_texture_path, "%2F", "/");
-		new_texture_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(new_texture_path);
+        new_texture_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(new_texture_path);
 
                 if (!(scene->GetTextureManager()->HasTexture(new_texture_path))){
                         EG::Graphics::Texture *texture = new EG::Graphics::Texture(new_texture_path);
@@ -249,59 +249,89 @@ std::string SetSpecularCallback::Call(std::map<std::string, std::string> args){
 }
 
 std::string SaveCallback::Call(std::map<std::string, std::string> args){
-	if (object && scene){
-		std::string file_path = args["output_path"];
-		file_path = EG::Utility::StringMethods::SearchAndReplace(file_path, "%2F", "/");
-        	file_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(file_path);
+    if (object && scene){
+        std::string file_path = args["output_path"];
+        file_path = EG::Utility::StringMethods::SearchAndReplace(file_path, "%2F", "/");
+            file_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(file_path);
 
-	        EG::Media::ObjectWriter *writer = new EG::Media::ObjectWriter(object, scene, file_path, "Assets/Textures/", "Assets/Models/");
-	        writer->Write(file_path);
-		return "{\"status\": true}";
-	}
-	return "{\"status\": false}";
+            EG::Media::ObjectWriter *writer = new EG::Media::ObjectWriter(object, scene, file_path, "Assets/Textures/", "Assets/Models/");
+            writer->Write(file_path);
+        return "{\"status\": true}";
+    }
+    return "{\"status\": false}";
 }
 
 ModelConverter::ModelConverter(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
-	gui->Initialize("Assets/GUIs/ModelConverter", "index.html");
+    gui->Initialize("Assets/GUIs/ModelConverter", "index.html");
 
-	LoadModelEventListener *listener = new LoadModelEventListener();
-	listener->scene = scene;
-	listener->model_loaded = false;
-	gui->AddResponseHandler("load_model", listener);
+    LoadModelEventListener *listener = new LoadModelEventListener();
+    listener->scene = scene;
+    listener->model_loaded = false;
+    gui->AddResponseHandler("load_model", listener);
 }
 
 ModelConverter::~ModelConverter(void){
-	//
+    //
 }
 
 void ModelConverter::Update(void){
-	float movement_speed = time->GetFrameTime() * 2.0f;
-	if (input->IsMouseDown(EG::Input::mouse_right)){
-		scene->GetCurrentCamera()->RotateByMouse(input->GetMouseDelta() * 2.0f);
-	}
-	if (input->IsKeyDown(EG::Input::q)){
-		scene->GetCurrentCamera()->Rotate(glm::vec3(0.0f, 0.0f, -movement_speed));
-	}
-	if (input->IsKeyDown(EG::Input::e)){
-		scene->GetCurrentCamera()->Rotate(glm::vec3(0.0f, 0.0f, movement_speed));
-	}
-	if (input->IsKeyDown(EG::Input::w)){
-		scene->GetCurrentCamera()->Move(glm::vec3(0.0f, 0.0f, -movement_speed));
-	}
-	if (input->IsKeyDown(EG::Input::s)){
-		scene->GetCurrentCamera()->Move(glm::vec3(0.0f, 0.0f, movement_speed));
-	}
-	if (input->IsKeyDown(EG::Input::a)){
-		scene->GetCurrentCamera()->Move(glm::vec3(-movement_speed, 0.0f, 0.0f));
-	}
-	if (input->IsKeyDown(EG::Input::d)){
-		scene->GetCurrentCamera()->Move(glm::vec3(movement_speed, 0.0f, 0.0f));
-	}
-	if (input->IsKeyDown(EG::Input::space)){
-		scene->GetCurrentCamera()->Move(glm::vec3(0.0f, movement_speed, 0.0f));
-	}
-	if (input->IsKeyDown(EG::Input::c)){
-		scene->GetCurrentCamera()->Move(glm::vec3(0.0f, -movement_speed, 0.0f));
-	}
+    float movement_speed = time->GetFrameTime() * 2.0f;
+    if (input->IsMouseDown(EG::Input::mouse_right)){
+        scene->GetCurrentCamera()->RotateByMouse(input->GetMouseDelta() * 2.0f);
+    }
+    if (input->IsKeyDown(EG::Input::q)){
+        scene->GetCurrentCamera()->Rotate(glm::vec3(0.0f, 0.0f, -movement_speed));
+    }
+    if (input->IsKeyDown(EG::Input::e)){
+        scene->GetCurrentCamera()->Rotate(glm::vec3(0.0f, 0.0f, movement_speed));
+    }
+    if (input->IsKeyDown(EG::Input::w)){
+        scene->GetCurrentCamera()->Move(glm::vec3(0.0f, 0.0f, -movement_speed));
+    }
+    if (input->IsKeyDown(EG::Input::s)){
+        scene->GetCurrentCamera()->Move(glm::vec3(0.0f, 0.0f, movement_speed));
+    }
+    if (input->IsKeyDown(EG::Input::a)){
+        scene->GetCurrentCamera()->Move(glm::vec3(-movement_speed, 0.0f, 0.0f));
+    }
+    if (input->IsKeyDown(EG::Input::d)){
+        scene->GetCurrentCamera()->Move(glm::vec3(movement_speed, 0.0f, 0.0f));
+    }
+    if (input->IsKeyDown(EG::Input::space)){
+        scene->GetCurrentCamera()->Move(glm::vec3(0.0f, movement_speed, 0.0f));
+    }
+    if (input->IsKeyDown(EG::Input::c)){
+        scene->GetCurrentCamera()->Move(glm::vec3(0.0f, -movement_speed, 0.0f));
+    }
+    if (input->IsKeyPressed(EG::Input::t)){
+        if (rendering_method == RENDERER_DEFERRED){
+            (static_cast<EG::Graphics::RendererDeferred *>(renderer))->CycleOutputType();
+        }
+    }
+    if (input->IsKeyPressed(EG::Input::b)){
+        if (rendering_method == RENDERER_DEFERRED){
+            (static_cast<EG::Graphics::RendererDeferred *>(renderer))->ToggleBloom();
+        }
+    }
+    if (input->IsKeyPressed(EG::Input::o)){
+        if (rendering_method == RENDERER_DEFERRED){
+            (static_cast<EG::Graphics::RendererDeferred *>(renderer))->ToggleSSAO();
+        }
+    }
+    if (input->IsKeyPressed(EG::Input::n)){
+        if (rendering_method == RENDERER_DEFERRED){
+            (static_cast<EG::Graphics::RendererDeferred *>(renderer))->ToggleNormalMapping();
+        }
+    }
+    if (input->IsKeyPressed(EG::Input::m)){
+        if (rendering_method == RENDERER_DEFERRED){
+            (static_cast<EG::Graphics::RendererDeferred *>(renderer))->ToggleShadowMapping();
+        }
+    }
+    if (input->IsKeyPressed(EG::Input::f)){
+        if (rendering_method == RENDERER_DEFERRED){
+            (static_cast<EG::Graphics::RendererDeferred *>(renderer))->ToggleDOF();
+        }
+    }
 }
 

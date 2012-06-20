@@ -122,14 +122,8 @@ namespace EG{
 					out << "NORMALS" << std::endl;
 					float *d = mesh->GetNormals();
 					for (unsigned int i = 0; i < mesh->GetVertexCount(); i++){
-						unsigned int temp_stride = 3;
-						if (graphics->CheckVersion(3)){
-							temp_stride = 4;
-						}
-						out << d[i * temp_stride] << ' ' << d[(i * temp_stride) + 1] << ' ' << d[(i * temp_stride) + 2];
-						if (graphics->CheckVersion(3)){
-							out << ' ' << 1.0f;
-						}
+						unsigned int temp_stride = 4;
+						out << d[i * temp_stride] << ' ' << d[(i * temp_stride) + 1] << ' ' << d[(i * temp_stride) + 2] << ' ' << 1.0f;
 						if (i != (mesh->GetVertexCount() - 1)){
 							out << ' ';
 						}

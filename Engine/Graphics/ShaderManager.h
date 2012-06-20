@@ -89,6 +89,7 @@ namespace EG{
                 bool Add(std::string shader_id, std::string vertex_path, std::string fragment_path, std::string geometry_path = "", std::string tessellation_control_path = "", std::string tessellation_evaluation_path = "", unsigned int fragment_outputs = 1);
                 void ReleaseShader(unsigned int *program_object_id, unsigned int *vertex_object_id, unsigned int *fragment_object_id, unsigned int *geometry_object_id = NULL, unsigned int *tessellation_control_object_id = NULL, unsigned int *tessellation_evaluation_object_id = NULL);
                 //void Bind(const char *shader_id);
+                bool Has(std::string shader_id);
                 void Bind(std::string shader_id);
                 void Unbind(void);
                 bool IsBound(void){

@@ -18,28 +18,21 @@ namespace EG{
             time = new EG::Utility::Time();
             graphics->Initialize(window->GetResolutionWidth(), window->GetResolutionHeight());
 
-            // Resolution needs to be from config
-            rendering_method = RENDERER_SIMPLE;
-
-            if (graphics->CheckVersion(3, 1)){
-                if (rendering_method == RENDERER_SIMPLE){
-                    rendering_method = RENDERER_DEFERRED;
-                }
-            }else{
-                rendering_method = RENDERER_SIMPLE;
-                graphics->OverrideVersion(2, 1);
+            if (!(graphics->CheckVersion(3, 0))) {
+                window->Close();
             }
-            if (rendering_method == RENDERER_SIMPLE){
-                renderer = new EG::Graphics::Renderer();
-                renderer->Initialize();
-            }else if (rendering_method == RENDERER_MULTIPASS){
-                renderer = new EG::Graphics::RendererMultipass();
-                (static_cast<EG::Graphics::RendererMultipass *>(renderer))->Initialize();
-            }else if (rendering_method == RENDERER_DEFERRED){
+
+            // Resolution needs to be from config
+            bool deferred = true;
+            if (deferred) {
+                rendering_method = RENDERER_DEFERRED;
                 renderer = new EG::Graphics::RendererDeferred();
                 (static_cast<EG::Graphics::RendererDeferred *>(renderer))->Initialize();
+            } else {
+                rendering_method = RENDERER_SIMPLE;
+                renderer = new EG::Graphics::Renderer();
+                renderer->Initialize();
             }
-            //gui = new EG::GUI::GUI();
 
             physics = new EG::Dynamics::Physics();
 

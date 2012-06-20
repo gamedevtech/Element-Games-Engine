@@ -140,6 +140,13 @@ namespace EG{
             shader_bound = false;
         }
 
+        bool ShaderManager::Has(std::string shader_id){
+            if (this->program_objects.Has(shader_id)) {
+                return true;
+            }
+            return false;
+        }
+
         void ShaderManager::AddEngineUniformUsage(std::string shader_id, EG::Graphics::ShaderManager::EngineUniforms variable_name){
             if (program_objects.Has(shader_id)){
                 unsigned int id = program_objects.Get(shader_id);

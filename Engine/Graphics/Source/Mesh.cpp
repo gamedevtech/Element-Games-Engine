@@ -402,7 +402,7 @@ namespace EG{
         }
 
         void Mesh::Draw(void){
-            graphics->DrawMesh(&vertex_array_object_id, vertex_buffer_object_ids, vertex_count, has_vertices, has_texcoords, has_normals, has_binormals, has_bitangents, has_skeleton);
+            graphics->DrawMesh(&vertex_array_object_id, vertex_count);
         }
 
         void Mesh::GenerateBuffer(void){
@@ -422,17 +422,13 @@ namespace EG{
             vertex_count = triangle_mesh->GetTriangleCount() * 3;
             vertices = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
             texcoords = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
-            if (graphics->CheckVersion(3)){
-                normals = new float[triangle_mesh->GetTriangleCount() * 3 * 4]; // experimental
-            }else{
-                normals = new float[triangle_mesh->GetTriangleCount() * 3 * 3];
-            }
+            normals = new float[triangle_mesh->GetTriangleCount() * 3 * 4]; // experimental
             binormals = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
             bitangents = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
             weights = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
             weight_vertex_indices = new unsigned int[triangle_mesh->GetTriangleCount() * 3 * 4];
 
-            unsigned int index = 0, normal_index = 0;
+            unsigned int index = 0;
             std::vector<Triangle>::iterator triangle_iterator = triangle_mesh->GetTriangles()->begin();
             while (triangle_iterator != triangle_mesh->GetTriangles()->end()){
                 Triangle triangle = (*triangle_iterator);
@@ -447,17 +443,10 @@ namespace EG{
                     texcoords[index + 3] = triangle.texcoords[i].w;
 
                     if (has_normals){
-                        if (graphics->CheckVersion(3)){
-                            normals[index] = triangle.normals[i].x;
-                            normals[index + 1] = triangle.normals[i].y;
-                            normals[index + 2] = triangle.normals[i].z;
-                            normals[index + 3] = triangle.normals[i].w;
-                        }else{
-                            normals[normal_index] = triangle.normals[i].x;
-                            normals[normal_index + 1] = triangle.normals[i].y;
-                            normals[normal_index + 2] = triangle.normals[i].z;
-                            normal_index += 3;
-                        }
+                        normals[index] = triangle.normals[i].x;
+                        normals[index + 1] = triangle.normals[i].y;
+                        normals[index + 2] = triangle.normals[i].z;
+                        normals[index + 3] = triangle.normals[i].w;
                     }
                     if (has_binormals){
                         binormals[index] = triangle.tangents[i].x;
@@ -477,10 +466,10 @@ namespace EG{
                         std::cout << "Weights: " << w->size() << std::endl;
                         for (unsigned int i = 0; i < 4; i++) {
                             if (i < w->size() - 1) {
-                                weight_vertex_indices[index + i] = float((*w)[i].first);
+                                weight_vertex_indices[index + i] = (*w)[i].first;
                                 weights[index + i] = (*w)[i].second;
                             } else {
-                                weight_vertex_indices[index + i] = 10000.0f;
+                                weight_vertex_indices[index + i] = 100000;
                                 weights[index + i] = 0.0f;
                             }
                         }
