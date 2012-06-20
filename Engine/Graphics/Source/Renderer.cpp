@@ -295,7 +295,7 @@ namespace EG{
                         graphics->BindTexture(scene->GetTextureManager()->GetTexture("default_height")->GetId(), 2);
                     }
                 }else if (variable == EG::Graphics::ShaderManager::ENGINE_SPECULAR_MAP) {
-                    shaders->SetInt("height_map", 3);
+                    shaders->SetInt("specular_map", 3);
                     if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR)){
                         graphics->BindTexture(scene->GetTextureManager()->GetTexture(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR))->GetId(), 3);
                     }else if (material->HasCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR)){

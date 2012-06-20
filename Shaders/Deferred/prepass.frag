@@ -15,7 +15,6 @@ uniform float material_specularity;
 uniform vec4 material_color;
 uniform int normal_mapping_enabled;
 uniform int receives_lighting;
-uniform vec3 camera_position;
 
 out vec4 fragment0;
 out vec4 fragment1;
@@ -41,6 +40,7 @@ void main(){
             computed_normal = normalize(tbn_matrix * normal_map_value);
         }
         fragment2 = vec4(computed_normal, height);
+        //fragment2 = vec4(-computed_normal, 1.0);
 
         // Placeholder for transparent data!
         fragment3 = vec4(0.0, 0.0, 0.0, 0.0);
