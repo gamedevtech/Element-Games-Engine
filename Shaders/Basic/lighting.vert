@@ -29,9 +29,6 @@ void main() {
     vec3 transformed_vertex = vec3(0.0);
 
     if (has_animations == 1) {
-        gl_TexCoord[2] = gl_MultiTexCoord2; // weights
-        gl_TexCoord[3] = gl_MultiTexCoord3; // weight indices
-
         vec4 temp_vertex = vec4(vertex_position);
         vec4 temp_normal = vec4(vertex_normal.xyz, 1.0);
 

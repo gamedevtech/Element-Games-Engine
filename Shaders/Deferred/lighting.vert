@@ -12,7 +12,7 @@ in vec4 vertex_texcoord;
 in vec4 vertex_binormal;
 in vec4 vertex_bitangent;
 in vec4 vertex_weights;
-in vec4 vertex_weight_indices;
+in ivec4 vertex_weight_indices;
 
 smooth out vec2 texcoord;
 
