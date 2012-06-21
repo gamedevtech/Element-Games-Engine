@@ -13,12 +13,9 @@ in vec4 vertex_bitangent;
 in vec4 vertex_weights;
 in ivec4 vertex_weight_indices;
 
-smooth out float factor;
+smooth out vec3 normal;
 
 void main(){
-    vec3 position = (model_matrix * vertex_position).xyz;
-    vec3 normal = normalize(view_matrix * normal_matrix * vec4(vertex_normal.xyz, 0.0)).xyz;
-    factor = 1.0 - dot(normalize(normal), normalize(vec3(0.0, 0.0, -1.0)));
-
-    gl_Position = projection_matrix * view_matrix * vec4(position, 1.0);
+    normal = normalize((view_matrix * normal_matrix * normalize(vertex_position)).xyz);
+    gl_Position = projection_matrix * view_matrix * model_matrix * vertex_position;
 }
