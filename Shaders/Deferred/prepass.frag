@@ -39,11 +39,10 @@ void main(){
             vec3 normal_map_value = normalize(2.0 * texture(normal_map, texcoord).xyz - 1.0);
             computed_normal = normalize(tbn_matrix * normal_map_value);
         }
-        fragment2 = vec4(computed_normal, height);
-        //fragment2 = vec4(-computed_normal, 1.0);
+        fragment2 = vec4(computed_normal, 1.0);
 
         // Placeholder for transparent data!
-        fragment3 = vec4(0.0, 0.0, 0.0, 0.0);
+        fragment3 = vec4(0.0, 0.0, 0.0, 1.0);
     }else{
         vec4 color_output = texture(decal_map, texcoord) * material_color;
         fragment0 = vec4(0.0, 0.0, 0.0, color_output.a);
