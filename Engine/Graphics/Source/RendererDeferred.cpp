@@ -72,9 +72,9 @@ namespace EG{
 
             /* Renderer Settings */
             ssao_enabled = 0;
-            bloom_enabled = 0;
-            normal_mapping_enabled = 0;
-            shadows_enabled = 0;
+            bloom_enabled = 1;
+            normal_mapping_enabled = 1;
+            shadows_enabled = 1;
             dof_enabled = 0;
             // HDR
             luminance_buffer_sample_min_x = 4;

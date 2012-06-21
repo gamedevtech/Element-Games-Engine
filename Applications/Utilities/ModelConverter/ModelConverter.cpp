@@ -175,7 +175,6 @@ std::string SetNormalCallback::Call(std::map<std::string, std::string> args){
                 std::string new_texture_path = args["normal"];
                 new_texture_path = EG::Utility::StringMethods::SearchAndReplace(new_texture_path, "%2F", "/");
                 new_texture_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(new_texture_path);
-                std::cout << "new_texture_path: " << new_texture_path << std::endl;
 
                 if (!(scene->GetTextureManager()->HasTexture(new_texture_path))){
                         EG::Graphics::Texture *texture = new EG::Graphics::Texture(new_texture_path);
