@@ -114,6 +114,7 @@ int main(int argc, char **argv){
     material->SetLit(false);
     material->SetColor(glm::vec4(0.25f, 0.25f, 0.5f, 0.5f));
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "planet_atmosphere");
+    material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "planet_atmosphere");
     material->SetCastsShadows(false);
     material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ALPHA);
     pa->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));

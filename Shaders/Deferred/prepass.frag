@@ -5,6 +5,7 @@ smooth in vec3 normal;
 smooth in vec3 binormal;
 smooth in vec3 bitangent;
 smooth in vec2 texcoord;
+smooth in float vertex_weighted;
 
 uniform sampler2D decal_map;
 uniform sampler2D normal_map;
@@ -27,7 +28,11 @@ void main(){
         fragment0 = vec4(position, material_specularity);
 
         // Decal and Color
-        fragment1 = texture(decal_map, texcoord) * material_color;
+        if (vertex_weighted > 0.5) {
+            fragment1 = vec4(1.0, 0.0, 0.0, 1.0);
+        } else {
+            fragment1 = texture(decal_map, texcoord) * material_color;
+        }
 
         // Height and Normal
         float height = texture(height_map, texcoord).r * 2.0 - 1.0;

@@ -1,4 +1,4 @@
-#version 410
+#version 130
 
 smooth in vec3 position;
 smooth in vec3 normal;
@@ -45,10 +45,10 @@ void main(){
 			computed_normal = normalize(tbn_matrix * normal_map_value);
 			//computed_normal = texture(normal_map, texcoord).xyz;
 		}
-		fragment2 = vec4(computed_normal, height);
+		fragment2 = vec4(computed_normal, 1.0);
 
 		// Placeholder for transparent data!
-		fragment3 = vec4(0.0, 0.0, 0.0, 0.0);
+		fragment3 = vec4(0.0, 0.0, 0.0, 1.0);
 	}else{
 		vec4 color_output = decal_color * material_color;
 		fragment0 = vec4(0.0, 0.0, 0.0, color_output.a);

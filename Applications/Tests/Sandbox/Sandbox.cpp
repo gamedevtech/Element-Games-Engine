@@ -118,7 +118,7 @@ void Sandbox::Update(void){
         }
     }
 
-    EG::Game::Object *ship = scene->GetObjectManager()->GetObjectByName("test_model.ego");
+    /*EG::Game::Object *ship = scene->GetObjectManager()->GetObjectByName("test_model.ego");
     if (ship){
         std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
         std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
@@ -138,7 +138,7 @@ void Sandbox::Update(void){
             c->SetPosition(glm::vec3(pos.x, pos.y, pos.z));
             ++attr_iter;
         }
-    }
+    }*/
 
     physics->Update(time->GetFrameTime());
 }
