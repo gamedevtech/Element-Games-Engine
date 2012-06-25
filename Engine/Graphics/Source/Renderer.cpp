@@ -201,7 +201,6 @@ namespace EG{
 
             EG::Graphics::Camera *camera = scene->GetCurrentCamera();
             std::vector<EG::Graphics::ShaderManager::EngineUniforms>::iterator uniform_iter = uniforms->begin();
-            //std::cout << phase << ": " << shader_id << std::endl;
             while (uniform_iter != uniforms->end()){
                 EG::Graphics::ShaderManager::EngineUniforms variable = (*uniform_iter);
                 if (variable == EG::Graphics::ShaderManager::ENGINE_CAMERA_MATRIX) {
@@ -345,7 +344,6 @@ namespace EG{
             if (uniforms == NULL) {
                 return;
             }
-            std::cout << shader_id << ": " << object->GetObjectName() << std::endl;
             std::vector<std::pair<std::string, EG::Graphics::ShaderManager::ShaderUniformTypes> >::iterator uniform_iter = uniforms->begin();
             std::vector<EG::Game::ObjectAttribute *> *attrs;
             std::vector<EG::Game::ObjectAttribute *>::iterator attrs_iter;

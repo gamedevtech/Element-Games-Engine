@@ -32,7 +32,6 @@ void main(){
 
         // do for all four
         if (vertex_weight_indices[0] < 1000) {
-            vertex_weighted = 1.0;
             temp_vertex += (bone_transforms[vertex_weight_indices[0]] * temp_vertex) * vertex_weights[0];
         }
         if (vertex_weight_indices[1] < 1000) {

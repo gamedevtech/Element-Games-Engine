@@ -718,7 +718,6 @@ namespace EG{
                                             if (material->GetLit() && material->GetCastsShadows()){
                                                 EG::Graphics::Mesh *mesh = scene->GetMeshManager()->Get(mesh_attribute->GetMeshId());
                                                 mesh->Draw();
-                                                //std::cout << object->GetObjectName() << std::endl;
                                             }
 
                                             ++mesh_attribute_iterator;

@@ -50,16 +50,16 @@ namespace EG{
             bones.push_back(bone);
         }
 
-        KeyFrame::KeyFrame(float _duration, unsigned int _index, Skeleton *_skeleton){
+        KeyFrame::KeyFrame(float _frame_time, unsigned int _index, Skeleton *_skeleton){
             skeleton = _skeleton;
             index = _index;
-            duration = _duration;
+            frame_time = _frame_time;
         }
         KeyFrame::~KeyFrame(void){
             //
         }
-        void KeyFrame::SetDuration(float _duration){
-            duration = _duration;
+        void KeyFrame::SetFrameTime(float _frame_time){
+            frame_time = _frame_time;
         }
         void KeyFrame::SetIndex(float _index){
             index = _index;
@@ -70,8 +70,8 @@ namespace EG{
         unsigned int KeyFrame::GetIndex(void){
             return index;
         }
-        float KeyFrame::GetDuration(void){
-            return duration;
+        float KeyFrame::GetFrameTime(void){
+            return frame_time;
         }
         Skeleton *KeyFrame::GetSkeleton(void){
             return skeleton;
@@ -169,7 +169,7 @@ namespace EG{
             float frame_time_sum = 0.0f;
             unsigned int frame_index = 0;
             for (frame_index = 0; frame_index < frame_count; frame_index++) {
-                frame_time_sum += key_frames[frame_index].GetDuration();
+                frame_time_sum = key_frames[frame_index].GetFrameTime();
                 if (animation_time < frame_time_sum) {
                     break;
                 }
@@ -179,14 +179,14 @@ namespace EG{
                 previous_frame_index = frame_count - 1;
             }
             //std::cout << "Animation Time: " << animation_time << std::endl;
-//             std::cout << "Frame Index: " << frame_index << " / " << frame_count << std::endl;
+            //std::cout << "Frame Index: " << frame_index << " / " << frame_count << std::endl;
 
             EG::Dynamics::Skeleton *post_frame = key_frames[frame_index].GetSkeleton();
             EG::Dynamics::Skeleton *prev_frame = key_frames[previous_frame_index].GetSkeleton();
 
-            float previous_frame_sum = frame_time_sum - key_frames[frame_index].GetDuration();
+            float previous_frame_sum = key_frames[previous_frame_index].GetFrameTime();
             float temp_animation_time = animation_time - previous_frame_sum;
-            float interpolation_factor = temp_animation_time / key_frames[frame_index].GetDuration();
+            float interpolation_factor = temp_animation_time / (key_frames[frame_index].GetFrameTime() - key_frames[previous_frame_index].GetFrameTime());
 //             std::cout << "Interpolation Factor: " << interpolation_factor << std::endl;
 
             glm::mat4 bind_trans = glm::mat4(1.0f);
@@ -215,6 +215,7 @@ namespace EG{
             for (unsigned int i = 0; i < size; i++) {
                 out.push_back(transforms[i]);
             }
+            //std::cout << "Transform Count: " << out.size() << std::endl;
             return out;
         }
     }

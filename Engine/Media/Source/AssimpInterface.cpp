@@ -139,6 +139,8 @@ namespace EG{
 
             for (unsigned int frame_index = 0; frame_index < frame_count; frame_index++) {
                 std::map<unsigned int, glm::mat4> transforms;
+                double previous_frame_time = 0.0;
+                double frame_time = 0.0;
                 double frame_duration = 0.0;
                 for (unsigned int bone_index = 0; bone_index < ai_animation->mNumChannels; bone_index++) {
                     aiNodeAnim *channel = ai_animation->mChannels[bone_index];
@@ -146,7 +148,9 @@ namespace EG{
                     unsigned int bone_id = bone_name_map[bone_name];
 
                     aiVectorKey pos_key = channel->mPositionKeys[frame_index];
-                    frame_duration = pos_key.mTime;
+                    previous_frame_time = frame_time;
+                    frame_time = pos_key.mTime;
+                    frame_duration = frame_time - previous_frame_time;
                     aiVector3D position = pos_key.mValue;
 
                     aiQuatKey rot_key = channel->mRotationKeys[frame_index];
@@ -162,7 +166,7 @@ namespace EG{
                 }
                 BuildFrameSkeleton(&(frame_skeletons[frame_index]), &transforms);
                 frames[frame_index].SetSkeleton(&(frame_skeletons[frame_index]));
-                frames[frame_index].SetDuration(float(frame_duration));
+                frames[frame_index].SetFrameTime(float(frame_time));
                 frames[frame_index].SetIndex(frame_index);
             }
 

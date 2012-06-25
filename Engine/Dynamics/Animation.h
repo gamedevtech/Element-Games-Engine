@@ -47,18 +47,18 @@ namespace EG{
 
         class KeyFrame{
             public:
-                KeyFrame(float _duration = 0, unsigned int _index = 0, Skeleton *_skeleton = NULL);
+                KeyFrame(float _frame_time = 0, unsigned int _index = 0, Skeleton *_skeleton = NULL);
                 ~KeyFrame(void);
 
-                void SetDuration(float _duration);
+                void SetFrameTime(float _duration);
                 void SetIndex(float _index);
                 void SetSkeleton(Skeleton *_skeleton);
 
                 unsigned int GetIndex(void);
-                float GetDuration(void);
+                float GetFrameTime(void);
                 Skeleton *GetSkeleton(void);
             private:
-                float duration;
+                float frame_time;
                 unsigned int index;
                 Skeleton *skeleton;
         };
