@@ -159,9 +159,7 @@ namespace EG{
                     aiVectorKey scale_key = channel->mScalingKeys[frame_index];
                     aiVector3D scaling = scale_key.mValue;
 
-                    glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, position.z));
-                    transform *= glm::toMat4(glm::quat(rotation.x, rotation.y, rotation.z, rotation.w));
-                    transform = glm::scale(transform, glm::vec3(scaling.x, scaling.y, scaling.z));
+                    glm::mat4 transform = EG::Math::Utility::GenerateTransform(glm::vec3(position.x, position.y, position.z), glm::vec3(scaling.x, scaling.y, scaling.z), glm::quat(rotation.x, rotation.y, rotation.z, rotation.w));
                     transforms[bone_id] = transform;
                 }
                 BuildFrameSkeleton(&(frame_skeletons[frame_index]), &transforms);

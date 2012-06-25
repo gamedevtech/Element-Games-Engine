@@ -27,11 +27,7 @@ void main(){
         fragment0 = vec4(position, material_specularity);
 
         // Decal and Color
-        if (vertex_weighted == 1) {
-            fragment1 = vec4(1.0, 0.0, 0.0, 1.0);
-        } else {
-            fragment1 = texture(decal_map, texcoord) * material_color;
-        }
+        fragment1 = texture(decal_map, texcoord) * material_color;
 
         // Height and Normal
         float height = texture(height_map, texcoord).r * 2.0 - 1.0;
