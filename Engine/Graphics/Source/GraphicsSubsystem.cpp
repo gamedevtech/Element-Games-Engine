@@ -165,7 +165,7 @@ namespace EG{
 			using_tessellation = _using_tessellation;
 		}
 
-		void GraphicsSubsystem::GenerateMeshBuffer(unsigned int *vertex_array_object_id, unsigned int *vertex_buffer_object_ids, unsigned int vertex_count, bool has_vertices, float *vertices, bool has_texcoords, float *texcoords, bool has_normals, float *normals, bool has_binormals, float *binormals, bool has_bitangents, float *bitangents, bool has_skeleton, unsigned int *weight_vertex_indices, float *weights){
+		void GraphicsSubsystem::GenerateMeshBuffer(unsigned int *vertex_array_object_id, unsigned int *vertex_buffer_object_ids, unsigned int vertex_count, bool has_vertices, float *vertices, bool has_texcoords, float *texcoords, bool has_normals, float *normals, bool has_binormals, float *binormals, bool has_bitangents, float *bitangents, bool has_skeleton, float *weight_vertex_indices, float *weights){
             opengl_interface->GenerateMeshBuffer(vertex_array_object_id, vertex_buffer_object_ids, vertex_count, has_vertices, vertices, has_texcoords, texcoords, has_normals, normals, has_binormals, binormals, has_bitangents, bitangents, has_skeleton, weight_vertex_indices, weights);
 		}
 

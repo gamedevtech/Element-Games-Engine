@@ -34,7 +34,7 @@ namespace EG{
                 glm::vec4 bitangents[3];	// per vertex bitangents
 
                 // skeletal information
-                std::vector<std::pair<unsigned int, float> > weights[3];
+                std::vector<std::pair<float, float> > weights[3];
         };
 
         class TriangleMesh{
@@ -96,8 +96,8 @@ namespace EG{
                 unsigned int stride;
 
                 // Skeletal Data
-                unsigned int *weight_vertex_indices;
-                float *weights;
+                //unsigned int *weight_vertex_indices;
+                float *weights, *weight_vertex_indices;
 
                 // Buffer Data
                 unsigned int *vertex_buffer_object_ids;

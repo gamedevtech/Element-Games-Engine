@@ -15,7 +15,7 @@ in vec4 vertex_texcoord;
 in vec4 vertex_binormal;
 in vec4 vertex_bitangent;
 in vec4 vertex_weights;
-in ivec4 vertex_weight_indices;
+in vec4 vertex_weight_indices;
 
 smooth out vec3 normal;
 smooth out vec3 light;
@@ -33,17 +33,18 @@ void main() {
         vec4 temp_normal = vec4(vertex_normal.xyz, 1.0);
 
         // do for all four
-        if (vertex_weight_indices[0] < 1000) {
-            temp_vertex += (bone_transforms[vertex_weight_indices[0]] * temp_vertex) * vertex_weights[0];
+        ivec4 indices = ivec4(vertex_weight_indices);
+        if (indices.x < max_bones) {
+            temp_vertex += (bone_transforms[indices.x] * temp_vertex) * vertex_weights.x;
         }
-        if (vertex_weight_indices[1] < 1000) {
-            temp_vertex += (bone_transforms[vertex_weight_indices[1]] * temp_vertex) * vertex_weights[1];
+        if (indices.y < max_bones) {
+            temp_vertex += (bone_transforms[indices.y] * temp_vertex) * vertex_weights.y;
         }
-        if (vertex_weight_indices[2] < 1000) {
-            temp_vertex += (bone_transforms[vertex_weight_indices[2]] * temp_vertex) * vertex_weights[2];
+        if (indices.z < max_bones) {
+            temp_vertex += (bone_transforms[indices.z] * temp_vertex) * vertex_weights.z;
         }
-        if (vertex_weight_indices[3] < 1000) {
-            temp_vertex += (bone_transforms[vertex_weight_indices[3]] * temp_vertex) * vertex_weights[3];
+        if (indices.w < max_bones) {
+            temp_vertex += (bone_transforms[indices.w] * temp_vertex) * vertex_weights.w;
         }
 
         transformed_vertex = (model_matrix * temp_vertex).xyz;

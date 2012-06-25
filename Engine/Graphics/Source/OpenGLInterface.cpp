@@ -386,9 +386,8 @@ namespace EG{
             glUniformMatrix4fv(variable_location, count, GL_FALSE, data);
         }
 
-        void OpenGLInterface::GenerateMeshBuffer(unsigned int *vertex_array_object_id, unsigned int *vertex_buffer_object_ids, unsigned int vertex_count, bool has_vertices, float *vertices, bool has_texcoords, float *texcoords, bool has_normals, float *normals, bool has_binormals, float *binormals, bool has_bitangents, float *bitangents, bool has_skeleton, unsigned int *weight_vertex_indices, float *weights){
+        void OpenGLInterface::GenerateMeshBuffer(unsigned int *vertex_array_object_id, unsigned int *vertex_buffer_object_ids, unsigned int vertex_count, bool has_vertices, float *vertices, bool has_texcoords, float *texcoords, bool has_normals, float *normals, bool has_binormals, float *binormals, bool has_bitangents, float *bitangents, bool has_skeleton, float *weight_vertex_indices, float *weights){
             unsigned int count = vertex_count * 4 * sizeof(float);
-            unsigned int normal_count = vertex_count * 3 * sizeof(float);
 
             glGenVertexArrays(1, vertex_array_object_id);
             glBindVertexArray(*vertex_array_object_id);
@@ -453,7 +452,8 @@ namespace EG{
                 glGenBuffers(1, &vertex_buffer_object_ids[VBO_WEIGHT_VERTEX_INDICES]);
                 glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_object_ids[VBO_WEIGHT_VERTEX_INDICES]);
                 glBufferData(GL_ARRAY_BUFFER, count, weight_vertex_indices, GL_STATIC_DRAW);
-                glVertexAttribPointer((GLuint)6, 4, GL_UNSIGNED_INT, GL_FALSE, 0, 0);
+                //glVertexAttribPointer((GLuint)6, 4, GL_UNSIGNED_INT, GL_FALSE, 0, 0);
+                glVertexAttribPointer((GLuint)6, 4, GL_FLOAT, GL_FALSE, 0, 0);
                 glEnableVertexAttribArray(6);
             }
 

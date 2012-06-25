@@ -424,7 +424,8 @@ namespace EG{
             binormals = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
             bitangents = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
             weights = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
-            weight_vertex_indices = new unsigned int[triangle_mesh->GetTriangleCount() * 3 * 4];
+            //weight_vertex_indices = new unsigned int[triangle_mesh->GetTriangleCount() * 3 * 4];
+            weight_vertex_indices = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
 
             unsigned int index = 0;
             std::vector<Triangle>::iterator triangle_iterator = triangle_mesh->GetTriangles()->begin();
@@ -460,13 +461,13 @@ namespace EG{
                     }
 
                     if (has_skeleton){
-                        std::vector<std::pair<unsigned int, float> > w = triangle.weights[i];
+                        std::vector<std::pair<float, float> > w = triangle.weights[i];
                         for (unsigned int i = 0; i < 4; i++) {
                             if (i < w.size()) {
                                 weight_vertex_indices[index + i] = w[i].first;
                                 weights[index + i] = w[i].second;
                             } else {
-                                weight_vertex_indices[index + i] = 100000;
+                                weight_vertex_indices[index + i] = 1000.0f;
                                 weights[index + i] = 0.0f;
                             }
                             std::cout << index + i << ": " << weight_vertex_indices[index + i] << " " << weights[index + i] << std::endl;

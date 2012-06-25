@@ -207,7 +207,7 @@ namespace EG{
                 EG::Graphics::Triangle *faces = new EG::Graphics::Triangle[ai_mesh->mNumFaces];
 
                 // Skeletal Structure
-                std::map<unsigned int, std::vector<std::pair<unsigned int, float> > > vertex_weights;
+                std::map<unsigned int, std::vector<std::pair<float, float> > > vertex_weights;
                 if (ai_mesh->HasBones()) {
                     for (unsigned int i = 0; i < ai_mesh->mNumBones; i++) {
                         const struct aiBone *bone = ai_mesh->mBones[i];
@@ -221,7 +221,7 @@ namespace EG{
                         //bone_transformations[index][bone_name_map[bone_name_str]] = offset_transform;
                         for (unsigned int weight_index = 0; weight_index < bone->mNumWeights; weight_index++) {
                             aiVertexWeight weight = bone->mWeights[weight_index];
-                            vertex_weights[weight.mVertexId].push_back(std::pair<unsigned int, float>(bone_name_map[bone_name_str], weight.mWeight));
+                            vertex_weights[weight.mVertexId].push_back(std::pair<float, float>(float(bone_name_map[bone_name_str]), weight.mWeight));
                         }
                     }
                 }
