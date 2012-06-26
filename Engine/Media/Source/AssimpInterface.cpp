@@ -306,12 +306,13 @@ namespace EG{
         }
 
         glm::mat4 AssimpInterface::ConvertMatrix(aiMatrix4x4 in) {
-            aiQuaternion rotation;
-            aiVector3D scaling, position;
-            in.Decompose(scaling, rotation, position);
-            return EG::Math::Utility::GenerateTransform(glm::vec3(position.x, position.y, position.z),
-                                                        glm::vec3(scaling.x, scaling.y, scaling.z),
-                                                        glm::quat(rotation.x, rotation.y, rotation.z, rotation.w));
+            glm::mat4 out;
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    out[j][i] = float(in[i][j]);
+                }
+            }
+            return out;
         }
     }
 }
