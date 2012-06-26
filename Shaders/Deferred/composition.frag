@@ -30,7 +30,8 @@ void main(){
 	if (bloom_enabled == 0){
 		bloom_amount = 0.0;
 	}
-	
+
+	// NOTE: Currently, if the decal color is black, the specular component goes away :(.
 	vec3 color_output = light * color * ssao;
 	color_output += bloom * bloom_amount * ssao;
 	fragment_output = vec4(color_output + trans, 1.0);
