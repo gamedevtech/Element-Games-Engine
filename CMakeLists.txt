@@ -25,4 +25,7 @@ ENDIF (WIN32)
 #add the other source dirs
 add_subdirectory(Engine)
 add_subdirectory(Applications)
-add_subdirectory(Scripting)
+
+IF (WIN32)
+    add_subdirectory(Scripting)
+ENDIF (WIN32)
