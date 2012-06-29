@@ -104,22 +104,53 @@ From the repository root
 
 *That's It!*  
   
+**********************************************************************  
   
+#Setting up the Build Environment for Windows 7 64bit with DevKit#
   
+Because compiling and installing the dependencies on windows has been such a pain, I realized I could just distribute pre-compiled libraries, includes and bins for at least the windows system I have which is 64bit Windows 7  
 
+For your convenience I've provided a Windows Installers zip file  
+[WindowsInstallers.zip](http://www.palodequeso.net/WindowsInstallersQT.zip)  
+You will also need the Win64bit Dev Kit Zip File
+[Windows64DevKit.zip](http://www.palodequeso.net/Windows64DevKit.zip)  
 
+##First for the installers##
+```
+Unzip WindowsInstallersQT zip package somewhere  
+Install CMake  
+Install QT SDK (Run As Administrator)  
+Run the OpenAL Installer
+```
 
+##Dependencies##
+```
+Unzip Windows64DevKit.zip  
+Copy the contents (bin, lib, include) to C:\QtSDK\mingw\
+```
 
+##Compile and Run##
+```
+Open the CMakeLists.txt from the root of Element-Games-Engine in QTCreator  
+Click Build  
+You can either run the exe from the Element-Games-Engine dir  
+or Setup a run config in QtCreator
+```
 
+*Still need to include instructions on getting the python wrapper building, but the rest of it should build fine so far, it is for me*
 
-#Setting up the Build Environment for Windows 7 64bit#
+**********************************************************************  
+  
+#Setting up the Build Environment for Windows 7 64bit by compiling libs#
 
 This is pretty much the same process except instead of easily apt-getting some stuff you actually have to download the packages and compile/install them yourself.  
 
 ##Dependency Installation##
 
 For your convenience I've provided a Windows Installers zip file  
-[WindowsInstallers.zip](http://www.palodequeso.net/WindowsInstallers.zip)  
+[WindowsInstallers.zip](http://www.palodequeso.net/WindowsInstallersQT.zip)  
+Also be sure to download the Dependencies zip file
+[Dependencies.zip](http://www.palodequeso.net/Dependencies.zip)
   
 Make sure as you're installing you're adding the bin dirs of these packages to your windows environment path!  
 
@@ -128,7 +159,9 @@ Unzip this zip package somewhere
 Install CMake  
 Install QT SDK (Run As Administrator)  
 Run the OpenAL Installer  
-Install Code Blocks (you'll see why later)
+Install Code Blocks (you'll see why later)  
+Install Awesomium  
+NOTE: Boost is included in here and is needed for the normal dependency builds below  
 ```
 
 ###You should install the dependencies in this order:###
@@ -224,7 +257,7 @@ cp C:\Program Files (x86)\Khrona LLC\Awesomium SDK\1.6.6\build\lib\release\Aweso
 copy contents of C:\Program Files (x86)\Khrona LLC\Awesomium SDK\1.6.6\build\bin\release\ to C:\QtSDK\mingw\bin\  
 ```
 
-##Build and Compile##
+##Compile and Run##
 
 Open CMakeLists.txt with QtCreator  
 click Build  
