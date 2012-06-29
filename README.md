@@ -123,11 +123,13 @@ For your convenience I've provided a Windows Installers zip file
   
 Make sure as you're installing you're adding the bin dirs of these packages to your windows environment path!  
 
-# Unzip this zip package somewhere  
-# Install CMake  
-# Install QT SDK (Run As Administrator)  
-# Run the OpenAL Installer  
-# Install Code Blocks (you'll see why later)
+```
+Unzip this zip package somewhere  
+Install CMake  
+Install QT SDK (Run As Administrator)  
+Run the OpenAL Installer  
+Install Code Blocks (you'll see why later)
+```
 
 ###You should install the dependencies in this order:###
 
