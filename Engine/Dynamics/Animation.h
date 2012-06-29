@@ -37,46 +37,40 @@ namespace EG{
                 Bone *GetRoot(void);
                 std::vector<Bone *> *GetBones(void);
                 void AddBone(Bone *bone);
+                Bone *GetBone(unsigned int bone_id);
 
                 void PrintRecursive(Bone *b = NULL);
             private:
                 unsigned int print_level;
+                std::map<unsigned int, Bone *> bone_map;
                 std::vector<Bone *> bones;
                 Bone *root;
         };
 
-        class KeyFrame{
+        class Animation {
             public:
-                KeyFrame(float _frame_time = 0, unsigned int _index = 0, Skeleton *_skeleton = NULL);
-                ~KeyFrame(void);
-
-                void SetFrameTime(float _duration);
-                void SetIndex(float _index);
-                void SetSkeleton(Skeleton *_skeleton);
-
-                unsigned int GetIndex(void);
-                float GetFrameTime(void);
-                Skeleton *GetSkeleton(void);
-            private:
-                float frame_time;
-                unsigned int index;
-                Skeleton *skeleton;
-        };
-
-        class Animation{
-            public:
-                Animation(std::string animation_name, float _duration, KeyFrame *_frames, unsigned int _frame_count);
+                Animation(std::string animation_name, float _duration);
                 ~Animation(void);
 
                 float GetDuration(void);
                 std::string GetName(void);
-                KeyFrame *GetFrames(void);
-                unsigned int GetFrameCount(void);
+                std::vector<glm::mat4> GetTransforms(float time_stamp);
+                unsigned int GetBoneCount(void);
+
+                void SetBoneCount(unsigned int _bone_count);
+                void AddBonePosition(unsigned int bone_id, float time, glm::vec3 position);
+                void AddBoneScaling(unsigned int bone_id, float time, glm::vec3 scaling);
+                void AddBoneRotation(unsigned int bone_id, float time, glm::quat rotation);
             private:
                 float duration;
                 std::string name;
-                KeyFrame *frames;
-                unsigned int frame_count;
+                unsigned int bone_count;
+                // Store frame time stamp (not frame duration) and value for each component of the transformation.
+                // This makes it easier and cheaper to interpolate with the cost of a bit of super cheap ram.
+                // Per bone_id, store a list of pairs of timestamps and transform components
+                std::map<unsigned int, std::vector<std::pair<float, glm::vec3> > > positions;
+                std::map<unsigned int, std::vector<std::pair<float, glm::vec3> > > scalings;
+                std::map<unsigned int, std::vector<std::pair<float, glm::quat> > > rotations;
         };
 
         class Animations{

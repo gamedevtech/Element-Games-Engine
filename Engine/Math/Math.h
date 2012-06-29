@@ -35,7 +35,6 @@ namespace EG{
                 static int RandomInteger(int min, int max);
                 static float RandomFloat(float min, float max);
                 static glm::mat4 GenerateTransform(glm::vec3 translate = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f), glm::quat rotation = glm::quat(glm::vec3(0.0f)));
-                static glm::mat4 Interpolate(glm::mat4 begin, glm::mat4 end, float factor);
             private:
                 //
         };

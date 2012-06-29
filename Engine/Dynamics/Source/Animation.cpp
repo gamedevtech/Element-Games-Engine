@@ -22,6 +22,7 @@ namespace EG{
             parent = _parent;
         }
         void Bone::AddChild(Bone *_child){
+            _child->SetParent(this);
             children.push_back(_child);
         }
         Bone *Bone::GetParent(void) {
@@ -48,33 +49,7 @@ namespace EG{
         }
         void Skeleton::AddBone(Bone *bone) {
             bones.push_back(bone);
-        }
-
-        KeyFrame::KeyFrame(float _frame_time, unsigned int _index, Skeleton *_skeleton){
-            skeleton = _skeleton;
-            index = _index;
-            frame_time = _frame_time;
-        }
-        KeyFrame::~KeyFrame(void){
-            //
-        }
-        void KeyFrame::SetFrameTime(float _frame_time){
-            frame_time = _frame_time;
-        }
-        void KeyFrame::SetIndex(float _index){
-            index = _index;
-        }
-        void KeyFrame::SetSkeleton(Skeleton *_skeleton){
-            skeleton = _skeleton;
-        }
-        unsigned int KeyFrame::GetIndex(void){
-            return index;
-        }
-        float KeyFrame::GetFrameTime(void){
-            return frame_time;
-        }
-        Skeleton *KeyFrame::GetSkeleton(void){
-            return skeleton;
+            bone_map[bone->GetId()] = bone;
         }
         void Skeleton::PrintRecursive(Bone *b) {
             if (b == NULL) {
@@ -93,27 +68,88 @@ namespace EG{
                 }
             }
         }
-
-        Animation::Animation(std::string animation_name, float _duration, KeyFrame *_frames, unsigned int _frame_count){
-            duration = _duration;
-            name = animation_name;
-            frames = _frames;
-            frame_count = _frame_count;
+        Bone *Skeleton::GetBone(unsigned int bone_id) {
+            return bone_map[bone_id];
         }
-        Animation::~Animation(void){
+        
+        Animation::Animation(std::string animation_name, float _duration) {
+            name = animation_name;
+            duration = _duration;
+        }
+        Animation::~Animation(void) {
             //
         }
-        float Animation::GetDuration(void){
+
+        float Animation::GetDuration(void) {
             return duration;
         }
-        std::string Animation::GetName(void){
+        std::string Animation::GetName(void) {
             return name;
         }
-        KeyFrame *Animation::GetFrames(void){
-            return frames;
+        std::vector<glm::mat4> Animation::GetTransforms(float time_stamp) {
+            std::vector<glm::mat4> out;
+            for (unsigned int bone_index = 0; bone_index < bone_count; bone_index++) {
+                glm::vec3 position;
+                glm::vec3 scaling;
+                glm::quat rotation;
+
+                for (unsigned int i = 0; i <= positions[bone_index].size(); i++) {
+                    if (time_stamp < positions[bone_index][i].first) {
+                        if (i == 0) {
+                            position = positions[bone_index][i].second;
+                        } else {
+                            float diff = positions[bone_index][i].first - positions[bone_index][i - 1].first;
+                            float factor = (time_stamp - positions[bone_index][i - 1].first) / diff;
+                            position = glm::mix(positions[bone_index][i - 1].second, positions[bone_index][i].second, factor);
+                        }
+                        break;
+                    }
+                }
+                for (unsigned int i = 0; i < scalings[bone_index].size(); i++) {
+                    if (time_stamp < scalings[bone_index][i].first) {
+//                         if (i == 0) {
+                            scaling = scalings[bone_index][i].second;
+//                         } else {
+//                             float diff = scalings[bone_index][i].first - scalings[bone_index][i - 1].first;
+//                             float factor = (time_stamp - scalings[bone_index][i - 1].first) / diff;
+//                             scaling = glm::mix(scalings[bone_index][i - 1].second, scalings[bone_index][i].second, factor);
+//                         }
+                        break;
+                    }
+                }
+                for (unsigned int i = 0; i < rotations[bone_index].size(); i++) {
+                    if (time_stamp < rotations[bone_index][i].first) {
+//                         if (i == 0) {
+                            rotation = rotations[bone_index][i].second;
+//                         } else {
+//                             float diff = rotations[bone_index][i].first - rotations[bone_index][i - 1].first;
+//                             float factor = (time_stamp - rotations[bone_index][i - 1].first) / diff;
+//                             rotation = glm::mix(rotations[bone_index][i - 1].second, rotations[bone_index][i].second, factor);
+//                         }
+                        break;
+                    }
+                }
+                glm::mat4 mat = EG::Math::Utility::GenerateTransform(position, scaling, rotation);
+                EG::Math::Utility::PrintMat4(mat);
+                out.push_back(mat);
+            }
+            return out;
         }
-        unsigned int Animation::GetFrameCount(void) {
-            return frame_count;
+        unsigned int Animation::GetBoneCount(void) {
+            return bone_count;
+        }
+
+        void Animation::SetBoneCount(unsigned int _bone_count) {
+            bone_count = _bone_count;
+        }
+        void Animation::AddBonePosition(unsigned int bone_id, float time, glm::vec3 position) {
+            positions[bone_id].push_back(std::pair<float, glm::vec3>(time, position));
+        }
+        void Animation::AddBoneScaling(unsigned int bone_id, float time, glm::vec3 scaling) {
+            scalings[bone_id].push_back(std::pair<float, glm::vec3>(time, scaling));
+        }
+        void Animation::AddBoneRotation(unsigned int bone_id, float time, glm::quat rotation) {
+            rotations[bone_id].push_back(std::pair<float, glm::quat>(time, rotation));
         }
 
         Animations::Animations(void){
@@ -153,69 +189,30 @@ namespace EG{
             return animations;
         }
         void AnimationState::Update(float frame_time){
-            //std::cout << "Frame Time Animations: " << frame_time << std::endl;
             EG::Dynamics::Animation *animation = animations->Get(current_animation);
-            //std::cout << "Current Animation: " << current_animation << std::endl;
-
             float animation_duration = animation->GetDuration();
-            //std::cout << "Animation Duration: " << animation_duration << std::endl;
             animation_time += frame_time;
             if (animation_time > animation_duration) {
                 animation_time = glm::mod(animation_time, animation_duration);
             }
-
-            unsigned int frame_count = animation->GetFrameCount();
-            EG::Dynamics::KeyFrame *key_frames = animation->GetFrames();
-            float frame_time_sum = 0.0f;
-            unsigned int frame_index = 0;
-            for (frame_index = 0; frame_index < frame_count; frame_index++) {
-                frame_time_sum = key_frames[frame_index].GetFrameTime();
-                if (animation_time < frame_time_sum) {
-                    break;
+            // Traverse Tree and Multiply Aptly, as well as apply Bind Pose Properly
+            std::vector<glm::mat4> unmultiplied_transforms = animation->GetTransforms(animation_time);
+            for (unsigned int i = 0; i < unmultiplied_transforms.size(); i++) {
+                Bone *b = animations->GetBindPose()->GetBone(i);
+                glm::mat4 offset = b->GetOffset();
+                while (b) {
+                    std::cout << "i: " << i << " " << b->GetId() << std::endl;
+                    offset = unmultiplied_transforms[b->GetId()] * offset;
+                    b = b->GetParent();
                 }
-            }
-            unsigned int previous_frame_index = frame_index - 1;
-            if (frame_index == 0) {
-                previous_frame_index = frame_count - 1;
-            }
-            //std::cout << "Animation Time: " << animation_time << std::endl;
-            //std::cout << "Frame Index: " << frame_index << " / " << frame_count << std::endl;
-
-            EG::Dynamics::Skeleton *post_frame = key_frames[frame_index].GetSkeleton();
-            EG::Dynamics::Skeleton *prev_frame = key_frames[previous_frame_index].GetSkeleton();
-
-            float previous_frame_sum = key_frames[previous_frame_index].GetFrameTime();
-            float temp_animation_time = animation_time - previous_frame_sum;
-            float interpolation_factor = temp_animation_time / (key_frames[frame_index].GetFrameTime() - key_frames[previous_frame_index].GetFrameTime());
-//             std::cout << "Interpolation Factor: " << interpolation_factor << std::endl;
-
-            glm::mat4 bind_trans = glm::mat4(1.0f);
-            glm::mat4 start_trans = glm::mat4(1.0f);
-            glm::mat4 end_trans = glm::mat4(1.0f);
-            Interpolate(bind_trans, animations->GetBindPose()->GetRoot(), start_trans, prev_frame->GetRoot(), end_trans, post_frame->GetRoot(), interpolation_factor);
-        }
-        void AnimationState::Interpolate(glm::mat4 &bind_trans, Bone *bone, glm::mat4 &start_trans, Bone *start, glm::mat4 &end_trans, Bone *end, float i) {
-            bind_trans *= bone->GetOffset();
-            start_trans *= start->GetOffset();
-            const glm::mat4 tmp_start_trans = bind_trans * start_trans;
-            end_trans *= end->GetOffset();
-            const glm::mat4 tmp_end_trans = bind_trans * end_trans;
-            transforms[bone->GetId()] = EG::Math::Utility::Interpolate(tmp_start_trans, tmp_end_trans, i);//glm::interpolate(tmp_start_trans, tmp_end_trans, i);
-
-            std::vector<Bone *> *bones = bone->GetChildren();
-            std::vector<Bone *> *start_bones = start->GetChildren();
-            std::vector<Bone *> *end_bones = end->GetChildren();
-            for (unsigned int bone_index = 0; bone_index < bones->size(); bone_index++) {
-                Interpolate(bind_trans, (*bones)[bone_index], start_trans, (*start_bones)[bone_index], end_trans, (*end_bones)[bone_index], i);
+                transforms[i] = offset;
             }
         }
         std::vector<glm::mat4> AnimationState::GetTransforms(void) {
-            unsigned int size = transforms.size();
             std::vector<glm::mat4> out;
-            for (unsigned int i = 0; i < size; i++) {
+            for (unsigned int i = 0; i < transforms.size(); i++) {
                 out.push_back(transforms[i]);
             }
-            //std::cout << "Transform Count: " << out.size() << std::endl;
             return out;
         }
     }

@@ -58,12 +58,6 @@ namespace EG{
                 // Animation Loaders
                 EG::Dynamics::Animation *LoadAnimation(const aiAnimation *ai_animation,
                                                        unsigned int index);
-                void BuildFrameSkeleton(EG::Dynamics::Skeleton *skeleton,
-                                        std::map<unsigned int, glm::mat4> *transforms);
-                void BuildFrameSkeletonRecursive(std::map< unsigned int, glm::mat4 > *transforms,
-                                        EG::Dynamics::Skeleton *skeleton,
-                                        EG::Dynamics::Bone *bone,
-                                        EG::Dynamics::Bone *ref_bone);
 
                 unsigned int count;
                 EG::Utility::Dictionary<unsigned int, std::string> meshes;
@@ -76,6 +70,7 @@ namespace EG{
                 unsigned int bone_count;
                 std::vector<std::string> bone_names;
                 std::map<std::string, unsigned int> bone_name_map;
+                std::map<unsigned int, glm::mat4> bind_pose_map;
                 EG::Dynamics::Skeleton *bind_pose_skeleton;
         };
     }
