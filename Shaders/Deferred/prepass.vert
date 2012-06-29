@@ -34,7 +34,8 @@ void main(){
                            vertex_weights[3] * bone_transforms[indices[3]];
     }
     vec3 transformed_vertex = (model_matrix * animation_matrix * vertex_position).xyz;
-    normal = normalize((normal_matrix * animation_matrix * vec4(vertex_normal.xyz, 0.0)).xyz);
+    vec4 temp_normal = animation_matrix * vec4(vertex_normal.xyz, 1.0);
+    normal = normalize((normal_matrix * vec4(temp_normal.xyz, 0.0)).xyz);
 
     position = transformed_vertex;
     texcoord = vertex_texcoord.st;

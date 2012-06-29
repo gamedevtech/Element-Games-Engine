@@ -200,11 +200,10 @@ namespace EG{
             for (unsigned int i = 0; i < unmultiplied_transforms.size(); i++) {
                 Bone *b = animations->GetBindPose()->GetBone(i);
                 glm::mat4 offset = b->GetOffset();
+                glm::mat4 result = glm::mat4(1.0f);
+                std::vector<glm::mat4> stack;
                 while (b) {
-                    std::cout << "i: " << i << " " << b->GetId() << std::endl;
                     offset = unmultiplied_transforms[b->GetId()] * offset;
-                    //offset = offset * unmultiplied_transforms[b->GetId()];
-                    //offset = offset * unmultiplied_transforms[b->GetId()] * animations->GetBindPose()->GetBone(b->GetId())->GetOffset();
                     b = b->GetParent();
                 }
                 transforms[i] = offset;
