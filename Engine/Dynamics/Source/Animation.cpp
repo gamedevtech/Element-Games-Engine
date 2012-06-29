@@ -203,6 +203,8 @@ namespace EG{
                 while (b) {
                     std::cout << "i: " << i << " " << b->GetId() << std::endl;
                     offset = unmultiplied_transforms[b->GetId()] * offset;
+                    //offset = offset * unmultiplied_transforms[b->GetId()];
+                    //offset = offset * unmultiplied_transforms[b->GetId()] * animations->GetBindPose()->GetBone(b->GetId())->GetOffset();
                     b = b->GetParent();
                 }
                 transforms[i] = offset;

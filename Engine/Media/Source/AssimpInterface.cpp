@@ -19,6 +19,7 @@ namespace EG{
 
             // Use Assimp to Load The Scene
             Assimp::Importer importer;
+            importer.SetPropertyInteger(AI_CONFIG_PP_LBW_MAX_WEIGHTS, 4);
             file_path = _file_path;
             ai_scene = importer.ReadFile(file_path, /*aiProcess_CalcTangentSpace | */aiProcess_Triangulate | /*aiProcess_JoinIdenticalVertices | */aiProcess_SortByPType);
             if (!ai_scene){

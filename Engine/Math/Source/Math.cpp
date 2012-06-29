@@ -62,22 +62,11 @@ namespace EG{
         }
 
         glm::mat4 Utility::GenerateTransform(glm::vec3 translate, glm::vec3 scale, glm::quat rotation){
-            glm::mat4 scaling_matrix = glm::scale(glm::mat4(1.0f), scale);
-            std::cout << "Scale: " << scale.x << ", " << scale.y << ", " << scale.z << std::endl;
-            EG::Math::Utility::PrintMat4(scaling_matrix);
-
-            glm::mat4 rotation_matrix = glm::toMat4(rotation);
-            std::cout << "Rotation: " << rotation.x << ", " << rotation.y << ", " << rotation.z << ", " << rotation.w << std::endl;
-            EG::Math::Utility::PrintMat4(rotation_matrix);
-
-            glm::mat4 translation_matrix = glm::translate(glm::mat4(1.0f), translate);
-            std::cout << "Translate: " << translate.x << ", " << translate.y << ", " << translate.z << std::endl;
-            EG::Math::Utility::PrintMat4(translation_matrix);
-
-            std::cout << "Result: " << std::endl;
-            glm::mat4 out = scaling_matrix * rotation_matrix * translation_matrix;
-            EG::Math::Utility::PrintMat4(out);
-
+            glm::mat4 out = glm::toMat4(rotation);
+            out[3][0] = translate.x;
+            out[3][1] = translate.y;
+            out[3][2] = translate.z;
+            out = glm::scale(out, scale);
             return out;
         }
     }

@@ -467,7 +467,7 @@ namespace EG{
                                 weight_vertex_indices[index + i] = w[i].first;
                                 weights[index + i] = w[i].second;
                             } else {
-                                weight_vertex_indices[index + i] = 1000.0f;
+                                weight_vertex_indices[index + i] = 0.0f;
                                 weights[index + i] = 0.0f;
                             }
                             std::cout << index + i << ": " << weight_vertex_indices[index + i] << " " << weights[index + i] << std::endl;

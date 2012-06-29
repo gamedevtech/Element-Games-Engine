@@ -26,33 +26,16 @@ smooth out vec3 binormal;
 smooth out vec3 bitangent;
 
 void main() {
-    vec3 transformed_vertex = vec3(0.0);
-
+    mat4 animation_matrix = mat4(1.0);
     if (has_animations == 1) {
-        vec4 temp_vertex = vec4(vertex_position);
-        vec4 temp_normal = vec4(vertex_normal.xyz, 1.0);
-
-        // do for all four
         ivec4 indices = ivec4(vertex_weight_indices);
-        if (indices.x < max_bones) {
-            temp_vertex += (bone_transforms[indices.x] * temp_vertex) * vertex_weights.x;
-        }
-        if (indices.y < max_bones) {
-            temp_vertex += (bone_transforms[indices.y] * temp_vertex) * vertex_weights.y;
-        }
-        if (indices.z < max_bones) {
-            temp_vertex += (bone_transforms[indices.z] * temp_vertex) * vertex_weights.z;
-        }
-        if (indices.w < max_bones) {
-            temp_vertex += (bone_transforms[indices.w] * temp_vertex) * vertex_weights.w;
-        }
-
-        transformed_vertex = (model_matrix * temp_vertex).xyz;
-        normal = normalize((normal_matrix * vec4(vertex_normal.xyz, 0.0)).xyz);
-    } else {
-        transformed_vertex = (model_matrix * vertex_position).xyz;
-        normal = normalize((normal_matrix * vec4(vertex_normal.xyz, 0.0)).xyz);
+        animation_matrix = vertex_weights[0] * bone_transforms[indices[0]] +
+                           vertex_weights[1] * bone_transforms[indices[1]] +
+                           vertex_weights[2] * bone_transforms[indices[2]] +
+                           vertex_weights[3] * bone_transforms[indices[3]];
     }
+    vec3 transformed_vertex = (model_matrix * animation_matrix * vertex_position).xyz;
+    normal = normalize((normal_matrix * animation_matrix * vec4(vertex_normal.xyz, 0.0)).xyz);
 
     vec3 light_vector = transformed_vertex - light_position.xyz;
 
