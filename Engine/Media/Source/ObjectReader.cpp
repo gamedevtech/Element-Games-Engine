@@ -144,7 +144,10 @@ namespace EG{
             bool has_texs = false;
             bool has_bins = false;
             bool has_bits = false;
-            float *vers, *nors, *texs, *bins, *bits;
+            bool has_weights = false;
+            bool has_bone_indices = false;
+            bool has_animations = false;
+            float *vers, *nors, *texs, *bins, *bits, *weights, *bone_indices;
             while (in.good()){
                 std::getline(in, line);
                 std::string simple_prefix = line.substr(0, 3);
@@ -164,11 +167,26 @@ namespace EG{
                 }else if (simple_prefix == "BIN"){
                     bins = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
                     has_bins = true;
+                }else if (simple_prefix == "WEI"){
+                    weights = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
+                    has_weights = true;
+                }else if (simple_prefix == "BON"){
+                    bone_indices = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
+                    has_bone_indices = true;
+                }else if (simple_prefix == "ANI"){
+                    has_animations = true;
+                    break;
                 }
             }
-            EG::Graphics::Mesh *mesh = new EG::Graphics::Mesh(vertex_count, 4, vers, has_vers, texs, has_texs, nors, has_nors, bins, has_bins, bits, has_bits);
+            EG::Graphics::Mesh *mesh = new EG::Graphics::Mesh(vertex_count, 4, vers, has_vers, texs, has_texs, nors, has_nors, bins, has_bins, bits, has_bits, weights, bone_indices, has_weights && has_bone_indices);
             scene->GetMeshManager()->Add(mesh_name, mesh);
             object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(mesh_name, material));
+
+            std::getline(in, line);
+            if (in.good() && has_animations) {
+                //
+            }
+
             in.close();
 
             return true;

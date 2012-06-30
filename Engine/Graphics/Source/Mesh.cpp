@@ -316,7 +316,7 @@ namespace EG{
             GenerateBuffer();
         }
 
-        Mesh::Mesh(unsigned int _vertex_count, unsigned int _stride, float *_vertices, bool _has_vertices, float *_texcoords, bool _has_texcoords, float *_normals, bool _has_normals, float *_binormals, bool _has_binormals, float *_bitangents, bool _has_bitangents){
+        Mesh::Mesh(unsigned int _vertex_count, unsigned int _stride, float *_vertices, bool _has_vertices, float *_texcoords, bool _has_texcoords, float *_normals, bool _has_normals, float *_binormals, bool _has_binormals, float *_bitangents, bool _has_bitangents, float *_weights, float *_bone_indices, float _has_skeleton){
             vertex_count = _vertex_count;
             stride = _stride;
 
@@ -325,7 +325,7 @@ namespace EG{
             has_normals = _has_normals;
             has_binormals = _has_binormals;
             has_bitangents = _has_bitangents;
-            has_skeleton = false;
+            has_skeleton = _has_skeleton;
 
             if (has_vertices){
                 vertices = _vertices;
@@ -341,6 +341,10 @@ namespace EG{
             }
             if (has_bitangents){
                 bitangents = _bitangents;
+            }
+            if (has_skeleton){
+                weights = _weights;
+                weight_vertex_indices = _bone_indices;
             }
             GenerateBuffer();
         }
@@ -384,6 +388,12 @@ namespace EG{
         float *Mesh::GetBitangents(void){
             return bitangents;
         }
+        float *Mesh::GetWeights(void){
+            return weights;
+        }
+        float *Mesh::GetWeightVertexIndices(void){
+            return weight_vertex_indices;
+        }
         bool Mesh::HasVertices(void){
             return has_vertices;
         }
@@ -398,6 +408,9 @@ namespace EG{
         }
         bool Mesh::HasBitangents(void){
             return has_bitangents;
+        }
+        bool Mesh::HasSkeleton(void){
+            return has_skeleton;
         }
 
         void Mesh::Draw(void){

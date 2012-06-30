@@ -68,7 +68,7 @@ namespace EG{
         class Mesh{
             public:
                 Mesh(EG::Graphics::TriangleMesh *triangle_mesh);
-                Mesh(unsigned int _vertex_count, unsigned int _stride, float *_vertices, bool _has_vertices, float *_texcoords, bool _has_texcoords, float *_normals, bool _has_normals, float *_binormals, bool _has_binormals, float *_bitangents, bool _has_bitangents);
+                Mesh(unsigned int _vertex_count, unsigned int _stride, float *_vertices, bool _has_vertices, float *_texcoords, bool _has_texcoords, float *_normals, bool _has_normals, float *_binormals, bool _has_binormals, float *_bitangents, bool _has_bitangents, float *_weights, float *_bone_indices, float _has_skeleton);
                 ~Mesh(void);
 
                 unsigned int GetVertexCount(void);
@@ -79,7 +79,7 @@ namespace EG{
                 float *GetBinormals(void);
                 float *GetBitangents(void);
                 float *GetWeights(void);
-                unsigned int *GetWeightVertexIndices(void);
+                float *GetWeightVertexIndices(void);
                 bool HasVertices(void);
                 bool HasNormals(void);
                 bool HasTexCoords(void);
