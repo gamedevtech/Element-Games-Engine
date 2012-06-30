@@ -86,14 +86,18 @@ namespace EG{
         std::string Animation::GetName(void) {
             return name;
         }
-        std::vector<glm::mat4> Animation::GetTransforms(float time_stamp) {
+        std::vector<glm::mat4> Animation::GetTransforms(float time_stamp, std::map<unsigned int, std::pair<float, unsigned int> > *position_state, std::map<unsigned int, std::pair<float, unsigned int> > *scaling_state, std::map<unsigned int, std::pair<float, unsigned int> > *rotation_state) {
             std::vector<glm::mat4> out;
             for (unsigned int bone_index = 0; bone_index < bone_count; bone_index++) {
                 glm::vec3 position;
                 glm::vec3 scaling;
                 glm::quat rotation;
 
-                for (unsigned int i = 0; i <= positions[bone_index].size(); i++) {
+                unsigned int i = (*position_state)[bone_index].second;
+                if ((*position_state)[bone_index].first > time_stamp) {
+                    i = 0;
+                }
+                for (i; i <= positions[bone_index].size(); i++) {
                     if (time_stamp < positions[bone_index][i].first) {
                         if (i == 0) {
                             position = positions[bone_index][i].second;
@@ -105,7 +109,13 @@ namespace EG{
                         break;
                     }
                 }
-                for (unsigned int i = 0; i < scalings[bone_index].size(); i++) {
+                (*position_state)[bone_index] = std::pair<float, unsigned int>(time_stamp, i);
+
+                i = (*scaling_state)[bone_index].second;
+                if ((*scaling_state)[bone_index].first > time_stamp) {
+                    i = 0;
+                }
+                for (i; i < scalings[bone_index].size(); i++) {
                     if (time_stamp < scalings[bone_index][i].first) {
                         if (i == 0) {
                             scaling = scalings[bone_index][i].second;
@@ -117,7 +127,13 @@ namespace EG{
                         break;
                     }
                 }
-                for (unsigned int i = 0; i < rotations[bone_index].size(); i++) {
+                (*scaling_state)[bone_index] = std::pair<float, unsigned int>(time_stamp, i);
+
+                i = (*rotation_state)[bone_index].second;
+                if ((*rotation_state)[bone_index].first > time_stamp) {
+                    i = 0;
+                }
+                for (i; i < rotations[bone_index].size(); i++) {
                     if (time_stamp < rotations[bone_index][i].first) {
 //                         if (i == 0) {
                             rotation = rotations[bone_index][i].second;
@@ -129,6 +145,8 @@ namespace EG{
                         break;
                     }
                 }
+                (*rotation_state)[bone_index] = std::pair<float, unsigned int>(time_stamp, i);
+
                 glm::mat4 mat = EG::Math::Utility::GenerateTransform(position, scaling, rotation);
                 out.push_back(mat);
             }
@@ -174,6 +192,12 @@ namespace EG{
             current_animation = "";
             animations = _animations;
             animation_time = 0.0f;
+            unsigned int bone_count = animations->GetBindPose()->GetBones()->size();
+            for (unsigned int i = 0; i < bone_count; i++) {
+                position_state[i] = std::pair<float, unsigned int>(0.0f, 0);
+                scaling_state[i] = std::pair<float, unsigned int>(0.0f, 0);
+                rotation_state[i] = std::pair<float, unsigned int>(0.0f, 0);
+            }
         }
         AnimationState::~AnimationState(void){
             //
@@ -195,7 +219,7 @@ namespace EG{
                 animation_time = glm::mod(animation_time, animation_duration);
             }
             // Traverse Tree and Multiply Aptly, as well as apply Bind Pose Properly
-            std::vector<glm::mat4> unmultiplied_transforms = animation->GetTransforms(animation_time);
+            std::vector<glm::mat4> unmultiplied_transforms = animation->GetTransforms(animation_time, &position_state, &scaling_state, &rotation_state);
             for (unsigned int i = 0; i < unmultiplied_transforms.size(); i++) {
                 Bone *b = animations->GetBindPose()->GetBone(i);
                 glm::mat4 offset = b->GetOffset();

@@ -54,7 +54,7 @@ namespace EG{
 
                 float GetDuration(void);
                 std::string GetName(void);
-                std::vector<glm::mat4> GetTransforms(float time_stamp);
+                std::vector<glm::mat4> GetTransforms(float time_stamp, std::map<unsigned int, std::pair<float, unsigned int> > *position_state, std::map<unsigned int, std::pair<float, unsigned int> > *scaling_state, std::map<unsigned int, std::pair<float, unsigned int> > *rotation_state);
                 unsigned int GetBoneCount(void);
 
                 void SetBoneCount(unsigned int _bone_count);
@@ -100,6 +100,9 @@ namespace EG{
                 void Interpolate(glm::mat4 &bind_trans, Bone *bone, glm::mat4 &start_trans, Bone *start, glm::mat4 &end_trans, Bone *end, float i);
             private:
                 std::string current_animation;
+                std::map<unsigned int, std::pair<float, unsigned int> > position_state;
+                std::map<unsigned int, std::pair<float, unsigned int> > rotation_state;
+                std::map<unsigned int, std::pair<float, unsigned int> > scaling_state;
                 Animations *animations;
                 float animation_time;
                 std::map<unsigned int, glm::mat4> transforms;
