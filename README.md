@@ -14,7 +14,7 @@ http://bulletphysics.org/Bullet/phpBB3/viewtopic.php?t=5250-->
 
 #Setting up Development Environment for Ubuntu 12.04:#
 ##Dependency Installation##
-```sudo apt-get install git build-essential cmake libsndfile1-dev libopenal-dev libfreetype6-dev libxrandr-dev libx11-dev libboost-dev libboost-python-dev libglu1-mesa-dev libxmu-dev libxi-dev freeglut3-dev```
+```sudo apt-get install git build-essential cmake libsndfile1-dev libopenal-dev libfreetype6-dev libxrandr-dev libx11-dev libboost-dev libboost-python-dev libglu1-mesa-dev libxmu-dev libxi-dev freeglut3-dev libjpeg-dev libjpeg62-dev```
 
 ##I also like to use KDevelop, but it's up to you!##
 ```sudo apt-get install kdevelop kdevelop-dev```

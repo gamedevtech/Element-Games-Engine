@@ -203,10 +203,11 @@ namespace EG{
                 glm::mat4 result = glm::mat4(1.0f);
                 std::vector<glm::mat4> stack;
                 while (b) {
-                    offset = unmultiplied_transforms[b->GetId()] * offset;
+                    //offset = unmultiplied_transforms[b->GetId()] * offset;
+                    result = unmultiplied_transforms[b->GetId()] * result;
                     b = b->GetParent();
                 }
-                transforms[i] = offset;
+                transforms[i] = result * offset;
             }
         }
         std::vector<glm::mat4> AnimationState::GetTransforms(void) {

@@ -29,7 +29,7 @@ void main(){
 	float height_index = texture(height_map, teCubeMapTexCoord).r;
 	vec4 decal_color = texture(decal_map, vec2(height_index, 0.5));
 	//vec4 decal_color = vec4(height_index, height_index, height_index, 1.0);
-	if (object_is_lit == 1){
+	if (receives_lighting == 1){
 		// Position and Specular Factor
 		fragment0 = vec4(tePosition.xyz, material_specularity);
 
