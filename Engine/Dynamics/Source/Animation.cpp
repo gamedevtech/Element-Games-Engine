@@ -107,13 +107,13 @@ namespace EG{
                 }
                 for (unsigned int i = 0; i < scalings[bone_index].size(); i++) {
                     if (time_stamp < scalings[bone_index][i].first) {
-//                         if (i == 0) {
+                        if (i == 0) {
                             scaling = scalings[bone_index][i].second;
-//                         } else {
-//                             float diff = scalings[bone_index][i].first - scalings[bone_index][i - 1].first;
-//                             float factor = (time_stamp - scalings[bone_index][i - 1].first) / diff;
-//                             scaling = glm::mix(scalings[bone_index][i - 1].second, scalings[bone_index][i].second, factor);
-//                         }
+                        } else {
+                            float diff = scalings[bone_index][i].first - scalings[bone_index][i - 1].first;
+                            float factor = (time_stamp - scalings[bone_index][i - 1].first) / diff;
+                            scaling = glm::mix(scalings[bone_index][i - 1].second, scalings[bone_index][i].second, factor);
+                        }
                         break;
                     }
                 }
@@ -130,7 +130,6 @@ namespace EG{
                     }
                 }
                 glm::mat4 mat = EG::Math::Utility::GenerateTransform(position, scaling, rotation);
-                EG::Math::Utility::PrintMat4(mat);
                 out.push_back(mat);
             }
             return out;
@@ -203,7 +202,6 @@ namespace EG{
                 glm::mat4 result = glm::mat4(1.0f);
                 std::vector<glm::mat4> stack;
                 while (b) {
-                    //offset = unmultiplied_transforms[b->GetId()] * offset;
                     result = unmultiplied_transforms[b->GetId()] * result;
                     b = b->GetParent();
                 }

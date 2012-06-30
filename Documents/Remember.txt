@@ -20,3 +20,6 @@ perf - linux-tools
 valgrind --tool=callgrind myprog
 
 gprof build/Applications/Tests/Sandbox/element_games_sandbox | python gprof2dot.py | dot -Tpng -o gprof.png
+
+On Improving the Animation:
+Should remember previous timestamp/frame index for each bone and component, and unless the new timestamp is less than the current one, it should always start at the previous frame index for searching for the right frame to use.

@@ -11,7 +11,6 @@ namespace EG{
         }
 
         Object::~Object(void){
-            //std::cout << "Deleting Object" << std::endl;
             std::vector<EG::Game::ObjectAttribute::ObjectAttributeType>::iterator type_iter = attributes.GetKeysBegin();
             while (type_iter != attributes.GetKeysEnd()){
                 EG::Game::ObjectAttribute::ObjectAttributeType type_key = (*type_iter);
@@ -58,15 +57,11 @@ namespace EG{
         }
 
         EG::Utility::Dictionary<EG::Game::ObjectAttribute::ObjectAttributeType, std::vector<EG::Game::ObjectAttribute *> *> *Object::GetAttributes(void){
-            //std::cout << "Getting ALl of It!" << std::endl;
             return &attributes;
         }
 
         std::vector<EG::Game::ObjectAttribute *> *Object::GetAttributesByType(EG::Game::ObjectAttribute::ObjectAttributeType type){
-            //std::cout << "Getting Type: " << type << std::endl;
             std::vector<EG::Game::ObjectAttribute *> *out = attributes.Get(type);
-            //return attributes.Get(type);
-            //std::cout << "Got" << std::endl;
             return out;
         }
 

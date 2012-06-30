@@ -420,11 +420,10 @@ namespace EG{
             vertex_count = triangle_mesh->GetTriangleCount() * 3;
             vertices = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
             texcoords = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
-            normals = new float[triangle_mesh->GetTriangleCount() * 3 * 4]; // experimental
+            normals = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
             binormals = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
             bitangents = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
             weights = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
-            //weight_vertex_indices = new unsigned int[triangle_mesh->GetTriangleCount() * 3 * 4];
             weight_vertex_indices = new float[triangle_mesh->GetTriangleCount() * 3 * 4];
 
             unsigned int index = 0;
@@ -470,7 +469,6 @@ namespace EG{
                                 weight_vertex_indices[index + i] = 0.0f;
                                 weights[index + i] = 0.0f;
                             }
-                            std::cout << index + i << ": " << weight_vertex_indices[index + i] << " " << weights[index + i] << std::endl;
                         }
                     }
 
