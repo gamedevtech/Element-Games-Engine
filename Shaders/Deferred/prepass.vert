@@ -8,7 +8,7 @@ uniform mat4 model_matrix;
 uniform mat4 normal_matrix;
 
 uniform int has_animations;
-uniform mat4 bone_transforms[60];
+uniform mat4 bone_transforms[64];
 
 in vec4 vertex_position;
 in vec4 vertex_normal;

@@ -318,6 +318,10 @@ namespace EG{
                     if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_ANIMATION)) {
                         EG::Dynamics::AnimationState *animations = (static_cast<EG::Game::ObjectAttributeControlAnimationState *>(object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_ANIMATION)->at(0)))->GetAnimationState();
                         std::vector<glm::mat4> transforms = animations->GetTransforms();
+                        unsigned int transforms_size = transforms.size();
+                        for (transforms_size; transforms_size < 64; transforms_size++) {
+                            transforms.push_back(glm::mat4(1.0f));
+                        }
                         shaders->SetMatrix4("bone_transforms", transforms);
                     }
                 }

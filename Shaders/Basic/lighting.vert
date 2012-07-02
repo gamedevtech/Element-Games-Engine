@@ -7,7 +7,7 @@ uniform mat4 normal_matrix;
 uniform vec4 light_position;
 uniform vec3 camera_position;
 uniform int has_animations;
-uniform mat4 bone_transforms[60];
+uniform mat4 bone_transforms[64];
 
 in vec4 vertex_position;
 in vec4 vertex_normal;
