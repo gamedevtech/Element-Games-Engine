@@ -113,7 +113,7 @@ Because compiling and installing the dependencies on windows has been such a pai
 For your convenience I've provided a Windows Installers zip file  
 [WindowsInstallers.zip](http://www.palodequeso.net/WindowsInstallersQT.zip)  
 You will also need the Win64bit Dev Kit Zip File
-[Windows64DevKit.zip](http://www.palodequeso.net/Windows64DevKit.zip)  
+[Windows64DevKit.zip](http://www.palodequeso.net/Win64MinGW.zip)  
 
 ##First for the installers##
 ```
@@ -125,7 +125,7 @@ Run the OpenAL Installer
 
 ##Dependencies##
 ```
-Unzip Windows64DevKit.zip  
+Unzip Win64MinGW.zip  
 Copy the contents (bin, lib, include) to C:\QtSDK\mingw\
 ```
 
@@ -139,6 +139,7 @@ or Setup a run config in QtCreator
 
 *Still need to include instructions on getting the python wrapper building, but the rest of it should build fine so far, it is for me*
 
+<!--
 **********************************************************************  
   
 #Setting up the Build Environment for Windows 7 64bit by compiling libs#
@@ -265,3 +266,4 @@ You can either run the exe from the Element-Games-Engine dir
 or Setup a run config in QtCreator
 
 *Still need to include instructions on getting the python wrapper building, but the rest of it should build fine so far, it is for me*
+-->
