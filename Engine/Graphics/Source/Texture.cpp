@@ -84,8 +84,7 @@ namespace EG{
 			width = 0;
 			height = 0;
 			filtering = false;
-			id = 0;
-			//std::cout << "dongle" << std::endl;
+            id = 0;
 			Load(positive_x_file_path, negative_x_file_path, positive_y_file_path, negative_y_file_path, positive_z_file_path, negative_z_file_path, _filtering, anisotropic_param);
 		}
 
@@ -100,23 +99,24 @@ namespace EG{
 			file_paths[CUBE_BOTTOM] = negative_y_file_path;
 			file_paths[CUBE_BACK] = positive_z_file_path;
 			file_paths[CUBE_FRONT] = negative_z_file_path;
-			filtering = _filtering;
+            filtering = _filtering;
 
-			id = 0;
-			//std::cout << file_paths[CUBE_FRONT] << std::endl;
+            id = 0;
 			if (positive_x_file_path.size() > 0 && negative_x_file_path.size() > 0 && positive_y_file_path.size() > 0 && negative_y_file_path.size() > 0 && positive_z_file_path.size() > 0 && negative_z_file_path.size() > 0){
 				unsigned char **pixels = new unsigned char *[6];
 				for (unsigned int i = 0; i < 6; i++){
 					bool success = false;
-					pixels[i] = sfml_interface->LoadImage(file_paths[i], &success, &width, &height);
+                    //std::cout << file_paths[i] << std::endl;
+                    pixels[i] = sfml_interface->LoadImage(file_paths[i], &success, &width, &height);
+                    //std::cout << "Success" << success << std::endl;
 					if (!success){
 						for (unsigned int p = 0; p < (i + 1); p++){
 							delete []pixels[p];
 						}
 						delete []pixels;
 						return 0;
-					}
-				}
+                    }
+                }
 
 				id = graphics->CreateCubeMap(pixels, width, height, filtering, anisotropic_param);
 				for (unsigned int i = 0; i < 6; i++){

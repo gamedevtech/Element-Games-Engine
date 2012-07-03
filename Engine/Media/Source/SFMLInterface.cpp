@@ -31,7 +31,7 @@ namespace EG{
 			fullscreen = _fullscreen;
 			window_title = _window_title;
 			clock = new sf::Clock();
-			clock->Reset();
+            clock->restart();
 
 			if (fullscreen){
 				sfml_application = new sf::RenderWindow(sf::VideoMode(resolution_width, resolution_height, bits_per_pixel), window_title, sf::Style::Fullscreen);
@@ -45,39 +45,39 @@ namespace EG{
 		}
 
 		void SFMLInterface::UpdateWindow(void){
-			sfml_application->SetActive();
+            sfml_application->setActive();
 			// Process events
 			sf::Event sfml_event;
-			while (sfml_application->PollEvent(sfml_event)){
-				if (sfml_event.Type == sf::Event::Closed || (sfml_event.Type == sf::Event::KeyPressed && sfml_event.Key.Code == sf::Keyboard::Escape)){
+            while (sfml_application->pollEvent(sfml_event)){
+                if (sfml_event.type == sf::Event::Closed || (sfml_event.type == sf::Event::KeyPressed && sfml_event.key.code == sf::Keyboard::Escape)){
 					opened = false;
-				}else if (sfml_event.Type == sf::Event::Resized){
-					resolution_width = sfml_event.Size.Width;
-					resolution_height = sfml_event.Size.Height;
+                }else if (sfml_event.type == sf::Event::Resized){
+                    resolution_width = sfml_event.size.width;
+                    resolution_height = sfml_event.size.height;
 					window_resized = true;
-				}else if (sfml_event.Type == sf::Event::KeyPressed){
-					EG::Input::Key eg_key = key_translations.Get(sfml_event.Key.Code);
+                }else if (sfml_event.type == sf::Event::KeyPressed){
+                    EG::Input::Key eg_key = key_translations.Get(sfml_event.key.code);
 					input->KeyPressed(eg_key);
-				}else if (sfml_event.Type == sf::Event::KeyReleased){
-					input->KeyReleased(key_translations.Get(sfml_event.Key.Code));
-				}else if (sfml_event.Type == sf::Event::MouseButtonPressed){
-					input->MouseButtonPressed(mouse_translations.Get(sfml_event.MouseButton.Button));
-				}else if (sfml_event.Type == sf::Event::MouseButtonReleased){
-					input->MouseButtonReleased(mouse_translations.Get(sfml_event.MouseButton.Button));
-				}else if (sfml_event.Type == sf::Event::MouseMoved){
-					input->MouseMoved(glm::vec2(float(sfml_event.MouseMove.X), float(sfml_event.MouseMove.Y)));
-				}else if (sfml_event.Type == sf::Event::MouseWheelMoved){
+                }else if (sfml_event.type == sf::Event::KeyReleased){
+                    input->KeyReleased(key_translations.Get(sfml_event.key.code));
+                }else if (sfml_event.type == sf::Event::MouseButtonPressed){
+                    input->MouseButtonPressed(mouse_translations.Get(sfml_event.mouseButton.button));
+                }else if (sfml_event.type == sf::Event::MouseButtonReleased){
+                    input->MouseButtonReleased(mouse_translations.Get(sfml_event.mouseButton.button));
+                }else if (sfml_event.type == sf::Event::MouseMoved){
+                    input->MouseMoved(glm::vec2(float(sfml_event.mouseMove.x), float(sfml_event.mouseMove.y)));
+                }else if (sfml_event.type == sf::Event::MouseWheelMoved){
 					//input->MouseWheelMoved(input_translations[sfml_event.Key.Code]);
-				}else if (sfml_event.Type == sf::Event::TextEntered){
-					if (sfml_event.Text.Unicode > 31){ // 32 is a space
-						input->SetTextEntered(static_cast<char>(sfml_event.Text.Unicode));
+                }else if (sfml_event.type == sf::Event::TextEntered){
+                    if (sfml_event.text.unicode > 31){ // 32 is a space
+                        input->SetTextEntered(static_cast<char>(sfml_event.text.unicode));
 					}
 				}
 			}
 		}
 
 		void SFMLInterface::DisplayWindow(void){
-			sfml_application->Display();
+            sfml_application->display();
 		}
 
 		bool SFMLInterface::WindowResized(void){
@@ -140,7 +140,7 @@ namespace EG{
 			key_translations.Set(sf::Keyboard::Down, EG::Input::down);
 			key_translations.Set(sf::Keyboard::Left, EG::Input::left);
 			key_translations.Set(sf::Keyboard::Right, EG::Input::right);
-			key_translations.Set(sf::Keyboard::Back, EG::Input::back_space);
+            key_translations.Set(sf::Keyboard::BackSpace, EG::Input::back_space);
 			key_translations.Set(sf::Keyboard::Delete, EG::Input::del);
 			key_translations.Set(sf::Keyboard::Tab, EG::Input::tab);
 			mouse_translations.Set(sf::Mouse::Left, EG::Input::mouse_left);
@@ -150,13 +150,14 @@ namespace EG{
 
 		unsigned char *SFMLInterface::LoadImage(std::string file_path, bool *success, unsigned int *width, unsigned int *height){
 			sf::Image sfml_image;
-			if (sfml_image.LoadFromFile(file_path)){
-				(*width) = sfml_image.GetWidth();
-				(*height) = sfml_image.GetHeight();
+            if (sfml_image.loadFromFile(file_path)){
+                sf::Vector2u size = sfml_image.getSize();
+                (*width) = size.x;
+                (*height) = size.y;
 				unsigned char *pixels = new unsigned char[(*width) * (*height) * 4];
-				unsigned char *sixels = (unsigned char *)(sfml_image.GetPixelsPtr());
-				for (unsigned int i = 0; i < (*height); i++){
-					for (unsigned int j = 0; j < (*width); j++){
+                unsigned char *sixels = (unsigned char *)(sfml_image.getPixelsPtr());
+                for (unsigned int i = 0; i < (*height); i++){
+                    for (unsigned int j = 0; j < (*width); j++){
                         unsigned int source_index = (((*height) - i) * (*width) * 4) + (j * 4);
 						unsigned int dest_index = (i * (*width) * 4) + (j * 4);
 						pixels[dest_index] = sixels[source_index];
@@ -165,7 +166,7 @@ namespace EG{
 						pixels[dest_index + 3] = sixels[source_index + 3];
 					}
 				}
-				(*success) = true;
+                (*success) = true;
 				return pixels;
 			}
 			(*success) = false;
@@ -173,15 +174,16 @@ namespace EG{
 		}
 
 		void SFMLInterface::ResetTime(void){
-			clock->Reset();
+            clock->restart();
 		}
 
 		unsigned int SFMLInterface::GetElapsedTime(void){
-			return clock->GetElapsedTime();
+            sf::Time time = clock->getElapsedTime();
+            return time.asMilliseconds();
 		}
 
 		void SFMLInterface::Close(void){
-			sfml_application->Close();
+            sfml_application->close();
 		}
 	}
 }

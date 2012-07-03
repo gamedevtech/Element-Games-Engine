@@ -142,9 +142,10 @@ set(SRCS
 	./Utility/Source/StringMethods.cpp
 )
 
-add_library(egengine SHARED ${SRCS})
 IF (WIN32)
-    target_link_libraries(egengine glew_static glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath Awesomium freetype ftgl mingw32 egengine glew_static glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath Awesomium freetype ftgl mingw32)
+    add_library(egengine STATIC ${SRCS})
+    target_link_libraries(egengine glew_static glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath Awesomium freetype ftgl_static mingw32 egengine glew_static glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath Awesomium freetype ftgl_static mingw32)
 ELSE (WIN32)
+    add_library(egengine SHARED ${SRCS})
     target_link_libraries(egengine)
 ENDIF (WIN32)

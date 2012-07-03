@@ -297,8 +297,8 @@ namespace EG{
 			}
 			if (image_dump){
 				sf::Image image_out;
-				image_out.Create(width, height, pixels);
-				bool image_result = image_out.SaveToFile(file_path);
+                image_out.create(width, height, pixels);
+                bool image_result = image_out.saveToFile(file_path);
 				delete []pixels;
 			}
 			return heights;
@@ -354,8 +354,8 @@ namespace EG{
 
 			if (image_dump){
 				sf::Image image_out;
-				image_out.Create(width, height, pixels);
-				bool image_result = image_out.SaveToFile(file_path);
+                image_out.create(width, height, pixels);
+                bool image_result = image_out.saveToFile(file_path);
 				delete []pixels;
 			}
 
@@ -390,8 +390,8 @@ namespace EG{
 			}
 			if (image_dump){
 				sf::Image image_out;
-				image_out.Create(width, height, pixels);
-				bool image_result = image_out.SaveToFile(file_path);
+                image_out.create(width, height, pixels);
+                bool image_result = image_out.saveToFile(file_path);
 				delete []pixels;
 			}
 			return colors;
@@ -428,8 +428,8 @@ namespace EG{
 
 			if (image_dump){
 				sf::Image image_out;
-				image_out.Create(width, height, pixels);
-				bool image_result = image_out.SaveToFile(file_path);
+                image_out.create(width, height, pixels);
+                bool image_result = image_out.saveToFile(file_path);
 				//std::cout << file_path << std::endl;
 				delete []pixels;
 			}
@@ -489,11 +489,11 @@ namespace EG{
 				}
 				if (image_dump){
 					sf::Image image_out;
-					image_out.Create(width, height, pixels);
+                    image_out.create(width, height, pixels);
 					std::stringstream file_path_out;
 					std::string first_part = file_path.substr(0, file_path.find_first_of('.'));
 					file_path_out << first_part << '_' << i << ".png";
-					bool image_result = image_out.SaveToFile(file_path_out.str());
+                    bool image_result = image_out.saveToFile(file_path_out.str());
 					delete []pixels;
 				}
 			}

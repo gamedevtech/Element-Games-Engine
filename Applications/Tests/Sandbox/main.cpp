@@ -37,7 +37,6 @@ int main(int argc, char **argv){
     EG::Utility::JSON config_file("config.json");
     EG::Utility::Window *window = new EG::Utility::Window(config_file.GetInt("screen.width"), config_file.GetInt("screen.height"), 32, config_file.GetBool("screen.fullscreen"), "Element Games Sandbox");
     EG::Game::Scene *scene = new EG::Game::Scene();
-    //EG::Game::Game *game = new EG::Game::Game(window, scene);
     Sandbox *game = new Sandbox(window, scene);
 
     EG::Graphics::RenderingMaterial *material;
@@ -374,6 +373,7 @@ int main(int argc, char **argv){
     game->GetScene()->SetCurrentCamera(main_camera);
     //objects->AddObject(dummy_light_object);
     // NOTE: End Test Data
+    std::cout << "Scene Setup" << std::endl;
 
     while (game->GetWindow()->IsOpened()){
         game->Update();

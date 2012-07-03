@@ -28,7 +28,7 @@ ENDIF (WIN32)
 
 IF (WIN32)
 	IF (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
-                target_link_libraries(element_games_model_converter egengine glew_static glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath Awesomium freetype ftgl mingw32 egengine glew_static glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath Awesomium freetype ftgl mingw32)
+                target_link_libraries(element_games_model_converter egengine glew_static glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath Awesomium freetype ftgl_static mingw32 egengine glew_static glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath Awesomium freetype ftgl_static mingw32)
 	ENDIF (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
 	IF (CMAKE_GENERATOR STREQUAL "Visual Studio 10 Win64")
 		target_link_libraries(element_games_model_converter egengine glew32s glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath Awesomium freetype246 ftgl_static)
