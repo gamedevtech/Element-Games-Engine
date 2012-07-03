@@ -94,6 +94,7 @@ int main(int argc, char **argv){
 
     EG::Graphics::Texture *decal_gradient = new EG::Graphics::Texture("Assets/Textures/generated_planet_decal_map.png");
     scene->GetTextureManager()->AddTexture("planet_decal_gradient", decal_gradient);
+    std::cout << "Dongle" << std::endl;
     material = new EG::Graphics::RenderingMaterial();
     material->SetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT, "planet_heights");
     material->SetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, "planet_normals");
@@ -122,7 +123,7 @@ int main(int argc, char **argv){
     EG::Graphics::Mesh *cube = EG::Graphics::GenerateCube();
     scene->GetMeshManager()->Add("cube", cube);
     EG::Game::Object *object2 = new EG::Game::Object("TestObject2");
-    EG::Graphics::Texture *texture = new EG::Graphics::Texture("Assets/Textures/concrete.jpg");
+    EG::Graphics::Texture *texture = new EG::Graphics::Texture("Assets/Textures/concrete.jpg"); // CRASHES HERE WIN32
     scene->GetTextureManager()->AddTexture("concrete_decal", texture);
     texture = new EG::Graphics::Texture("Assets/Textures/concrete_normal.jpg");
     scene->GetTextureManager()->AddTexture("concrete_normal", texture);
@@ -213,6 +214,7 @@ int main(int argc, char **argv){
     material->SetLit(false);
     material->SetColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
     light_object3->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("sphere", material));
+    std::cout << "After Light 2" << std::endl;
 
     // Particle System
     scene->GetMeshManager()->Add("quad", EG::Graphics::GenerateQuad());
@@ -373,7 +375,6 @@ int main(int argc, char **argv){
     game->GetScene()->SetCurrentCamera(main_camera);
     //objects->AddObject(dummy_light_object);
     // NOTE: End Test Data
-    std::cout << "Scene Setup" << std::endl;
 
     while (game->GetWindow()->IsOpened()){
         game->Update();

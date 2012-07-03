@@ -149,7 +149,7 @@ namespace EG{
 		}
 
 		unsigned char *SFMLInterface::LoadImage(std::string file_path, bool *success, unsigned int *width, unsigned int *height){
-			sf::Image sfml_image;
+            sf::Image sfml_image;
             if (sfml_image.loadFromFile(file_path)){
                 sf::Vector2u size = sfml_image.getSize();
                 (*width) = size.x;
@@ -158,14 +158,14 @@ namespace EG{
                 unsigned char *sixels = (unsigned char *)(sfml_image.getPixelsPtr());
                 for (unsigned int i = 0; i < (*height); i++){
                     for (unsigned int j = 0; j < (*width); j++){
-                        unsigned int source_index = (((*height) - i) * (*width) * 4) + (j * 4);
+                        unsigned int source_index = (((*height) - (i + 1)) * (*width) * 4) + (j * 4);
 						unsigned int dest_index = (i * (*width) * 4) + (j * 4);
 						pixels[dest_index] = sixels[source_index];
 						pixels[dest_index + 1] = sixels[source_index + 1];
 						pixels[dest_index + 2] = sixels[source_index + 2];
 						pixels[dest_index + 3] = sixels[source_index + 3];
 					}
-				}
+                }
                 (*success) = true;
 				return pixels;
 			}

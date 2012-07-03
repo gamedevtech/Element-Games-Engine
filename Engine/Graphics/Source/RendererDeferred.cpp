@@ -89,13 +89,11 @@ namespace EG{
             // ETC
 
             initialized = true;
-            std::cout << "Renderer Initialized" << std::endl;
         }
 
         void RendererDeferred::Render(EG::Game::Scene *scene, EG::Utility::Time *time){
             EG::Graphics::Camera *camera = scene->GetCurrentCamera();
             frame_time = time->GetFrameTime();
-            std::cout << "Beginning Frame" << std::endl;
             graphics->BeginFrame();
 
             ShadowMapping(scene);
