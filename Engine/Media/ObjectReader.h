@@ -5,6 +5,8 @@
 #include "../Game/Scene.h"
 #include "../Utility/StringMethods.h"
 
+#include <fstream>
+
 namespace EG{
     namespace Media{
         class ObjectReader{
@@ -15,10 +17,19 @@ namespace EG{
                 bool Read(std::string file_path, EG::Game::Scene *scene);
                 EG::Game::Object *GetLoadedObject(void);
             private:
+                std::ifstream in;
                 EG::Game::Object *object;
+                char *characters;
+
+                std::string ReadString(unsigned int size);
+                bool ReadBool(void);
+                unsigned int ReadUInt(void);
+                float ReadFloat(void);
+                float *ReadFloatV(unsigned int size);
+                glm::vec4 ReadVec4(void);
+                glm::mat4 ReadMat4(void);
         };
     }
 }
 
 #endif
-

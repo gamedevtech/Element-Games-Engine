@@ -9,8 +9,6 @@
 #include "../../Graphics/GraphicsSubsystem.h"
 #include "../../Utility/StringMethods.h"
 
-#include <fstream>
-
 namespace EG{
     namespace Media{
         ObjectWriter::ObjectWriter(EG::Game::Object *_object, EG::Game::Scene *_scene, std::string _object_name, std::string _images_output_path, std::string _model_output_path){
@@ -24,182 +22,173 @@ namespace EG{
             //
         }
 
-        void ObjectWriter::Write(std::string file_path){
-            std::ofstream out;
-            out.open((model_output_path + file_path).c_str());
+        void ObjectWriter::Write(std::string file_name) {
+            out.open((model_output_path + file_name).c_str(), std::ios::binary);
 
-            out << object_name << std::endl;
+            // Write Object Name
+            WriteUInt(object_name.size() + 1);
+            WriteString(object_name);
 
-            // Transformation Attribute
+            // Write Basic Transformation
             std::vector<EG::Game::ObjectAttribute *> *transformation_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
             EG::Game::ObjectAttributeBasicTransformation *transformation_attribute = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(transformation_attributes->at(0));
-            glm::mat4 transformation = transformation_attribute->GetTransformation();
-            for (unsigned int i = 0; i < 4; i++){
-                for (unsigned int j = 0; j < 4; j++){
-                    out << transformation[i][j];
-                    if (i != 3 || j != 3){
-                        out << ' ';
-                    }
-                }
-            }
-            out << std::endl;
+            WriteMat4(transformation_attribute->GetTransformation());
 
             // Mesh/Material Attributes
-            out << "MATERIAL" << std::endl;
             std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
             std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
+            WriteUInt(mesh_attributes->size());
             while (mesh_attribute_iterator != mesh_attributes->end()){
                 EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
                 EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
+                EG::Graphics::Mesh *mesh = scene->GetMeshManager()->Get(mesh_attribute->GetMeshId());
 
-                if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL)){
+                // Material
+                if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL)) {
                     EG::Graphics::Texture *texture = scene->GetTextureManager()->GetTexture(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL));
                     std::string image_out_path = (images_output_path + EG::Utility::StringMethods::GetFilenameFromPath(texture->GetFilePath()));
                     CopyFile(texture->GetFilePath(), image_out_path.c_str());
-                    out << "DECAL" << image_out_path << std::endl;
+                    WriteBool(true);
+                    WriteUInt(image_out_path.size() + 1);
+                    WriteString(image_out_path);
                 }else{
-                    out << "DECAL" << std::endl;
+                    WriteBool(false);
                 }
                 if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL)){
                     EG::Graphics::Texture *texture = scene->GetTextureManager()->GetTexture(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL));
                     std::string image_out_path = (images_output_path + EG::Utility::StringMethods::GetFilenameFromPath(texture->GetFilePath()));
                     CopyFile(texture->GetFilePath(), image_out_path.c_str());
-                    out << "NORMAL" << image_out_path << std::endl;
+                    WriteBool(true);
+                    WriteUInt(image_out_path.size() + 1);
+                    WriteString(image_out_path);
                 }else{
-                    out << "NORMAL" << std::endl;
+                    WriteBool(false);
                 }
                 if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT)){
                     EG::Graphics::Texture *texture = scene->GetTextureManager()->GetTexture(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT));
                     std::string image_out_path = (images_output_path + EG::Utility::StringMethods::GetFilenameFromPath(texture->GetFilePath()));
                     CopyFile(texture->GetFilePath(), image_out_path.c_str());
-                    out << "HEIGHT" << image_out_path << std::endl;
+                    WriteBool(true);
+                    WriteUInt(image_out_path.size() + 1);
+                    WriteString(image_out_path);
                 }else{
-                    out << "HEIGHT" << std::endl;
+                    WriteBool(false);
                 }
                 if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR)){
                     EG::Graphics::Texture *texture = scene->GetTextureManager()->GetTexture(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR));
                     std::string image_out_path = (images_output_path + EG::Utility::StringMethods::GetFilenameFromPath(texture->GetFilePath()));
                     CopyFile(texture->GetFilePath(), image_out_path.c_str());
-                    out << "SPECULAR" << image_out_path << std::endl;
+                    WriteBool(true);
+                    WriteUInt(image_out_path.size() + 1);
+                    WriteString(image_out_path);
                 }else{
-                    out << "SPECULAR" << std::endl;
+                    WriteBool(false);
                 }
                 if (material->GetLit()){
-                    out << "LIT1" << std::endl;
+                    WriteBool(true);
                 }else{
-                    out << "LIT0" << std::endl;
+                    WriteBool(false);
                 }
                 if (material->GetCastsShadows()){
-                    out << "CASTSSHADOWS1" << std::endl;
+                    WriteBool(true);
                 }else{
-                    out << "CASTSSHADOWS0" << std::endl;
+                    WriteBool(false);
                 }
                 if (material->GetTranslucent()){
-                    out << "TRANSLUCENT1" << std::endl;
+                    WriteBool(true);
                 }else{
-                    out << "TRANSLUCENT0" << std::endl;
+                    WriteBool(false);
                 }
-                out << "LIGHTING " << material->GetAmbient() << ' ' << material->GetDiffuse() << ' ' << material->GetSpecular() << ' ' << material->GetSpecularExponent() << std::endl;
-                out << "COLOR " << material->GetColor().x << ' ' << material->GetColor().y << ' ' << material->GetColor().z << ' ' << material->GetColor().w << std::endl;
-                // Don't forget to output custom shaders!
+                WriteFloat(material->GetAmbient());
+                WriteFloat(material->GetDiffuse());
+                WriteFloat(material->GetSpecular());
+                WriteFloat(material->GetSpecularExponent());
+                WriteVec4(material->GetColor());
 
-                out << "MESH" << std::endl;
-                EG::Graphics::Mesh *mesh = scene->GetMeshManager()->Get(mesh_attribute->GetMeshId());
-                out << mesh_attribute->GetMeshId() << std::endl; // Dupe checking?!?
-                out << mesh->GetVertexCount() << std::endl;
-                out << mesh->GetStride() << std::endl;
+                // Mesh
+                WriteUInt(mesh_attribute->GetMeshId().size() + 1);
+                WriteString(mesh_attribute->GetMeshId());
+                WriteUInt(mesh->GetVertexCount());
+                WriteUInt(mesh->GetStride());
                 if (mesh->HasVertices()){
-                    out << "VERTICES" << std::endl;
+                    WriteBool(true);
                     float *d = mesh->GetVertices();
-                    for (unsigned int i = 0; i < mesh->GetVertexCount(); i++){
-                        out << d[i * 4] << ' ' << d[(i * 4) + 1] << ' ' << d[(i * 4) + 2] << ' ' << 1.0f;
-                        if (i != (mesh->GetVertexCount() - 1)){
-                            out << ' ';
-                        }
-                    }
-                    out << std::endl;
+                    WriteFloatV(d, mesh->GetVertexCount() * 4);
+                } else {
+                    WriteBool(false);
                 }
                 if (mesh->HasNormals()){
-                    out << "NORMALS" << std::endl;
+                    WriteBool(true);
                     float *d = mesh->GetNormals();
-                    for (unsigned int i = 0; i < mesh->GetVertexCount(); i++){
-                        unsigned int temp_stride = 4;
-                        out << d[i * temp_stride] << ' ' << d[(i * temp_stride) + 1] << ' ' << d[(i * temp_stride) + 2] << ' ' << 1.0f;
-                        if (i != (mesh->GetVertexCount() - 1)){
-                            out << ' ';
-                        }
-                    }
-                    out << std::endl;
+                    WriteFloatV(d, mesh->GetVertexCount() * 4);
+                } else {
+                    WriteBool(false);
                 }
                 if (mesh->HasTexCoords()){
-                    out << "TEXCOORDS" << std::endl;
+                    WriteBool(true);
                     float *d = mesh->GetTexCoords();
-                    for (unsigned int i = 0; i < mesh->GetVertexCount(); i++){
-                        out << d[i * 4] << ' ' << d[(i * 4) + 1] << ' ' << d[(i * 4) + 2] << ' ' << 1.0f;
-                        if (i != (mesh->GetVertexCount() - 1)){
-                            out << ' ';
-                        }
-                    }
-                    out << std::endl;
+                    WriteFloatV(d, mesh->GetVertexCount() * 4);
+                } else {
+                    WriteBool(false);
                 }
                 if (mesh->HasBinormals()){
-                    out << "BINORMALS" << std::endl;
+                    WriteBool(true);
                     float *d = mesh->GetBinormals();
-                    for (unsigned int i = 0; i < mesh->GetVertexCount(); i++){
-                        out << d[i * 4] << ' ' << d[(i * 4) + 1] << ' ' << d[(i * 4) + 2] << ' ' << 1.0f;
-                        if (i != (mesh->GetVertexCount() - 1)){
-                            out << ' ';
-                        }
-                    }
-                    out << std::endl;
+                    WriteFloatV(d, mesh->GetVertexCount() * 4);
+                } else {
+                    WriteBool(false);
                 }
                 if (mesh->HasBitangents()){
-                    out << "BITANGENTS" << std::endl;
+                    WriteBool(true);
                     float *d = mesh->GetBitangents();
-                    for (unsigned int i = 0; i < mesh->GetVertexCount(); i++){
-                        out << d[i * 4] << ' ' << d[(i * 4) + 1] << ' ' << d[(i * 4) + 2] << ' ' << 1.0f;
-                        if (i != (mesh->GetVertexCount() - 1)){
-                            out << ' ';
-                        }
-                    }
-                    out << std::endl;
+                    WriteFloatV(d, mesh->GetVertexCount() * 4);
+                } else {
+                    WriteBool(false);
                 }
                 if (mesh->HasSkeleton()) {
-                    out << "WEIGHTS" << std::endl;
+                    WriteBool(true);
                     float *d = mesh->GetWeights();
-                    for (unsigned int i = 0; i < mesh->GetVertexCount(); i++) {
-                        out << d[i * 4] << ' ' << d[(i * 4) + 1] << ' ' << d[(i * 4) + 2] << ' ' << 1.0f;
-                        if (i != (mesh->GetVertexCount() - 1)){
-                            out << ' ';
-                        }
-                    }
-                    out << std::endl;
-                    out << "BONE_INDICES" << std::endl;
+                    WriteFloatV(d, mesh->GetVertexCount() * 4);
                     d = mesh->GetWeightVertexIndices();
-                    for (unsigned int i = 0; i < mesh->GetVertexCount(); i++) {
-                        out << d[i * 4] << ' ' << d[(i * 4) + 1] << ' ' << d[(i * 4) + 2] << ' ' << 1.0f;
-                        if (i != (mesh->GetVertexCount() - 1)){
-                            out << ' ';
-                        }
-                    }
-                    out << std::endl;
+                    WriteFloatV(d, mesh->GetVertexCount() * 4);
+                } else {
+                    WriteBool(false);
                 }
 
                 ++mesh_attribute_iterator;
             }
 
-            std::vector<EG::Game::ObjectAttribute *> *animation_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_ANIMATION);
-            std::vector<EG::Game::ObjectAttribute *>::iterator animation_attribute_iterator = animation_attributes->begin();
-            if (animation_attributes->size() > 0) {
-                EG::Game::ObjectAttributeControlAnimationState *animation_state = static_cast<EG::Game::ObjectAttributeControlAnimationState *>(animation_attributes->at(0));
-                out << "ANIMATIONS" << std::endl;
-            }
-            //
-            // Light Attributes
-            //
-
             out.close();
         }
+
+        void ObjectWriter::WriteString(std::string value) {
+            out.write(value.c_str(), sizeof(char) * value.size() + 1);
+        }
+
+        void ObjectWriter::WriteBool(bool value) {
+            out.write(reinterpret_cast<const char *>(&value), sizeof(bool));
+        }
+
+        void ObjectWriter::WriteUInt(unsigned int value) {
+            out.write(reinterpret_cast<const char *>(&value), sizeof(unsigned int));
+        }
+
+        void ObjectWriter::WriteFloat(float value) {
+            out.write(reinterpret_cast<const char *>(&value), sizeof(float));
+        }
+
+        void ObjectWriter::WriteFloatV(float *value, unsigned int count) {
+            out.write(reinterpret_cast<const char *>(value), sizeof(float) * count);
+        }
+
+        void ObjectWriter::WriteVec4(glm::vec4 value) {
+            out.write(reinterpret_cast<const char *>(glm::value_ptr(value)), sizeof(float) * 4);
+        }
+
+        void ObjectWriter::WriteMat4(glm::mat4 value) {
+            out.write(reinterpret_cast<const char *>(glm::value_ptr(value)), sizeof(float) * 16);
+        }
+
         void ObjectWriter::CopyFile(std::string in, std::string out){
             std::ifstream in_file(in.c_str(), std::fstream::binary);
             std::ofstream out_file(out.c_str(), std::fstream::trunc|std::fstream::binary);

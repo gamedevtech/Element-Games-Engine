@@ -43,6 +43,11 @@ namespace EG{
             version_major = atoi(version_numbers_string.substr(0, 1).c_str());
             version_minor = atoi(version_numbers_string.substr(2, 1).c_str());
             std::cout << "OpenGL Version: " << version_major << '.' << version_minor << std::endl;
+            GLint n;
+            glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &n);
+            std::cout << "Max Vertex Attribs: " << n << std::endl;
+            glGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &n);
+            std::cout << "Max Vertex Uniform Components: " << n << std::endl;
         }
 
         void OpenGLInterface::Resize(unsigned int viewport_width, unsigned int viewport_height){

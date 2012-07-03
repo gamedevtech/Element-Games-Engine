@@ -4,7 +4,7 @@
 #include "../../Game/ObjectEmissionAttribute.h"
 #include "../../Graphics/Mesh.h"
 #include "../../Graphics/RenderingMaterial.h"
-#include <fstream>
+#include <fcntl.h>
 
 namespace EG{
     namespace Media{
@@ -16,180 +16,176 @@ namespace EG{
             //
         }
 
-        /*
-            string line;
-            ifstream myfile ("example.txt");
-            if (myfile.is_open()){
-                while ( myfile.good() ){
-                    getline (myfile,line);
-                    cout << line << endl;
-                }
-                myfile.close();
-            }
-        */
+        bool ObjectReader::Read(std::string file_path, EG::Game::Scene *scene) {
+            in.open(file_path.c_str(), std::ios::binary);
 
-        bool ObjectReader::Read(std::string file_path, EG::Game::Scene *scene){
-            std::ifstream in;
-            in.open(file_path.c_str());
+            // Read Object ID and Create Object
+            unsigned int string_size = ReadUInt();
+            std::string object_id = ReadString(string_size);
+            object = new EG::Game::Object(object_id);
+            
 
-            std::string line;
-
-            // Get Object Name
-            std::getline(in, line);
-            object = new EG::Game::Object(line);
-
-            // Get Object Basic Transformation Attribute
-            std::getline(in, line);
-            float *t = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
-            glm::mat4 transformation = glm::mat4(1.0f);
-            unsigned int fi = 0;
-            for (unsigned int i = 0; i < 4; i++){
-                for (unsigned int j = 0; j < 4; j++){
-                    transformation[i][j] = t[fi];
-                    fi += 1;
-                }
-            }
+            // Read Transformation
+            glm::mat4 transformation = ReadMat4();
             object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(transformation));
 
-            std::getline(in, line);
-            EG::Graphics::RenderingMaterial *material = new EG::Graphics::RenderingMaterial();
+            // Mesh/Materials
+            unsigned int count = ReadUInt();
+            for (unsigned int i = 0; i < count; i++) {
+                EG::Graphics::RenderingMaterial *material = new EG::Graphics::RenderingMaterial();
 
-            // DECAL
-            std::getline(in, line);
-            std::string decal_path = line.substr(5);
-            decal_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(decal_path);
-            if (decal_path.size() > 2){
-                if (!(scene->GetTextureManager()->HasTexture(decal_path))){
-                    scene->GetTextureManager()->AddTexture(decal_path, new EG::Graphics::Texture(decal_path));
+                // Decal
+                bool has_decal = ReadBool();
+                if (has_decal) {
+                    string_size = ReadUInt();
+                    std::string decal_path = ReadString(string_size);
+                    decal_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(decal_path);
+                    if (decal_path.size() > 2){
+                        if (!(scene->GetTextureManager()->HasTexture(decal_path))){
+                            scene->GetTextureManager()->AddTexture(decal_path, new EG::Graphics::Texture(decal_path));
+                        }
+                        material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, decal_path);
+                    }
                 }
-                material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, decal_path);
-            }
 
-            // NORMAL
-            std::getline(in, line);
-            std::string normal_path = line.substr(6);
-            normal_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(normal_path);
-            if (normal_path.size() > 2){
-                if (!(scene->GetTextureManager()->HasTexture(normal_path))){
-                    EG::Graphics::Texture *new_tex = new EG::Graphics::Texture(normal_path);
-                    scene->GetTextureManager()->AddTexture(normal_path, new_tex);
+                // Normal
+                bool has_normal = ReadBool();
+                if (has_normal) {
+                    string_size = ReadUInt();
+                    std::string normal_path = ReadString(string_size);
+                    normal_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(normal_path);
+                    if (normal_path.size() > 2){
+                        if (!(scene->GetTextureManager()->HasTexture(normal_path))){
+                            scene->GetTextureManager()->AddTexture(normal_path, new EG::Graphics::Texture(normal_path));
+                        }
+                        material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, normal_path);
+                    }
                 }
-                material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, normal_path);
-            }
 
-            // HEIGHT
-            std::getline(in, line);
-            std::string height_path = line.substr(6);
-            height_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(height_path);
-            if (height_path.size() > 2){
-                if (!(scene->GetTextureManager()->HasTexture(height_path))){
-                    scene->GetTextureManager()->AddTexture(height_path, new EG::Graphics::Texture(height_path));
+                // Height
+                bool has_height = ReadBool();
+                if (has_height) {
+                    string_size = ReadUInt();
+                    std::string height_path = ReadString(string_size);
+                    height_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(height_path);
+                    if (height_path.size() > 2){
+                        if (!(scene->GetTextureManager()->HasTexture(height_path))){
+                            scene->GetTextureManager()->AddTexture(height_path, new EG::Graphics::Texture(height_path));
+                        }
+                        material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT, height_path);
+                    }
                 }
-                material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT, height_path);
-            }
 
-            // SPECULAR
-            std::getline(in, line);
-            std::string specular_path = line.substr(8);
-            specular_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(specular_path);
-            if (specular_path.size() > 2){
-                if (!(scene->GetTextureManager()->HasTexture(specular_path))){
-                    scene->GetTextureManager()->AddTexture(specular_path, new EG::Graphics::Texture(specular_path));
+                // Specular
+                bool has_specular = ReadBool();
+                if (has_specular) {
+                    string_size = ReadUInt();
+                    std::string specular_path = ReadString(string_size);
+                    specular_path = EG::Utility::StringMethods::RemoveSpecialCharactersFromPathString(specular_path);
+                    if (specular_path.size() > 2){
+                        if (!(scene->GetTextureManager()->HasTexture(specular_path))){
+                            scene->GetTextureManager()->AddTexture(specular_path, new EG::Graphics::Texture(specular_path));
+                        }
+                        material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR, specular_path);
+                    }
                 }
-                material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR, specular_path);
-            }
 
-            // LIT
-            std::getline(in, line);
-            unsigned int is_lit = atoi(line.substr(3).c_str());
-            if (is_lit != 1){
-                material->SetLit(false);
-            }
+                material->SetLit(ReadBool());
+                material->SetCastsShadows(ReadBool());
+                material->SetTranslucent(ReadBool());
+                material->SetAmbient(ReadFloat());
+                material->SetDiffuse(ReadFloat());
+                material->SetSpecular(ReadFloat());
+                material->SetSpecularExponent(ReadFloat());
+                material->SetColor(ReadVec4());
 
-            // CASTS SHADOWS
-            std::getline(in, line);
-            unsigned int is_casts_shadows = atoi(line.substr(12).c_str());
-            if (is_casts_shadows != 1){
-                material->SetCastsShadows(false);
-            }
+                // Mesh Data
+                string_size = ReadUInt();
+                std::string mesh_id = ReadString(string_size);
+                unsigned int vertex_count = ReadUInt();
+                unsigned int strid = ReadUInt();
 
-            // TRANSLUCENT
-            std::getline(in, line);
-            unsigned int is_translucent = atoi(line.substr(11).c_str());
-            if (is_translucent == 1){
-                material->SetTranslucent(true);
-            }
-
-            // LIGHTING
-            std::getline(in, line);
-            float *lighting_parameters = EG::Utility::StringMethods::ConvertStringToFloatArray(line.substr(9));
-            material->SetAmbient(lighting_parameters[0]);
-            material->SetDiffuse(lighting_parameters[1]);
-            material->SetSpecular(lighting_parameters[2]);
-            material->SetSpecularExponent(lighting_parameters[3]);
-
-            // COLOR
-            std::getline(in, line);
-            float *color = EG::Utility::StringMethods::ConvertStringToFloatArray(line.substr(6));
-            material->SetColor(glm::vec4(color[0], color[1], color[2], color[3]));
-
-            std::getline(in, line);
-            std::getline(in, line);
-            std::string mesh_name = line;
-            std::getline(in, line);
-            unsigned int vertex_count = atoi(line.c_str());
-            std::getline(in, line);
-            bool has_vers = false;
-            bool has_nors = false;
-            bool has_texs = false;
-            bool has_bins = false;
-            bool has_bits = false;
-            bool has_weights = false;
-            bool has_bone_indices = false;
-            bool has_animations = false;
-            float *vers, *nors, *texs, *bins, *bits, *weights, *bone_indices;
-            while (in.good()){
-                std::getline(in, line);
-                std::string simple_prefix = line.substr(0, 3);
-                std::getline(in, line);
-                if (simple_prefix == "VER"){
-                    vers = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
-                    has_vers = true;
-                }else if (simple_prefix == "NOR"){
-                    nors = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
-                    has_nors = true;
-                }else if (simple_prefix == "TEX"){
-                    texs = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
-                    has_texs = true;
-                }else if (simple_prefix == "BIT"){
-                    bits = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
-                    has_bits = true;
-                }else if (simple_prefix == "BIN"){
-                    bins = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
-                    has_bins = true;
-                }else if (simple_prefix == "WEI"){
-                    weights = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
-                    has_weights = true;
-                }else if (simple_prefix == "BON"){
-                    bone_indices = EG::Utility::StringMethods::ConvertStringToFloatArray(line);
-                    has_bone_indices = true;
-                }else if (simple_prefix == "ANI"){
-                    has_animations = true;
-                    break;
+                float *vertices, *normals, *tex_coords, *binormals, *bitangents, *weights, *bone_indices;
+                bool has_vertices = ReadBool();
+                if (has_vertices) {
+                    vertices = ReadFloatV(vertex_count * 4);
                 }
-            }
-            EG::Graphics::Mesh *mesh = new EG::Graphics::Mesh(vertex_count, 4, vers, has_vers, texs, has_texs, nors, has_nors, bins, has_bins, bits, has_bits, weights, bone_indices, has_weights && has_bone_indices);
-            scene->GetMeshManager()->Add(mesh_name, mesh);
-            object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(mesh_name, material));
+                bool has_normals = ReadBool();
+                if (has_normals) {
+                    normals = ReadFloatV(vertex_count * 4);
+                }
+                bool has_tex_coords = ReadBool();
+                if (has_tex_coords) {
+                    tex_coords = ReadFloatV(vertex_count * 4);
+                }
+                bool has_binormals = ReadBool();
+                if (has_binormals) {
+                    binormals = ReadFloatV(vertex_count * 4);
+                }
+                bool has_bitangents = ReadBool();
+                if (has_bitangents) {
+                    bitangents = ReadFloatV(vertex_count * 4);
+                }
+                bool has_skeleton = ReadBool();
+                if (has_skeleton) {
+                    weights = ReadFloatV(vertex_count * 4);
+                    bone_indices = ReadFloatV(vertex_count * 4);
+                }
 
-            std::getline(in, line);
-            if (in.good() && has_animations) {
-                //
+                EG::Graphics::Mesh *mesh = new EG::Graphics::Mesh(vertex_count, 4, vertices, has_vertices, tex_coords,
+                                                                  has_tex_coords, normals, has_normals, binormals,
+                                                                  has_binormals, bitangents, has_bitangents, weights,
+                                                                  bone_indices, has_skeleton);
+                scene->GetMeshManager()->Add(mesh_id, mesh);
+                object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(mesh_id, material));
             }
 
             in.close();
-
             return true;
+        }
+
+        std::string ObjectReader::ReadString(unsigned int size) {
+            characters = new char[size];
+            in.read(characters, sizeof(char) * size);
+            std::string out(characters, size);
+            delete []characters;
+            return out;
+        }
+        bool ObjectReader::ReadBool(void) {
+            bool out;
+            in.read((char *)&out, sizeof(bool));
+            return out;
+        }
+        unsigned int ObjectReader::ReadUInt(void) {
+            unsigned int out;
+            in.read((char *)&out, sizeof(unsigned int));
+            return out;
+        }
+        float ObjectReader::ReadFloat(void) {
+            float out;
+            in.read((char *)&out, sizeof(float));
+            return out;
+        }
+        float *ObjectReader::ReadFloatV(unsigned int size) {
+            float *out = new float[size];
+            in.read((char *)out, sizeof(float) * size);
+            return out;
+        }
+        glm::vec4 ObjectReader::ReadVec4(void) {
+            float tmp[4];
+            in.read((char *)tmp, sizeof(float) * 4);
+            return glm::vec4(tmp[0], tmp[1], tmp[2], tmp[3]);
+        }
+        glm::mat4 ObjectReader::ReadMat4(void) {
+            float tmp[16];
+            in.read((char *)tmp, sizeof(float) * 16);
+            glm::mat4 out;
+            for (unsigned int i = 0; i < 4; i++) {
+                for (unsigned int j = 0; j < 4; j++) {
+                    out[i][j] = tmp[j * 4 + i];
+                }
+            }
+            return out;
         }
 
         EG::Game::Object *ObjectReader::GetLoadedObject(void){
