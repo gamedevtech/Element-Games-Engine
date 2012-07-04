@@ -47,6 +47,9 @@ namespace EG{
         std::vector<Bone *> *Skeleton::GetBones(void){
             return &bones;
         }
+        std::map<unsigned int, Bone *> *Skeleton::GetBoneMap(void) {
+            return &bone_map;
+        }
         void Skeleton::AddBone(Bone *bone) {
             bones.push_back(bone);
             bone_map[bone->GetId()] = bone;
@@ -168,6 +171,15 @@ namespace EG{
         void Animation::AddBoneRotation(unsigned int bone_id, float time, glm::quat rotation) {
             rotations[bone_id].push_back(std::pair<float, glm::quat>(time, rotation));
         }
+        std::map<unsigned int, std::vector<std::pair<float, glm::vec3> > > *Animation::GetPositions(void) {
+            return &positions;
+        }
+        std::map<unsigned int, std::vector<std::pair<float, glm::vec3> > > *Animation::GetScalings(void) {
+            return &scalings;
+        }
+        std::map<unsigned int, std::vector<std::pair<float, glm::quat> > > *Animation::GetRotations(void) {
+            return &rotations;
+        }
 
         Animations::Animations(void){
             //
@@ -186,6 +198,15 @@ namespace EG{
         }
         Skeleton *Animations::GetBindPose(void){
             return bind_pose;
+        }
+        std::vector<std::string> Animations::GetAnimationNames(void) {
+            std::vector<std::string> out;
+            std::map<std::string, Animation *>::iterator anim_iter = animations.begin();
+            while (anim_iter != animations.end()) {
+                out.push_back(anim_iter->first);
+                ++anim_iter;
+            }
+            return out;
         }
 
         AnimationState::AnimationState(Animations *_animations){

@@ -26,7 +26,9 @@ namespace EG{
                 void WriteUInt(unsigned int value);
                 void WriteFloat(float value);
                 void WriteFloatV(float *value, unsigned int count);
+                void WriteVec3(glm::vec3 value);
                 void WriteVec4(glm::vec4 value);
+                void WriteQuat(glm::quat value);
                 void WriteMat4(glm::mat4 value);
         };
     }

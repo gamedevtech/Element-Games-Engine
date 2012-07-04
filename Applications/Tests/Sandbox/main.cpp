@@ -377,8 +377,11 @@ int main(int argc, char **argv){
     // NOTE: End Test Data
 
     while (game->GetWindow()->IsOpened()){
+        //std::cout << "Begin Loop Frame" << std::endl;
         game->Update();
+        //std::cout << "Game Updated" << std::endl;
         game->Render();
+        //std::cout << "Game Rendered" << std::endl;
         glFinish();
     }
     window->Close();

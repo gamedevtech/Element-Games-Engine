@@ -36,6 +36,7 @@ namespace EG{
                 void SetRoot(Bone *_root);
                 Bone *GetRoot(void);
                 std::vector<Bone *> *GetBones(void);
+                std::map<unsigned int, Bone *> *GetBoneMap(void);
                 void AddBone(Bone *bone);
                 Bone *GetBone(unsigned int bone_id);
 
@@ -61,6 +62,10 @@ namespace EG{
                 void AddBonePosition(unsigned int bone_id, float time, glm::vec3 position);
                 void AddBoneScaling(unsigned int bone_id, float time, glm::vec3 scaling);
                 void AddBoneRotation(unsigned int bone_id, float time, glm::quat rotation);
+
+                std::map<unsigned int, std::vector<std::pair<float, glm::vec3> > > *GetPositions(void);
+                std::map<unsigned int, std::vector<std::pair<float, glm::vec3> > > *GetScalings(void);
+                std::map<unsigned int, std::vector<std::pair<float, glm::quat> > > *GetRotations(void);
             private:
                 float duration;
                 std::string name;
@@ -82,6 +87,7 @@ namespace EG{
                 Animation *Get(std::string name);
                 void SetBindPose(Skeleton *_bind_pose_skeleton);
                 Skeleton *GetBindPose(void);
+                std::vector<std::string> GetAnimationNames(void);
             private:
                 EG::Dynamics::Skeleton *bind_pose;
                 std::map<std::string, Animation *> animations;

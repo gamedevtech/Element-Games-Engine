@@ -26,7 +26,9 @@ namespace EG{
                 unsigned int ReadUInt(void);
                 float ReadFloat(void);
                 float *ReadFloatV(unsigned int size);
+                glm::vec3 ReadVec3(void);
                 glm::vec4 ReadVec4(void);
+                glm::quat ReadQuat(void);
                 glm::mat4 ReadMat4(void);
         };
     }

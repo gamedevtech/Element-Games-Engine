@@ -2,6 +2,7 @@
 #include "../../Game/ObjectRenderingAttribute.h"
 #include "../../Game/ObjectBasicAttribute.h"
 #include "../../Game/ObjectEmissionAttribute.h"
+#include "../../Game/ObjectControlAttribute.h"
 #include "../../Graphics/Mesh.h"
 #include "../../Graphics/RenderingMaterial.h"
 #include <fcntl.h>
@@ -140,6 +141,80 @@ namespace EG{
                 object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh(mesh_id, material));
             }
 
+            // Read Animations
+            bool has_animations = ReadBool();
+            if (has_animations) {
+                EG::Dynamics::Animations *animations = new EG::Dynamics::Animations;
+
+                // Build Bind Pose
+                unsigned int bone_count = ReadUInt();
+                EG::Dynamics::Skeleton *bind_pose = new EG::Dynamics::Skeleton;
+                std::map<unsigned int, unsigned int> parent_relations;
+                for (unsigned int i = 0; i < bone_count; i++) {
+                    unsigned int bone_id = ReadUInt();
+                    unsigned int parent_bone_id = ReadUInt();
+                    glm::mat4 offset = ReadMat4();
+                    parent_relations[bone_id] = parent_bone_id;
+                    bind_pose->AddBone(new EG::Dynamics::Bone(bone_id, offset));
+                }
+                std::map<unsigned int, unsigned int>::iterator riter = parent_relations.begin();
+                while (riter != parent_relations.end()) {
+                    unsigned int bone_id = riter->first;
+                    unsigned int parent_bone_id = riter->second;
+                    EG::Dynamics::Bone *bone = bind_pose->GetBone(bone_id);
+                    if (parent_bone_id > 999) {
+                        bind_pose->SetRoot(bone);
+                    } else {
+                        EG::Dynamics::Bone *parent_bone = bind_pose->GetBone(parent_bone_id);
+                        parent_bone->AddChild(bone);
+                    }
+                    ++riter;
+                }
+                animations->SetBindPose(bind_pose);
+
+                // Load Animations
+                unsigned int animation_count = ReadUInt();
+                for (unsigned int i = 0; i < animation_count; i++) {
+                    string_size = ReadUInt();
+                    std::string animation_name = ReadString(string_size);
+                    float duration = ReadFloat();
+                    EG::Dynamics::Animation *animation = new EG::Dynamics::Animation(animation_name, duration);
+                    unsigned int bone_count = ReadUInt();
+                    animation->SetBoneCount(bone_count);
+                    for (unsigned int bi = 0; bi < bone_count; bi++) {
+                        unsigned int bone_id = ReadUInt();
+
+                        // Positions
+                        unsigned int position_count = ReadUInt();
+                        for (unsigned int pi = 0; pi < position_count; pi++) {
+                            float time = ReadFloat();
+                            glm::vec3 value = ReadVec3();
+                            animation->AddBonePosition(bone_id, time, value);
+                        }
+
+                        // Scalings
+                        unsigned int scaling_count = ReadUInt();
+                        for (unsigned int si = 0; si < scaling_count; si++) {
+                            float time = ReadFloat();
+                            glm::vec3 value = ReadVec3();
+                            animation->AddBoneScaling(bone_id, time, value);
+                        }
+
+                        // Rotations
+                        unsigned int rotation_count = ReadUInt();
+                        for (unsigned int ri = 0; ri < rotation_count; ri++) {
+                            float time = ReadFloat();
+                            glm::quat value = ReadQuat();
+                            animation->AddBoneRotation(bone_id, time, value);
+                        }
+                    }
+                    animations->Add(animation);
+                }
+
+                EG::Dynamics::AnimationState *animation_state = new EG::Dynamics::AnimationState(animations);
+                object->AddAttribute(new EG::Game::ObjectAttributeControlAnimationState(animation_state));
+            }
+
             in.close();
             return true;
         }
@@ -171,10 +246,23 @@ namespace EG{
             in.read((char *)out, sizeof(float) * size);
             return out;
         }
+        glm::vec3 ObjectReader::ReadVec3(void) {
+            float tmp[3];
+            in.read((char *)tmp, sizeof(float) * 3);
+            return glm::vec3(tmp[0], tmp[1], tmp[2]);
+        }
         glm::vec4 ObjectReader::ReadVec4(void) {
             float tmp[4];
             in.read((char *)tmp, sizeof(float) * 4);
             return glm::vec4(tmp[0], tmp[1], tmp[2], tmp[3]);
+        }
+        glm::quat ObjectReader::ReadQuat(void) {
+            float tmp[4];
+            tmp[0] = ReadFloat();
+            tmp[1] = ReadFloat();
+            tmp[2] = ReadFloat();
+            tmp[3] = ReadFloat();
+            return glm::quat(tmp[0], tmp[1], tmp[2], tmp[3]);
         }
         glm::mat4 ObjectReader::ReadMat4(void) {
             float tmp[16];

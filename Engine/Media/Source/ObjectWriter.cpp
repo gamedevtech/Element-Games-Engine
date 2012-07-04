@@ -26,7 +26,7 @@ namespace EG{
             out.open((model_output_path + file_name).c_str(), std::ios::binary);
 
             // Write Object Name
-            WriteUInt(object_name.size() + 1);
+            WriteUInt(object_name.size());
             WriteString(object_name);
 
             // Write Basic Transformation
@@ -49,7 +49,7 @@ namespace EG{
                     std::string image_out_path = (images_output_path + EG::Utility::StringMethods::GetFilenameFromPath(texture->GetFilePath()));
                     CopyFile(texture->GetFilePath(), image_out_path.c_str());
                     WriteBool(true);
-                    WriteUInt(image_out_path.size() + 1);
+                    WriteUInt(image_out_path.size());
                     WriteString(image_out_path);
                 }else{
                     WriteBool(false);
@@ -59,7 +59,7 @@ namespace EG{
                     std::string image_out_path = (images_output_path + EG::Utility::StringMethods::GetFilenameFromPath(texture->GetFilePath()));
                     CopyFile(texture->GetFilePath(), image_out_path.c_str());
                     WriteBool(true);
-                    WriteUInt(image_out_path.size() + 1);
+                    WriteUInt(image_out_path.size());
                     WriteString(image_out_path);
                 }else{
                     WriteBool(false);
@@ -69,7 +69,7 @@ namespace EG{
                     std::string image_out_path = (images_output_path + EG::Utility::StringMethods::GetFilenameFromPath(texture->GetFilePath()));
                     CopyFile(texture->GetFilePath(), image_out_path.c_str());
                     WriteBool(true);
-                    WriteUInt(image_out_path.size() + 1);
+                    WriteUInt(image_out_path.size());
                     WriteString(image_out_path);
                 }else{
                     WriteBool(false);
@@ -79,7 +79,7 @@ namespace EG{
                     std::string image_out_path = (images_output_path + EG::Utility::StringMethods::GetFilenameFromPath(texture->GetFilePath()));
                     CopyFile(texture->GetFilePath(), image_out_path.c_str());
                     WriteBool(true);
-                    WriteUInt(image_out_path.size() + 1);
+                    WriteUInt(image_out_path.size());
                     WriteString(image_out_path);
                 }else{
                     WriteBool(false);
@@ -106,7 +106,7 @@ namespace EG{
                 WriteVec4(material->GetColor());
 
                 // Mesh
-                WriteUInt(mesh_attribute->GetMeshId().size() + 1);
+                WriteUInt(mesh_attribute->GetMeshId().size());
                 WriteString(mesh_attribute->GetMeshId());
                 WriteUInt(mesh->GetVertexCount());
                 WriteUInt(mesh->GetStride());
@@ -155,6 +155,83 @@ namespace EG{
                     WriteBool(false);
                 }
 
+                // Animations
+                if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_ANIMATION)) {
+                    WriteBool(true); // Has Animations
+                    
+                    EG::Game::ObjectAttributeControlAnimationState *animation_attribute = static_cast<EG::Game::ObjectAttributeControlAnimationState *>(object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_ANIMATION)->at(0));
+                    EG::Dynamics::AnimationState *animation_state = animation_attribute->GetAnimationState();
+                    EG::Dynamics::Animations *animations = animation_state->GetAnimations();
+
+                    // Bind Pose Skeleton
+                    EG::Dynamics::Skeleton *bind_pose = animations->GetBindPose();
+                    std::map<unsigned int, EG::Dynamics::Bone *> *bones = bind_pose->GetBoneMap();
+                    unsigned int bone_count = bind_pose->GetBones()->size();
+                    WriteUInt(bone_count);
+                    for (unsigned int i = 0; i < bone_count; i++) {
+                        EG::Dynamics::Bone *bone = (*bones)[i];
+                        WriteUInt(i); // Bone ID
+                        if (bone->GetParent() != NULL) {
+                            WriteUInt(bone->GetParent()->GetId());
+                        } else {
+                            WriteUInt(99999);
+                        }
+                        WriteMat4(bone->GetOffset());
+                    }
+
+                    // Animations
+                    std::vector<std::string> animation_names = animations->GetAnimationNames();
+                    WriteUInt(animation_names.size());
+                    std::vector<std::string>::iterator aiter = animation_names.begin();
+                    while (aiter != animation_names.end()) {
+                        // Animation
+                        std::string animation_name = (*aiter);
+                        EG::Dynamics::Animation *animation = animations->Get(animation_name);
+
+                        // Animation Name
+                        WriteUInt(animation_name.size());
+                        WriteString(animation_name);
+                        WriteFloat(animation->GetDuration());
+
+                        WriteUInt(animation->GetBoneCount());
+                        std::map<unsigned int, std::vector<std::pair<float, glm::vec3> > > *positions = animation->GetPositions();
+                        std::map<unsigned int, std::vector<std::pair<float, glm::vec3> > > *scalings = animation->GetScalings();
+                        std::map<unsigned int, std::vector<std::pair<float, glm::quat> > > *rotations = animation->GetRotations();
+                        for (unsigned int i = 0; i < animation->GetBoneCount(); i++) {
+                            WriteUInt(i); // Bone ID
+                            std::vector<std::pair<float, glm::vec3> > p = (*positions)[i];
+                            std::vector<std::pair<float, glm::vec3> > s = (*scalings)[i];
+                            std::vector<std::pair<float, glm::quat> > r = (*rotations)[i];
+
+                            // Write Positions
+                            WriteUInt(p.size());
+                            for (unsigned int j = 0; j < p.size(); j++) {
+                                WriteFloat(p[j].first);
+                                WriteVec3(p[j].second);
+                            }
+                            // Write Scalings
+                            WriteUInt(s.size());
+                            for (unsigned int j = 0; j < s.size(); j++) {
+                                WriteFloat(s[j].first);
+                                WriteVec3(s[j].second);
+                            }
+                            // Write Rotations
+                            WriteUInt(r.size());
+                            for (unsigned int j = 0; j < r.size(); j++) {
+                                WriteFloat(r[j].first);
+                                WriteQuat(r[j].second);
+                            }
+                        }
+
+                        ++aiter;
+                    }
+                } else {
+                    WriteBool(false);
+                }
+
+                // Lights
+                // Particle Systems?
+
                 ++mesh_attribute_iterator;
             }
 
@@ -162,7 +239,7 @@ namespace EG{
         }
 
         void ObjectWriter::WriteString(std::string value) {
-            out.write(value.c_str(), sizeof(char) * value.size() + 1);
+            out.write(value.c_str(), sizeof(char) * value.size());
         }
 
         void ObjectWriter::WriteBool(bool value) {
@@ -181,8 +258,19 @@ namespace EG{
             out.write(reinterpret_cast<const char *>(value), sizeof(float) * count);
         }
 
+        void ObjectWriter::WriteVec3(glm::vec3 value) {
+            out.write(reinterpret_cast<const char *>(glm::value_ptr(value)), sizeof(float) * 3);
+        }
+
         void ObjectWriter::WriteVec4(glm::vec4 value) {
             out.write(reinterpret_cast<const char *>(glm::value_ptr(value)), sizeof(float) * 4);
+        }
+
+        void ObjectWriter::WriteQuat(glm::quat value) {
+            WriteFloat(value.x);
+            WriteFloat(value.y);
+            WriteFloat(value.z);
+            WriteFloat(value.w);
         }
 
         void ObjectWriter::WriteMat4(glm::mat4 value) {
