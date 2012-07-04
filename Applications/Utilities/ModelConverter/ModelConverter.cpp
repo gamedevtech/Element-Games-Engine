@@ -53,7 +53,7 @@ std::string LoadModelEventListener::Call(std::map<std::string, std::string> args
         gui->AddResponseHandler("save_model", savecallback);
 
         // TODO: Loop through the meshes and perhaps combine them into one, and get the transforms right, if not, then just make transforms available as an option on a mesh as well!
-        model_object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 2.0f, 0.0f)), glm::vec3(0.02f, 0.02f, 0.02f))));
+        model_object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(/*glm::scale(*/glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 2.0f, 0.0f))/*, glm::vec3(0.02f, 0.02f, 0.02f))*/));
         for (unsigned int i = 0; i < model->GetMeshMaterialPairCount(); i++) {
             std::cout << "Mesh Material Index: " << i << std::endl;
             model->GetMaterial(i)->SetLit(true);

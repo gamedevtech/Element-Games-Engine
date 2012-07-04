@@ -262,17 +262,15 @@ namespace EG{
             tmp[1] = ReadFloat();
             tmp[2] = ReadFloat();
             tmp[3] = ReadFloat();
-            return glm::quat(tmp[0], tmp[1], tmp[2], tmp[3]);
+            return glm::quat(tmp[3], tmp[0], tmp[1], tmp[2]);
         }
         glm::mat4 ObjectReader::ReadMat4(void) {
             float tmp[16];
             in.read((char *)tmp, sizeof(float) * 16);
-            glm::mat4 out;
-            for (unsigned int i = 0; i < 4; i++) {
-                for (unsigned int j = 0; j < 4; j++) {
-                    out[i][j] = tmp[j * 4 + i];
-                }
-            }
+            glm::mat4 out(tmp[0], tmp[1], tmp[2], tmp[3],
+                           tmp[4], tmp[5], tmp[6], tmp[7],
+                           tmp[8], tmp[9], tmp[10], tmp[11],
+                           tmp[12], tmp[13], tmp[14], tmp[15]);
             return out;
         }
 

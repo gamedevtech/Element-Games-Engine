@@ -149,8 +149,8 @@ namespace EG{
                     WriteBool(true);
                     float *d = mesh->GetWeights();
                     WriteFloatV(d, mesh->GetVertexCount() * 4);
-                    d = mesh->GetWeightVertexIndices();
-                    WriteFloatV(d, mesh->GetVertexCount() * 4);
+                    float *di = mesh->GetWeightVertexIndices();
+                    WriteFloatV(di, mesh->GetVertexCount() * 4);
                 } else {
                     WriteBool(false);
                 }
