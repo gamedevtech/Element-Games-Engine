@@ -263,6 +263,7 @@ std::string SaveCallback::Call(std::map<std::string, std::string> args){
 
 ModelConverter::ModelConverter(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
     gui->Initialize("Assets/GUIs/ModelConverter", "index.html");
+//     gui->Initialize("../GUI", "index.html");
 
     LoadModelEventListener *listener = new LoadModelEventListener();
     listener->scene = scene;

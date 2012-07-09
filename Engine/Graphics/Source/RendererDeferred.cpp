@@ -45,7 +45,7 @@ namespace EG{
             shaders->Add("planet_atmosphere", "Shaders/Deferred/planet_atmosphere.vert", "Shaders/Deferred/planet_atmosphere.frag", "", "", "", 4);
             shaders->Add("prepass_debug", "Shaders/Deferred/prepass_debug.vert", "Shaders/Deferred/prepass_debug.frag");
             shaders->Add("font_rendering", "Shaders/Basic/font_rendering.vert", "Shaders/Basic/font_rendering.frag");
-            shaders->Add("lighting", "Shaders/Deferred/lighting.vert", "Shaders/Deferred/lighting.frag");
+            shaders->Add("lighting", "Shaders/Deferred/lighting.vert", "Shaders/Deferred/lighting.frag", "", "", "", 2);
             shaders->Add("composition", "Shaders/Deferred/composition.vert", "Shaders/Deferred/composition.frag");
             shaders->Add("convolution", "Shaders/Deferred/convolution.vert", "Shaders/Deferred/convolution.frag");
             shaders->Add("gaussian_v", "Shaders/Deferred/gaussian_v.vert", "Shaders/Deferred/gaussian_v.frag");
@@ -64,7 +64,7 @@ namespace EG{
             }
 
             deferred_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth(), graphics->GetViewportHeight(), 4, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_NONE);
-            light_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth(), graphics->GetViewportHeight(), 1, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
+            light_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth(), graphics->GetViewportHeight(), 2, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
             bloom_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth() / 4.0f, graphics->GetViewportHeight() / 4.0f, 3, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
             hdr_buffer = new EG::Graphics::OffscreenBuffer(16, 16, 1, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
             ssao_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth() / 2.0f, graphics->GetViewportHeight() / 2.0f, 3, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
@@ -262,7 +262,9 @@ namespace EG{
 
         void RendererDeferred::Lighting(EG::Game::Scene *scene){
             EG::Graphics::Camera *camera = scene->GetCurrentCamera();
-            graphics->StartOffscreenRender(light_buffer->GetBufferId(), 0, graphics->GetViewportWidth(), graphics->GetViewportHeight());
+            //graphics->StartOffscreenRender(light_buffer->GetBufferId(), 0, graphics->GetViewportWidth(), graphics->GetViewportHeight());
+            int draw_buffers[] = {0, 1};
+            graphics->StartMultiBufferOffscreenRender(light_buffer->GetBufferId(), 2, draw_buffers, graphics->GetViewportWidth(), graphics->GetViewportHeight());
             shaders->Bind("lighting");
 
             // Sphere Method
@@ -370,6 +372,25 @@ namespace EG{
                 graphics->BindTexture(deferred_buffer->GetTextureId(3), 0); // translucent
                 rectangle->Draw();
                 shaders->Unbind();
+            }else if (output_type == EG::Graphics::RendererDeferred::DEFERRED_OUTPUT_LIGHTING){
+                Bloom();
+                shaders->Bind("prepass_debug");
+                shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
+                shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
+                shaders->SetInt("out_map", 0);
+                shaders->SetMatrix4("model_matrix", glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, (graphics->GetViewportHeight() / 2.0f), 0.0f)), glm::vec3((graphics->GetViewportWidth() / 2.0f), (graphics->GetViewportHeight() / 2.0f), 1.0f)));
+                graphics->BindTexture(light_buffer->GetTextureId(0), 0);
+                rectangle->Draw();
+                shaders->SetMatrix4("model_matrix", glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3((graphics->GetViewportWidth() / 2.0f), (graphics->GetViewportHeight() / 2.0f), 0.0f)), glm::vec3((graphics->GetViewportWidth() / 2.0f), (graphics->GetViewportHeight() / 2.0f), 1.0f)));
+                graphics->BindTexture(light_buffer->GetTextureId(1), 0);
+                rectangle->Draw();
+                shaders->SetMatrix4("model_matrix", glm::scale(glm::mat4(1.0f), glm::vec3((graphics->GetViewportWidth() / 2.0f), (graphics->GetViewportHeight() / 2.0f), 1.0f)));
+                graphics->BindTexture(deferred_buffer->GetTextureId(2), 0);
+                rectangle->Draw();
+                shaders->SetMatrix4("model_matrix", glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3((graphics->GetViewportWidth() / 2.0f), 0.0f, 0.0f)), glm::vec3((graphics->GetViewportWidth() / 2.0f), (graphics->GetViewportHeight() / 2.0f), 1.0f)));
+                graphics->BindTexture(bloom_buffer->GetTextureId(2), 0);
+                rectangle->Draw();
+                shaders->Unbind();
             }else if (output_type == EG::Graphics::RendererDeferred::DEFERRED_OUTPUT_BLOOM){
                 Bloom();
                 shaders->Bind("prepass_debug");
@@ -435,10 +456,11 @@ namespace EG{
                 shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
                 shaders->SetMatrix4("model_matrix", glm::scale(glm::mat4(1.0f), glm::vec3(float(graphics->GetViewportWidth()), float(graphics->GetViewportHeight()), 1.0f)));
                 shaders->SetInt("color_map", 0);
-                shaders->SetInt("light_map", 1);
-                shaders->SetInt("bloom_map", 2);
-                shaders->SetInt("ssao_map", 3);
-                shaders->SetInt("translucent_map", 4);
+                shaders->SetInt("diffuse_map", 1);
+                shaders->SetInt("specular_map", 2);
+                shaders->SetInt("bloom_map", 3);
+                shaders->SetInt("ssao_map", 4);
+                shaders->SetInt("translucent_map", 5);
                 shaders->SetFloat("luminance", luminance);
                 shaders->SetFloat("luminance_scale", luminance_scale);
                 shaders->SetFloat("bloom_scale", bloom_scale);
@@ -446,9 +468,10 @@ namespace EG{
                 shaders->SetInt("bloom_enabled", bloom_enabled);
                 graphics->BindTexture(deferred_buffer->GetTextureId(1), 0);
                 graphics->BindTexture(light_buffer->GetTextureId(0), 1);
-                graphics->BindTexture(bloom_buffer->GetTextureId(2), 2);
-                graphics->BindTexture(ssao_buffer->GetTextureId(2), 3);
-                graphics->BindTexture(deferred_buffer->GetTextureId(3), 4);
+                graphics->BindTexture(light_buffer->GetTextureId(1), 2);
+                graphics->BindTexture(bloom_buffer->GetTextureId(2), 3);
+                graphics->BindTexture(ssao_buffer->GetTextureId(2), 4);
+                graphics->BindTexture(deferred_buffer->GetTextureId(3), 5);
                 rectangle->Draw();
                 shaders->Unbind();
                 graphics->EndOffscreenRender();
@@ -540,7 +563,9 @@ namespace EG{
             graphics->StartOffscreenRender(bloom_buffer->GetBufferId(), 0, graphics->GetViewportWidth(), graphics->GetViewportHeight());
             shaders->Bind("convolution");
             graphics->BindTexture(light_buffer->GetTextureId(0), 0);
-            shaders->SetInt("map_in", 0);
+            shaders->SetInt("map_in0", 0);
+            graphics->BindTexture(light_buffer->GetTextureId(1), 1);
+            shaders->SetInt("map_in1", 1);
             shaders->SetInt("translucent_map", 1);
             graphics->BindTexture(deferred_buffer->GetTextureId(3), 1);
             shaders->SetFloat2("size", size);
@@ -794,6 +819,8 @@ namespace EG{
             }else if (output_type == EG::Graphics::RendererDeferred::DEFERRED_OUTPUT_NORMAL){
                 output_type = EG::Graphics::RendererDeferred::DEFERRED_OUTPUT_PREPASS;
             }else if (output_type == EG::Graphics::RendererDeferred::DEFERRED_OUTPUT_PREPASS){
+                output_type = EG::Graphics::RendererDeferred::DEFERRED_OUTPUT_LIGHTING;
+            }else if (output_type == EG::Graphics::RendererDeferred::DEFERRED_OUTPUT_LIGHTING) {
                 output_type = EG::Graphics::RendererDeferred::DEFERRED_OUTPUT_BLOOM;
             }
         }

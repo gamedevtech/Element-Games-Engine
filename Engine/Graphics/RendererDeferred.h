@@ -10,7 +10,7 @@ namespace EG{
         class RendererDeferred : public Renderer{
             public:
             enum DeferredOutputType{
-                DEFERRED_OUTPUT_NORMAL, DEFERRED_OUTPUT_PREPASS, DEFERRED_OUTPUT_BLOOM, DEFERRED_OUTPUT_SSAO, DEFERRED_OUTPUT_HDR, DEFERRED_OUTPUT_SHADOW
+                DEFERRED_OUTPUT_NORMAL, DEFERRED_OUTPUT_PREPASS, DEFERRED_OUTPUT_LIGHTING, DEFERRED_OUTPUT_BLOOM, DEFERRED_OUTPUT_SSAO, DEFERRED_OUTPUT_HDR, DEFERRED_OUTPUT_SHADOW
             };
                 RendererDeferred(void);
                 ~RendererDeferred(void);

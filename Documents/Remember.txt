@@ -5,10 +5,12 @@ Remember:
 - Add Camera to Light for shadow mapping!
 - Definitely need to add transformations to meshes (and rigid bodies later) too
 - Create a way to add shaders outside of the renderer class to a specific renderer type! Define in the material?
+    - Also, need a way to define a function which determines which shader gets used for this as well, aka, atmospheric shading from inside or outside the atmosphere
 - GUI Focus
 - Awesomium Backspace Key
 - Fix cube mapping for spheres now that textures are loaded properly
 - Specular component gets lost when decal is dark, even if material specularity is high! This is in composition.frag!
+    - Fix by storing specular map in separate FBO
 
 Profiling and Other Optimizations, moved to git as well:
 gprof... don't forget to compile with -pg!
@@ -20,6 +22,3 @@ perf - linux-tools
 valgrind --tool=callgrind myprog
 
 gprof build/Applications/Tests/Sandbox/element_games_sandbox | python gprof2dot.py | dot -Tpng -o gprof.png
-
-On Improving the Animation:
-Should remember previous timestamp/frame index for each bone and component, and unless the new timestamp is less than the current one, it should always start at the previous frame index for searching for the right frame to use.

@@ -1,7 +1,8 @@
 #version 130
 
 uniform sampler2D color_map;
-uniform sampler2D light_map;
+uniform sampler2D diffuse_map;
+uniform sampler2D specular_map;
 uniform sampler2D bloom_map;
 uniform sampler2D ssao_map;
 uniform sampler2D translucent_map;
@@ -16,7 +17,8 @@ smooth in vec2 texcoord;
 out vec4 fragment_output;
 
 void main(){
-	vec3 light = texture(light_map, texcoord).rgb;
+	vec3 diffuse = texture(diffuse_map, texcoord).rgb;
+	vec3 specular = texture(specular_map, texcoord).rgb;
 	vec3 color = texture(color_map, texcoord).rgb;
 	vec3 bloom = texture(bloom_map, texcoord).rgb;
 	vec3 trans = texture(translucent_map, texcoord).rgb;
@@ -32,7 +34,8 @@ void main(){
 	}
 
 	// NOTE: Currently, if the decal color is black, the specular component goes away :(.
-	vec3 color_output = light * color * ssao;
+	vec3 color_output = diffuse * color * ssao;
+	color_output += specular * ssao;
 	color_output += bloom * bloom_amount * ssao;
 	fragment_output = vec4(color_output + trans, 1.0);
 }
