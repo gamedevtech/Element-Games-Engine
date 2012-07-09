@@ -42,7 +42,7 @@ namespace EG{
         void RendererDeferred::Initialize(void){
             shaders = new EG::Graphics::ShaderManager();
             shaders->Add("prepass", "Shaders/Deferred/prepass.vert", "Shaders/Deferred/prepass.frag", "", "", "", 4);
-            shaders->Add("planet_atmosphere", "Shaders/Deferred/planet_atmosphere.vert", "Shaders/Deferred/planet_atmosphere.frag", "", "", "", 4);
+            shaders->Add("planet_atmosphere", "Shaders/Deferred/atmospheric_scattering.vert", "Shaders/Deferred/atmospheric_scattering.frag", "", "", "", 4);
             shaders->Add("prepass_debug", "Shaders/Deferred/prepass_debug.vert", "Shaders/Deferred/prepass_debug.frag");
             shaders->Add("font_rendering", "Shaders/Basic/font_rendering.vert", "Shaders/Basic/font_rendering.frag");
             shaders->Add("lighting", "Shaders/Deferred/lighting.vert", "Shaders/Deferred/lighting.frag", "", "", "", 2);
