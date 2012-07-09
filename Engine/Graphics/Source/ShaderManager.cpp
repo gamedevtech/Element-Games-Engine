@@ -380,7 +380,6 @@ namespace EG{
                 }
                 pos = line.find("uniform");
                 if (pos != -1){
-                    std::cout << "Line: " << line << std::endl;
                     int type_pos = line.find_first_not_of(' ', pos + 7);
                     int after_type_pos = line.find_first_of(' ', type_pos);
                     std::string type = line.substr(type_pos, after_type_pos - type_pos);

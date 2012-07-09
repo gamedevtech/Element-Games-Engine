@@ -80,7 +80,7 @@ int main(int argc, char **argv){
         temp << "Assets/Textures/generated_planet_height_map_" << i << ".png";
         images[i] = temp.str();
     }
-    EG::Graphics::CubeMap *cube_map = new EG::Graphics::CubeMap(images[CUBE_RIGHT], images[CUBE_LEFT], images[CUBE_TOP], images[CUBE_BOTTOM], images[CUBE_BACK], images[CUBE_FRONT]);
+    EG::Graphics::CubeMap *cube_map = new EG::Graphics::CubeMap(images[CUBE_RIGHT], images[CUBE_LEFT], images[CUBE_BOTTOM], images[CUBE_TOP], images[CUBE_BACK], images[CUBE_FRONT]);
     scene->GetTextureManager()->AddCubeMap("planet_heights", cube_map);
 
     for (unsigned int i = 0; i < 6; i++){
@@ -89,7 +89,7 @@ int main(int argc, char **argv){
         //temp << "Assets/Textures/default_normal.png";
         images[i] = temp.str();
     }
-    cube_map = new EG::Graphics::CubeMap(images[CUBE_RIGHT], images[CUBE_LEFT], images[CUBE_TOP], images[CUBE_BOTTOM], images[CUBE_BACK], images[CUBE_FRONT]);
+    cube_map = new EG::Graphics::CubeMap(images[CUBE_RIGHT], images[CUBE_LEFT], images[CUBE_BOTTOM], images[CUBE_TOP], images[CUBE_BACK], images[CUBE_FRONT]);
     scene->GetTextureManager()->AddCubeMap("planet_normals", cube_map);
 
     EG::Graphics::Texture *decal_gradient = new EG::Graphics::Texture("Assets/Textures/generated_planet_decal_map.png");

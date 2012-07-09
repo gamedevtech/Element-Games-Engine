@@ -51,7 +51,6 @@ void main(){
 
         diffuse_color = (diffuse * attenuation_factor) * light_color;
         specular_color = (specular * attenuation_factor) * light_color;
-        //color = vec4(diffuse_color + specular_color, 1.0);
     }
 
     if (shadow_mapping_enabled == 1){
@@ -59,7 +58,6 @@ void main(){
         shadow_influence = textureProj(shadow_map, projected_coordinate);
     }
 
-    //fragment_output = vec4(color.rgb * shadow_influence, 1.0);
     fragment0 = vec4(diffuse_color * shadow_influence, 1.0);
     fragment1 = vec4(specular_color * shadow_influence, 1.0);
 }

@@ -566,8 +566,8 @@ namespace EG{
             shaders->SetInt("map_in0", 0);
             graphics->BindTexture(light_buffer->GetTextureId(1), 1);
             shaders->SetInt("map_in1", 1);
-            shaders->SetInt("translucent_map", 1);
-            graphics->BindTexture(deferred_buffer->GetTextureId(3), 1);
+            graphics->BindTexture(deferred_buffer->GetTextureId(3), 2);
+            shaders->SetInt("translucent_map", 2);
             shaders->SetFloat2("size", size);
             shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
             shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
