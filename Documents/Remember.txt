@@ -10,6 +10,8 @@ Remember:
 - Awesomium Backspace Key
 - Fix cube mapping for spheres now that textures are loaded properly
     - This involves fixing the texture generation so there's not a 1 pixel border of weird stuff around the edge of generated textures
+- Atmospheric Scattering
+- Deferred Rendering Needs Multipass lighting on Translucent Objects that get Lighting
 
 Profiling and Other Optimizations, moved to git as well:
 gprof... don't forget to compile with -pg!

@@ -1,6 +1,9 @@
 #version 130
 
-smooth in vec3 normal;
+smooth in vec3 camera_to_position;
+smooth in vec2 uv_coord;
+smooth in float alpha;
+smooth in vec3 light_direction;
 
 uniform float material_specularity;
 uniform vec4 material_color;
@@ -13,10 +16,23 @@ out vec4 fragment2;
 out vec4 fragment3;
 
 void main(){
-    float factor = 1.0 - length(cross(normalize(normal), normalize(vec3(0.0, 0.0, -1.0))));
+    const float exposure = 1.5;
+    float g = -0.990;
+    float g2 = g * g;
+    vec4 diffuse = vec4(1.0, 1.0, 1.0, 1.0) * uv_coord.x; // Replace with gradient texture usage!
+    vec4 diffuse2 = vec4(1.0, 1.0, 1.0, 1.0) * min(0.5, uv_coord.x); // float2(min(0.5,uv.x),1)
+    float cosine = dot(normalize(light_direction), normalize(camera_to_position));
+    float cosine2 = cosine * cosine;
+    vec4 diffuse_color = diffuse * alpha;
 
+    float mie_phase = 1.5 * ((1.0 - g2) / (2.0 + g2)) * (1.0 + cosine2) / (1.0 + g2 - 2.0 * g * cosine);
+    vec4 mie_color = diffuse2 * mie_phase * alpha;
+
+    float factor = alpha;
     fragment0 = vec4(0.0, 0.0, 0.0, factor);
     fragment1 = vec4(0.0, 0.0, 0.0, factor);
     fragment2 = vec4(0.0, 0.0, 0.0, factor);
-    fragment3 = vec4(material_color.rgb, factor);
+
+    vec4 color_out = vec4(1.0) - exp((diffuse_color * (1.0 + uv_coord.y) + mie_color) * -exposure);
+    fragment3 = vec4(color_out.rgb, factor);
 }

@@ -23,6 +23,7 @@
 #include "../../../Engine/Utility/JSON.h"
 #include "../../../Engine/Media/ModelLoader.h"
 #include "../../../Engine/Media/ObjectReader.h"
+#include "../../../Engine/Media/ObjectWriter.h"
 #include "../../../Engine/Graphics/Particle.h"
 
 EG::Media::ModelLoader *model;
@@ -40,7 +41,7 @@ int main(int argc, char **argv){
     Sandbox *game = new Sandbox(window, scene);
 
     EG::Graphics::RenderingMaterial *material;
-    EG::Graphics::Mesh *sphere = EG::Graphics::GenerateCubeSphere(4);
+    EG::Graphics::Mesh *sphere = EG::Graphics::GenerateCubeSphere(16);
     scene->GetMeshManager()->Add("planet_sphere", sphere);
 
     scene->GetMeshManager()->Add("rectangle", EG::Graphics::GenerateQuad());
@@ -60,11 +61,8 @@ int main(int argc, char **argv){
     gradients->AddColorGradient(0.35f, 1.0f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     glm::vec4 *colors = EG::Math::GenerateGradientMap(width, height, 4, gradients, "Assets/Textures/generated_planet_decal_map.png");
     for (unsigned int i = 0; i < 6; i++){
-        //delete []normals[i];
         delete []heights[i];
-        //delete []colors[i];
     }
-    //delete []normals;
     delete []heights;
     delete []colors;
     delete noise_generator;
@@ -159,14 +157,14 @@ int main(int argc, char **argv){
 
     // Light 0
     EG::Game::Object *light_object = new EG::Game::Object("RedLight");
-    glm::vec3 light_position = glm::vec3(-4.0f, 5.0f, 5.0f);
+    glm::vec3 light_position = glm::vec3(0.0f, 6.0f, -6.0f);
     translate = glm::translate(light_position);
     scale = glm::scale(0.1f, 0.1f, 0.1f);
     light_object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(translate * scale));
     EG::Graphics::Light *light = new EG::Graphics::Light();
     light->SetPosition(light_position);
     light->SetDirection(-light_position);
-    light->SetColor(glm::vec3(1.0f, 0.0f, 0.0f));
+    light->SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
     //light->SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
     light->SetAttenuation(glm::vec3(0.8f, 0.00125f, 0.0000001f));
     light->SetRadius(100.0f);
@@ -174,47 +172,47 @@ int main(int argc, char **argv){
     light_object->AddAttribute(new EG::Game::ObjectAttributeEmissionLight(light));
     material = new EG::Graphics::RenderingMaterial();
     material->SetLit(false);
-    material->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f));
+    material->SetColor(glm::vec4(1.0f, 1.0f, 1.0f, 0.5f));
     light_object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("sphere", material));
 
-    // Light 1
-    EG::Game::Object *light_object2 = new EG::Game::Object("GreenLight");
-    glm::vec3 light_position2 = glm::vec3(4.0f, 5.0f, 5.0f);
-    translate = glm::translate(light_position2);
-    light_object2->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(translate * scale));
-    EG::Graphics::Light *light2 = new EG::Graphics::Light();
-    light2->SetPosition(light_position2);
-    light2->SetDirection(-light_position2);
-    light2->SetColor(glm::vec3(0.0f, 1.0f, 0.0f));
-    //light2->SetColor(glm::vec3(0.0f, 0.8f, 0.2f));
-    light2->SetAttenuation(glm::vec3(0.8f, 0.00125f, 0.0000001f));
-    light2->SetRadius(100.0f);
-    light2->SetCastsShadows(true);
-    light_object2->AddAttribute(new EG::Game::ObjectAttributeEmissionLight(light2));
-    material = new EG::Graphics::RenderingMaterial();
-    material->SetLit(false);
-    material->SetColor(glm::vec4(0.0f, 1.0f, 0.0f, 0.5f));
-    light_object2->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("sphere", material));
-
-    // Light 2
-    EG::Game::Object *light_object3 = new EG::Game::Object("BlueLight");
-    glm::vec3 light_position3 = glm::vec3(0.0f, 5.0f, -5.0f);
-    translate = glm::translate(light_position3);
-    light_object3->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(translate * scale));
-    EG::Graphics::Light *light3 = new EG::Graphics::Light();
-    light3->SetPosition(light_position3);
-    light3->SetDirection(-light_position3);
-    light3->SetColor(glm::vec3(0.0f, 0.0f, 1.0f));
-    //light3->SetColor(glm::vec3(1.0f, 0.0f, 1.0f));
-    light3->SetAttenuation(glm::vec3(0.8f, 0.00125f, 0.0000001f));
-    light3->SetRadius(100.0f);
-    light3->SetCastsShadows(true);
-    light_object3->AddAttribute(new EG::Game::ObjectAttributeEmissionLight(light3));
-    material = new EG::Graphics::RenderingMaterial();
-    material->SetLit(false);
-    material->SetColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
-    light_object3->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("sphere", material));
-    std::cout << "After Light 2" << std::endl;
+//     // Light 1
+//     EG::Game::Object *light_object2 = new EG::Game::Object("GreenLight");
+//     glm::vec3 light_position2 = glm::vec3(4.0f, 5.0f, 5.0f);
+//     translate = glm::translate(light_position2);
+//     light_object2->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(translate * scale));
+//     EG::Graphics::Light *light2 = new EG::Graphics::Light();
+//     light2->SetPosition(light_position2);
+//     light2->SetDirection(-light_position2);
+//     light2->SetColor(glm::vec3(0.0f, 1.0f, 0.0f));
+//     //light2->SetColor(glm::vec3(0.0f, 0.8f, 0.2f));
+//     light2->SetAttenuation(glm::vec3(0.8f, 0.00125f, 0.0000001f));
+//     light2->SetRadius(100.0f);
+//     light2->SetCastsShadows(true);
+//     light_object2->AddAttribute(new EG::Game::ObjectAttributeEmissionLight(light2));
+//     material = new EG::Graphics::RenderingMaterial();
+//     material->SetLit(false);
+//     material->SetColor(glm::vec4(0.0f, 1.0f, 0.0f, 0.5f));
+//     light_object2->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("sphere", material));
+// 
+//     // Light 2
+//     EG::Game::Object *light_object3 = new EG::Game::Object("BlueLight");
+//     glm::vec3 light_position3 = glm::vec3(0.0f, 5.0f, -5.0f);
+//     translate = glm::translate(light_position3);
+//     light_object3->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(translate * scale));
+//     EG::Graphics::Light *light3 = new EG::Graphics::Light();
+//     light3->SetPosition(light_position3);
+//     light3->SetDirection(-light_position3);
+//     light3->SetColor(glm::vec3(0.0f, 0.0f, 1.0f));
+//     //light3->SetColor(glm::vec3(1.0f, 0.0f, 1.0f));
+//     light3->SetAttenuation(glm::vec3(0.8f, 0.00125f, 0.0000001f));
+//     light3->SetRadius(100.0f);
+//     light3->SetCastsShadows(true);
+//     light_object3->AddAttribute(new EG::Game::ObjectAttributeEmissionLight(light3));
+//     material = new EG::Graphics::RenderingMaterial();
+//     material->SetLit(false);
+//     material->SetColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
+//     light_object3->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("sphere", material));
+//     std::cout << "After Light 2" << std::endl;
 
     // Particle System
     scene->GetMeshManager()->Add("quad", EG::Graphics::GenerateQuad());
@@ -368,8 +366,8 @@ int main(int argc, char **argv){
     objects->AddObject(object3);
     //objects->AddObject(object4);
     objects->AddObject(light_object);
-    objects->AddObject(light_object2);
-    objects->AddObject(light_object3);
+//     objects->AddObject(light_object2);
+//     objects->AddObject(light_object3);
     objects->AddObject(particle_system);
     //objects->AddObject(camera_object);
     game->GetScene()->SetCurrentCamera(main_camera);

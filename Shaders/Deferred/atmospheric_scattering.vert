@@ -34,11 +34,11 @@ float scale(float cosine_value, float scale_depth) {
 }
 
 void main(){
-    vec3 light_position = vec3(-5.0, 5.0, -6.0); // NOTE: Test Data
+    vec3 light_position = vec3(0.0, 6.0, -6.0); // NOTE: Test Data
     float inner_radius = 1.0;
     float outer_radius = 1.1;
 
-    float camera_height = length(camera_position - ((model_matrix * vertex_position).xyz)) - inner_radius;
+    float camera_height = length(camera_position - /*((model_matrix * vertex_position).xyz)*/vertex_position.xyz) - inner_radius;
     float camera_height2 = camera_height * camera_height;
     float outer_radius2 = outer_radius * outer_radius;
     float inner_radius2 = inner_radius * inner_radius;
@@ -51,6 +51,9 @@ void main(){
         1.0 / pow(0.475, 4.0)
     );
     int camera_inside_atmosphere = 0;
+    if (camera_height < (outer_radius - inner_radius)) {
+        camera_inside_atmosphere = 1;
+    }
 
     // Get the ray from the camera to the vertex and it's length
     vec3 ray = vertex_position.xyz - camera_position;
