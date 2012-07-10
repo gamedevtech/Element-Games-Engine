@@ -9,8 +9,7 @@ Remember:
 - GUI Focus
 - Awesomium Backspace Key
 - Fix cube mapping for spheres now that textures are loaded properly
-- Specular component gets lost when decal is dark, even if material specularity is high! This is in composition.frag!
-    - Fix by storing specular map in separate FBO
+    - This involves fixing the texture generation so there's not a 1 pixel border of weird stuff around the edge of generated textures
 
 Profiling and Other Optimizations, moved to git as well:
 gprof... don't forget to compile with -pg!

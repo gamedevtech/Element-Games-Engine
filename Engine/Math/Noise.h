@@ -162,8 +162,9 @@ namespace EG{
 		// NEED Many other features like craters and shit!
 		float *GenerateSphereHeightMap(unsigned int width, unsigned int height, Noise *noise_generator, std::string file_path = "");
 		float **GenerateCubeSphereHeightMap(unsigned int width, unsigned height, Noise *noise_generator, std::string file_path = "");
-		glm::vec4 *GenerateSphereNormalHeightMap(unsigned int width, unsigned int height, float *heights, std::string file_path = "");
-		glm::vec4 **GenerateCubeSphereNormalHeightMap(unsigned int width, unsigned int height, float **heights, std::string file_path = "");
+        void GenerateSphereNormalHeightMap(unsigned int width, unsigned int height, float *heights, std::string file_path);
+		void GenerateCubeSphereNormalHeightMap(unsigned int width, unsigned int height, float **heights, std::string file_path = "");
+        glm::vec3 GenerateNormalFromHeights(float left, float right, float top, float bottom, float normal_scaler = 1.1f);
 		glm::vec4 *GenerateSphereDecalMap(unsigned int width, unsigned int height, float *heights, unsigned int layer_count, ColorGradientSet *gradients, std::string file_path = "");
 		glm::vec4 **GenerateCubeSphereDecalMap(unsigned int width, unsigned int height, float **heights, unsigned int layer_count, ColorGradientSet *gradients, std::string file_path = "");
 		glm::vec4 *GenerateGradientMap(unsigned int width, unsigned int height, unsigned int layer_count, ColorGradientSet *gradients, std::string file_path = "");

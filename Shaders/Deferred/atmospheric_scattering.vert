@@ -34,11 +34,11 @@ float scale(float cosine_value, float scale_depth) {
 }
 
 void main(){
-    vec3 light_position = vec3(0.0, 0.0, 0.0); // NOTE: Test Data
+    vec3 light_position = vec3(-5.0, 5.0, -6.0); // NOTE: Test Data
     float inner_radius = 1.0;
-    float outer_radius = 1.3;
+    float outer_radius = 1.1;
 
-    float camera_height = 0.0; // TODO
+    float camera_height = length(camera_position - ((model_matrix * vertex_position).xyz)) - inner_radius;
     float camera_height2 = camera_height * camera_height;
     float outer_radius2 = outer_radius * outer_radius;
     float inner_radius2 = inner_radius * inner_radius;

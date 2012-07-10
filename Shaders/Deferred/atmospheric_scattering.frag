@@ -20,7 +20,7 @@ out vec4 fragment2;
 out vec4 fragment3;
 
 void main(){
-    vec3 light_position = vec3(0.0, 0.0, 0.0); // NOTE: Hacked in for now.
+    vec3 light_position = vec3(-5.0, 5.0, -6.0); // NOTE: Test Data
 
     float cosine = dot(light_position, direction) / length(direction);
     float mie_phase = 1.5 * ((1.0 - g2) / (2.0 + g2)) * (1.0 + cosine*cosine) / pow(1.0 + g2 - 2.0 * g * cosine, 1.5);
