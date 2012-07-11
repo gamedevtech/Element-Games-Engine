@@ -12,6 +12,7 @@ namespace EG{
             specular_exponent = 16.0f;
             color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
             blending_mode = EG::Graphics::RenderingMaterial::BLEND_OFF;
+            culling_mode = EG::Graphics::RenderingMaterial::CULL_OFF;
         }
 
         RenderingMaterial::~RenderingMaterial(void){
@@ -145,6 +146,12 @@ namespace EG{
 
         EG::Graphics::RenderingMaterial::BlendingMode RenderingMaterial::GetBlendingMode(void){
             return blending_mode;
+        }
+        void RenderingMaterial::SetCullingMode(EG::Graphics::RenderingMaterial::CullingMode _culling_mode) {
+            culling_mode = _culling_mode;
+        }
+        EG::Graphics::RenderingMaterial::CullingMode RenderingMaterial::GetCullingMode(void) {
+            return culling_mode;
         }
     }
 }

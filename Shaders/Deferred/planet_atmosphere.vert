@@ -20,7 +20,7 @@ smooth out vec2 uv_coord;
 smooth out float alpha;
 smooth out vec3 light_direction;
 
-void main(){
+void main() {
     vec3 light_position = vec3(0.0, 6.0, -6.0);
     float inner_radius = 1.0;
     float outer_radius = 1.1;
@@ -32,11 +32,11 @@ void main(){
     light_direction = normalize(vertex_position.xyz - light_position);
     vec3 normal = normalize(vertex_position.xyz);
     vec3 ray_direction = camera_to_position / far_distance;
-    float camera_height = length(camera_position - (model_matrix * vec4(0.0, 0.0, 0.0, 1.0)).xyz/*((model_matrix * vertex_position).xyz)*/);
+    float camera_height = length(camera_position - /*(model_matrix * vec4(0.0, 0.0, 0.0, 1.0)).xyz*/((model_matrix * vertex_position).xyz));
     float camera_height2 = camera_height * camera_height;
 
     float B = 2.0 * dot(camera_position, ray_direction);
-    float C = camera_height2 - outer_radius2;
+    float C = camera_height2;// - outer_radius2;
     float det = max(0.0, B*B - 4.0 * C);
     float near_distance = 0.5 * (-B - sqrt(det));
     vec3 near_position = camera_position + (ray_direction * near_distance);
@@ -46,17 +46,17 @@ void main(){
     float ln = dot(light_direction, normal);
     float lnn = dot(light_direction, near_normal);
 
-    float altitude = camera_height - inner_radius;
+    float altitude = camera_height - (outer_radius - inner_radius);// - inner_radius;
     float horizon_distance = sqrt((altitude * altitude) + (2.0 * inner_radius * altitude));
     float max_dot = horizon_distance / camera_height;
 
-    altitude = max(0.0, camera_height - outer_radius);
+    altitude = max(0.0, camera_height/* - outer_radius*/);
     horizon_distance = sqrt((altitude * altitude) + (2.0 * outer_radius * altitude));
 
     float tweak_amount = 0.1;
     float min_dot = max(tweak_amount, horizon_distance / camera_height);
 
-    float min_dot2 = ((camera_height - outer_radius) * (1.0 / (outer_radius - inner_radius))) - (1.0 - tweak_amount);
+    float min_dot2 = ((camera_height/* - outer_radius*/) * (1.0 / (outer_radius - inner_radius))) - (1.0 - tweak_amount);
     min_dot = min(min_dot, min_dot2);
 
     float pos_dot = dot(camera_to_position / far_distance, -camera_position / camera_height) - min_dot;

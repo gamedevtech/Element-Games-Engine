@@ -35,6 +35,11 @@ namespace EG{
                     BLEND_ALPHA_PARTICLE = 4,
                     BLEND_COLOR_PARTICLE = 5
                 };
+                enum CullingMode{
+                    CULL_OFF = 0,
+                    CULL_FRONT = 1,
+                    CULL_BACK = 2
+                };
 
                 RenderingMaterial(void);
                 ~RenderingMaterial(void);
@@ -69,10 +74,13 @@ namespace EG{
 
                 void SetBlendingMode(EG::Graphics::RenderingMaterial::BlendingMode _blending_mode);
                 EG::Graphics::RenderingMaterial::BlendingMode GetBlendingMode(void);
+                void SetCullingMode(EG::Graphics::RenderingMaterial::CullingMode _culling_mode);
+                EG::Graphics::RenderingMaterial::CullingMode GetCullingMode(void);
             private:
                 bool lit, translucent, casts_shadows;
                 float ambient, diffuse, specular;
                 float specular_exponent;
+                EG::Graphics::RenderingMaterial::CullingMode culling_mode;
                 glm::vec4 color;
                 EG::Graphics::RenderingMaterial::BlendingMode blending_mode;
                 EG::Utility::Dictionary<EG::Graphics::RenderingMaterial::RenderingMaterialTextureType, std::string> textures;

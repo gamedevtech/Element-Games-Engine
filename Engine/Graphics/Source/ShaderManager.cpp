@@ -443,6 +443,7 @@ namespace EG{
             engine_uniform_string_translations.Set("camera_matrix", EG::Graphics::ShaderManager::ENGINE_CAMERA_MATRIX);
             engine_uniform_string_translations.Set("camera_position", EG::Graphics::ShaderManager::ENGINE_CAMERA_POSITION);
             engine_uniform_string_translations.Set("view_matrix", EG::Graphics::ShaderManager::ENGINE_VIEW_MATRIX);
+            engine_uniform_string_translations.Set("invserse_view_matrix", EG::Graphics::ShaderManager::ENGINE_INVERSE_VIEW_MATRIX);
             engine_uniform_string_translations.Set("model_matrix", EG::Graphics::ShaderManager::ENGINE_MODEL_MATRIX);
             engine_uniform_string_translations.Set("normal_matrix", EG::Graphics::ShaderManager::ENGINE_NORMAL_MATRIX);
             engine_uniform_string_translations.Set("light_position", EG::Graphics::ShaderManager::ENGINE_LIGHT_POSITION);

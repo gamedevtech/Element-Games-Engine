@@ -207,6 +207,8 @@ namespace EG{
                     shaders->SetMatrix4("camera_matrix", camera->GetViewMatrix());
                 }else if (variable == EG::Graphics::ShaderManager::ENGINE_VIEW_MATRIX) {
                     shaders->SetMatrix4("view_matrix", camera->GetViewMatrix());
+                }else if (variable == EG::Graphics::ShaderManager::ENGINE_INVERSE_VIEW_MATRIX) {
+                    shaders->SetMatrix4("inverse_view_matrix", camera->GetInverseViewMatrix());
                 }else if (variable == EG::Graphics::ShaderManager::ENGINE_PROJECTION_MATRIX) {
                     shaders->SetMatrix4("projection_matrix", camera->GetProjectionMatrix());
                 }else if (variable == EG::Graphics::ShaderManager::ENGINE_PERSPECTIVE_MATRIX) {

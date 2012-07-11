@@ -9,18 +9,19 @@ uniform float material_specularity;
 uniform vec4 material_color;
 uniform int normal_mapping_enabled;
 uniform int receives_lighting;
+uniform sampler2D decal_map;
 
 out vec4 fragment0;
 out vec4 fragment1;
 out vec4 fragment2;
 out vec4 fragment3;
 
-void main(){
+void main() {
     const float exposure = 1.5;
     float g = -0.990;
     float g2 = g * g;
-    vec4 diffuse = vec4(1.0, 1.0, 1.0, 1.0) * uv_coord.x; // Replace with gradient texture usage!
-    vec4 diffuse2 = vec4(1.0, 1.0, 1.0, 1.0) * min(0.5, uv_coord.x); // float2(min(0.5,uv.x),1)
+    vec4 diffuse = texture(decal_map, uv_coord);
+    vec4 diffuse2 = texture(decal_map, vec2(min(0.5, uv_coord.x), 1.0));
     float cosine = dot(normalize(light_direction), normalize(camera_to_position));
     float cosine2 = cosine * cosine;
     vec4 diffuse_color = diffuse * alpha;
@@ -28,7 +29,7 @@ void main(){
     float mie_phase = 1.5 * ((1.0 - g2) / (2.0 + g2)) * (1.0 + cosine2) / (1.0 + g2 - 2.0 * g * cosine);
     vec4 mie_color = diffuse2 * mie_phase * alpha;
 
-    float factor = alpha;
+    float factor = max(alpha, 0.5);
     fragment0 = vec4(0.0, 0.0, 0.0, factor);
     fragment1 = vec4(0.0, 0.0, 0.0, factor);
     fragment2 = vec4(0.0, 0.0, 0.0, factor);

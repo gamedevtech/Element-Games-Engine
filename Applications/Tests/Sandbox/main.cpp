@@ -41,7 +41,7 @@ int main(int argc, char **argv){
     Sandbox *game = new Sandbox(window, scene);
 
     EG::Graphics::RenderingMaterial *material;
-    EG::Graphics::Mesh *sphere = EG::Graphics::GenerateCubeSphere(16);
+    EG::Graphics::Mesh *sphere = EG::Graphics::GenerateCubeSphere(8);
     scene->GetMeshManager()->Add("planet_sphere", sphere);
 
     scene->GetMeshManager()->Add("rectangle", EG::Graphics::GenerateQuad());
@@ -111,6 +111,11 @@ int main(int argc, char **argv){
     material = new EG::Graphics::RenderingMaterial();
     material->SetLit(false);
     material->SetColor(glm::vec4(0.25f, 0.25f, 0.5f, 0.5f));
+    material->SetCastsShadows(false);
+    material->SetCullingMode(EG::Graphics::RenderingMaterial::CULL_OFF);
+    EG::Graphics::Texture *atmosphere_gradient = new EG::Graphics::Texture("Assets/Textures/atmosphere_gradient.png");
+    scene->GetTextureManager()->AddTexture("atmosphere_gradient", atmosphere_gradient);
+    material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "atmosphere_gradient");
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "planet_atmosphere");
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "planet_atmosphere");
     material->SetCastsShadows(false);
@@ -347,7 +352,7 @@ int main(int argc, char **argv){
     std::cout << "Loaded Model: " << read_object->GetObjectName() << std::endl;
     // END TEST
 
-    EG::Graphics::Camera *main_camera = new EG::Graphics::Camera(45.0f, glm::ivec2(graphics->GetViewportWidth(), graphics->GetViewportHeight()), glm::vec2(0.1f, 100.0f));
+    EG::Graphics::Camera *main_camera = new EG::Graphics::Camera(45.0f, glm::ivec2(graphics->GetViewportWidth(), graphics->GetViewportHeight()), glm::vec2(0.001f, 100.0f));
     main_camera->ComputeProjectionMatrix();
     main_camera->SetPosition(glm::vec3(-0.7f, 2.5f, 5.0f));
     main_camera->RotateByMouse(glm::vec2(0.0f, -200.0f));
