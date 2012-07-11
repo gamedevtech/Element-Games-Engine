@@ -34,7 +34,7 @@ void main() {
     float camera_height = length(camera_position);
     vec3 camera_to_position = world_position - camera_position;
     float far_distance = length(camera_to_position);
-    vec3 light_direction = normalize(light_position);
+    vec3 light_direction = normalize(light_position - camera_position);
 
     vec3 ray_direction = camera_to_position / far_distance;
     float camera_height2 = camera_height * camera_height;
@@ -89,6 +89,9 @@ void main() {
     float mie_phase = 1.5 * ((1.0 - g2) / (2.0 + g2)) * (1.0 + cosine2) /(1.0 + g2 - 2.0 * g * cosine);
     vec4 mie_color = diffuse2 * mie_phase * alpha;
 
+    if (alpha < 0.1) {
+        discard;
+    }
     float factor = alpha;//max(alpha, 0.5);
     fragment0 = vec4(0.0, 0.0, 0.0, factor);
     fragment1 = vec4(0.0, 0.0, 0.0, factor);
