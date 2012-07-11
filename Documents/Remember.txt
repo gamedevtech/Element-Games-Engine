@@ -13,6 +13,8 @@ Remember:
 - Atmospheric Scattering
 - Deferred Rendering Needs Multipass lighting on Translucent Objects that get Lighting
 - Fix window resizing
+- Impelement Specular Mapping
+- Implement General Tessellation Displacement Mapping (from height map)
 
 Profiling and Other Optimizations, moved to git as well:
 gprof... don't forget to compile with -pg!
