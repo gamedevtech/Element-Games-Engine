@@ -23,14 +23,15 @@ void main() {
     float outer_radius = 1.1;
 
     // constants
-    float stretch_amount = 0.01;
+    float stretch_amount = 0.001;
     float exposure = 0.9;//1.5;
     float g = -0.990;
     float g2 = g * g;
-    float tweak_amount = 0.1;
+    float tweak_amount = 0.01;
 
     // NOTE: radius is the same as outer_radius
     float outer_radius2 = outer_radius * outer_radius;
+    //float camera_height = length(camera_position - world_position + (outer_radius - inner_radius));
     float camera_height = length(camera_position);
     vec3 camera_to_position = world_position - camera_position;
     float far_distance = length(camera_to_position);
@@ -89,7 +90,7 @@ void main() {
     float mie_phase = 1.5 * ((1.0 - g2) / (2.0 + g2)) * (1.0 + cosine2) /(1.0 + g2 - 2.0 * g * cosine);
     vec4 mie_color = diffuse2 * mie_phase * alpha;
 
-    if (alpha < 0.1) {
+    if (alpha < 0.0001) {
         discard;
     }
     float factor = alpha;//max(alpha, 0.5);
