@@ -136,10 +136,8 @@ namespace EG{
                         }
                         delete _table[i];
                     }
+                    _table[i] = NULL;
                 }
-                delete []_table;
-                initialized = false;
-                _table = NULL;
             }
         }
 

@@ -33,12 +33,15 @@ namespace EG{
                 //glm::mat4 orthographics_projection_matrix; // created in base renderer
                 EG::Graphics::Mesh *rectangle;
                 EG::Graphics::Mesh *light_sphere;
+                //EG::Utility::UnsignedIntDictionary<EG::Game::Object *> translucent_lit_objects;
+                std::map<unsigned int, EG::Game::Object *> translucent_lit_objects;
 
                 void Bloom(void);
                 void SSAO(void);
                 void ShadowMapping(EG::Game::Scene *scene);
 
                 void RenderObject(EG::Game::Scene *scene, EG::Game::Object *object);
+                void RenderObjectForward(EG::Game::Scene *scene, EG::Graphics::Light *light, EG::Game::Object *object);
                 void CalculateLighting(EG::Game::Scene *scene, EG::Graphics::Light *light);
                 void Prepass(EG::Game::Scene *scene);
                 void Lighting(EG::Game::Scene *scene);

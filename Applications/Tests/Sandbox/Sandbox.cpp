@@ -16,6 +16,9 @@ Sandbox::~Sandbox(void){
 
 void Sandbox::Update(void){
     float movement_speed = time->GetFrameTime() * 2.0f;
+    if (input->IsKeyDown(EG::Input::v)) {
+        movement_speed /= 100.0f;
+    }
     if (input->IsMouseDown(EG::Input::mouse_right)){
         scene->GetCurrentCamera()->RotateByMouse(input->GetMouseDelta());
     }

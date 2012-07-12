@@ -749,7 +749,8 @@ namespace EG{
             BLEND_COLOR = 2,
             BLEND_ADDITIVE = 3,
             BLEND_ALPHA_PARTICLE = 4,
-            BLEND_COLOR_PARTICLE = 5
+            BLEND_COLOR_PARTICLE = 5,
+            BLEND_ONE_ONE_MINUS_SRC_ALPHA = 6
         };
         void OpenGLInterface::SetBlendingMode(unsigned int blending_mode){
             if (blending_mode == 1){
@@ -767,6 +768,9 @@ namespace EG{
             }else if (blending_mode == 5){
                 glEnable(GL_BLEND);
                 glBlendFunc(GL_SRC_COLOR, GL_ONE);
+            }else if (blending_mode == 6){
+                glEnable(GL_BLEND);
+                glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
             }else{
                 glDisable(GL_BLEND);
             }

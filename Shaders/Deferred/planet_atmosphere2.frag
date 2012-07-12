@@ -10,6 +10,9 @@ uniform vec4 material_color;
 uniform int normal_mapping_enabled;
 uniform int receives_lighting;
 uniform sampler2D decal_map;
+uniform vec4 light_position;
+uniform float inner_radius;
+uniform float outer_radius;
 
 out vec4 fragment0;
 out vec4 fragment1;
@@ -17,11 +20,6 @@ out vec4 fragment2;
 out vec4 fragment3;
 
 void main() {
-    // vars that need to be sent in instead
-    vec3 light_position = vec3(0.0, 6.0, -6.0);
-    float inner_radius = 1.0;
-    float outer_radius = 1.1;
-
     // constants
     float stretch_amount = 0.001;
     float exposure = 0.9;//1.5;
@@ -35,7 +33,7 @@ void main() {
     float camera_height = length(camera_position);
     vec3 camera_to_position = world_position - camera_position;
     float far_distance = length(camera_to_position);
-    vec3 light_direction = normalize(light_position - camera_position);
+    vec3 light_direction = normalize(light_position.xyz - camera_position);
 
     vec3 ray_direction = camera_to_position / far_distance;
     float camera_height2 = camera_height * camera_height;
@@ -93,11 +91,11 @@ void main() {
     if (alpha < 0.0001) {
         discard;
     }
-    float factor = alpha;//max(alpha, 0.5);
-    fragment0 = vec4(0.0, 0.0, 0.0, factor);
-    fragment1 = vec4(0.0, 0.0, 0.0, factor);
-    fragment2 = vec4(0.0, 0.0, 0.0, factor);
-
     vec4 color_out = vec4(1.0) - exp((diffuse_color * (1.0 + uv.y) + mie_color) * -exposure);
-    fragment3 = vec4(color_out.rgb, alpha);
+    //color_out.a = alpha;
+
+    fragment0 = vec4(0.0, 0.0, 0.0, color_out.a);
+    fragment1 = vec4(0.0, 0.0, 0.0, color_out.a);
+    fragment2 = vec4(0.0, 0.0, 0.0, color_out.a);
+    fragment3 = vec4(color_out);
 }

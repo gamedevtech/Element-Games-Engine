@@ -356,42 +356,46 @@ namespace EG{
             while (uniform_iter != uniforms->end()){
                 std::pair<std::string, EG::Graphics::ShaderManager::ShaderUniformTypes> variable = (*uniform_iter);
                 if (variable.second == EG::Graphics::ShaderManager::UNIFORM_INT) {
-                    // Seems this should be stored in a better format.
-                    attrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_INTEGER);
-                    attrs_iter = attrs->begin();
-                    bool found = false;
-                    EG::Game::ObjectAttributeBasicInteger *needed_int;
-                    while (attrs_iter != attrs->end() && !found) {
-                        EG::Game::ObjectAttributeBasicInteger *int_attr = static_cast<EG::Game::ObjectAttributeBasicInteger *>((*attrs_iter));
-                        if (int_attr->GetKey() == variable.first) {
-                            needed_int = int_attr;
-                            found = true;
+                    if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_INTEGER)) {
+                        // Seems this should be stored in a better format.
+                        attrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_INTEGER);
+                        attrs_iter = attrs->begin();
+                        bool found = false;
+                        EG::Game::ObjectAttributeBasicInteger *needed_int;
+                        while (attrs_iter != attrs->end() && !found) {
+                            EG::Game::ObjectAttributeBasicInteger *int_attr = static_cast<EG::Game::ObjectAttributeBasicInteger *>((*attrs_iter));
+                            if (int_attr->GetKey() == variable.first) {
+                                needed_int = int_attr;
+                                found = true;
+                            }
+                            ++attrs_iter;
                         }
-                        ++attrs_iter;
-                    }
-                    if (found) {
-                        shaders->SetInt(variable.first.c_str(), needed_int->GetValue());
-                    } else {
-                        std::cout << "Couldn't find attribute (" << variable.second << ") in integer attributes of object " << object->GetObjectName() << std::endl;
+                        if (found) {
+                            shaders->SetInt(variable.first.c_str(), needed_int->GetValue());
+                        } else {
+                            std::cout << "Couldn't find attribute (" << variable.second << ") in integer attributes of object " << object->GetObjectName() << std::endl;
+                        }
                     }
                 } else if (variable.second == EG::Graphics::ShaderManager::UNIFORM_FLOAT) {
-                    // Seems this should be stored in a better format.
-                    attrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_FLOAT);
-                    attrs_iter = attrs->begin();
-                    bool found = false;
-                    EG::Game::ObjectAttributeBasicFloat *needed_float;
-                    while (attrs_iter != attrs->end() && !found) {
-                        EG::Game::ObjectAttributeBasicFloat *float_attr = static_cast<EG::Game::ObjectAttributeBasicFloat *>((*attrs_iter));
-                        if (float_attr->GetKey() == variable.first) {
-                            needed_float = float_attr;
-                            found = true;
+                    if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_FLOAT)) {
+                        // Seems this should be stored in a better format.
+                        attrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_FLOAT);
+                        attrs_iter = attrs->begin();
+                        bool found = false;
+                        EG::Game::ObjectAttributeBasicFloat *needed_float;
+                        while (attrs_iter != attrs->end() && !found) {
+                            EG::Game::ObjectAttributeBasicFloat *float_attr = static_cast<EG::Game::ObjectAttributeBasicFloat *>((*attrs_iter));
+                            if (float_attr->GetKey() == variable.first) {
+                                needed_float = float_attr;
+                                found = true;
+                            }
+                            ++attrs_iter;
                         }
-                        ++attrs_iter;
-                    }
-                    if (found) {
-                        shaders->SetFloat(variable.first.c_str(), needed_float->GetValue());
-                    } else {
-                        std::cout << "Couldn't find attribute (" << variable.second << ") in float attributes of object " << object->GetObjectName() << std::endl;
+                        if (found) {
+                            shaders->SetFloat(variable.first.c_str(), needed_float->GetValue());
+                        } else {
+                            std::cout << "Couldn't find attribute (" << variable.second << ") in float attributes of object " << object->GetObjectName() << std::endl;
+                        }
                     }
                 }
                 ++uniform_iter;

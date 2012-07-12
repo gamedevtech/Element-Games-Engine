@@ -33,7 +33,8 @@ namespace EG{
                     BLEND_COLOR = 2,
                     BLEND_ADDITIVE = 3,
                     BLEND_ALPHA_PARTICLE = 4,
-                    BLEND_COLOR_PARTICLE = 5
+                    BLEND_COLOR_PARTICLE = 5,
+                    BLEND_ONE_ONE_MINUS_SRC_ALPHA = 6
                 };
                 enum CullingMode{
                     CULL_OFF = 0,

@@ -43,6 +43,7 @@ namespace EG{
             shaders = new EG::Graphics::ShaderManager();
             shaders->Add("prepass", "Shaders/Deferred/prepass.vert", "Shaders/Deferred/prepass.frag", "", "", "", 4);
             shaders->Add("planet_atmosphere", "Shaders/Deferred/planet_atmosphere2.vert", "Shaders/Deferred/planet_atmosphere2.frag", "", "", "", 4);
+            shaders->Add("translucent_lit_prepass", "Shaders/Deferred/translucent_lit_prepass.vert", "Shaders/Deferred/translucent_lit_prepass.frag", "", "", "", 4);
             shaders->Add("prepass_debug", "Shaders/Deferred/prepass_debug.vert", "Shaders/Deferred/prepass_debug.frag");
             shaders->Add("font_rendering", "Shaders/Basic/font_rendering.vert", "Shaders/Basic/font_rendering.frag");
             shaders->Add("lighting", "Shaders/Deferred/lighting.vert", "Shaders/Deferred/lighting.frag", "", "", "", 2);
@@ -119,6 +120,13 @@ namespace EG{
                 while (mesh_attribute_iterator != mesh_attributes->end()){
                     EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
                     EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
+                    if (material->GetTranslucent() && material->GetLit()) {
+                        // Needs Forward Rendering
+                        translucent_lit_objects[object->GetObjectId()] = object;
+                        //translucent_lit_objects.Set(object->GetObjectId(), object);
+                        ++mesh_attribute_iterator;
+                        continue;
+                    }
                     EG::Graphics::RenderingMaterial::CullingMode cull_mode = material->GetCullingMode();
                     if (cull_mode == EG::Graphics::RenderingMaterial::CULL_OFF) {
                         glDisable(GL_CULL_FACE); // Should be enabled all of the time?
@@ -205,6 +213,79 @@ namespace EG{
             }
         }
 
+        void RendererDeferred::RenderObjectForward(EG::Game::Scene *scene, EG::Graphics::Light *light, EG::Game::Object *object){
+            EG::Graphics::Camera *camera = scene->GetCurrentCamera();
+            // Meshes
+            glm::vec3 lp = light->GetPosition();
+            glm::vec4 light_position = glm::vec4(lp.x, lp.y, lp.z, 1.0f);
+            if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH)){
+                std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+                std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
+                while (mesh_attribute_iterator != mesh_attributes->end()){
+                    EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
+                    EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
+                    EG::Graphics::RenderingMaterial::CullingMode cull_mode = material->GetCullingMode();
+                    if (cull_mode == EG::Graphics::RenderingMaterial::CULL_OFF) {
+                        glDisable(GL_CULL_FACE); // Should be enabled all of the time?
+                    } else if (cull_mode == EG::Graphics::RenderingMaterial::CULL_FRONT) {
+                        glEnable(GL_CULL_FACE); // Should be enabled all of the time?
+                        glCullFace(GL_FRONT);
+                    } else if (cull_mode == EG::Graphics::RenderingMaterial::CULL_BACK) {
+                        glEnable(GL_CULL_FACE); // Should be enabled all of the time?
+                        glCullFace(GL_BACK);
+                    }
+                    graphics->SetBlendingMode(material->GetBlendingMode());
+                    bool custom_shader = false;
+
+                    // Transformation
+                    std::vector<EG::Game::ObjectAttribute *> *transformation_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
+                    EG::Game::ObjectAttributeBasicTransformation *transformation_attribute = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(transformation_attributes->at(0));
+                    glm::mat4 transformation = transformation_attribute->GetTransformation();
+
+                    if (material->HasShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER)){
+                        custom_shader = true;
+                        shaders->Unbind();
+                        std::string shader_id = material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER);
+                        current_shader_id = shader_id;
+                        shaders->Bind(current_shader_id);
+                        BindShaderBeginUniforms(current_shader_id, scene, light);
+                    } else {
+                        if (current_shader_id != "translucent_lit_prepass") {
+                            current_shader_id = "translucent_lit_prepass";
+                            shaders->Unbind();
+                            shaders->Bind(current_shader_id);
+                            BindShaderBeginUniforms(current_shader_id, scene, light); // TODO: REUSE THIS WHERE THE SHADER IS INITIALLY BOUND TOO!
+                        }
+                    }
+
+                    BindCustomShaderUniforms(object, current_shader_id);
+                    BindEngineShaderUniforms(object, current_shader_id, "Lighting", transformation, material, scene);
+
+                    EG::Graphics::Mesh *mesh = scene->GetMeshManager()->Get(mesh_attribute->GetMeshId());
+                    if (mesh){
+                        mesh->Draw();
+                    }
+                    ++mesh_attribute_iterator;
+                    graphics->SetBlendingMode();
+                }
+            }
+
+            if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM)){
+                std::vector<EG::Game::ObjectAttribute *> *attrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM);
+                std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+                while (attr_iter != attrs->end()){
+                    EG::Game::ObjectAttributeEmissionParticleSystem *pattr = static_cast<EG::Game::ObjectAttributeEmissionParticleSystem *>(*attr_iter);
+                    EG::Graphics::ParticleSystem *psys = pattr->GetParticleSystem();
+                    std::list<EG::Graphics::Particle *>::iterator piter = psys->GetParticles()->begin();
+                    while (piter != psys->GetParticles()->end()){
+                        RenderObjectForward(scene, light, *piter);
+                        ++piter;
+                    }
+                    ++attr_iter;
+                }
+            }
+        }
+
         void RendererDeferred::Prepass(EG::Game::Scene *scene){
             EG::Graphics::Camera *camera = scene->GetCurrentCamera();
             int draw_buffers[] = {0, 1, 2, 3};
@@ -221,6 +302,34 @@ namespace EG{
                 RenderObject(scene, object);
                 ++object_iterator;
             }
+
+            // Render Translucent yet Lit Objects Forwardly
+            current_shader_id = "translucent_lit_prepass";
+            EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
+            EG::Utility::UnsignedIntDictionaryKeysIterator light_object_iterator = light_objects->GetKeysBegin();
+            while (light_object_iterator != light_objects->GetKeysEnd()){
+                EG::Game::Object *light_object = light_objects->Get(*light_object_iterator);
+                if (light_object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT)){
+                    std::vector<EG::Game::ObjectAttribute *> *light_attributes = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
+                    std::vector<EG::Game::ObjectAttribute *>::iterator light_attribute_iterator = light_attributes->begin();
+                    while (light_attribute_iterator != light_attributes->end()){
+                        EG::Game::ObjectAttributeEmissionLight *light_attribute = static_cast<EG::Game::ObjectAttributeEmissionLight *>(*light_attribute_iterator);
+                        EG::Graphics::Light *light = light_attribute->GetLight();
+                        BindShaderBeginUniforms(current_shader_id, scene, light);
+                        std::map<unsigned int, EG::Game::Object *>::iterator trans_obj_iter = translucent_lit_objects.begin();
+                        while (trans_obj_iter != translucent_lit_objects.end()) {
+                            EG::Game::Object *object = objects->Get((*trans_obj_iter).first);
+                            RenderObjectForward(scene, light, object);
+                            ++trans_obj_iter;
+                        }
+                        ++light_attribute_iterator;
+                    }
+                }
+                ++light_object_iterator;
+            }
+            //translucent_lit_objects.Clear();
+            translucent_lit_objects.clear();
+
             graphics->EndMultiBufferOffscreenRender();
         }
 

@@ -109,18 +109,24 @@ int main(int argc, char **argv){
     planet_transform = planet_transform * glm::scale(1.1f, 1.1f, 1.1f);
     pa->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(planet_transform));
     material = new EG::Graphics::RenderingMaterial();
-    material->SetLit(false);
-    material->SetColor(glm::vec4(0.25f, 0.25f, 0.5f, 0.5f));
+    material->SetLit(true);
+    material->SetTranslucent(true);
     material->SetCastsShadows(false);
+    material->SetColor(glm::vec4(0.25f, 0.25f, 0.5f, 0.5f));
     material->SetCullingMode(EG::Graphics::RenderingMaterial::CULL_OFF);
+    material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ONE_ONE_MINUS_SRC_ALPHA);
+//     material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ALPHA);
     EG::Graphics::Texture *atmosphere_gradient = new EG::Graphics::Texture("Assets/Textures/atmosphere_gradient.png");
     scene->GetTextureManager()->AddTexture("atmosphere_gradient", atmosphere_gradient);
     material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "atmosphere_gradient");
-    material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "planet_atmosphere");
-    material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "planet_atmosphere");
+    //material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "planet_atmosphere");
+    //material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "planet_atmosphere");
+    material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER, "planet_atmosphere");
     material->SetCastsShadows(false);
     material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ALPHA);
     pa->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));
+    pa->AddAttribute(new EG::Game::ObjectAttributeBasicFloat("inner_radius", 1.0f));
+    pa->AddAttribute(new EG::Game::ObjectAttributeBasicFloat("outer_radius", 1.1f));
 
     // Test Cube2
     EG::Graphics::Mesh *cube = EG::Graphics::GenerateCube();
@@ -251,6 +257,7 @@ int main(int argc, char **argv){
             material->SetSpecular(1.0f);
             material->SetColor(glm::vec4(0.1f, 0.3f, 0.7f, 0.75f));
             material->SetLit(false);
+            material->SetTranslucent(true);
             material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ALPHA_PARTICLE);
             material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "particle");
             material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "billboarding");
