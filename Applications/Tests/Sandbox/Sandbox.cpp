@@ -143,5 +143,17 @@ void Sandbox::Update(void){
         }
     }*/
 
+    // TODO: Rotate Planet!
+    EG::Game::Object *planet = scene->GetObjectManager()->GetObjectByName("Planet");
+    std::vector<EG::Game::ObjectAttribute *> *attrs = planet->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
+    std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+    while (attr_iter != attrs->end()){
+        EG::Game::ObjectAttributeBasicTransformation *trans_attr = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(*attr_iter);
+        glm::mat4 trans = trans_attr->GetTransformation();
+        trans = glm::rotate(trans, 0.1f, glm::vec3(0.0f, 1.0f, 0.0f));
+        trans_attr->SetTransformation(trans);
+        ++attr_iter;
+    }
+
     physics->Update(time->GetFrameTime());
 }

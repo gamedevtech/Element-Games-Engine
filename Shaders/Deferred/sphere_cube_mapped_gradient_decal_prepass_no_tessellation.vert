@@ -15,13 +15,14 @@ in ivec4 vertex_weight_indices;
 
 smooth out vec3 position;
 smooth out vec3 normal;
+smooth out vec3 texcoord;
 smooth out vec3 binormal;
 smooth out vec3 bitangent;
 
 void main(){
 	position = (model_matrix * vertex_position).xyz;
-	//texcoord = vertex_texcoord.st;
-	normal = normalize(vertex_position).xyz;
+	texcoord = normalize(vertex_position).xyz;
+	normal = normalize(normal_matrix * vertex_position).xyz;
 	binormal = normalize(normal_matrix * vec4(vertex_binormal.xyz, 0.0)).xyz;
 	bitangent = normalize(normal_matrix * vec4(vertex_bitangent.xyz, 0.0)).xyz;
 

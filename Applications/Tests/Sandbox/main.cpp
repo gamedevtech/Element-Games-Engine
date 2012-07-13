@@ -53,13 +53,18 @@ int main(int argc, char **argv){
     float **heights = EG::Math::GenerateCubeSphereHeightMap(width, height, noise_generator, "Assets/Textures/generated_planet_height_map.png");
     EG::Math::GenerateCubeSphereNormalHeightMap(width, height, heights, "Assets/Textures/generated_planet_normal_map.png");
     EG::Math::ColorGradientSet *gradients = new EG::Math::ColorGradientSet();
-    gradients->AddColorGradient(-1.0f, -0.3f, glm::vec4(0.0f, 0.0f, 0.25f, 1.0f), glm::vec4(0.0f, 0.25f, 1.0f, 1.0f));
-    gradients->AddColorGradient(-0.3f, -0.2f, glm::vec4(1.0f, 1.0f, 0.35f, 1.0f), glm::vec4(0.64f, 0.85f, 0.0f, 1.0f));
+    gradients->AddColorGradient(-1.0f, -0.4f, glm::vec4(0.0f, 0.0f, 0.25f, 1.0f), glm::vec4(0.0f, 0.25f, 1.0f, 1.0f));
+    gradients->AddColorGradient(-0.4f, -0.2f, glm::vec4(1.0f, 1.0f, 0.35f, 1.0f), glm::vec4(0.64f, 0.85f, 0.0f, 1.0f));
     gradients->AddColorGradient(-0.2f, 0.0f, glm::vec4(0.64f, 0.85f, 0.0f, 1.0f), glm::vec4(0.14f, 0.55f, 0.1f, 1.0f));
     gradients->AddColorGradient(0.0f, 0.15f, glm::vec4(0.14f, 0.55f, 0.1f, 1.0f), glm::vec4(0.45f, 0.37f, 0.0f, 1.0f));
     gradients->AddColorGradient(0.15f, 0.35f, glm::vec4(0.45f, 0.37f, 0.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     gradients->AddColorGradient(0.35f, 1.0f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     glm::vec4 *colors = EG::Math::GenerateGradientMap(width, height, 4, gradients, "Assets/Textures/generated_planet_decal_map.png");
+    std::vector<std::pair<glm::vec2, float> > specular_values;
+    specular_values.push_back(std::pair<glm::vec2, float>(glm::vec2(-1.0f, -0.4f), 1.0f));
+    specular_values.push_back(std::pair<glm::vec2, float>(glm::vec2(-0.4f, 0.35f), 0.0f));
+    specular_values.push_back(std::pair<glm::vec2, float>(glm::vec2(0.35f, 1.0f), 0.5f));
+    EG::Math::GenerateCubeSphereSpecularMap(width, height, heights, specular_values, "Assets/Textures/generated_planet_specular_map.png");
     for (unsigned int i = 0; i < 6; i++){
         delete []heights[i];
     }
@@ -90,12 +95,22 @@ int main(int argc, char **argv){
     cube_map = new EG::Graphics::CubeMap(images[CUBE_RIGHT], images[CUBE_LEFT], images[CUBE_BOTTOM], images[CUBE_TOP], images[CUBE_BACK], images[CUBE_FRONT]);
     scene->GetTextureManager()->AddCubeMap("planet_normals", cube_map);
 
+    for (unsigned int i = 0; i < 6; i++){
+        std::stringstream temp;
+        temp << "Assets/Textures/generated_planet_specular_map_" << i << ".png";
+        //temp << "Assets/Textures/default_normal.png";
+        images[i] = temp.str();
+    }
+    cube_map = new EG::Graphics::CubeMap(images[CUBE_RIGHT], images[CUBE_LEFT], images[CUBE_BOTTOM], images[CUBE_TOP], images[CUBE_BACK], images[CUBE_FRONT]);
+    scene->GetTextureManager()->AddCubeMap("planet_specular", cube_map);
+
     EG::Graphics::Texture *decal_gradient = new EG::Graphics::Texture("Assets/Textures/generated_planet_decal_map.png");
     scene->GetTextureManager()->AddTexture("planet_decal_gradient", decal_gradient);
     std::cout << "Dongle" << std::endl;
     material = new EG::Graphics::RenderingMaterial();
     material->SetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT, "planet_heights");
     material->SetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, "planet_normals");
+    material->SetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR, "planet_specular");
     material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "planet_decal_gradient");
     material->SetLit(true);
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "sphere_cube_map_gradient_decal");
@@ -115,12 +130,9 @@ int main(int argc, char **argv){
     material->SetColor(glm::vec4(0.25f, 0.25f, 0.5f, 0.5f));
     material->SetCullingMode(EG::Graphics::RenderingMaterial::CULL_OFF);
     material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ONE_ONE_MINUS_SRC_ALPHA);
-//     material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ALPHA);
     EG::Graphics::Texture *atmosphere_gradient = new EG::Graphics::Texture("Assets/Textures/atmosphere_gradient.png");
     scene->GetTextureManager()->AddTexture("atmosphere_gradient", atmosphere_gradient);
     material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "atmosphere_gradient");
-    //material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "planet_atmosphere");
-    //material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "planet_atmosphere");
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER, "planet_atmosphere");
     material->SetCastsShadows(false);
     material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ALPHA);
@@ -372,7 +384,7 @@ int main(int argc, char **argv){
     // Add Objects
     EG::Game::ObjectManager *objects = game->GetScene()->GetObjectManager();
     objects->AddObject(object);
-    objects->AddObject(pa);
+    //objects->AddObject(pa);
     objects->AddObject(read_object);
     objects->AddObject(object2);
     objects->AddObject(object3);

@@ -9,7 +9,7 @@ smooth in vec2 texcoord;
 uniform sampler2D decal_map;
 uniform sampler2D normal_map;
 uniform sampler2D height_map;
-// TODO: Add specular_map
+uniform sampler2D specular_map;
 
 uniform float material_specularity;
 uniform vec4 material_color;
@@ -24,7 +24,8 @@ out vec4 fragment3;
 void main(){
     if (receives_lighting == 1){
         // Position and Specular Factor
-        fragment0 = vec4(position, material_specularity);
+        float specular_map_value = texture(specular_map, texcoord).r;
+        fragment0 = vec4(position, specular_map_value);
 
         // Decal and Color
         fragment1 = texture(decal_map, texcoord) * material_color;

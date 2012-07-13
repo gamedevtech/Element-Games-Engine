@@ -519,5 +519,63 @@ namespace EG{
                 EG::Math::GenerateSphereNormalHeightMap(width, height, heights[i], file_path_out.str());
             }
         }
+
+        void GenerateSphereSpecularMap(unsigned int width, unsigned int height, float *heights, std::vector<std::pair<glm::vec2, float> > specular_mapping, std::string file_path) {
+            unsigned int pixel_count = height * width;
+
+            bool image_dump = (file_path != "") ? true : false;
+            unsigned char *pixels;
+            unsigned int index = 0;
+            if (image_dump){
+                pixels = new unsigned char[pixel_count * 4];
+            }
+
+            for (unsigned int z = 0; z < height; ++z){
+                for(unsigned int x = 0; x < width; ++x){
+                    float height = heights[(z * width) + x];
+                    float specular_value = 1.0f;
+
+                    std::vector<std::pair<glm::vec2, float> >::iterator mapping_iterator = specular_mapping.begin();
+                    while (mapping_iterator != specular_mapping.end()) {
+                        glm::vec2 range = (*mapping_iterator).first;
+                        float specular_scaling = (*mapping_iterator).second;
+
+                        if (height >= range.x && height <= range.y) {
+                            specular_value = specular_scaling;
+                            break;
+                        }
+
+                        ++mapping_iterator;
+                    }
+
+                    if (image_dump){
+                        unsigned char out_value = (unsigned char)(specular_value * 255.0f);
+                        pixels[index] = out_value;
+                        pixels[index + 1] = out_value;
+                        pixels[index + 2] = out_value;
+                        pixels[index + 3] = 255;
+                        index += 4;
+                    }
+                }
+            }
+
+            if (image_dump){
+                sf::Image image_out;
+                image_out.create(width, height, pixels);
+                bool image_result = image_out.saveToFile(file_path);
+                delete []pixels;
+            }
+        }
+
+        void GenerateCubeSphereSpecularMap(unsigned int width, unsigned int height, float **heights, std::vector<std::pair<glm::vec2, float> > specular_mapping, std::string file_path) {
+            bool image_dump = (file_path != "") ? true : false;
+
+            for (unsigned int i = 0; i < 6; i++){
+                std::stringstream file_path_out;
+                std::string first_part = file_path.substr(0, file_path.find_first_of('.'));
+                file_path_out << first_part << '_' << i << ".png";
+                EG::Math::GenerateSphereSpecularMap(width, height, heights[i], specular_mapping, file_path_out.str());
+            }
+        }
     }
 }

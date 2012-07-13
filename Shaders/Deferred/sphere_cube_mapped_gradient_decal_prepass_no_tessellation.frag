@@ -2,13 +2,14 @@
 
 smooth in vec3 position;
 smooth in vec3 normal;
+smooth in vec3 texcoord;
 smooth in vec3 binormal;
 smooth in vec3 bitangent;
 
 uniform sampler2D decal_map;
 uniform samplerCube normal_map;
 uniform samplerCube height_map;
-// TODO: Add specular_map
+uniform samplerCube specular_map;
 
 uniform float material_specularity;
 uniform vec4 material_color;
@@ -23,14 +24,15 @@ out vec4 fragment2;
 out vec4 fragment3;
 
 void main(){
-	vec3 texcoord = normalize(normal);
-	vec3 normalized_normal = texcoord;
-	float height_index = texture(height_map, texcoord).r;
+	vec3 uva = normalize(texcoord);
+	vec3 normalized_normal = normalize(normal);
+	float height_index = texture(height_map, uva).r;
+	float specular_map_value = texture(specular_map, uva).r;
 	vec4 decal_color = texture(decal_map, vec2(height_index, 0.5));
 
 	if (receives_lighting == 1){
 		// Position and Specular Factor
-		fragment0 = vec4(position, material_specularity);
+		fragment0 = vec4(position, specular_map_value);
 
 		// Decal and Color
 		fragment1 = decal_color * material_color;
@@ -39,11 +41,11 @@ void main(){
 		float height = height_index * 2.0 - 1.0;
 		vec3 computed_normal = -normalized_normal;
 		if (normal_mapping_enabled == 1){
-			vec3 temp_bitangent = cross(normal, binormal);
+			vec3 temp_bitangent = cross(normal, binormal); // Use normalized normal?!?
 			mat3 tbn_matrix = mat3(normalize(binormal), /*normalize(bitangent)*/ normalize(temp_bitangent), normalized_normal);
-			vec3 normal_map_value = normalize(2.0 * texture(normal_map, texcoord).xyz - 1.0);
+			vec3 normal_map_value = normalize(2.0 * texture(normal_map, uva).xyz - 1.0);
 			computed_normal = normalize(tbn_matrix * normal_map_value);
-			//computed_normal = texture(normal_map, texcoord).xyz;
+			//computed_normal = texture(normal_map, uva).xyz;
 		}
 		fragment2 = vec4(computed_normal, 1.0);
 
