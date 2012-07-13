@@ -14,10 +14,12 @@ Remember:
 - Deferred Rendering Needs Multipass lighting on Translucent Objects that get Lighting
 - Fix window resizing
 - Impelement Specular Mapping
+    - Also, make it so that if there is no specular map, it uses the material specularity
 - Implement General Tessellation Displacement Mapping (from height map)
 - Light shafts when in atmosphere
 - Reflections & Refractions
 - Bounce Lighting
+- Make it so you can at least the emissiveness of a translucent non-lit mesh-material
 
 Profiling and Other Optimizations, moved to git as well:
 gprof... don't forget to compile with -pg!
