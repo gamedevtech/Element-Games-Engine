@@ -53,11 +53,11 @@ int main(int argc, char **argv){
     float **heights = EG::Math::GenerateCubeSphereHeightMap(width, height, noise_generator, "Assets/Textures/generated_planet_height_map.png");
     EG::Math::GenerateCubeSphereNormalHeightMap(width, height, heights, "Assets/Textures/generated_planet_normal_map.png");
     EG::Math::ColorGradientSet *gradients = new EG::Math::ColorGradientSet();
-    gradients->AddColorGradient(-1.0f, -0.4f, glm::vec4(0.0f, 0.0f, 0.25f, 1.0f), glm::vec4(0.0f, 0.25f, 1.0f, 1.0f));
-    gradients->AddColorGradient(-0.4f, -0.2f, glm::vec4(1.0f, 1.0f, 0.35f, 1.0f), glm::vec4(0.64f, 0.85f, 0.0f, 1.0f));
-    gradients->AddColorGradient(-0.2f, 0.0f, glm::vec4(0.64f, 0.85f, 0.0f, 1.0f), glm::vec4(0.14f, 0.55f, 0.1f, 1.0f));
-    gradients->AddColorGradient(0.0f, 0.15f, glm::vec4(0.14f, 0.55f, 0.1f, 1.0f), glm::vec4(0.45f, 0.37f, 0.0f, 1.0f));
-    gradients->AddColorGradient(0.15f, 0.35f, glm::vec4(0.45f, 0.37f, 0.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    gradients->AddColorGradient(-1.0f, -0.4f, glm::vec4(0.0705f, 0.1333f, 0.2745f, 1.0f), glm::vec4(0.0705f, 0.1333, 0.2745f, 1.0f));
+    gradients->AddColorGradient(-0.4f, -0.2f, glm::vec4(0.6588f, 0.5019f, 0.6313f, 1.0f), glm::vec4(0.3137f, 0.2745f, 0.2784f, 1.0f));
+    gradients->AddColorGradient(-0.2f, 0.0f, glm::vec4(0.3137f, 0.2745f, 0.2784f, 1.0f), glm::vec4(0.1725f, 0.2235f, 0.1568f, 1.0f));
+    gradients->AddColorGradient(0.0f, 0.15f, glm::vec4(0.1725f, 0.2235f, 0.1568f, 1.0f), glm::vec4(0.4f, 0.3176f, 0.3450f, 1.0f));
+    gradients->AddColorGradient(0.15f, 0.35f, glm::vec4(0.4f, 0.3176f, 0.3450f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     gradients->AddColorGradient(0.35f, 1.0f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     glm::vec4 *colors = EG::Math::GenerateGradientMap(width, height, 4, gradients, "Assets/Textures/generated_planet_decal_map.png");
     std::vector<std::pair<glm::vec2, float> > specular_values;
@@ -130,7 +130,7 @@ int main(int argc, char **argv){
     material->SetColor(glm::vec4(0.25f, 0.25f, 0.5f, 0.5f));
     material->SetCullingMode(EG::Graphics::RenderingMaterial::CULL_OFF);
     material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ONE_ONE_MINUS_SRC_ALPHA);
-    EG::Graphics::Texture *atmosphere_gradient = new EG::Graphics::Texture("Assets/Textures/atmosphere_gradient.png");
+    EG::Graphics::Texture *atmosphere_gradient = new EG::Graphics::Texture("Assets/Textures/atmosphere_gradient2.png");
     scene->GetTextureManager()->AddTexture("atmosphere_gradient", atmosphere_gradient);
     material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "atmosphere_gradient");
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER, "planet_atmosphere");

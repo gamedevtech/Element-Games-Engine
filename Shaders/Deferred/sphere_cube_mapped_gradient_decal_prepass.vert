@@ -16,7 +16,7 @@ out float vDistance;
 void main(){
 	vPosition = vertex_position;//model_matrix * view_matrix * vertex_position;
 	vTexCoord = vertex_texcoord.st;
-	vNormal = vertex_normal.xyz;//(normal_matrix * vertex_normal).xyz;
+	vNormal = normalize(vertex_position.xyz);//vertex_normal.xyz;//(normal_matrix * vertex_normal).xyz;
 	vBinormal = vertex_binormal.xyz;//(normal_matrix * vertex_binormal).xyz;
 	vBitangent = vertex_bitangent.xyz;//(normal_matrix * vertex_bitangent).xyz;
 }

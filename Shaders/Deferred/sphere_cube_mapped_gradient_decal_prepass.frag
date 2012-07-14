@@ -11,7 +11,8 @@ in float teHeightValue;
 uniform sampler2D decal_map;
 uniform samplerCube normal_map;
 uniform samplerCube height_map;
-// TODO: Add specular_map
+uniform samplerCube specular_map;
+uniform int use_specular_map;
 
 uniform float material_specularity;
 uniform vec4 material_color;
@@ -31,7 +32,11 @@ void main(){
 	//vec4 decal_color = vec4(height_index, height_index, height_index, 1.0);
 	if (receives_lighting == 1){
 		// Position and Specular Factor
-		fragment0 = vec4(tePosition.xyz, material_specularity);
+		float specularity = material_specularity;
+		if (use_specular_map == 1) {
+			specularity = texture(specular_map, teCubeMapTexCoord).r;
+		}
+		fragment0 = vec4(tePosition.xyz, specularity);
 
 		// Decal and Color
 		fragment1 = decal_color * material_color;
