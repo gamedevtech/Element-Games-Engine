@@ -21,11 +21,11 @@ out vec4 fragment3;
 
 void main() {
     // constants
-    float stretch_amount = 0.025;
-    float exposure = 0.5;//1.5;
+    float stretch_amount = 0.0;//0.025;
+    float exposure = 1.0;
     float g = -0.990;
     float g2 = g * g;
-    float tweak_amount = 0.025;
+    float tweak_amount = 0.0;//0.025;
 
     // NOTE: radius is the same as outer_radius
     float outer_radius2 = outer_radius * outer_radius;

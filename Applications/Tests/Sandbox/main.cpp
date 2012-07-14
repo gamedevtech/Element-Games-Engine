@@ -384,7 +384,7 @@ int main(int argc, char **argv){
     // Add Objects
     EG::Game::ObjectManager *objects = game->GetScene()->GetObjectManager();
     objects->AddObject(object);
-    //objects->AddObject(pa);
+    objects->AddObject(pa);
     objects->AddObject(read_object);
     objects->AddObject(object2);
     objects->AddObject(object3);

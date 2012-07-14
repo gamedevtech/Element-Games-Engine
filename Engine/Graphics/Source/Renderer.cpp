@@ -298,11 +298,14 @@ namespace EG{
                 }else if (variable == EG::Graphics::ShaderManager::ENGINE_SPECULAR_MAP) {
                     shaders->SetInt("specular_map", 3);
                     if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR)){
+                        shaders->SetInt("use_specular_map", 1);
                         graphics->BindTexture(scene->GetTextureManager()->GetTexture(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR))->GetId(), 3);
                     }else if (material->HasCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR)){
+                        shaders->SetInt("use_specular_map", 1);
                         graphics->BindCubeMap(scene->GetTextureManager()->GetCubeMap(material->GetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR))->GetId(), 3);
                     }else{
-                        graphics->BindTexture(scene->GetTextureManager()->GetTexture("default_specular")->GetId(), 3);
+                        shaders->SetInt("use_specular_map", 0);
+                        //graphics->BindTexture(scene->GetTextureManager()->GetTexture("default_specular")->GetId(), 3);
                     }
                 }else if (variable == EG::Graphics::ShaderManager::ENGINE_RECEIVES_LIGHTING) {
                     int r = 0;
