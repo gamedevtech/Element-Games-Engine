@@ -1,0 +1,128 @@
+body {
+    background: transparent;
+    color: black;
+}
+
+#menu {
+    background: #222222;
+    color: #FFFFFF;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 20px;
+    width: 100%;
+}
+
+#menu .btn-toolbar {
+    margin: 0px;
+    display: inline;
+}
+
+#menu .btn-group {
+    border: 0px;
+    border-radius: 0px;
+    background-image: none;
+}
+
+#menu .btn-inverse {
+    background: #222;
+    border: 0px;
+    border-radius: 0px;
+    background-image: none;
+}
+
+#menu .btn-inverse:hover {
+    background: #444;
+    border: 0px;
+    border-radius: 0px;
+    background-image: none;
+}
+
+#status {
+    background: #222222;
+    color: #FFFFFF;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    height: 20px;
+    width: 100%;
+}
+
+#main {
+    background: transparent;
+    position: absolute;
+    width: 100%;
+    top: 20px;
+    bottom: 20px;
+}
+
+#left {
+    z-index: 0;
+    background: #222222;
+    color: #FFFFFF;
+    position: absolute;
+    width: 20px;
+    padding-top: 10px;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+}
+
+#right {
+    z-index: 0;
+    background: #222222;
+    color: #FFFFFF;
+    position: absolute;
+    width: 20px;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+}
+
+#middle {
+    z-index: 0;
+    background: transparent;
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    top: 0px;
+    bottom: 0px;
+}
+
+/*.vertical_text {
+    z-index: 1;
+    text-align: left;
+    -webkit-writing-mode: vertical-lr;
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(90deg);
+}*/
+
+.tool_left {
+    z-index: 0;
+    left: 20px;
+}
+
+.tool_right {
+    z-index: 0;
+    right: 20px;
+}
+
+.tool_area {
+    z-index: 0;
+    background: #222222;
+    color: #FFFFFF;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    width: 200px;
+    display: none;
+}
+
+#gui_enable {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 20px;
+    height: 20px;
+    display: none;
+}
