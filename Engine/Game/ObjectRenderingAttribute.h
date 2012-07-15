@@ -10,16 +10,19 @@ namespace EG{
 	namespace Game{
 		class ObjectAttributeRenderingMesh : public ObjectAttribute{
 			public:
-				ObjectAttributeRenderingMesh(std::string _mesh_id, EG::Graphics::RenderingMaterial *_material);
+				ObjectAttributeRenderingMesh(std::string _mesh_id, EG::Graphics::RenderingMaterial *_material, glm::mat4 _offset = glm::mat4(1.0f));
 				~ObjectAttributeRenderingMesh(void);
 
 				void SetMeshId(std::string _mesh_id);
 				void SetMaterial(EG::Graphics::RenderingMaterial *_material);
 				std::string GetMeshId(void);
 				EG::Graphics::RenderingMaterial *GetMaterial(void);
+                void SetOffset(glm::mat4 _offset);
+                glm::mat4 GetOffset(void);
 			private:
 				std::string mesh_id;
 				EG::Graphics::RenderingMaterial *material;
+                glm::mat4 offset;
 		};
 
 		class ObjectAttributeRenderingCamera : public ObjectAttribute{

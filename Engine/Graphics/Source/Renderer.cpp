@@ -75,6 +75,8 @@ namespace EG{
                         std::vector<EG::Game::ObjectAttribute *> *transformation_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
                         EG::Game::ObjectAttributeBasicTransformation *transformation_attribute = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(transformation_attributes->at(0));
                         glm::mat4 transformation = transformation_attribute->GetTransformation();
+                        glm::mat4 mesh_offset = mesh_attribute->GetOffset();
+                        transformation *= mesh_offset;
 
                         if (material->HasShader(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER)){
                             custom_shader = true;
@@ -136,6 +138,8 @@ namespace EG{
                     std::vector<EG::Game::ObjectAttribute *> *transformation_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
                     EG::Game::ObjectAttributeBasicTransformation *transformation_attribute = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(transformation_attributes->at(0));
                     glm::mat4 transformation = transformation_attribute->GetTransformation();
+                    glm::mat4 mesh_offset = mesh_attribute->GetOffset();
+                    transformation *= mesh_offset;
 
                     if (!material->GetLit()){
                         bool custom_shader = false;

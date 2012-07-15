@@ -2,10 +2,11 @@
 
 namespace EG{
     namespace Game{
-        ObjectAttributeRenderingMesh::ObjectAttributeRenderingMesh(std::string _mesh_id, EG::Graphics::RenderingMaterial *_material){
+        ObjectAttributeRenderingMesh::ObjectAttributeRenderingMesh(std::string _mesh_id, EG::Graphics::RenderingMaterial *_material, glm::mat4 _offset){
             type = EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH;
             mesh_id = _mesh_id;
             material = _material;
+            offset = _offset;
         }
         ObjectAttributeRenderingMesh::~ObjectAttributeRenderingMesh(void){
             delete material;
@@ -22,6 +23,12 @@ namespace EG{
         }
         EG::Graphics::RenderingMaterial *ObjectAttributeRenderingMesh::GetMaterial(void){
             return material;
+        }
+        void ObjectAttributeRenderingMesh::SetOffset(glm::mat4 _offset) {
+            offset = _offset;
+        }
+        glm::mat4 ObjectAttributeRenderingMesh::GetOffset(void) {
+            return offset;
         }
 
 	ObjectAttributeRenderingCamera::ObjectAttributeRenderingCamera(EG::Graphics::Camera *_camera){

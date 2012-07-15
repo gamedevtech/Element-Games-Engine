@@ -1,7 +1,6 @@
 Remember:
 - Def need frustum culling and other culling in general, seriously!
 - Add Camera to Light for shadow mapping!
-- Definitely need to add transformations to meshes (and rigid bodies later) too
 - Create a way to add shaders outside of the renderer class!
 - GUI Focus
 - Awesomium Backspace Key
@@ -17,3 +16,5 @@ Remember:
 - Check for shader changes in separate thread and re-compile/link them in when they do change!
 	- This should be an option turned on and compiled in!!! (Avoids visual hacking!)
 - Omni Directional Shadow Mapping
+- JSON Based Scene Format
+- Picking in Editor on Non-Physics Objects (Bounding Box Automatically Generated!)
