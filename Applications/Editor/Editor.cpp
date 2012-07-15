@@ -46,50 +46,6 @@ void Editor::Update(void){
     if (input->IsKeyDown(EG::Input::c)){
         scene->GetCurrentCamera()->Move(glm::vec3(0.0f, -movement_speed, 0.0f));
     }
-    if (input->IsKeyDown(EG::Input::i)){
-        EG::Game::Object *ship = scene->GetObjectManager()->GetObjectByName("test_model.ego");
-        std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY);
-        std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
-        while (attr_iter != attrs->end()){
-            EG::Game::ObjectAttributeControlRigidBody *body_attr = static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
-            EG::Dynamics::RigidBody *ship_body = body_attr->GetBody();
-            ship_body->ApplyImpulse(glm::vec3(-5.0f * time->GetFrameTime(), 0.0f, 0.0f));
-            ++attr_iter;
-        }
-    }
-    if (input->IsKeyDown(EG::Input::k)){
-        EG::Game::Object *ship = scene->GetObjectManager()->GetObjectByName("test_model.ego");
-        std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY);
-        std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
-        while (attr_iter != attrs->end()){
-            EG::Game::ObjectAttributeControlRigidBody *body_attr = static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
-            EG::Dynamics::RigidBody *ship_body = body_attr->GetBody();
-            ship_body->ApplyImpulse(glm::vec3(5.0f * time->GetFrameTime(), 0.0f, 0.0f));
-            ++attr_iter;
-        }
-    }
-    if (input->IsKeyDown(EG::Input::u)){
-        EG::Game::Object *ship = scene->GetObjectManager()->GetObjectByName("test_model.ego");
-        std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY);
-        std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
-        while (attr_iter != attrs->end()){
-            EG::Game::ObjectAttributeControlRigidBody *body_attr = static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
-            EG::Dynamics::RigidBody *ship_body = body_attr->GetBody();
-            ship_body->ApplyImpulse(glm::vec3(0.0f, 5.0f * time->GetFrameTime(), 0.0f));
-            ++attr_iter;
-        }
-    }
-    if (input->IsKeyDown(EG::Input::j)){
-        EG::Game::Object *ship = scene->GetObjectManager()->GetObjectByName("test_model.ego");
-        std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY);
-        std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
-        while (attr_iter != attrs->end()){
-            EG::Game::ObjectAttributeControlRigidBody *body_attr = static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
-            EG::Dynamics::RigidBody *ship_body = body_attr->GetBody();
-            ship_body->ApplyImpulse(glm::vec3(0.0f, -5.0f * time->GetFrameTime(), 0.0f));
-            ++attr_iter;
-        }
-    }
     if (input->IsKeyPressed(EG::Input::t)){
         if (rendering_method == RENDERER_DEFERRED){
             (static_cast<EG::Graphics::RendererDeferred *>(renderer))->CycleOutputType();
@@ -119,40 +75,6 @@ void Editor::Update(void){
         if (rendering_method == RENDERER_DEFERRED){
             (static_cast<EG::Graphics::RendererDeferred *>(renderer))->ToggleDOF();
         }
-    }
-
-    /*EG::Game::Object *ship = scene->GetObjectManager()->GetObjectByName("test_model.ego");
-    if (ship){
-        std::vector<EG::Game::ObjectAttribute *> *attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
-        std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
-        glm::vec4 pos = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-        while (attr_iter != attrs->end()){
-            EG::Game::ObjectAttributeBasicTransformation *trans_attr = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(*attr_iter);
-            glm::mat4 offset = glm::translate(3.0f, 1.5f, 0.0f);
-            glm::mat4 trans = offset * trans_attr->GetTransformation();
-            pos = trans * pos;
-            ++attr_iter;
-        }
-        attrs = ship->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_CAMERA);
-        attr_iter = attrs->begin();
-        while (attr_iter != attrs->end()){
-            EG::Game::ObjectAttributeRenderingCamera *cam_attr = static_cast<EG::Game::ObjectAttributeRenderingCamera *>(*attr_iter);
-            EG::Graphics::Camera *c = cam_attr->GetCamera();
-            c->SetPosition(glm::vec3(pos.x, pos.y, pos.z));
-            ++attr_iter;
-        }
-    }*/
-
-    // TODO: Rotate Planet!
-    EG::Game::Object *planet = scene->GetObjectManager()->GetObjectByName("Planet");
-    std::vector<EG::Game::ObjectAttribute *> *attrs = planet->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
-    std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
-    while (attr_iter != attrs->end()){
-        EG::Game::ObjectAttributeBasicTransformation *trans_attr = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(*attr_iter);
-        glm::mat4 trans = trans_attr->GetTransformation();
-        trans = glm::rotate(trans, 0.1f, glm::vec3(0.0f, 1.0f, 0.0f));
-        trans_attr->SetTransformation(trans);
-        ++attr_iter;
     }
 
     physics->Update(time->GetFrameTime());

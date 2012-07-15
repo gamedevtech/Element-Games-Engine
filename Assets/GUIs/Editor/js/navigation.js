@@ -20,7 +20,7 @@ define(function(require) {
         },
         render: function() {
             this.$el.empty();
-            var html = '<a href="#" class="toggle_gui"><span class="icon-eye-close icon-white" style="width: 20px;"></span></a>';
+            var html = '';
             html += '<div class="btn-toolbar">';
             html += this.build_menu();
             html += '</div>';

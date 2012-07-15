@@ -33,9 +33,18 @@ define(function(require) {
             }
         });
         nav.render();
-        $("#gui_enable_link").click(function() {
-            $("#gui_enable").fadeOut();
-            $("#body_container").fadeIn();
+
+        var gui_state = true;
+        $("#gui_toggle_link").live('click', function() {
+            if (gui_state) {
+                $("#gui_toggle").html('<a href="#" id="gui_toggle_link"><i class="icon-white icon-eye-open"></i></a>');
+                $("#body_container").fadeOut();
+                gui_state = false;
+            } else {
+                $("#gui_toggle").html('<a href="#" id="gui_toggle_link"><i class="icon-white icon-eye-close"></i></a>');
+                $("#body_container").fadeIn();
+                gui_state = true;
+            }
         });
 
         /* Tools */
