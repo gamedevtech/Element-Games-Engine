@@ -24,6 +24,7 @@ namespace EG{
                 void ToggleShadowMapping(void);
                 void ToggleDOF(void);
             private:
+                bool fbos_initialized;
                 EG::Graphics::OffscreenBuffer *deferred_buffer;
                 EG::Graphics::OffscreenBuffer *light_buffer;
                 EG::Graphics::OffscreenBuffer *bloom_buffer;
@@ -40,6 +41,7 @@ namespace EG{
                 void SSAO(void);
                 void ShadowMapping(EG::Game::Scene *scene);
 
+                void Resize(void);
                 void RenderObject(EG::Game::Scene *scene, EG::Game::Object *object);
                 void RenderObjectForward(EG::Game::Scene *scene, EG::Graphics::Light *light, EG::Game::Object *object);
                 void CalculateLighting(EG::Game::Scene *scene, EG::Graphics::Light *light);
@@ -47,6 +49,7 @@ namespace EG{
                 void Lighting(EG::Game::Scene *scene);
                 void ComposeScene(EG::Game::Scene *scene);
                 void Overlays(EG::Game::Scene *scene, EG::Utility::Time *time);
+                void GenerateFBOs(void);
 
                 // Settings
                 DeferredOutputType output_type;

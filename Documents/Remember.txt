@@ -1,33 +1,16 @@
 Remember:
-- XML or scripting language parsing
-	Perhaps python bindings
 - Def need frustum culling and other culling in general, seriously!
 - Add Camera to Light for shadow mapping!
 - Definitely need to add transformations to meshes (and rigid bodies later) too
-- Create a way to add shaders outside of the renderer class to a specific renderer type! Define in the material?
-    - Also, need a way to define a function which determines which shader gets used for this as well, aka, atmospheric shading from inside or outside the atmosphere
+- Create a way to add shaders outside of the renderer class!
 - GUI Focus
 - Awesomium Backspace Key
-- Fix cube mapping for spheres now that textures are loaded properly
-    - This involves fixing the texture generation so there's not a 1 pixel border of weird stuff around the edge of generated textures
 - Atmospheric Scattering
 - Deferred Rendering Needs Multipass lighting on Translucent Objects that get Lighting
-- Fix window resizing
-- Impelement Specular Mapping
-    - Also, make it so that if there is no specular map, it uses the material specularity
+	- Done but not fully tested!
 - Implement General Tessellation Displacement Mapping (from height map)
 - Light shafts when in atmosphere
 - Reflections & Refractions
 - Bounce Lighting
 - Make it so you can at least the emissiveness of a translucent non-lit mesh-material
-
-Profiling and Other Optimizations, moved to git as well:
-gprof... don't forget to compile with -pg!
-google-perftools
-valgrind
-perf - linux-tools
-
-
-valgrind --tool=callgrind myprog
-
-gprof build/Applications/Tests/Sandbox/element_games_sandbox | python gprof2dot.py | dot -Tpng -o gprof.png
+- Finish Python Bindings and Maintain Them, Or parse python scripts inside engine

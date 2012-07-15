@@ -21,15 +21,13 @@ out vec4 fragment3;
 
 void main() {
     // constants
-    float stretch_amount = 0.0;//0.025;
+    float stretch_amount = 0.01;
     float exposure = 1.0;
     float g = -0.990;
     float g2 = g * g;
-    float tweak_amount = 0.0;//0.025;
+    float tweak_amount = 0.025;
 
-    // NOTE: radius is the same as outer_radius
     float outer_radius2 = outer_radius * outer_radius;
-    //float camera_height = length(camera_position - world_position + (outer_radius - inner_radius));
     float camera_height = length(camera_position);
     vec3 camera_to_position = world_position - camera_position;
     float far_distance = length(camera_to_position);

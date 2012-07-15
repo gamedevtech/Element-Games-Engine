@@ -64,12 +64,9 @@ namespace EG{
                 shaders->Add("sphere_cube_mapped_gradient_decal_prepass", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass_no_tessellation.vert", "Shaders/Deferred/sphere_cube_mapped_gradient_decal_prepass_no_tessellation.frag", "", "", "", 4);
             }
 
-            deferred_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth(), graphics->GetViewportHeight(), 4, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_NONE);
-            light_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth(), graphics->GetViewportHeight(), 2, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
-            bloom_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth() / 4.0f, graphics->GetViewportHeight() / 4.0f, 3, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
-            hdr_buffer = new EG::Graphics::OffscreenBuffer(16, 16, 1, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
-            ssao_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth() / 2.0f, graphics->GetViewportHeight() / 2.0f, 3, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
-            composition_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth(), graphics->GetViewportHeight(), 1, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
+            fbos_initialized = false;
+            GenerateFBOs();
+
             orthographics_projection_matrix = glm::ortho(0.0f, float(graphics->GetViewportWidth()), 0.0f, float(graphics->GetViewportHeight()));
 
             /* Renderer Settings */
@@ -92,7 +89,35 @@ namespace EG{
             initialized = true;
         }
 
+        void RendererDeferred::GenerateFBOs(void) {
+            if (fbos_initialized) {
+                delete deferred_buffer;
+                delete light_buffer;
+                delete bloom_buffer;
+                delete hdr_buffer;
+                delete ssao_buffer;
+                delete composition_buffer;
+            }
+
+            deferred_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth(), graphics->GetViewportHeight(), 4, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_NONE);
+            light_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth(), graphics->GetViewportHeight(), 2, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
+            bloom_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth() / 4.0f, graphics->GetViewportHeight() / 4.0f, 3, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
+            hdr_buffer = new EG::Graphics::OffscreenBuffer(16, 16, 1, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
+            ssao_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth() / 2.0f, graphics->GetViewportHeight() / 2.0f, 3, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
+            composition_buffer = new EG::Graphics::OffscreenBuffer(graphics->GetViewportWidth(), graphics->GetViewportHeight(), 1, true, EG::Graphics::OffscreenBuffer::OFFSCREEN_BUFFER_FILTERING_LINEAR);
+            fbos_initialized = true;
+        }
+
+        void RendererDeferred::Resize(void) {
+            orthographics_projection_matrix = glm::ortho(0.0f, float(graphics->GetViewportWidth()), 0.0f, float(graphics->GetViewportHeight()));
+            GenerateFBOs();
+        }
+
         void RendererDeferred::Render(EG::Game::Scene *scene, EG::Utility::Time *time){
+            if (graphics->Resized()) {
+                Resize();
+            }
+
             EG::Graphics::Camera *camera = scene->GetCurrentCamera();
             frame_time = time->GetFrameTime();
             graphics->BeginFrame();

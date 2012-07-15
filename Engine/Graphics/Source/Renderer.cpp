@@ -53,6 +53,10 @@ namespace EG{
             initialized = true;
         }
 
+        void Renderer::Resize(void) {
+            orthographics_projection_matrix = glm::ortho(0.0f, float(graphics->GetViewportWidth()), 0.0f, float(graphics->GetViewportHeight()));
+        }
+
         void Renderer::RenderLitObject(EG::Game::Scene *scene, EG::Graphics::Light *light, EG::Game::Object *object){
             EG::Graphics::Camera *camera = scene->GetCurrentCamera();
             // Meshes
@@ -406,6 +410,10 @@ namespace EG{
         }
 
         void Renderer::Render(EG::Game::Scene *scene, EG::Utility::Time *time){
+            if (graphics->Resized()) {
+                Resize();
+            }
+
             float frame_time = time->GetFrameTime();
             graphics->BeginFrame();
             EG::Graphics::Camera *camera = scene->GetCurrentCamera();

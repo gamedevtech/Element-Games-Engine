@@ -30,6 +30,7 @@ namespace EG{
                 }
             protected:
                 bool initialized;
+                void Resize(void);
 
                 std::string current_shader_id;
                 void BindCustomShaderUniforms(EG::Game::Object *object, std::string shader_id);

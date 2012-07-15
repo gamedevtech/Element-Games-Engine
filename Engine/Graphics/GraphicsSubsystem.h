@@ -16,6 +16,7 @@ namespace EG{
                 // Context Management
                 void Initialize(unsigned int _viewport_width, unsigned int _viewport_height);
                 void Resize(unsigned int _viewport_width, unsigned int _viewport_height);
+                bool Resized(void);
 
                 // 3D Scene
                 void BeginFrame(void);
@@ -89,6 +90,7 @@ namespace EG{
                 OpenGLInterface *opengl_interface;
                 unsigned int viewport_width, viewport_height;
                 bool using_tessellation;
+                bool window_resized;
                 //unsigned int current_draw_buffer;
 
                 // Singleton
