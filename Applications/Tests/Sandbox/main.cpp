@@ -41,14 +41,14 @@ int main(int argc, char **argv){
     Sandbox *game = new Sandbox(window, scene);
 
     EG::Graphics::RenderingMaterial *material;
-    EG::Graphics::Mesh *sphere = EG::Graphics::GenerateCubeSphere(8);
+    EG::Graphics::Mesh *sphere = EG::Graphics::GenerateCubeSphere(16);
     scene->GetMeshManager()->Add("planet_sphere", sphere);
 
     scene->GetMeshManager()->Add("rectangle", EG::Graphics::GenerateQuad());
 
     // NOTE: Test Data
-    float width = 256;
-    float height = 256;
+    float width = 512;
+    float height = 512;
     EG::Math::Noise *noise_generator = new EG::Math::Noise(0, 16, 1.75f);
     float **heights = EG::Math::GenerateCubeSphereHeightMap(width, height, noise_generator, "Assets/Textures/generated_planet_height_map.png");
     EG::Math::GenerateCubeSphereNormalHeightMap(width, height, heights, "Assets/Textures/generated_planet_normal_map.png");
@@ -121,14 +121,13 @@ int main(int argc, char **argv){
     object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));
 
     EG::Game::Object *pa = new EG::Game::Object("PlanetAtmosphere");
-    planet_transform = planet_transform * glm::scale(1.1f, 1.1f, 1.1f);
+    planet_transform = planet_transform * glm::scale(1.15f, 1.15f, 1.15f);
     pa->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(planet_transform));
     material = new EG::Graphics::RenderingMaterial();
     material->SetLit(true);
     material->SetTranslucent(true);
     material->SetCastsShadows(false);
     material->SetColor(glm::vec4(0.25f, 0.25f, 0.5f, 0.5f));
-    material->SetCullingMode(EG::Graphics::RenderingMaterial::CULL_OFF);
     material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ONE_ONE_MINUS_SRC_ALPHA);
     EG::Graphics::Texture *atmosphere_gradient = new EG::Graphics::Texture("Assets/Textures/atmosphere_gradient2.png");
     scene->GetTextureManager()->AddTexture("atmosphere_gradient", atmosphere_gradient);
@@ -138,7 +137,7 @@ int main(int argc, char **argv){
     material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ALPHA);
     pa->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));
     pa->AddAttribute(new EG::Game::ObjectAttributeBasicFloat("inner_radius", 1.0f));
-    pa->AddAttribute(new EG::Game::ObjectAttributeBasicFloat("outer_radius", 1.1f));
+    pa->AddAttribute(new EG::Game::ObjectAttributeBasicFloat("outer_radius", 1.15f));
 
     // Test Cube2
     EG::Graphics::Mesh *cube = EG::Graphics::GenerateCube();
@@ -216,7 +215,7 @@ int main(int argc, char **argv){
 //     material->SetLit(false);
 //     material->SetColor(glm::vec4(0.0f, 1.0f, 0.0f, 0.5f));
 //     light_object2->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("sphere", material));
-// 
+//
 //     // Light 2
 //     EG::Game::Object *light_object3 = new EG::Game::Object("BlueLight");
 //     glm::vec3 light_position3 = glm::vec3(0.0f, 5.0f, -5.0f);
