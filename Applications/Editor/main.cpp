@@ -1,30 +1,30 @@
 #include <iostream>
 #include <string>
 
-#include "Sandbox.h"
-#include "../../../Engine/Utility/Window.h"
-#include "../../../Engine/Graphics/GraphicsSubsystem.h"
-#include "../../../Engine/Graphics/Renderer.h"
-#include "../../../Engine/Math/Math.h"
-#include "../../../Engine/Math/Noise.h"
-#include "../../../Engine/Input/Input.h"
-#include "../../../Engine/Game/Scene.h"
-#include "../../../Engine/Game/ObjectManager.h"
-#include "../../../Engine/Game/ObjectBasicAttribute.h"
-#include "../../../Engine/Game/ObjectControlAttribute.h"
-#include "../../../Engine/Game/ObjectEmissionAttribute.h"
-#include "../../../Engine/Game/ObjectRenderingAttribute.h"
-#include "../../../Engine/Graphics/Mesh.h"
-#include "../../../Engine/Graphics/MeshGenerator.h"
-#include "../../../Engine/Graphics/TextureManager.h"
-#include "../../../Engine/Graphics/Texture.h"
-#include "../../../Engine/Graphics/RenderingMaterial.h"
-#include "../../../Engine/Utility/Time.h"
-#include "../../../Engine/Utility/JSON.h"
-#include "../../../Engine/Media/ModelLoader.h"
-#include "../../../Engine/Media/ObjectReader.h"
-#include "../../../Engine/Media/ObjectWriter.h"
-#include "../../../Engine/Graphics/Particle.h"
+#include "Editor.h"
+#include "../../Engine/Utility/Window.h"
+#include "../../Engine/Graphics/GraphicsSubsystem.h"
+#include "../../Engine/Graphics/Renderer.h"
+#include "../../Engine/Math/Math.h"
+#include "../../Engine/Math/Noise.h"
+#include "../../Engine/Input/Input.h"
+#include "../../Engine/Game/Scene.h"
+#include "../../Engine/Game/ObjectManager.h"
+#include "../../Engine/Game/ObjectBasicAttribute.h"
+#include "../../Engine/Game/ObjectControlAttribute.h"
+#include "../../Engine/Game/ObjectEmissionAttribute.h"
+#include "../../Engine/Game/ObjectRenderingAttribute.h"
+#include "../../Engine/Graphics/Mesh.h"
+#include "../../Engine/Graphics/MeshGenerator.h"
+#include "../../Engine/Graphics/TextureManager.h"
+#include "../../Engine/Graphics/Texture.h"
+#include "../../Engine/Graphics/RenderingMaterial.h"
+#include "../../Engine/Utility/Time.h"
+#include "../../Engine/Utility/JSON.h"
+#include "../../Engine/Media/ModelLoader.h"
+#include "../../Engine/Media/ObjectReader.h"
+#include "../../Engine/Media/ObjectWriter.h"
+#include "../../Engine/Graphics/Particle.h"
 
 EG::Media::ModelLoader *model;
 int main(int argc, char **argv){
@@ -38,7 +38,7 @@ int main(int argc, char **argv){
     EG::Utility::JSON config_file("config.json");
     EG::Utility::Window *window = new EG::Utility::Window(config_file.GetInt("screen.width"), config_file.GetInt("screen.height"), 32, config_file.GetBool("screen.fullscreen"), "Element Games Sandbox");
     EG::Game::Scene *scene = new EG::Game::Scene();
-    Sandbox *game = new Sandbox(window, scene);
+    Editor *game = new Editor(window, scene);
 
     EG::Graphics::RenderingMaterial *material;
     EG::Graphics::Mesh *sphere = EG::Graphics::GenerateCubeSphere(16);

@@ -1,20 +1,20 @@
-#include "Sandbox.h"
-#include "../../../Engine/Game/ObjectBasicAttribute.h"
-#include "../../../Engine/Game/ObjectControlAttribute.h"
-#include "../../../Engine/Game/ObjectEmissionAttribute.h"
-#include "../../../Engine/Game/ObjectRenderingAttribute.h"
-#include "../../../Engine/Graphics/Renderer.h"
-#include "../../../Engine/Graphics/RendererDeferred.h"
+#include "Editor.h"
+#include "../../Engine/Game/ObjectBasicAttribute.h"
+#include "../../Engine/Game/ObjectControlAttribute.h"
+#include "../../Engine/Game/ObjectEmissionAttribute.h"
+#include "../../Engine/Game/ObjectRenderingAttribute.h"
+#include "../../Engine/Graphics/Renderer.h"
+#include "../../Engine/Graphics/RendererDeferred.h"
 
-Sandbox::Sandbox(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
+Editor::Editor(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
+    gui->Initialize("Assets/GUIs/Editor", "index.html");
+}
+
+Editor::~Editor(void){
     //
 }
 
-Sandbox::~Sandbox(void){
-    //
-}
-
-void Sandbox::Update(void){
+void Editor::Update(void){
     float movement_speed = time->GetFrameTime() * 2.0f;
     if (input->IsKeyDown(EG::Input::v)) {
         movement_speed /= 100.0f;
