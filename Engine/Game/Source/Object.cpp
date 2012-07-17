@@ -68,5 +68,13 @@ namespace EG{
         bool Object::HasAttributesOfType(EG::Game::ObjectAttribute::ObjectAttributeType type){
             return attributes.Has(type);
         }
+
+        void Object::AddScript(ObjectScript *script) {
+            scripts.push_back(script);
+        }
+
+        std::vector<ObjectScript *> *Object::GetScripts(void) {
+            return &scripts;
+        }
     }
 }

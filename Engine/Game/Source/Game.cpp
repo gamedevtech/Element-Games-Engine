@@ -212,6 +212,14 @@ namespace EG{
                     }
                 }
 
+                std::vector<EG::Game::ObjectScript *> *scripts = object->GetScripts();
+                std::vector<EG::Game::ObjectScript *>::iterator script_iter = scripts->begin();
+                while (script_iter != scripts->end()) {
+                    EG::Game::ObjectScript *script = (*script_iter);
+                    script->Run();
+                    ++script_iter;
+                }
+
                 ++object_iter;
             }
         }

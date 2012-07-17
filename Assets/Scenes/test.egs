@@ -1,0 +1,13 @@
+{
+    "name": "Test Scene",
+    "objects": [
+        {
+            "name": "Floor",
+            "attributes": [
+                {
+                    "type": "mesh_material"
+                }
+            ]
+        }
+    ]
+}

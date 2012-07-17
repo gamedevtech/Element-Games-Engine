@@ -57,6 +57,15 @@ namespace EG{
 		}
 
 		void GUI::Update(void){
+            /*unsigned int temp_width = graphics->GetViewportWidth();
+            unsigned int temp_height = graphics->GetViewportHeight();
+            if (width != temp_width || height != temp_height) {
+                width = temp_width;
+                height = temp_height;
+                std::cout << "Resizing Gui To: " << width << ", " << height << std::endl;
+                //awe_webview_resize(web_view, width, height, true, 100000);
+                awe_webview_resize(web_view, width, height, false, 100000);
+            }*/
 			awe_webcore_update();
 		}
 

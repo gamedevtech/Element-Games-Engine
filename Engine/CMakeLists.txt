@@ -32,6 +32,7 @@ set(SRCS
 	./Game/ObjectManager.h
 	./Game/Scene.h
 	./Game/Game.h
+	./Game/ObjectScript.h
 	./Game/Source/AI.cpp
 	./Game/Source/Object.cpp
 	./Game/Source/ObjectAttribute.cpp
@@ -42,6 +43,7 @@ set(SRCS
 	./Game/Source/ObjectManager.cpp
 	./Game/Source/Scene.cpp
 	./Game/Source/Game.cpp
+	./Game/Source/ObjectScript.cpp
 
 	# Graphics
 	./Graphics/Camera.h
