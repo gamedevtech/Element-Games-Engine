@@ -16,3 +16,4 @@ AwesomiumProcess
 chrome.pak
 cppcheck_results.txt
 pyegengine.so
+*.directory*
