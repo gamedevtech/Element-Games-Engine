@@ -315,6 +315,8 @@ namespace EG{
                         shaders->SetInt("use_specular_map", 0);
                         //graphics->BindTexture(scene->GetTextureManager()->GetTexture("default_specular")->GetId(), 3);
                     }
+                }else if (variable == EG::Graphics::ShaderManager::ENGINE_USE_SPECULAR_MAP) {
+                    // PASS, this is taken care of in the specular map place.
                 }else if (variable == EG::Graphics::ShaderManager::ENGINE_RECEIVES_LIGHTING) {
                     int r = 0;
                     if (material->GetLit()) {

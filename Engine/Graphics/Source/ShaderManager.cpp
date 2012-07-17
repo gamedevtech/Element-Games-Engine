@@ -454,6 +454,7 @@ namespace EG{
             engine_uniform_string_translations.Set("height_map", EG::Graphics::ShaderManager::ENGINE_HEIGHT_MAP);
             engine_uniform_string_translations.Set("normal_map", EG::Graphics::ShaderManager::ENGINE_NORMAL_MAP);
             engine_uniform_string_translations.Set("specular_map", EG::Graphics::ShaderManager::ENGINE_SPECULAR_MAP);
+            engine_uniform_string_translations.Set("use_specular_map", EG::Graphics::ShaderManager::ENGINE_USE_SPECULAR_MAP);
             engine_uniform_string_translations.Set("depth_map", EG::Graphics::ShaderManager::ENGINE_DEPTH_MAP);
             engine_uniform_string_translations.Set("normal_mapping_enabled", EG::Graphics::ShaderManager::ENGINE_NORMAL_MAPPING_ENABLED);
             engine_uniform_string_translations.Set("shadow_mapping_enabled", EG::Graphics::ShaderManager::ENGINE_SHADOW_MAPPING_ENABLED);

@@ -216,6 +216,7 @@ namespace EG{
                 std::vector<EG::Game::ObjectScript *>::iterator script_iter = scripts->begin();
                 while (script_iter != scripts->end()) {
                     EG::Game::ObjectScript *script = (*script_iter);
+                    EG::Game::ObjectScript::object = object;
                     script->Run();
                     ++script_iter;
                 }

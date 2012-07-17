@@ -59,7 +59,7 @@ int main(int argc, char **argv){
     EG::Dynamics::CollisionBox *plane_box = new EG::Dynamics::CollisionBox(0.0f, glm::vec3(5.0f, 0.05f, 5.0f));
     EG::Dynamics::RigidBody *plane_body = new EG::Dynamics::RigidBody(plane_box, translate, glm::vec3(10.0f, 0.1f, 10.0f));
     object2->AddAttribute(new EG::Game::ObjectAttributeControlRigidBody(plane_body));
-    object2->AddScript(new EG::Game::ObjectScript(object2, "Assets/Scripts/hello_world.lua"));
+    object2->AddScript(new EG::Game::ObjectScript("Assets/Scripts/hello_world.lua"));
 
     // Light 0
     EG::Game::Object *light_object = new EG::Game::Object("RedLight");

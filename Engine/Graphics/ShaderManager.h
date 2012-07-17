@@ -65,7 +65,8 @@ namespace EG{
                     ENGINE_VIEW_MATRIX = 36,
                     ENGINE_BONE_TRANSFORMS = 37,
                     ENGINE_HAS_ANIMATIONS = 38,
-                    ENGINE_INVERSE_VIEW_MATRIX = 39
+                    ENGINE_INVERSE_VIEW_MATRIX = 39,
+                    ENGINE_USE_SPECULAR_MAP = 40
                 };
 
                 enum ShaderUniformTypes{
