@@ -269,6 +269,7 @@ int main(int argc, char **argv){
             material->SetColor(glm::vec4(0.1f, 0.3f, 0.7f, 0.75f));
             material->SetLit(false);
             material->SetTranslucent(true);
+            material->SetDepthMask(false);
             material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ALPHA_PARTICLE);
             material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "particle");
             material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "billboarding");

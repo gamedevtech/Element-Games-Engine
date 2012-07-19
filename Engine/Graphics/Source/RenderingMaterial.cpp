@@ -13,6 +13,9 @@ namespace EG{
             color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
             blending_mode = EG::Graphics::RenderingMaterial::BLEND_OFF;
             culling_mode = EG::Graphics::RenderingMaterial::CULL_OFF;
+            cull_winding = EG::Graphics::RenderingMaterial::CULL_CW;
+            depth_mask = true;
+            depth_test = true;
         }
 
         RenderingMaterial::~RenderingMaterial(void){
@@ -93,6 +96,30 @@ namespace EG{
 
         glm::vec4 RenderingMaterial::GetColor(void){
             return color;
+        }
+
+        void RenderingMaterial::SetDepthTest(bool _depth_test) {
+            depth_test = _depth_test;
+        }
+
+        void RenderingMaterial::SetCullWinding(EG::Graphics::RenderingMaterial::CullWinding _cull_winding) {
+            cull_winding = _cull_winding;
+        }
+
+        void RenderingMaterial::SetDepthMask(bool _depth_mask) {
+            depth_mask = _depth_mask;
+        }
+
+        bool RenderingMaterial::GetDepthMask(void) {
+            return depth_mask;
+        }
+
+        bool RenderingMaterial::GetDepthTest(void) {
+            return depth_test;
+        }
+
+        EG::Graphics::RenderingMaterial::CullWinding RenderingMaterial::GetCullWinding(void) {
+            return cull_winding;
         }
 
         std::string RenderingMaterial::GetTexture(EG::Graphics::RenderingMaterial::RenderingMaterialTextureType type){

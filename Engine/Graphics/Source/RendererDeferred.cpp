@@ -4,9 +4,6 @@
 #include <sstream>
 
 #include "../MeshGenerator.h"
-#include "../../Game/ObjectRenderingAttribute.h"
-#include "../../Game/ObjectBasicAttribute.h"
-#include "../../Game/ObjectEmissionAttribute.h"
 
 namespace EG{
     namespace Graphics{
@@ -122,6 +119,7 @@ namespace EG{
             frame_time = time->GetFrameTime();
             graphics->BeginFrame();
 
+            StoreLights(scene);
             ShadowMapping(scene);
 
             camera->Update();
@@ -136,9 +134,154 @@ namespace EG{
             Overlays(scene, time);
         }
 
+        void RendererDeferred::StoreLights(EG::Game::Scene *scene) {
+            lights.clear();
+            EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
+            EG::Utility::UnsignedIntDictionaryKeysIterator light_object_iterator = light_objects->GetKeysBegin();
+            while (light_object_iterator != light_objects->GetKeysEnd()){
+                EG::Game::Object *light_object = light_objects->Get(*light_object_iterator);
+                if (light_object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT)){
+                    std::vector<EG::Game::ObjectAttribute *> *light_attributes = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
+                    std::vector<EG::Game::ObjectAttribute *>::iterator light_attribute_iterator = light_attributes->begin();
+                    while (light_attribute_iterator != light_attributes->end()){
+                        EG::Game::ObjectAttributeEmissionLight *light_attribute = static_cast<EG::Game::ObjectAttributeEmissionLight *>(*light_attribute_iterator);
+                        lights.push_back(light_attribute->GetLight());
+                        ++light_attribute_iterator;
+                    }
+                }
+                ++light_object_iterator;
+            }
+        }
+
+        void RendererDeferred::SetGraphicsState(EG::Graphics::RenderingMaterial *material) {
+            graphics->SetBlendingMode(material->GetBlendingMode());
+            EG::Graphics::RenderingMaterial::CullingMode cull_mode = material->GetCullingMode();
+            if (cull_mode == EG::Graphics::RenderingMaterial::CULL_OFF) {
+                glDisable(GL_CULL_FACE); // Should be enabled all of the time?
+            } else if (cull_mode == EG::Graphics::RenderingMaterial::CULL_FRONT) {
+                glEnable(GL_CULL_FACE); // Should be enabled all of the time?
+                glCullFace(GL_FRONT);
+            } else if (cull_mode == EG::Graphics::RenderingMaterial::CULL_BACK) {
+                glEnable(GL_CULL_FACE); // Should be enabled all of the time?
+                glCullFace(GL_BACK);
+            }
+            if (!material->GetDepthMask()) {
+                glDepthMask(GL_FALSE);
+            }
+            if (!material->GetDepthTest()) {
+                glDisable(GL_DEPTH_TEST);
+            }
+            if (material->GetCullWinding() == EG::Graphics::RenderingMaterial::CULL_CCW) {
+                glFrontFace(GL_CCW);
+            }
+        }
+
+        void RendererDeferred::RestoreGraphicsState(EG::Graphics::RenderingMaterial *material) {
+            graphics->SetBlendingMode();
+            if (!material->GetDepthMask()) {
+                glDepthMask(GL_TRUE);
+            }
+            if (!material->GetDepthTest()) {
+                glEnable(GL_DEPTH_TEST);
+            }
+            if (material->GetCullWinding() == EG::Graphics::RenderingMaterial::CULL_CCW) {
+                glFrontFace(GL_CW);
+            }
+            glDisable(GL_CULL_FACE); // Should be enabled all of the time?
+        }
+
+        void RendererDeferred::RenderMesh(EG::Game::Scene *scene, EG::Game::Object *object, EG::Game::ObjectAttributeRenderingMesh *mesh_attribute) {
+            EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
+            SetGraphicsState(material);
+            bool tessellation_shader = false;
+            if (material->HasShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER)){
+                std::string shader_id = material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER);
+                if (shaders->Has(shader_id) && shader_id != current_shader_id) {
+                    shaders->Unbind();
+                    current_shader_id = shader_id;
+                    shaders->Bind(current_shader_id);
+                    if (current_shader_id == "sphere_cube_mapped_gradient_decal_prepass" && graphics->CheckVersion(4, 1)) {
+                        tessellation_shader = true;
+                    }
+                    BindShaderBeginUniforms(current_shader_id, scene, NULL);
+                }
+            } else {
+                if (current_shader_id != "prepass") {
+                    current_shader_id = "prepass";
+                    shaders->Unbind();
+                    shaders->Bind(current_shader_id);
+                    BindShaderBeginUniforms(current_shader_id, scene, NULL); // TODO: REUSE THIS WHERE THE SHADER IS INITIALLY BOUND TOO!
+                }
+            }
+
+            // Transformation
+            std::vector<EG::Game::ObjectAttribute *> *transformation_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
+            EG::Game::ObjectAttributeBasicTransformation *transformation_attribute = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(transformation_attributes->at(0));
+            glm::mat4 transformation = transformation_attribute->GetTransformation();
+            glm::mat4 mesh_offset = mesh_attribute->GetOffset();
+            transformation *= mesh_offset;
+            BindEngineShaderUniforms(object, current_shader_id, "Prepass", transformation, material, scene);
+            BindCustomShaderUniforms(object, current_shader_id);
+
+            EG::Graphics::Mesh *mesh = scene->GetMeshManager()->Get(mesh_attribute->GetMeshId());
+            if (mesh){
+                if (tessellation_shader){
+                    graphics->SetUsingTessellation(true);
+                }
+                mesh->Draw();
+                if (tessellation_shader){
+                    graphics->SetUsingTessellation(false);
+                }
+            }
+            RestoreGraphicsState(material);
+        }
+
+        void RendererDeferred::RenderMeshForward(EG::Game::Scene *scene, EG::Game::Object *object, EG::Game::ObjectAttributeRenderingMesh *mesh_attribute) {
+            EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
+            SetGraphicsState(material);
+
+            // Transformation
+            std::vector<EG::Game::ObjectAttribute *> *transformation_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
+            EG::Game::ObjectAttributeBasicTransformation *transformation_attribute = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(transformation_attributes->at(0));
+            glm::mat4 transformation = transformation_attribute->GetTransformation();
+            glm::mat4 mesh_offset = mesh_attribute->GetOffset();
+            transformation *= mesh_offset;
+
+            if (material->HasShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER)){
+                shaders->Unbind();
+                std::string shader_id = material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER);
+                current_shader_id = shader_id;
+                shaders->Bind(current_shader_id);
+            } else {
+                if (current_shader_id != "translucent_lit_prepass") {
+                    current_shader_id = "translucent_lit_prepass";
+                    shaders->Unbind();
+                    shaders->Bind(current_shader_id);
+                }
+            }
+            BindCustomShaderUniforms(object, current_shader_id);
+            BindEngineShaderUniforms(object, current_shader_id, "Lighting", transformation, material, scene);
+
+            std::vector<EG::Graphics::Light *>::iterator light_iter = lights.begin();
+            while (light_iter != lights.end()) {
+                EG::Graphics::Light *light = (*light_iter);
+                glm::vec3 lp = light->GetPosition();
+                glm::vec4 light_position = glm::vec4(lp.x, lp.y, lp.z, 1.0f);
+                BindShaderBeginUniforms(current_shader_id, scene, light);
+
+                EG::Graphics::Mesh *mesh = scene->GetMeshManager()->Get(mesh_attribute->GetMeshId());
+                if (mesh){
+                    mesh->Draw();
+                }
+                ++light_iter;
+            }
+            RestoreGraphicsState(material);
+        }
+
         void RendererDeferred::RenderObject(EG::Game::Scene *scene, EG::Game::Object *object){
             EG::Graphics::Camera *camera = scene->GetCurrentCamera();
             // Meshes
+            bool deferred = true;
             if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH)){
                 std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
                 std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
@@ -146,80 +289,17 @@ namespace EG{
                     EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
                     EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
                     if (material->GetTranslucent() && material->GetLit()) {
-                        // Needs Forward Rendering
-                        translucent_lit_objects[object->GetObjectId()] = object;
-                        //translucent_lit_objects.Set(object->GetObjectId(), object);
-                        ++mesh_attribute_iterator;
-                        continue;
-                    }
-                    EG::Graphics::RenderingMaterial::CullingMode cull_mode = material->GetCullingMode();
-                    if (cull_mode == EG::Graphics::RenderingMaterial::CULL_OFF) {
-                        glDisable(GL_CULL_FACE); // Should be enabled all of the time?
-                    } else if (cull_mode == EG::Graphics::RenderingMaterial::CULL_FRONT) {
-                        glEnable(GL_CULL_FACE); // Should be enabled all of the time?
-                        glCullFace(GL_FRONT);
-                    } else if (cull_mode == EG::Graphics::RenderingMaterial::CULL_BACK) {
-                        glEnable(GL_CULL_FACE); // Should be enabled all of the time?
-                        glCullFace(GL_BACK);
-                    }
-                    bool tessellation_shader = false;
-                    bool custom_shader = false;
-                    bool billboarding_shader = false;
-                    if (material->HasShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER)){
-                        std::string shader_id = material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER);
-                        if (shaders->Has(shader_id) && shader_id != current_shader_id) {
-                            custom_shader = true;
-                            shaders->Unbind();
-                            current_shader_id = shader_id;
-                            shaders->Bind(current_shader_id);
-                            if (current_shader_id == "sphere_cube_mapped_gradient_decal_prepass" && graphics->CheckVersion(4, 1)) {
-                                tessellation_shader = true;
-                            }
+                        current_shader_id = "translucent_lit_prepass";
+                        RenderMeshForward(scene, object, mesh_attribute);
+                        deferred = false;
+                    } else {
+                        if (!deferred) {
+                            current_shader_id = "prepass";
                             BindShaderBeginUniforms(current_shader_id, scene, NULL);
                         }
-
-                        // HACK: This should really be reading some other attribute, so others can write their own billboarding shaders!!!
-                        if (material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER) == "billboarding"){
-                            billboarding_shader = true;
-                            // HACK: Assuming particle systems for now!
-                            //glDisable(GL_DEPTH_TEST);
-                            glDepthMask(GL_FALSE);
-                        }
-                        graphics->SetBlendingMode(material->GetBlendingMode());
-                    } else {
-                        if (current_shader_id != "prepass") {
-                            current_shader_id = "prepass";
-                            shaders->Unbind();
-                            shaders->Bind(current_shader_id);
-                            BindShaderBeginUniforms(current_shader_id, scene, NULL); // TODO: REUSE THIS WHERE THE SHADER IS INITIALLY BOUND TOO!
-                        }
+                        RenderMesh(scene, object, mesh_attribute);
+                        deferred = true;
                     }
-
-                    // Transformation
-                    std::vector<EG::Game::ObjectAttribute *> *transformation_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
-                    EG::Game::ObjectAttributeBasicTransformation *transformation_attribute = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(transformation_attributes->at(0));
-                    glm::mat4 transformation = transformation_attribute->GetTransformation();
-                    glm::mat4 mesh_offset = mesh_attribute->GetOffset();
-                    transformation *= mesh_offset;
-                    BindEngineShaderUniforms(object, current_shader_id, "Prepass", transformation, material, scene);
-                    BindCustomShaderUniforms(object, current_shader_id);
-
-                    EG::Graphics::Mesh *mesh = scene->GetMeshManager()->Get(mesh_attribute->GetMeshId());
-                    if (mesh){
-                        if (tessellation_shader){
-                            graphics->SetUsingTessellation(true);
-                        }
-                        mesh->Draw();
-                        if (tessellation_shader){
-                            graphics->SetUsingTessellation(false);
-                        }
-                    }
-
-                    if (billboarding_shader){
-                        //glDisable(GL_DEPTH_TEST);
-                        glDepthMask(GL_TRUE);
-                    }
-                    graphics->SetBlendingMode();
                     ++mesh_attribute_iterator;
                 }
             }
@@ -233,81 +313,6 @@ namespace EG{
                     std::list<EG::Graphics::Particle *>::iterator piter = psys->GetParticles()->begin();
                     while (piter != psys->GetParticles()->end()){
                         RenderObject(scene, *piter);
-                        ++piter;
-                    }
-                    ++attr_iter;
-                }
-            }
-        }
-
-        void RendererDeferred::RenderObjectForward(EG::Game::Scene *scene, EG::Graphics::Light *light, EG::Game::Object *object){
-            EG::Graphics::Camera *camera = scene->GetCurrentCamera();
-            // Meshes
-            glm::vec3 lp = light->GetPosition();
-            glm::vec4 light_position = glm::vec4(lp.x, lp.y, lp.z, 1.0f);
-            if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH)){
-                std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
-                std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
-                while (mesh_attribute_iterator != mesh_attributes->end()){
-                    EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
-                    EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
-                    EG::Graphics::RenderingMaterial::CullingMode cull_mode = material->GetCullingMode();
-                    if (cull_mode == EG::Graphics::RenderingMaterial::CULL_OFF) {
-                        glDisable(GL_CULL_FACE); // Should be enabled all of the time?
-                    } else if (cull_mode == EG::Graphics::RenderingMaterial::CULL_FRONT) {
-                        glEnable(GL_CULL_FACE); // Should be enabled all of the time?
-                        glCullFace(GL_FRONT);
-                    } else if (cull_mode == EG::Graphics::RenderingMaterial::CULL_BACK) {
-                        glEnable(GL_CULL_FACE); // Should be enabled all of the time?
-                        glCullFace(GL_BACK);
-                    }
-                    graphics->SetBlendingMode(material->GetBlendingMode());
-                    bool custom_shader = false;
-
-                    // Transformation
-                    std::vector<EG::Game::ObjectAttribute *> *transformation_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
-                    EG::Game::ObjectAttributeBasicTransformation *transformation_attribute = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(transformation_attributes->at(0));
-                    glm::mat4 transformation = transformation_attribute->GetTransformation();
-                    glm::mat4 mesh_offset = mesh_attribute->GetOffset();
-                    transformation *= mesh_offset;
-
-                    if (material->HasShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER)){
-                        custom_shader = true;
-                        shaders->Unbind();
-                        std::string shader_id = material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER);
-                        current_shader_id = shader_id;
-                        shaders->Bind(current_shader_id);
-                        BindShaderBeginUniforms(current_shader_id, scene, light);
-                    } else {
-                        if (current_shader_id != "translucent_lit_prepass") {
-                            current_shader_id = "translucent_lit_prepass";
-                            shaders->Unbind();
-                            shaders->Bind(current_shader_id);
-                            BindShaderBeginUniforms(current_shader_id, scene, light); // TODO: REUSE THIS WHERE THE SHADER IS INITIALLY BOUND TOO!
-                        }
-                    }
-
-                    BindCustomShaderUniforms(object, current_shader_id);
-                    BindEngineShaderUniforms(object, current_shader_id, "Lighting", transformation, material, scene);
-
-                    EG::Graphics::Mesh *mesh = scene->GetMeshManager()->Get(mesh_attribute->GetMeshId());
-                    if (mesh){
-                        mesh->Draw();
-                    }
-                    ++mesh_attribute_iterator;
-                    graphics->SetBlendingMode();
-                }
-            }
-
-            if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM)){
-                std::vector<EG::Game::ObjectAttribute *> *attrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM);
-                std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
-                while (attr_iter != attrs->end()){
-                    EG::Game::ObjectAttributeEmissionParticleSystem *pattr = static_cast<EG::Game::ObjectAttributeEmissionParticleSystem *>(*attr_iter);
-                    EG::Graphics::ParticleSystem *psys = pattr->GetParticleSystem();
-                    std::list<EG::Graphics::Particle *>::iterator piter = psys->GetParticles()->begin();
-                    while (piter != psys->GetParticles()->end()){
-                        RenderObjectForward(scene, light, *piter);
                         ++piter;
                     }
                     ++attr_iter;
@@ -331,33 +336,6 @@ namespace EG{
                 RenderObject(scene, object);
                 ++object_iterator;
             }
-
-            // Render Translucent yet Lit Objects Forwardly
-            current_shader_id = "translucent_lit_prepass";
-            EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
-            EG::Utility::UnsignedIntDictionaryKeysIterator light_object_iterator = light_objects->GetKeysBegin();
-            while (light_object_iterator != light_objects->GetKeysEnd()){
-                EG::Game::Object *light_object = light_objects->Get(*light_object_iterator);
-                if (light_object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT)){
-                    std::vector<EG::Game::ObjectAttribute *> *light_attributes = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
-                    std::vector<EG::Game::ObjectAttribute *>::iterator light_attribute_iterator = light_attributes->begin();
-                    while (light_attribute_iterator != light_attributes->end()){
-                        EG::Game::ObjectAttributeEmissionLight *light_attribute = static_cast<EG::Game::ObjectAttributeEmissionLight *>(*light_attribute_iterator);
-                        EG::Graphics::Light *light = light_attribute->GetLight();
-                        BindShaderBeginUniforms(current_shader_id, scene, light);
-                        std::map<unsigned int, EG::Game::Object *>::iterator trans_obj_iter = translucent_lit_objects.begin();
-                        while (trans_obj_iter != translucent_lit_objects.end()) {
-                            EG::Game::Object *object = objects->Get((*trans_obj_iter).first);
-                            RenderObjectForward(scene, light, object);
-                            ++trans_obj_iter;
-                        }
-                        ++light_attribute_iterator;
-                    }
-                }
-                ++light_object_iterator;
-            }
-            //translucent_lit_objects.Clear();
-            translucent_lit_objects.clear();
 
             graphics->EndMultiBufferOffscreenRender();
         }
@@ -717,6 +695,7 @@ namespace EG{
             graphics->BindTexture(deferred_buffer->GetTextureId(3), 2);
             shaders->SetInt("translucent_map", 2);
             shaders->SetFloat2("size", size);
+            shaders->SetFloat2("scalar", glm::vec2(0.5f, 1.5f));
             shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
             shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
             shaders->SetMatrix4("model_matrix", model_matrix);

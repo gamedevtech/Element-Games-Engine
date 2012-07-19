@@ -4,6 +4,9 @@
 #include "Renderer.h"
 #include "OffscreenBuffer.h"
 #include "Light.h"
+#include "../Game/ObjectRenderingAttribute.h"
+#include "../Game/ObjectBasicAttribute.h"
+#include "../Game/ObjectEmissionAttribute.h"
 
 namespace EG{
     namespace Graphics{
@@ -31,43 +34,40 @@ namespace EG{
                 EG::Graphics::OffscreenBuffer *hdr_buffer;
                 EG::Graphics::OffscreenBuffer *ssao_buffer;
                 EG::Graphics::OffscreenBuffer *composition_buffer;
-                //glm::mat4 orthographics_projection_matrix; // created in base renderer
                 EG::Graphics::Mesh *rectangle;
                 EG::Graphics::Mesh *light_sphere;
-                //EG::Utility::UnsignedIntDictionary<EG::Game::Object *> translucent_lit_objects;
-                std::map<unsigned int, EG::Game::Object *> translucent_lit_objects;
 
                 void Bloom(void);
                 void SSAO(void);
+                void StoreLights(EG::Game::Scene *scene);
                 void ShadowMapping(EG::Game::Scene *scene);
 
+                void SetGraphicsState(EG::Graphics::RenderingMaterial *material);
+                void RestoreGraphicsState(EG::Graphics::RenderingMaterial *material);
                 void Resize(void);
                 void RenderObject(EG::Game::Scene *scene, EG::Game::Object *object);
-                void RenderObjectForward(EG::Game::Scene *scene, EG::Graphics::Light *light, EG::Game::Object *object);
+                void RenderMesh(EG::Game::Scene *scene, EG::Game::Object *object, EG::Game::ObjectAttributeRenderingMesh *mesh_attribute);
+                void RenderMeshForward(EG::Game::Scene *scene, EG::Game::Object *object, EG::Game::ObjectAttributeRenderingMesh *mesh_attribute);
                 void CalculateLighting(EG::Game::Scene *scene, EG::Graphics::Light *light);
                 void Prepass(EG::Game::Scene *scene);
                 void Lighting(EG::Game::Scene *scene);
                 void ComposeScene(EG::Game::Scene *scene);
                 void Overlays(EG::Game::Scene *scene, EG::Utility::Time *time);
                 void GenerateFBOs(void);
+                std::vector<EG::Graphics::Light *> lights;
 
                 // Settings
                 DeferredOutputType output_type;
                 float frame_time;
-                //unsigned int ssao_enabled, bloom_enabled, normal_mapping_enabled, shadows_enabled, dof_enabled;
                 unsigned int luminance_buffer_sample_min_x;
                 unsigned int luminance_buffer_sample_min_y;
                 unsigned int luminance_buffer_sample_max_x;
                 unsigned int luminance_buffer_sample_max_y;
-                float luminance_buffer[1024];/*
-                float luminance;
-                float bloom_scale;
-                float luminance_scale;*/
+                float luminance_buffer[1024];
                 float target_luminance;
                 float luminance_time_multiplier;
                 float shadow_mapping_offset_0;
                 float shadow_mapping_offset_1;
-                //glm::mat4 shadow_mapping_bias;
 
                 // Debugging
                 EG::Graphics::Light *debug_shadow_map_light;
