@@ -89,6 +89,8 @@ namespace EG{
 
             //program_objects[shader_id] = object_ids[SHADER_PROGRAM_OBJECT];
             program_objects.Set(shader_id, object_ids[SHADER_PROGRAM_OBJECT]);
+            shader_files.Set(shader_id, new ShaderFiles(vertex_path, fragment_path, geometry_path, tessellation_control_path, tessellation_evaluation_path));
+            fragment_output_counts.Set(shader_id, fragment_outputs);
             vertex_shader_objects.Set(SHADER_PROGRAM_OBJECT, object_ids[VERTEX_SHADER_OBJECT]);
             fragment_shader_objects.Set(SHADER_PROGRAM_OBJECT, object_ids[FRAGMENT_SHADER_OBJECT]);
             if (object_ids[GEOMETRY_SHADER_OBJECT]){
@@ -491,6 +493,26 @@ namespace EG{
             uniform_type_translations.Set("mat2", EG::Graphics::ShaderManager::UNIFORM_MAT2);
             uniform_type_translations.Set("mat3", EG::Graphics::ShaderManager::UNIFORM_MAT3);
             uniform_type_translations.Set("mat4", EG::Graphics::ShaderManager::UNIFORM_MAT4);
+        }
+
+        void ShaderManager::Update(void) {
+            EG::Utility::StringDictionaryKeysIterator iter = shader_files.GetKeysBegin();
+            while (iter != shader_files.GetKeysEnd()) {
+                std::string shader_id = (*iter);
+                EG::Graphics::ShaderFiles *files = shader_files.Get(shader_id);
+                files->Update();
+                if (files->vertex_changed || files->fragment_changed || files->geometry_changed || files->tessellation_control_changed || files->tessellation_evaluation_changed) {
+                    // Stuff Changed, Reload Shader
+                    unsigned int id = program_objects.Get(shader_id);
+                    variable_locations.Get(id)->Clear();
+                    engine_shader_uniforms.Get(id)->clear();
+                    object_shader_uniforms.Get(id)->clear();
+                    unsigned int fragment_output_count = fragment_output_counts.Get(shader_id);
+                    std::cout << "Reloading Shader: " << shader_id << std::endl;
+                    Add(shader_id, files->vertex, files->fragment, files->geometry, files->tessellation_control, files->tessellation_evaluation, fragment_output_count);
+                }
+                ++iter;
+            }
         }
     }
 }

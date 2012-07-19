@@ -1,8 +1,8 @@
 #version 130
 
-smooth in vec3 object_position;
 smooth in vec3 world_position;
 smooth in vec3 normal;
+flat in vec3 sphere_center;
 
 uniform vec3 camera_position;
 uniform float material_specularity;
@@ -21,15 +21,21 @@ out vec4 fragment3;
 
 void main() {
     // constants
-    float stretch_amount = 0.01;
-    float exposure = 1.0;
+    float stretch_amount = 0.0;
+    float exposure = 1.5;
     float g = -0.990;
     float g2 = g * g;
     float tweak_amount = 0.025;
 
+    // discard back pixels
+    // Implement this generically in all shaders as Back face culling! Perhaps do this on the vertex?
+    vec3 camera_to_position = world_position - camera_position;
+    if (dot(normalize(normal), normalize(camera_to_position)) < 0.0) {
+        discard;
+    }
+
     float outer_radius2 = outer_radius * outer_radius;
     float camera_height = length(camera_position);
-    vec3 camera_to_position = world_position - camera_position;
     float far_distance = length(camera_to_position);
     vec3 light_direction = normalize(light_position.xyz - camera_position);
 
@@ -79,7 +85,8 @@ void main() {
     vec4 diffuse = texture(decal_map, uv);
     vec4 diffuse2 = texture(decal_map, vec2(min(0.5, uv.x), 1.0));
 
-    float cosine = dot(normalize(new_light_direction.xyz), normalize(negative_ray_dir));
+    //float cosine = dot(normalize(new_light_direction.xyz), normalize(negative_ray_dir));
+    float cosine = dot(new_light_direction.xyz, negative_ray_dir) * inversesqrt(dot(new_light_direction.xyz, new_light_direction.xyz) * dot(negative_ray_dir, negative_ray_dir));
     float cosine2 = cosine * cosine;
 
     vec4 diffuse_color = diffuse * alpha;
@@ -88,6 +95,9 @@ void main() {
 
     vec4 color_out = vec4(1.0) - exp((diffuse_color * (1.0 + uv.y) + mie_color) * -exposure);
     //color_out.a = alpha;
+    /*if (alpha < 0.0 || alpha > 1.0) {
+        discard;
+    }*/
 
     fragment0 = vec4(0.0, 0.0, 0.0, color_out.a);
     fragment1 = vec4(0.0, 0.0, 0.0, color_out.a);

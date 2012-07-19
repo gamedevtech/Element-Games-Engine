@@ -69,6 +69,7 @@ namespace EG{
                 float luminance_time_multiplier;
                 float shadow_mapping_offset_0;
                 float shadow_mapping_offset_1;
+                bool shader_debugging;
                 //glm::mat4 shadow_mapping_bias;
 
                 // Debugging

@@ -6,6 +6,9 @@
 #include <iostream>
 #include <fstream>
 
+#include <sys/types.h>
+#include <sys/stat.h> 
+
 #include "../Utility/StringDictionary.h"
 #include "../Utility/UnsignedIntDictionary.h"
 #include "Shader.h"
@@ -126,9 +129,13 @@ namespace EG{
                 void SetMatrix3(const char *variable_name, glm::mat3 matrix);
                 void SetMatrix4(const char *variable_name, glm::mat4 matrix);
                 void SetMatrix4(const char *variable_name, std::vector<glm::mat4> matrix);
+
+                void Update(void);
             private:
                 bool shader_bound;
                 unsigned int current_program_object_id;
+                EG::Utility::StringDictionary<ShaderFiles *> shader_files;
+                EG::Utility::StringDictionary<unsigned int> fragment_output_counts;
                 EG::Utility::StringDictionary<unsigned int> program_objects;
                 EG::Utility::UnsignedIntDictionary<unsigned int> vertex_shader_objects;
                 EG::Utility::UnsignedIntDictionary<unsigned int> fragment_shader_objects;

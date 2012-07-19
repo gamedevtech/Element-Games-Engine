@@ -113,6 +113,7 @@ int main(int argc, char **argv){
     material->SetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR, "planet_specular");
     material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "planet_decal_gradient");
     material->SetLit(true);
+    //material->SetCullingMode(EG::Graphics::RenderingMaterial::CULL_BACK);
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "sphere_cube_map_gradient_decal");
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER, "sphere_cube_map_gradient_decal_with_lighting");
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "sphere_cube_map_gradient_decal");
@@ -127,8 +128,9 @@ int main(int argc, char **argv){
     material->SetLit(true);
     material->SetTranslucent(true);
     material->SetCastsShadows(false);
+    //material->SetCullingMode(EG::Graphics::RenderingMaterial::CULL_FRONT);
     material->SetColor(glm::vec4(0.25f, 0.25f, 0.5f, 0.5f));
-    material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ONE_ONE_MINUS_SRC_ALPHA);
+    //material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ONE_ONE_MINUS_SRC_ALPHA);
     EG::Graphics::Texture *atmosphere_gradient = new EG::Graphics::Texture("Assets/Textures/atmosphere_gradient2.png");
     scene->GetTextureManager()->AddTexture("atmosphere_gradient", atmosphere_gradient);
     material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "atmosphere_gradient");
