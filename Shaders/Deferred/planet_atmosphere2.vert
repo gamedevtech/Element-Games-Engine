@@ -4,6 +4,7 @@ uniform mat4 projection_matrix;
 uniform mat4 model_matrix;
 uniform mat4 view_matrix;
 uniform mat4 normal_matrix;
+uniform vec3 camera_position;
 
 in vec4 vertex_position;
 in vec4 vertex_normal;

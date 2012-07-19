@@ -1,5 +1,6 @@
 Remember:
 - Def need frustum culling and other culling in general, seriously!
+- Add vertex culling and pixel culling to all shaders since opengl can't do it for me in deferred renderer!
 - Add Camera to Light for shadow mapping!
 - Create a way to add shaders outside of the renderer class!
 - GUI Focus
