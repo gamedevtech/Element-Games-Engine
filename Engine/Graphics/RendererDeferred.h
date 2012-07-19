@@ -41,6 +41,8 @@ namespace EG{
                 void SSAO(void);
                 void ShadowMapping(EG::Game::Scene *scene);
 
+                void SetGraphicsState(EG::Graphics::RenderingMaterial *material);
+                void RestoreGraphicsState(EG::Graphics::RenderingMaterial *material);
                 void Resize(void);
                 void RenderObject(EG::Game::Scene *scene, EG::Game::Object *object);
                 void RenderObjectForward(EG::Game::Scene *scene, EG::Graphics::Light *light, EG::Game::Object *object);

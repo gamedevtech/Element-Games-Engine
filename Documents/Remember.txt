@@ -18,3 +18,4 @@ Remember:
 - Omni Directional Shadow Mapping
 - JSON Based Scene Format
 - Picking in Editor on Non-Physics Objects (Bounding Box Automatically Generated!)
+- Separate all transparent rendering and draw it in depth first order!

@@ -113,6 +113,43 @@ namespace EG{
             GenerateFBOs();
         }
 
+        void RendererDeferred::SetGraphicsState(EG::Graphics::RenderingMaterial *material) {
+            graphics->SetBlendingMode(material->GetBlendingMode());
+            EG::Graphics::RenderingMaterial::CullingMode cull_mode = material->GetCullingMode();
+            if (cull_mode == EG::Graphics::RenderingMaterial::CULL_OFF) {
+                glDisable(GL_CULL_FACE); // Should be enabled all of the time?
+            } else if (cull_mode == EG::Graphics::RenderingMaterial::CULL_FRONT) {
+                glEnable(GL_CULL_FACE); // Should be enabled all of the time?
+                glCullFace(GL_FRONT);
+            } else if (cull_mode == EG::Graphics::RenderingMaterial::CULL_BACK) {
+                glEnable(GL_CULL_FACE); // Should be enabled all of the time?
+                glCullFace(GL_BACK);
+            }
+            if (!material->GetDepthMask()) {
+                glDepthMask(GL_FALSE);
+            }
+            if (!material->GetDepthTest()) {
+                glDisable(GL_DEPTH_TEST);
+            }
+            if (material->GetCullWinding() == EG::Graphics::RenderingMaterial::CULL_CCW) {
+                glFrontFace(GL_CCW);
+            }
+        }
+
+        void RendererDeferred::RestoreGraphicsState(EG::Graphics::RenderingMaterial *material) {
+            graphics->SetBlendingMode();
+            if (!material->GetDepthMask()) {
+                glDepthMask(GL_TRUE);
+            }
+            if (!material->GetDepthTest()) {
+                glEnable(GL_DEPTH_TEST);
+            }
+            if (material->GetCullWinding() == EG::Graphics::RenderingMaterial::CULL_CCW) {
+                glFrontFace(GL_CW);
+            }
+            glDisable(GL_CULL_FACE); // Should be enabled all of the time?
+        }
+
         void RendererDeferred::Render(EG::Game::Scene *scene, EG::Utility::Time *time){
             if (graphics->Resized()) {
                 Resize();
@@ -152,7 +189,8 @@ namespace EG{
                         ++mesh_attribute_iterator;
                         continue;
                     }
-                    EG::Graphics::RenderingMaterial::CullingMode cull_mode = material->GetCullingMode();
+                    SetGraphicsState(material);
+                    /*EG::Graphics::RenderingMaterial::CullingMode cull_mode = material->GetCullingMode();
                     if (cull_mode == EG::Graphics::RenderingMaterial::CULL_OFF) {
                         glDisable(GL_CULL_FACE); // Should be enabled all of the time?
                     } else if (cull_mode == EG::Graphics::RenderingMaterial::CULL_FRONT) {
@@ -161,7 +199,7 @@ namespace EG{
                     } else if (cull_mode == EG::Graphics::RenderingMaterial::CULL_BACK) {
                         glEnable(GL_CULL_FACE); // Should be enabled all of the time?
                         glCullFace(GL_BACK);
-                    }
+                    }*/
                     bool tessellation_shader = false;
                     bool custom_shader = false;
                     bool billboarding_shader = false;
@@ -179,13 +217,13 @@ namespace EG{
                         }
 
                         // HACK: This should really be reading some other attribute, so others can write their own billboarding shaders!!!
-                        if (material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER) == "billboarding"){
+                        /*if (material->GetShader(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER) == "billboarding"){
                             billboarding_shader = true;
                             // HACK: Assuming particle systems for now!
                             //glDisable(GL_DEPTH_TEST);
                             glDepthMask(GL_FALSE);
                         }
-                        graphics->SetBlendingMode(material->GetBlendingMode());
+                        graphics->SetBlendingMode(material->GetBlendingMode());*/
                     } else {
                         if (current_shader_id != "prepass") {
                             current_shader_id = "prepass";
@@ -215,11 +253,12 @@ namespace EG{
                         }
                     }
 
-                    if (billboarding_shader){
+                    /*if (billboarding_shader){
                         //glDisable(GL_DEPTH_TEST);
                         glDepthMask(GL_TRUE);
                     }
-                    graphics->SetBlendingMode();
+                    graphics->SetBlendingMode();*/
+                    RestoreGraphicsState(material);
                     ++mesh_attribute_iterator;
                 }
             }
@@ -251,7 +290,7 @@ namespace EG{
                 while (mesh_attribute_iterator != mesh_attributes->end()){
                     EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
                     EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
-                    EG::Graphics::RenderingMaterial::CullingMode cull_mode = material->GetCullingMode();
+                    /*EG::Graphics::RenderingMaterial::CullingMode cull_mode = material->GetCullingMode();
                     if (cull_mode == EG::Graphics::RenderingMaterial::CULL_OFF) {
                         glDisable(GL_CULL_FACE); // Should be enabled all of the time?
                     } else if (cull_mode == EG::Graphics::RenderingMaterial::CULL_FRONT) {
@@ -261,7 +300,8 @@ namespace EG{
                         glEnable(GL_CULL_FACE); // Should be enabled all of the time?
                         glCullFace(GL_BACK);
                     }
-                    graphics->SetBlendingMode(material->GetBlendingMode());
+                    graphics->SetBlendingMode(material->GetBlendingMode());*/
+                    SetGraphicsState(material);
                     bool custom_shader = false;
 
                     // Transformation
@@ -294,8 +334,9 @@ namespace EG{
                     if (mesh){
                         mesh->Draw();
                     }
+                    RestoreGraphicsState(material);
                     ++mesh_attribute_iterator;
-                    graphics->SetBlendingMode();
+                    //graphics->SetBlendingMode();
                 }
             }
 

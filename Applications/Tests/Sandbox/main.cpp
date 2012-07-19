@@ -269,6 +269,7 @@ int main(int argc, char **argv){
             material->SetColor(glm::vec4(0.1f, 0.3f, 0.7f, 0.75f));
             material->SetLit(false);
             material->SetTranslucent(true);
+            material->SetDepthMask(false);
             material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ALPHA_PARTICLE);
             material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "particle");
             material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "billboarding");
@@ -387,14 +388,9 @@ int main(int argc, char **argv){
     objects->AddObject(read_object);
     objects->AddObject(object2);
     objects->AddObject(object3);
-    //objects->AddObject(object4);
     objects->AddObject(light_object);
-//     objects->AddObject(light_object2);
-//     objects->AddObject(light_object3);
     objects->AddObject(particle_system);
-    //objects->AddObject(camera_object);
     game->GetScene()->SetCurrentCamera(main_camera);
-    //objects->AddObject(dummy_light_object);
     // NOTE: End Test Data
 
     while (game->GetWindow()->IsOpened()){

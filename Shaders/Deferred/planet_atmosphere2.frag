@@ -86,9 +86,6 @@ void main() {
     float mie_phase = 1.5 * ((1.0 - g2) / (2.0 + g2)) * (1.0 + cosine2) /(1.0 + g2 - 2.0 * g * cosine);
     vec4 mie_color = diffuse2 * mie_phase * alpha;
 
-    if (alpha < 0.0001) {
-        discard;
-    }
     vec4 color_out = vec4(1.0) - exp((diffuse_color * (1.0 + uv.y) + mie_color) * -exposure);
     //color_out.a = alpha;
 
