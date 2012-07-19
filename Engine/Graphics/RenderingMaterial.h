@@ -41,6 +41,10 @@ namespace EG{
                     CULL_FRONT = 1,
                     CULL_BACK = 2
                 };
+                enum CullWinding{
+                    CULL_CW = 0,
+                    CULL_CCW = 1
+                };
 
                 RenderingMaterial(void);
                 ~RenderingMaterial(void);
@@ -53,6 +57,9 @@ namespace EG{
                 void SetSpecular(float _specular);
                 void SetSpecularExponent(float _specular_exponent);
                 void SetColor(glm::vec4 _color);
+                void SetDepthMask(bool _depth_mask = true);
+                void SetDepthTest(bool _depth_test = true);
+                void SetCullWinding(EG::Graphics::RenderingMaterial::CullWinding _cull_winding);
                 void SetTexture(EG::Graphics::RenderingMaterial::RenderingMaterialTextureType type, std::string texture_id);
                 void SetCubeMap(EG::Graphics::RenderingMaterial::RenderingMaterialTextureType type, std::string texture_id);
                 void SetShaderOverride(EG::Graphics::RenderingMaterial::RendererType renderer_type, EG::Graphics::RenderingMaterial::RenderingPhaseShaderType rendering_phase, std::string shader_id);
@@ -65,6 +72,9 @@ namespace EG{
                 float GetSpecular(void);
                 float GetSpecularExponent(void);
                 glm::vec4 GetColor(void);
+                bool GetDepthMask(void);
+                bool GetDepthTest(void);
+                EG::Graphics::RenderingMaterial::CullWinding GetCullWinding(void);
                 std::string GetTexture(EG::Graphics::RenderingMaterial::RenderingMaterialTextureType type);
                 std::string GetCubeMap(EG::Graphics::RenderingMaterial::RenderingMaterialTextureType type);
                 bool HasShader(EG::Graphics::RenderingMaterial::RendererType renderer_type, EG::Graphics::RenderingMaterial::RenderingPhaseShaderType rendering_phase);
@@ -78,10 +88,11 @@ namespace EG{
                 void SetCullingMode(EG::Graphics::RenderingMaterial::CullingMode _culling_mode);
                 EG::Graphics::RenderingMaterial::CullingMode GetCullingMode(void);
             private:
-                bool lit, translucent, casts_shadows;
+                bool lit, translucent, casts_shadows, depth_mask, depth_test;
                 float ambient, diffuse, specular;
                 float specular_exponent;
                 EG::Graphics::RenderingMaterial::CullingMode culling_mode;
+                EG::Graphics::RenderingMaterial::CullWinding cull_winding;
                 glm::vec4 color;
                 EG::Graphics::RenderingMaterial::BlendingMode blending_mode;
                 EG::Utility::Dictionary<EG::Graphics::RenderingMaterial::RenderingMaterialTextureType, std::string> textures;
