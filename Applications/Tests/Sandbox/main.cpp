@@ -117,10 +117,10 @@ int main(int argc, char **argv){
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "sphere_cube_map_gradient_decal");
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER, "sphere_cube_map_gradient_decal_with_lighting");
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "sphere_cube_mapped_gradient_decal_prepass");
-    object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material, glm::scale(3.0f, 3.0f, 3.0f)));
+    object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material, glm::scale(1.0f, 1.0f, 1.0f)));
 
     EG::Game::Object *pa = new EG::Game::Object("PlanetAtmosphere");
-    EG::Graphics::Texture *atmosphere_gradient = new EG::Graphics::Texture("Assets/Textures/atmosphere_gradient2.png");
+    EG::Graphics::Texture *atmosphere_gradient = new EG::Graphics::Texture("Assets/Textures/atmosphere_gradient.png");
     pa->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(planet_transform));
     material = new EG::Graphics::RenderingMaterial();
     material->SetLit(true);
@@ -132,9 +132,9 @@ int main(int argc, char **argv){
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER, "planet_atmosphere");
     material->SetCastsShadows(false);
     material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ALPHA);
-    pa->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material, glm::scale(3.1f, 3.1f, 3.1f)));
-    pa->AddAttribute(new EG::Game::ObjectAttributeBasicFloat("inner_radius", 3.0f));
-    pa->AddAttribute(new EG::Game::ObjectAttributeBasicFloat("outer_radius", 3.1f));
+    pa->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material, glm::scale(1.1f, 1.1f, 1.1f)));
+    pa->AddAttribute(new EG::Game::ObjectAttributeBasicFloat("inner_radius", 1.0f));
+    pa->AddAttribute(new EG::Game::ObjectAttributeBasicFloat("outer_radius", 1.1f));
 
     // Test Cube2
     EG::Graphics::Mesh *cube = EG::Graphics::GenerateCube();

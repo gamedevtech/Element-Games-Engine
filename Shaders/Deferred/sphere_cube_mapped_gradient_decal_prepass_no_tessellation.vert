@@ -20,11 +20,10 @@ smooth out vec3 binormal;
 smooth out vec3 bitangent;
 
 void main(){
-	position = (model_matrix * vertex_position).xyz;
-	texcoord = normalize(vertex_position).xyz;
-	normal = normalize(normal_matrix * vertex_position).xyz;
-	binormal = normalize(normal_matrix * vec4(vertex_binormal.xyz, 0.0)).xyz;
-	bitangent = normalize(normal_matrix * vec4(vertex_bitangent.xyz, 0.0)).xyz;
-
-	gl_Position = projection_matrix * view_matrix * model_matrix * vertex_position;
+    texcoord = normalize(vertex_position).xyz;
+    normal = normalize(normal_matrix * vertex_position).xyz;
+    position = (model_matrix * vertex_position).xyz;
+    binormal = normalize(normal_matrix * vec4(vertex_binormal.xyz, 0.0)).xyz;
+    bitangent = normalize(normal_matrix * vec4(vertex_bitangent.xyz, 0.0)).xyz;
+    gl_Position = projection_matrix * view_matrix * (model_matrix * vertex_position);
 }
