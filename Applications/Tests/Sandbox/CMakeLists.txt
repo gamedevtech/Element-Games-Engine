@@ -27,7 +27,7 @@ ELSE (WIN32)
 ENDIF (WIN32)
 
 IF (WIN32)
-	target_link_libraries(element_games_sandbox egengine glew_static glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath Awesomium freetype ftgl_static mingw32 egengine glew_static glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath Awesomium freetype ftgl_static mingw32)
+	target_link_libraries(element_games_sandbox egengine glew_static glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath Awesomium lua freetype ftgl_static mingw32 egengine glew_static glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath Awesomium lua freetype ftgl_static mingw32)
 ELSE (WIN32)
 	target_link_libraries(element_games_sandbox egengine sfml-graphics sfml-window sfml-system sfml-audio sfml-network assimp GLEW glut GLU BulletDynamics BulletCollision LinearMath Xrandr ftgl awesomium-1.6.5 lua)
 ENDIF (WIN32)
