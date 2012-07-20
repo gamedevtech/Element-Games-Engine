@@ -22,7 +22,7 @@ out vec4 fragment3;
 void main() {
     // constants
     float stretch_amount = 0.0;
-    float exposure = 1.5;
+    float exposure = 1.0;
     float g = -0.990;
     float g2 = g * g;
     float tweak_amount = 0.025;

@@ -106,40 +106,35 @@ int main(int argc, char **argv){
 
     EG::Graphics::Texture *decal_gradient = new EG::Graphics::Texture("Assets/Textures/generated_planet_decal_map.png");
     scene->GetTextureManager()->AddTexture("planet_decal_gradient", decal_gradient);
-    std::cout << "Dongle" << std::endl;
     material = new EG::Graphics::RenderingMaterial();
     material->SetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT, "planet_heights");
     material->SetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, "planet_normals");
     material->SetCubeMap(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR, "planet_specular");
     material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "planet_decal_gradient");
     material->SetLit(true);
-    //material->SetCullingMode(EG::Graphics::RenderingMaterial::CULL_BACK);
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "sphere_cube_map_gradient_decal");
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_BASIC, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER, "sphere_cube_map_gradient_decal_with_lighting");
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_TEXTURED_SHADER, "sphere_cube_map_gradient_decal");
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_MULTIPASS, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER, "sphere_cube_map_gradient_decal_with_lighting");
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_PREPASS_SHADER, "sphere_cube_mapped_gradient_decal_prepass");
-    object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));
+    object->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material, glm::scale(3.0f, 3.0f, 3.0f)));
 
     EG::Game::Object *pa = new EG::Game::Object("PlanetAtmosphere");
-    planet_transform = planet_transform * glm::scale(1.15f, 1.15f, 1.15f);
+    EG::Graphics::Texture *atmosphere_gradient = new EG::Graphics::Texture("Assets/Textures/atmosphere_gradient2.png");
     pa->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(planet_transform));
     material = new EG::Graphics::RenderingMaterial();
     material->SetLit(true);
     material->SetTranslucent(true);
     material->SetCastsShadows(false);
-    //material->SetCullingMode(EG::Graphics::RenderingMaterial::CULL_FRONT);
     material->SetColor(glm::vec4(0.25f, 0.25f, 0.5f, 0.5f));
-    //material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ONE_ONE_MINUS_SRC_ALPHA);
-    EG::Graphics::Texture *atmosphere_gradient = new EG::Graphics::Texture("Assets/Textures/atmosphere_gradient2.png");
     scene->GetTextureManager()->AddTexture("atmosphere_gradient", atmosphere_gradient);
     material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "atmosphere_gradient");
     material->SetShaderOverride(EG::Graphics::RenderingMaterial::RENDERER_DEFERRED, EG::Graphics::RenderingMaterial::RENDERING_PHASE_LIGHTING_SHADER, "planet_atmosphere");
     material->SetCastsShadows(false);
     material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ALPHA);
-    pa->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material));
-    pa->AddAttribute(new EG::Game::ObjectAttributeBasicFloat("inner_radius", 1.0f));
-    pa->AddAttribute(new EG::Game::ObjectAttributeBasicFloat("outer_radius", 1.15f));
+    pa->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("planet_sphere", material, glm::scale(3.1f, 3.1f, 3.1f)));
+    pa->AddAttribute(new EG::Game::ObjectAttributeBasicFloat("inner_radius", 3.0f));
+    pa->AddAttribute(new EG::Game::ObjectAttributeBasicFloat("outer_radius", 3.1f));
 
     // Test Cube2
     EG::Graphics::Mesh *cube = EG::Graphics::GenerateCube();

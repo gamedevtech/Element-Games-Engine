@@ -150,7 +150,7 @@ void Sandbox::Update(void){
     while (attr_iter != attrs->end()){
         EG::Game::ObjectAttributeBasicTransformation *trans_attr = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(*attr_iter);
         glm::mat4 trans = trans_attr->GetTransformation();
-        trans = glm::rotate(trans, 0.1f, glm::vec3(0.0f, 1.0f, 0.0f));
+        trans = glm::rotate(trans, 0.01f, glm::vec3(0.0f, 1.0f, 0.0f));
         trans_attr->SetTransformation(trans);
         ++attr_iter;
     }
