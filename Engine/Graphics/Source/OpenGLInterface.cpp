@@ -48,6 +48,8 @@ namespace EG{
             std::cout << "Max Vertex Attribs: " << n << std::endl;
             glGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &n);
             std::cout << "Max Vertex Uniform Components: " << n << std::endl;
+            glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &n);
+            std::cout << "Max FBO Color Attachments: " << n << std::endl;
         }
 
         void OpenGLInterface::Resize(unsigned int viewport_width, unsigned int viewport_height){

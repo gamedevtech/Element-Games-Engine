@@ -113,27 +113,58 @@ namespace EG{
             GenerateFBOs();
         }
 
+        void RendererDeferred::StoreLights(EG::Game::Scene *scene) {
+            lights.clear();
+            EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
+            EG::Utility::UnsignedIntDictionaryKeysIterator light_object_iterator = light_objects->GetKeysBegin();
+            while (light_object_iterator != light_objects->GetKeysEnd()){
+                EG::Game::Object *light_object = light_objects->Get(*light_object_iterator);
+                if (light_object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT)){
+                    std::vector<EG::Game::ObjectAttribute *> *light_attributes = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
+                    std::vector<EG::Game::ObjectAttribute *>::iterator light_attribute_iterator = light_attributes->begin();
+                    while (light_attribute_iterator != light_attributes->end()){
+                        EG::Game::ObjectAttributeEmissionLight *light_attribute = static_cast<EG::Game::ObjectAttributeEmissionLight *>(*light_attribute_iterator);
+                        lights.push_back(light_attribute->GetLight());
+                        ++light_attribute_iterator;
+                    }
+                }
+
+                if (light_object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM)){
+                    std::vector<EG::Game::ObjectAttribute *> *attrs = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM);
+                    std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+                    while (attr_iter != attrs->end()){
+                        EG::Game::ObjectAttributeEmissionParticleSystem *pattr = static_cast<EG::Game::ObjectAttributeEmissionParticleSystem *>(*attr_iter);
+                        EG::Graphics::ParticleSystem *psys = pattr->GetParticleSystem();
+                        std::list<EG::Graphics::Particle *>::iterator piter = psys->GetParticles()->begin();
+                        while (piter != psys->GetParticles()->end()){
+                            EG::Graphics::Particle *p = (*piter);
+                            if (p->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT)){
+                                std::vector<EG::Game::ObjectAttribute *> *light_attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
+                                std::vector<EG::Game::ObjectAttribute *>::iterator light_attribute_iterator = light_attributes->begin();
+                                while (light_attribute_iterator != light_attributes->end()){
+                                    EG::Game::ObjectAttributeEmissionLight *light_attribute = static_cast<EG::Game::ObjectAttributeEmissionLight *>(*light_attribute_iterator);
+                                    lights.push_back(light_attribute->GetLight());
+                                    ++light_attribute_iterator;
+                                }
+                            }
+                            ++piter;
+                        }
+                        ++attr_iter;
+                    }
+                }
+
+                ++light_object_iterator;
+            }
+        }
+
         void RendererDeferred::SetGraphicsState(EG::Graphics::RenderingMaterial *material) {
             graphics->SetBlendingMode(material->GetBlendingMode());
-//             EG::Graphics::RenderingMaterial::CullingMode cull_mode = material->GetCullingMode();
-//             if (cull_mode == EG::Graphics::RenderingMaterial::CULL_OFF) {
-//                 glDisable(GL_CULL_FACE); // Should be enabled all of the time?
-//             } else if (cull_mode == EG::Graphics::RenderingMaterial::CULL_FRONT) {
-//                 glEnable(GL_CULL_FACE); // Should be enabled all of the time?
-//                 glCullFace(GL_FRONT);
-//             } else if (cull_mode == EG::Graphics::RenderingMaterial::CULL_BACK) {
-//                 glEnable(GL_CULL_FACE); // Should be enabled all of the time?
-//                 glCullFace(GL_BACK);
-//             }
             if (!material->GetDepthMask()) {
                 glDepthMask(GL_FALSE);
             }
             if (!material->GetDepthTest()) {
                 glDisable(GL_DEPTH_TEST);
             }
-            /*if (material->GetCullWinding() == EG::Graphics::RenderingMaterial::CULL_CCW) {
-                glFrontFace(GL_CCW);
-            }*/
             // TODO: Impelement culling in all shaders!
         }
 
@@ -145,15 +176,12 @@ namespace EG{
             if (!material->GetDepthTest()) {
                 glEnable(GL_DEPTH_TEST);
             }
-//             if (material->GetCullWinding() == EG::Graphics::RenderingMaterial::CULL_CCW) {
-//                 glFrontFace(GL_CW);
-//             }
-            //glDisable(GL_CULL_FACE); // Should be enabled all of the time?
         }
 
         void RendererDeferred::Render(EG::Game::Scene *scene, EG::Utility::Time *time){
             // Also, make this a feature you can turn on and off!
             shaders->Update(); // Check for changes, this should be done in a thread!!
+            StoreLights(scene);
 
             if (graphics->Resized()) {
                 Resize();
@@ -341,27 +369,16 @@ namespace EG{
 
             // Render Translucent yet Lit Objects Forwardly
             current_shader_id = "translucent_lit_prepass";
-            EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
-            EG::Utility::UnsignedIntDictionaryKeysIterator light_object_iterator = light_objects->GetKeysBegin();
-            while (light_object_iterator != light_objects->GetKeysEnd()){
-                EG::Game::Object *light_object = light_objects->Get(*light_object_iterator);
-                if (light_object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT)){
-                    std::vector<EG::Game::ObjectAttribute *> *light_attributes = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
-                    std::vector<EG::Game::ObjectAttribute *>::iterator light_attribute_iterator = light_attributes->begin();
-                    while (light_attribute_iterator != light_attributes->end()){
-                        EG::Game::ObjectAttributeEmissionLight *light_attribute = static_cast<EG::Game::ObjectAttributeEmissionLight *>(*light_attribute_iterator);
-                        EG::Graphics::Light *light = light_attribute->GetLight();
-                        BindShaderBeginUniforms(current_shader_id, scene, light);
-                        std::map<unsigned int, EG::Game::Object *>::iterator trans_obj_iter = translucent_lit_objects.begin();
-                        while (trans_obj_iter != translucent_lit_objects.end()) {
-                            EG::Game::Object *object = objects->Get((*trans_obj_iter).first);
-                            RenderObjectForward(scene, light, object);
-                            ++trans_obj_iter;
-                        }
-                        ++light_attribute_iterator;
-                    }
+            std::vector<EG::Graphics::Light *>::iterator lights_iter = lights.begin();
+            while (lights_iter != lights.end()) {
+                EG::Graphics::Light *light = (*lights_iter);
+                std::map<unsigned int, EG::Game::Object *>::iterator trans_obj_iter = translucent_lit_objects.begin();
+                while (trans_obj_iter != translucent_lit_objects.end()) {
+                    EG::Game::Object *object = objects->Get((*trans_obj_iter).first);
+                    RenderObjectForward(scene, light, object);
+                    ++trans_obj_iter;
                 }
-                ++light_object_iterator;
+                ++lights_iter;
             }
             //translucent_lit_objects.Clear();
             translucent_lit_objects.clear();
@@ -455,52 +472,13 @@ namespace EG{
             glEnable(GL_BLEND);
             glBlendFunc(GL_ONE, GL_ONE);
 
-            EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
-            EG::Utility::UnsignedIntDictionaryKeysIterator light_object_iterator = light_objects->GetKeysBegin();
-            while (light_object_iterator != light_objects->GetKeysEnd()){
-                EG::Game::Object *light_object = light_objects->Get(*light_object_iterator);
-                if (light_object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT)){
-                    std::vector<EG::Game::ObjectAttribute *> *light_attributes = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
-                    std::vector<EG::Game::ObjectAttribute *>::iterator light_attribute_iterator = light_attributes->begin();
-                    while (light_attribute_iterator != light_attributes->end()){
-                        //glPushAttrib(GL_TEXTURE_BIT);
-                        EG::Game::ObjectAttributeEmissionLight *light_attribute = static_cast<EG::Game::ObjectAttributeEmissionLight *>(*light_attribute_iterator);
-                        EG::Graphics::Light *light = light_attribute->GetLight();
-                        CalculateLighting(scene, light);
-                        ++light_attribute_iterator;
-                        //glPopAttrib();
-                    }
-                }
-
-                if (light_object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM)){
-                    std::vector<EG::Game::ObjectAttribute *> *attrs = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM);
-                    std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
-                    while (attr_iter != attrs->end()){
-                        EG::Game::ObjectAttributeEmissionParticleSystem *pattr = static_cast<EG::Game::ObjectAttributeEmissionParticleSystem *>(*attr_iter);
-                        EG::Graphics::ParticleSystem *psys = pattr->GetParticleSystem();
-                        std::list<EG::Graphics::Particle *>::iterator piter = psys->GetParticles()->begin();
-                        while (piter != psys->GetParticles()->end()){
-                            EG::Graphics::Particle *p = (*piter);
-                            if (p->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT)){
-                                std::vector<EG::Game::ObjectAttribute *> *light_attributes = p->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
-                                std::vector<EG::Game::ObjectAttribute *>::iterator light_attribute_iterator = light_attributes->begin();
-                                while (light_attribute_iterator != light_attributes->end()){
-                                    //glPushAttrib(GL_TEXTURE_BIT);
-                                    EG::Game::ObjectAttributeEmissionLight *light_attribute = static_cast<EG::Game::ObjectAttributeEmissionLight *>(*light_attribute_iterator);
-                                    EG::Graphics::Light *light = light_attribute->GetLight();
-                                    CalculateLighting(scene, light);
-                                    ++light_attribute_iterator;
-                                    //glPopAttrib();
-                                }
-                            }
-                            ++piter;
-                        }
-                        ++attr_iter;
-                    }
-                }
-
-                ++light_object_iterator;
+            std::vector<EG::Graphics::Light *>::iterator light_iter = lights.begin();
+            while (light_iter != lights.end()) {
+                EG::Graphics::Light *light = (*light_iter);
+                CalculateLighting(scene, light);
+                ++light_iter;
             }
+
             glDisable(GL_BLEND);
 
             shaders->Unbind();
@@ -854,105 +832,93 @@ namespace EG{
                 glPolygonOffset(shadow_mapping_offset_0, shadow_mapping_offset_1);
                 //
 
-                EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
-                EG::Utility::UnsignedIntDictionaryKeysIterator light_object_iterator = light_objects->GetKeysBegin();
-                while (light_object_iterator != light_objects->GetKeysEnd()){
-                    EG::Game::Object *light_object = light_objects->Get(*light_object_iterator);
-                    if (light_object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT)){
-                        std::vector<EG::Game::ObjectAttribute *> *light_attributes = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
-                        std::vector<EG::Game::ObjectAttribute *>::iterator light_attribute_iterator = light_attributes->begin();
-                        while (light_attribute_iterator != light_attributes->end()){
-                            EG::Game::ObjectAttributeEmissionLight *light_attribute = static_cast<EG::Game::ObjectAttributeEmissionLight *>(*light_attribute_iterator);
-                            EG::Graphics::Light *light = light_attribute->GetLight();
-                            if (light->GetCastsShadows()){
-                                debug_shadow_map_light = light;
-                                light->Update();
-                                graphics->StartOffscreenRender(light->GetShadowBuffer()->GetBufferId(), 0, int(light->GetShadowMapResolution()), int(light->GetShadowMapResolution()));
-                                shaders->Bind("shadow_map");
+                std::vector<EG::Graphics::Light *>::iterator light_iter = lights.begin();
+                while (light_iter != lights.end()) {
+                    EG::Graphics::Light *light = (*light_iter);
+                    if (light->GetCastsShadows()){
+                        debug_shadow_map_light = light;
+                        light->Update();
+                        graphics->StartOffscreenRender(light->GetShadowBuffer()->GetBufferId(), 0, int(light->GetShadowMapResolution()), int(light->GetShadowMapResolution()));
+                        shaders->Bind("shadow_map");
 
-                                shaders->SetMatrix4("projection_matrix", light->GetProjectionMatrix());
-                                //glm::mat4 light_view_matrix = glm::gtc::matrix_transform::lookAt(light->GetPosition(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-                                shaders->SetMatrix4("view_matrix", light->GetViewMatrix());
-                                //shaders->SetMatrix4("view_matrix", light_view_matrix);
-                                //shaders->SetMatrix4("projection_matrix", camera->GetProjectionMatrix());
-                                //shaders->SetMatrix4("view_matrix", camera->GetViewMatrix());
+                        shaders->SetMatrix4("projection_matrix", light->GetProjectionMatrix());
+                        //glm::mat4 light_view_matrix = glm::gtc::matrix_transform::lookAt(light->GetPosition(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+                        shaders->SetMatrix4("view_matrix", light->GetViewMatrix());
+                        //shaders->SetMatrix4("view_matrix", light_view_matrix);
+                        //shaders->SetMatrix4("projection_matrix", camera->GetProjectionMatrix());
+                        //shaders->SetMatrix4("view_matrix", camera->GetViewMatrix());
 
-                                // TODO: Disable Color Writes, ETC... After it's working that is!
-                                EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
-                                EG::Utility::UnsignedIntDictionaryKeysIterator object_iterator = objects->GetKeysBegin();
-                                while (object_iterator != objects->GetKeysEnd()){
-                                    EG::Game::Object *object = objects->Get(*object_iterator);
+                        // TODO: Disable Color Writes, ETC... After it's working that is!
+                        EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
+                        EG::Utility::UnsignedIntDictionaryKeysIterator object_iterator = objects->GetKeysBegin();
+                        while (object_iterator != objects->GetKeysEnd()){
+                            EG::Game::Object *object = objects->Get(*object_iterator);
 
-                                    // HACK: For now, don't render objects with particle systems
-                                    if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH)){
-                                        // Transformation
-                                        std::vector<EG::Game::ObjectAttribute *> *transformation_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
-                                        EG::Game::ObjectAttributeBasicTransformation *transformation_attribute = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(transformation_attributes->at(0));
-                                        glm::mat4 transformation = transformation_attribute->GetTransformation();
+                            // HACK: For now, don't render objects with particle systems
+                            if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH)){
+                                // Transformation
+                                std::vector<EG::Game::ObjectAttribute *> *transformation_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
+                                EG::Game::ObjectAttributeBasicTransformation *transformation_attribute = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(transformation_attributes->at(0));
+                                glm::mat4 transformation = transformation_attribute->GetTransformation();
 
-                                        std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
-                                        std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
-                                        while (mesh_attribute_iterator != mesh_attributes->end()){
-                                            EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
-                                            glm::mat4 mesh_offset = mesh_attribute->GetOffset();
-                                            transformation *= mesh_offset;
-                                            shaders->SetMatrix4("model_matrix", transformation);
-                                            EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
-                                            if (material->GetLit() && material->GetCastsShadows()){
-                                                EG::Graphics::Mesh *mesh = scene->GetMeshManager()->Get(mesh_attribute->GetMeshId());
-                                                mesh->Draw();
-                                            }
-
-                                            ++mesh_attribute_iterator;
-                                        }
-                                    }
-                                    if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM)){
-                                        std::vector<EG::Game::ObjectAttribute *> *attrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM);
-                                        std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
-                                        while (attr_iter != attrs->end()){
-                                            EG::Game::ObjectAttributeEmissionParticleSystem *pattr = static_cast<EG::Game::ObjectAttributeEmissionParticleSystem *>(*attr_iter);
-                                            EG::Graphics::ParticleSystem *psys = pattr->GetParticleSystem();
-                                            std::list<EG::Graphics::Particle *>::iterator piter = psys->GetParticles()->begin();
-                                            while (piter != psys->GetParticles()->end()){
-                                                EG::Graphics::Particle *object = (*piter);
-                                                if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH)){
-                                                    // Transformation
-                                                    std::vector<EG::Game::ObjectAttribute *> *transformation_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
-                                                    EG::Game::ObjectAttributeBasicTransformation *transformation_attribute = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(transformation_attributes->at(0));
-                                                    glm::mat4 transformation = transformation_attribute->GetTransformation();
-                                                    shaders->SetMatrix4("model_matrix", transformation);
-
-                                                    std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
-                                                    std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
-                                                    while (mesh_attribute_iterator != mesh_attributes->end()){
-                                                        EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
-                                                        EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
-                                                        if (material->GetLit() && material->GetCastsShadows()){
-                                                            EG::Graphics::Mesh *mesh = scene->GetMeshManager()->Get(mesh_attribute->GetMeshId());
-                                                            mesh->Draw();
-                                                        }
-
-                                                        ++mesh_attribute_iterator;
-                                                    }
-                                                }
-                                                ++piter;
-                                            }
-                                            ++attr_iter;
-                                        }
+                                std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+                                std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
+                                while (mesh_attribute_iterator != mesh_attributes->end()){
+                                    EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
+                                    glm::mat4 mesh_offset = mesh_attribute->GetOffset();
+                                    transformation *= mesh_offset;
+                                    shaders->SetMatrix4("model_matrix", transformation);
+                                    EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
+                                    if (material->GetLit() && material->GetCastsShadows()){
+                                        EG::Graphics::Mesh *mesh = scene->GetMeshManager()->Get(mesh_attribute->GetMeshId());
+                                        mesh->Draw();
                                     }
 
-                                    ++object_iterator;
+                                    ++mesh_attribute_iterator;
                                 }
+                            }
+                            if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM)){
+                                std::vector<EG::Game::ObjectAttribute *> *attrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM);
+                                std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+                                while (attr_iter != attrs->end()){
+                                    EG::Game::ObjectAttributeEmissionParticleSystem *pattr = static_cast<EG::Game::ObjectAttributeEmissionParticleSystem *>(*attr_iter);
+                                    EG::Graphics::ParticleSystem *psys = pattr->GetParticleSystem();
+                                    std::list<EG::Graphics::Particle *>::iterator piter = psys->GetParticles()->begin();
+                                    while (piter != psys->GetParticles()->end()){
+                                        EG::Graphics::Particle *object = (*piter);
+                                        if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH)){
+                                            // Transformation
+                                            std::vector<EG::Game::ObjectAttribute *> *transformation_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
+                                            EG::Game::ObjectAttributeBasicTransformation *transformation_attribute = static_cast<EG::Game::ObjectAttributeBasicTransformation *>(transformation_attributes->at(0));
+                                            glm::mat4 transformation = transformation_attribute->GetTransformation();
+                                            shaders->SetMatrix4("model_matrix", transformation);
 
-                                shaders->Unbind();
-                                graphics->EndOffscreenRender();
+                                            std::vector<EG::Game::ObjectAttribute *> *mesh_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+                                            std::vector<EG::Game::ObjectAttribute *>::iterator mesh_attribute_iterator = mesh_attributes->begin();
+                                            while (mesh_attribute_iterator != mesh_attributes->end()){
+                                                EG::Game::ObjectAttributeRenderingMesh *mesh_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*mesh_attribute_iterator);
+                                                EG::Graphics::RenderingMaterial *material = mesh_attribute->GetMaterial();
+                                                if (material->GetLit() && material->GetCastsShadows()){
+                                                    EG::Graphics::Mesh *mesh = scene->GetMeshManager()->Get(mesh_attribute->GetMeshId());
+                                                    mesh->Draw();
+                                                }
+
+                                                ++mesh_attribute_iterator;
+                                            }
+                                        }
+                                        ++piter;
+                                    }
+                                    ++attr_iter;
+                                }
                             }
 
-                            ++light_attribute_iterator;
+                            ++object_iterator;
                         }
-                    }
 
-                    ++light_object_iterator;
+                        shaders->Unbind();
+                        graphics->EndOffscreenRender();
+                    }
+                    ++light_iter;
                 }
 
                 // Move to OpenGLInterface
