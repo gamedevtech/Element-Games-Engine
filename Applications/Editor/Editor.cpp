@@ -6,8 +6,42 @@
 #include "../../Engine/Graphics/Renderer.h"
 #include "../../Engine/Graphics/RendererDeferred.h"
 
+std::string GetVideoSettingsListener::Call(std::map<std::string, std::string> args) {
+    std::string out;
+    out += "{";
+
+    std::string bloom_enabled = "false";
+    if (renderer->GetBloomEnabled()) {
+        bloom_enabled = "true";
+    }
+    out += "\"bloom\": " + bloom_enabled;
+    out += "}";
+    std::cout << "Bin Response: " << out << std::endl;
+    return out.c_str();
+}
+
+std::string SetVideoSettingsListener::Call(std::map<std::string, std::string> args) {
+    std::cout << "Dongle" << std::endl;
+    if (args["bloom"] == "true") {
+        renderer->SetBloomEnabled(true);
+    } else {
+        renderer->SetBloomEnabled(false);
+    }
+    return "{\"status\": true}";
+}
+
 Editor::Editor(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
     gui->Initialize("Assets/GUIs/Editor", "index.html");
+
+    GetVideoSettingsListener *get_video_listener = new GetVideoSettingsListener();
+    get_video_listener->scene = scene;
+    get_video_listener->renderer = renderer;
+    gui->AddResponseHandler("get_video_settings", get_video_listener);
+
+    SetVideoSettingsListener *set_video_listener = new SetVideoSettingsListener();
+    set_video_listener->scene = scene;
+    set_video_listener->renderer = renderer;
+    gui->AddResponseHandler("set_video_settings", set_video_listener);
 }
 
 Editor::~Editor(void){

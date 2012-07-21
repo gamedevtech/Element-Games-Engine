@@ -29,6 +29,7 @@ namespace EG{
 		void GUI::Initialize(std::string base_directory, std::string url){
 			//awe_webcore_initialize_default();
 			awe_webcore_initialize(true, true, true, awe_string_empty(), awe_string_empty(), awe_string_empty(), awe_string_empty(), awe_string_empty(), AWE_LL_NORMAL, false, awe_string_empty(), true, awe_string_empty(), awe_string_empty(), awe_string_empty(), awe_string_empty(), awe_string_empty(), awe_string_empty(), true, 0, false, false, awe_string_empty());
+            awe_webcore_clear_cache();
 			awe_string *tempstr = awe_string_create_from_ascii(base_directory.c_str(), base_directory.size());
 			awe_webcore_set_base_directory(tempstr);
 			awe_string_destroy(tempstr);

@@ -7,12 +7,10 @@ define(function(require) {
 
     var Navigation = Backbone.View.extend({
         events: {
-            "click .menu_entry": "menu_entry_click",
-            "click .toggle_gui": "toggle_gui"
+            "click .menu_entry": "menu_entry_click"
         },
         initialize: function() {
             _.bindAll(this, "render");
-            _.bindAll(this, "toggle_gui");
             _.bindAll(this, "build_menu");
             _.bindAll(this, "menu_entry_click");
             this.menu_options = this.options.menu_options;
@@ -26,11 +24,6 @@ define(function(require) {
             html += '</div>';
             this.$el.html(html);
             return this;
-        },
-        toggle_gui: function(event) {
-            event.preventDefault();
-            $("#body_container").fadeOut();
-            $("#gui_enable").fadeIn();
         },
         menu_entry_click: function(event) {
             event.preventDefault();

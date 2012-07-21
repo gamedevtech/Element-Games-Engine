@@ -18,6 +18,7 @@ Remember:
 - Check for shader changes in separate thread and re-compile/link them in when they do change!
 	- This should be an option turned on and compiled in!!! (Avoids visual hacking!)
 - Omni Directional Shadow Mapping
+- Culling of distant objects in shadow map rendering and backfaces in shader?
 - JSON Based Scene Format
 - Picking in Editor on Non-Physics Objects (Bounding Box Automatically Generated!)
 - Separate all transparent rendering and draw it in depth first order!

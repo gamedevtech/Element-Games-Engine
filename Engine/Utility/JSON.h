@@ -19,7 +19,7 @@ namespace EG{
     namespace Utility{
         class JSON{
             public:
-                JSON(std::string _filename){
+            JSON(std::string _filename = ""){
                     filename = _filename;
                     boost::property_tree::json_parser::read_json(filename, pt);
                 }

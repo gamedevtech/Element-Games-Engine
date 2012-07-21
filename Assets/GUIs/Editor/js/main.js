@@ -3,9 +3,27 @@ define(function(require) {
 
     var _ = require("underscore");
     var $ = require("jquery");
+	var Backbone = require("backbone");
     var domReady = require("domReady");
     var navigation = require("navigation");
     var tools = require("tools");
+	var video_preferences = require("video_preferences");
+
+	function open_video_preferences() {
+		var prefs_model = new video_preferences.VideoPreferences();
+		prefs_model.bind("read_complete", function() {
+			if (prefs_model.get("bloom") === true) {
+				console.log("Read Complete: true");
+			} else {
+				console.log("Read Complete: false");
+			}
+			var view = new video_preferences.VideoPreferencesDialog({
+				model: prefs_model
+			});
+			view.render();
+		});
+		prefs_model.fetch();
+	};
 
     domReady(function() {
         /* Navigation Menu */
@@ -20,7 +38,10 @@ define(function(require) {
                     'new_object',
                     'open_object',
                     'import_model'
-                ]
+                ],
+				'options': [
+					'video_prefs'
+				]
             },
             menu_names: {
                 'main': "Main",
@@ -29,9 +50,12 @@ define(function(require) {
                 'object': "Object",
                 'new_object': "New",
                 'open_object': "Open Object...",
-                'import_model': "Import Model..."
+                'import_model': "Import Model...",
+				'options': "Options",
+				'video_prefs': "Video Preferences..."
             }
         });
+		nav.bind("video_prefs", open_video_preferences);
         nav.render();
 
         var gui_state = true;

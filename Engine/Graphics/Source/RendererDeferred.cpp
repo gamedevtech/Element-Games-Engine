@@ -702,7 +702,7 @@ namespace EG{
             graphics->BindTexture(deferred_buffer->GetTextureId(3), 2);
             shaders->SetInt("translucent_map", 2);
             shaders->SetFloat2("size", size);
-            shaders->SetFloat2("scale", glm::vec2(0.5f, 1.5f));
+            shaders->SetFloat2("scale", glm::vec2(0.25f, 1.5f));
             shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
             shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
             shaders->SetMatrix4("model_matrix", model_matrix);

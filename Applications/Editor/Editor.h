@@ -15,4 +15,18 @@ class Editor : public EG::Game::Game{
         //
 };
 
+class GetVideoSettingsListener : public EG::GUI::WebResourceResponse{
+    public:
+        virtual std::string Call(std::map<std::string, std::string> args);
+        EG::Game::Scene *scene;
+        EG::Graphics::Renderer *renderer;
+};
+
+class SetVideoSettingsListener : public EG::GUI::WebResourceResponse{
+    public:
+        virtual std::string Call(std::map<std::string, std::string> args);
+        EG::Game::Scene *scene;
+        EG::Graphics::Renderer *renderer;
+};
+
 #endif

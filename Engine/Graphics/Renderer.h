@@ -28,6 +28,14 @@ namespace EG{
                 EG::Graphics::ShaderManager *GetShaderManager(void){
                     return shaders;
                 }
+
+                bool GetBloomEnabled(void) {
+                    return bloom_enabled;
+                }
+                void SetBloomEnabled(bool _bloom_enabled) {
+                    bloom_enabled = _bloom_enabled;
+                }
+
             protected:
                 bool initialized;
                 void Resize(void);

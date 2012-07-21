@@ -5,7 +5,10 @@ define(function(require) {
     var $ = require("jquery");
 
     var Get = function(path, callback) {
-        $.get(path, callback);
+        $.get(path, function(json_raw){
+			var data = JSON.parse(json_raw.toString());
+			callback(data);
+		});
     };
 
     var Post = function(path, data, callback) {
@@ -18,12 +21,19 @@ define(function(require) {
                 if (first_attr === true) {
                     url += "?";
                     first_attr = false;
-                }
+                } else {
+					url += "&";
+				}
                 attr_value = data[attr_name];
                 url += attr_name + "=" + encodeURIComponent(attr_value);
             }
         }
-        $.get(url, callback);
+		console.log(url);
+        $.get(url, function(json_raw) {
+			console.log("Raw: ", json_raw);
+			var data = JSON.parse(json_raw.toString());
+			callback(data);
+		});
     };
 
     return {
