@@ -180,7 +180,9 @@ namespace EG{
 
         void RendererDeferred::Render(EG::Game::Scene *scene, EG::Utility::Time *time){
             // Also, make this a feature you can turn on and off!
-            shaders->Update(); // Check for changes, this should be done in a thread!!
+            if (shader_debugging) {
+                shaders->Update();
+            }
             StoreLights(scene);
 
             if (graphics->Resized()) {

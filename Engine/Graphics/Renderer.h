@@ -36,6 +36,34 @@ namespace EG{
                     bloom_enabled = _bloom_enabled;
                 }
 
+                bool GetNormalMappingEnabled(void) {
+                    return normal_mapping_enabled;
+                }
+                void SetNormalMappingEnabled(bool _normal_mapping_enabled) {
+                    normal_mapping_enabled = _normal_mapping_enabled;
+                }
+
+                bool GetDepthOfFieldEnabled(void) {
+                    return dof_enabled;
+                }
+                void SetDepthOfFieldEnabled(bool _dof_enabled) {
+                    dof_enabled = _dof_enabled;
+                }
+
+                bool GetShadowsEnabled(void) {
+                    return shadows_enabled;
+                }
+                void SetShadowsEnabled(bool _shadows_enabled) {
+                    shadows_enabled = _shadows_enabled;
+                }
+
+                bool GetSSAOEnabled(void) {
+                    return ssao_enabled;
+                }
+                void SetSSAOEnabled(bool _ssao_enabled) {
+                    ssao_enabled = _ssao_enabled;
+                }
+
             protected:
                 bool initialized;
                 void Resize(void);
@@ -52,6 +80,7 @@ namespace EG{
                 float luminance_scale;
                 float bloom_scale;
                 float luminance;
+                bool shader_debugging;
 
                 // TEMP, SHOULD GO IN SCENE MANAGER WHICH SHOULD HOLD A CAMERA MANAGER
                 EG::Graphics::ShaderManager *shaders;

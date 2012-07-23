@@ -15,6 +15,31 @@ std::string GetVideoSettingsListener::Call(std::map<std::string, std::string> ar
         bloom_enabled = "true";
     }
     out += "\"bloom\": " + bloom_enabled;
+
+    std::string ssao_enabled = "false";
+    if (renderer->GetSSAOEnabled()) {
+        ssao_enabled = "true";
+    }
+    out += " ,\"ssao\": " + ssao_enabled;
+
+    std::string normal_mapping_enabled = "false";
+    if (renderer->GetNormalMappingEnabled()) {
+        normal_mapping_enabled = "true";
+    }
+    out += " ,\"normal_mapping\": " + normal_mapping_enabled;
+
+    std::string shadow_mapping_enabled = "false";
+    if (renderer->GetShadowsEnabled()) {
+        shadow_mapping_enabled = "true";
+    }
+    out += " ,\"shadows\": " + shadow_mapping_enabled;
+
+    std::string dof_enabled = "false";
+    if (renderer->GetDepthOfFieldEnabled()) {
+        dof_enabled = "true";
+    }
+    out += " ,\"dof\": " + dof_enabled;
+
     out += "}";
     std::cout << "Bin Response: " << out << std::endl;
     return out.c_str();
@@ -26,6 +51,26 @@ std::string SetVideoSettingsListener::Call(std::map<std::string, std::string> ar
         renderer->SetBloomEnabled(true);
     } else {
         renderer->SetBloomEnabled(false);
+    }
+    if (args["normal_mapping"] == "true") {
+        renderer->SetNormalMappingEnabled(true);
+    } else {
+        renderer->SetNormalMappingEnabled(false);
+    }
+    if (args["ssao"] == "true") {
+        renderer->SetSSAOEnabled(true);
+    } else {
+        renderer->SetSSAOEnabled(false);
+    }
+    if (args["shadows"] == "true") {
+        renderer->SetShadowsEnabled(true);
+    } else {
+        renderer->SetShadowsEnabled(false);
+    }
+    if (args["dof"] == "true") {
+        renderer->SetDepthOfFieldEnabled(true);
+    } else {
+        renderer->SetDepthOfFieldEnabled(false);
     }
     return "{\"status\": true}";
 }

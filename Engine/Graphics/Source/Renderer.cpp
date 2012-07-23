@@ -30,6 +30,7 @@ namespace EG{
             luminance_scale = 1.0f;
             bloom_scale = 1.0f;
             luminance = 1.0f;
+            shader_debugging = false;
         }
 
         Renderer::~Renderer(void){
@@ -416,6 +417,9 @@ namespace EG{
         }
 
         void Renderer::Render(EG::Game::Scene *scene, EG::Utility::Time *time){
+            if (shader_debugging) {
+                shaders->Update();
+            }
             if (graphics->Resized()) {
                 Resize();
             }
