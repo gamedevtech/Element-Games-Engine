@@ -57,7 +57,7 @@ define(function(require) {
                         } else {
                             item_entry_name = item_entry;
                         }
-                        out += '<li><a href="#" class="menu_entry" data-entry="' + item_entry + '">' + item_entry_name + '</a></li>';
+                        out += '<li><a href="javascript:;" class="menu_entry" data-entry="' + item_entry + '">' + item_entry_name + '</a></li>';
                     }
                     out += '</ul>';
                     out += '</div>';

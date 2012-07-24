@@ -29,4 +29,9 @@ class SetVideoSettingsListener : public EG::GUI::WebResourceResponse{
         EG::Graphics::Renderer *renderer;
 };
 
+class FileBrowserListener : public EG::GUI::WebResourceResponse {
+    public:
+        virtual std::string Call(std::map<std::string, std::string> args);
+};
+
 #endif

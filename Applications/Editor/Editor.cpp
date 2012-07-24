@@ -5,6 +5,11 @@
 #include "../../Engine/Game/ObjectRenderingAttribute.h"
 #include "../../Engine/Graphics/Renderer.h"
 #include "../../Engine/Graphics/RendererDeferred.h"
+#include "../../Engine/Utility/StringMethods.h"
+
+#include <boost/filesystem.hpp>
+#include <stdio.h>
+#include <stdlib.h>
 
 std::string GetVideoSettingsListener::Call(std::map<std::string, std::string> args) {
     std::string out;
@@ -75,6 +80,45 @@ std::string SetVideoSettingsListener::Call(std::map<std::string, std::string> ar
     return "{\"status\": true}";
 }
 
+std::string FileBrowserListener::Call(std::map< std::string, std::string > args) {
+    // Make config! Go with scene!
+    std::string path = boost::filesystem::current_path().c_str() + EG::Utility::StringMethods::SearchAndReplace(args["path"], "%2F", "/");
+    std::cout << "File Browser @: " << path << std::endl;
+    std::string out = "[";
+    boost::filesystem::directory_iterator end_itr; // Default ctor yields past-the-end
+    bool first = true;
+    unsigned int id = 0;
+    for (boost::filesystem::directory_iterator i(path); i != end_itr; ++i, id += 1) {
+        if (first) {
+            first = false;
+        } else {
+            out += ",";
+        }
+
+        std::string name = i->path().c_str();
+        unsigned int index = name.find_last_of('/');
+        name = name.substr(index + 1);
+
+        out += "{\"path\": \"";
+        out += name;
+        out += "\", \"type\": \"";
+        if (boost::filesystem::is_regular_file(i->status())) {
+            out += "file";
+        }
+        if (boost::filesystem::is_directory(i->status())) {
+            out += "dir";
+        }
+        out += "\", \"id\": ";
+        char id_str[6];
+        sprintf(id_str, "%d", id);
+        out += id_str;
+        out += "}";
+    }
+    out += "]";
+    std::cout << out << std::endl;
+    return out.c_str();
+}
+
 Editor::Editor(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
     gui->Initialize("Assets/GUIs/Editor", "index.html");
 
@@ -87,6 +131,9 @@ Editor::Editor(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_wi
     set_video_listener->scene = scene;
     set_video_listener->renderer = renderer;
     gui->AddResponseHandler("set_video_settings", set_video_listener);
+
+    FileBrowserListener *file_system_ = new FileBrowserListener();
+    gui->AddResponseHandler("list_directory", file_system_);
 }
 
 Editor::~Editor(void){

@@ -27,7 +27,7 @@ define(function(require) {
         },
         render: function() {
             this.$el.empty();
-            var html = '<a href="#" class="vertical_text toggle_button"><img src="' + this.data.button_img + '" /></a>';
+            var html = '<a href="javascript:;" class="vertical_text toggle_button"><img src="' + this.data.button_img + '" /></a>';
             if (this.edge === 'left') {
                 html += '<div class="tool_area tool_left"></div>';
             } else if (this.edge === 'right') {

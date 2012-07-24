@@ -6,9 +6,9 @@ define(function(require) {
 
     var Get = function(path, callback) {
         $.get(path, function(json_raw){
-			var data = JSON.parse(json_raw.toString());
-			callback(data);
-		});
+            var data = JSON.parse(json_raw.toString());
+            callback(data);
+        });
     };
 
     var Post = function(path, data, callback) {
@@ -22,18 +22,18 @@ define(function(require) {
                     url += "?";
                     first_attr = false;
                 } else {
-					url += "&";
-				}
+                    url += "&";
+                }
                 attr_value = data[attr_name];
                 url += attr_name + "=" + encodeURIComponent(attr_value);
             }
         }
-		console.log(url);
+        console.log(url);
         $.get(url, function(json_raw) {
-			console.log("Raw: ", json_raw);
-			var data = JSON.parse(json_raw.toString());
-			callback(data);
-		});
+            console.log("Raw: ", json_raw);
+            var data = JSON.parse(json_raw.toString());
+            callback(data);
+        });
     };
 
     return {

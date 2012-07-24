@@ -40,22 +40,30 @@ define(function(require) {
             this.left_el.empty();
             var view;
             var size = this.tool_views['left'].length;
-            var i;
-            for (i = 0; i < size; i += 1) {
-                view = this.tool_views['left'][i];
-                view.render();
-                this.left_el.append(view.$el);
+            if (size > 0) {
+                var i;
+                for (i = 0; i < size; i += 1) {
+                    view = this.tool_views['left'][i];
+                    view.render();
+                    this.left_el.append(view.$el);
+                }
+            } else {
+                this.left_el.hide();
             }
         },
         render_right: function() {
             this.right_el.empty();
             var view;
             var size = this.tool_views['right'].length;
-            var i;
-            for (i = 0; i < size; i += 1) {
-                view = this.tool_views['right'][i];
-                view.render();
-                this.right_el.append(view.$el);
+            if (size > 0) {
+                var i;
+                for (i = 0; i < size; i += 1) {
+                    view = this.tool_views['right'][i];
+                    view.render();
+                    this.right_el.append(view.$el);
+                }
+            } else {
+                this.right_el.hide();
             }
         }
     });

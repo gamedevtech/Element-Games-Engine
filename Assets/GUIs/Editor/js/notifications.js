@@ -57,7 +57,7 @@ define(function(require) {
             if (level !== "warn") {
                 this.$el.addClass("alert-" + level);
             }
-            this.$el.append('<a class="close" data-dismiss="alert" href="#">x</a>');
+            this.$el.append('<a class="close" data-dismiss="alert" href="javascript:;">x</a>');
             this.$el.append('<p>' + this.model.get("message") + '</p>');
             this.$el.alert();
             return this;
