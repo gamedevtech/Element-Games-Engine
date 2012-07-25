@@ -43,10 +43,12 @@ namespace EG{
 
                 static Console *Instance(void);
             private:
+                void AddLine(std::string str, glm::vec4 color);
                 static Console *instance;
                 std::vector<ConsoleLine *> lines;
                 unsigned int max_lines;
                 float fade_time;
+                bool print_to_std_out;
         };
     }
 }

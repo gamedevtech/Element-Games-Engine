@@ -51,7 +51,7 @@ namespace EG{
         }
 
         Console::Console(void) {
-            //
+            print_to_std_out = true;
         }
 
         Console::~Console(void) {
@@ -94,32 +94,39 @@ namespace EG{
             }
         }
 
-        void Console::Print(std::string str, glm::vec4 color) {
+        void Console::AddLine(std::string str, glm::vec4 color) {
+            if (print_to_std_out) {
+                std::cout << str << std::endl;
+            }
             lines.push_back(new ConsoleLine(str, color));
+        }
+
+        void Console::Print(std::string str, glm::vec4 color) {
+            AddLine(str, color);
         }
 
         void Console::Print(float val, std::string prefix, glm::vec4 color) {
             std::stringstream out;
             out << prefix << val;
-            lines.push_back(new ConsoleLine(out.str(), color));
+            AddLine(out.str(), color);
         }
 
         void Console::Print(glm::vec2 val, std::string prefix, glm::vec4 color) {
             std::stringstream out;
             out << prefix << val.x << ", " << val.y;
-            lines.push_back(new ConsoleLine(out.str(), color));
+            AddLine(out.str(), color);
         }
 
         void Console::Print(glm::vec3 val, std::string prefix, glm::vec4 color) {
             std::stringstream out;
             out << prefix << val.x << ", " << val.y << ", " << val.z;
-            lines.push_back(new ConsoleLine(out.str(), color));
+            AddLine(out.str(), color);
         }
 
         void Console::Print(glm::vec4 val, std::string prefix, glm::vec4 color) {
             std::stringstream out;
             out << prefix << val.x << ", " << val.y << ", " << val.z << ", " << val.w;
-            lines.push_back(new ConsoleLine(out.str(), color));
+            AddLine(out.str(), color);
         }
 
         void Console::Print(glm::mat4 val, std::string prefix, glm::vec4 color) {
