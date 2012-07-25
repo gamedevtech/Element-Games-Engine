@@ -59,21 +59,15 @@ namespace EG{
         }
 
         void Console::Update(float dt) {
-            std::vector<std::vector<ConsoleLine *>::iterator> to_remove;
             std::vector<ConsoleLine *>::iterator iter = lines.begin();
             while (iter != lines.end()) {
                 ConsoleLine *line = (*iter);
                 line->Update(dt);
                 if (!(line->IsAlive())) {
-                    to_remove.push_back(iter);
+                    iter = lines.erase(iter);
+                } else {
+                    ++iter;
                 }
-                ++iter;
-            }
-
-            std::vector<std::vector<ConsoleLine *>::iterator>::iterator remiter = to_remove.begin();
-            while (remiter != to_remove.end()) {
-                lines.erase((*remiter));
-                ++remiter;
             }
         }
 

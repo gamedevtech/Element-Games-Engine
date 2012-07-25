@@ -1,7 +1,9 @@
 #include "../Math.h"
+
 #include <time.h>
 #include <iostream>
 
+#include "../../Utility/Console.h"
 
 namespace EG{
     namespace Math{
@@ -106,10 +108,10 @@ namespace EG{
             glm::vec4 mouse_world = inverse_view * inverse_projection * mouse_clip;
             glm::vec3 mouse = glm::normalize(glm::vec3(mouse_world.x, mouse_world.y, mouse_world.z));
             glm::vec3 out = glm::normalize(mouse - camera_position);
-            std::cout << "mouse_click: " << mouse_clip.x << ", " << mouse_clip.y << std::endl;
-            std::cout << "mouse_world: " << mouse.x << ", " << mouse.y << ", " << mouse.z << std::endl;
-            std::cout << "cpos: " << camera_position.x << ", " << camera_position.y << ", " << camera_position.z << std::endl;
-            std::cout << "dir: " << out.x << ", " << out.y << ", " << out.z << std::endl;
+            console->Print(mouse_clip, "Mouse Click: ");
+            console->Print(mouse, "Mouse World: ");
+            console->Print(camera_position, "Cam Pos: ");
+            console->Print(out, "Dir: ");
             return out;
         }
     }
