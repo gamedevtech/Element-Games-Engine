@@ -135,6 +135,7 @@ set(SRCS
 	./Utility/StringDictionary.h
 	./Utility/UnsignedIntDictionary.h
 	./Utility/StringMethods.h
+    ./Utility/Console.h
 	./Utility/Source/VariableManager.cpp
 	./Utility/Source/Window.cpp
 	./Utility/Source/Time.cpp
@@ -142,6 +143,7 @@ set(SRCS
 	./Utility/Source/Text.cpp
 	./Utility/Source/GUI.cpp
 	./Utility/Source/StringMethods.cpp
+    ./Utility/Source/Console.cpp
 )
 
 IF (WIN32)

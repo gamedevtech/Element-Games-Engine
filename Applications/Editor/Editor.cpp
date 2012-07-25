@@ -119,6 +119,107 @@ std::string FileBrowserListener::Call(std::map< std::string, std::string > args)
     return out.c_str();
 }
 
+std::string LoadModelEventListener::Call(std::map<std::string, std::string> args){
+    std::string filename = args["path"].substr(3);
+    filename = EG::Utility::StringMethods::SearchAndReplace(filename, "%2F", "/");
+    model = new EG::Media::ModelLoader(scene);
+    model_loaded = model->Load(filename);
+    std::cout << "Loading Model: " << filename << std::endl;
+    if (model_loaded){
+        std::cout << "Model Loaded!" << std::endl;
+        model_object = new EG::Game::Object(filename);
+
+        /*SetLitCallback *litcallback = new SetLitCallback();
+        litcallback->object = model_object;
+        gui->AddResponseHandler("set_lit", litcallback);
+
+        SetShadowsCallback *shadowscallback = new SetShadowsCallback();
+        shadowscallback->object = model_object;
+        gui->AddResponseHandler("set_shadows", shadowscallback);
+
+        SetDecalCallback *decalcallback = new SetDecalCallback();
+        decalcallback->object = model_object;
+        decalcallback->scene = scene;
+        gui->AddResponseHandler("set_decal", decalcallback);
+
+        SetNormalCallback *normalcallback = new SetNormalCallback();
+        normalcallback->object = model_object;
+        normalcallback->scene = scene;
+        gui->AddResponseHandler("set_normal", normalcallback);
+
+        SetHeightCallback *heightcallback = new SetHeightCallback();
+        heightcallback->object = model_object;
+        heightcallback->scene = scene;
+        gui->AddResponseHandler("set_height", heightcallback);
+
+        SetSpecularCallback *specularcallback = new SetSpecularCallback();
+        specularcallback->object = model_object;
+        specularcallback->scene = scene;
+        gui->AddResponseHandler("set_specular", specularcallback);
+
+        SaveCallback *savecallback = new SaveCallback();
+        savecallback->object = model_object;
+        savecallback->scene = scene;
+        gui->AddResponseHandler("save_model", savecallback);*/
+
+        // TODO: Loop through the meshes and perhaps combine them into one, and get the transforms right, if not, then just make transforms available as an option on a mesh as well!
+        model_object->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 2.0f, 0.0f)), glm::vec3(0.02f, 0.02f, 0.02f))));
+        for (unsigned int i = 0; i < model->GetMeshMaterialPairCount(); i++) {
+            std::cout << "Mesh Material Index: " << i << std::endl;
+            model->GetMaterial(i)->SetLit(true);
+            model->GetMaterial(i)->SetCastsShadows(true);
+            EG::Game::ObjectAttributeRenderingMesh *rm = new EG::Game::ObjectAttributeRenderingMesh(model->GetMesh(i), model->GetMaterial(i));
+            model_object->AddAttribute(rm);
+        }
+        if (model->HasAnimations()) {
+            EG::Dynamics::AnimationState *animation_state = new EG::Dynamics::AnimationState(model->GetAnimations());
+            EG::Game::ObjectAttributeControlAnimationState *attrib = new EG::Game::ObjectAttributeControlAnimationState(animation_state);
+            model_object->AddAttribute(attrib);
+        }
+        scene->GetObjectManager()->AddObject(model_object);
+
+        std::string out = "{\"status\": true";
+
+        if (model->GetMaterial(0)->GetLit()){
+            out += ", \"lit\": true";
+        } else {
+            out += ", \"lit\": false";
+        }
+        if (model->GetMaterial(0)->GetCastsShadows()){
+            out += ", \"shadows\": true";
+        } else {
+            out += ", \"shadows\": false";
+        }
+        if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL)){
+            std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL))->GetFilePath();
+            out += ", \"decal\": \"" + file_path + "\"";
+        } else {
+            out += ", \"decal\": \"\"";
+        }
+        if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL)){
+            std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL))->GetFilePath();
+            out += ", \"normal\": \"" + file_path + "\"";
+        } else {
+            out += ", \"normal\": \"\"";
+        }
+        if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT)){
+            std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT))->GetFilePath();
+            out += ", \"height\": \"" + file_path + "\"";
+        } else {
+            out += ", \"height\": \"\"";
+        }
+        if (model->GetMaterial(0)->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR)){
+            std::string file_path = scene->GetTextureManager()->GetTexture(model->GetMaterial(0)->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR))->GetFilePath();
+            out += ", \"specular\": \"" + file_path + "\"}";
+        } else {
+            out += ", \"specular\": \"\"}";
+        }
+        return out;
+    }else{
+        return "{\"status\": false}";
+    }
+}
+
 Editor::Editor(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
     gui->Initialize("Assets/GUIs/Editor", "index.html");
 
@@ -134,16 +235,73 @@ Editor::Editor(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_wi
 
     FileBrowserListener *file_system_ = new FileBrowserListener();
     gui->AddResponseHandler("list_directory", file_system_);
+
+    LoadModelEventListener *listener = new LoadModelEventListener();
+    listener->scene = scene;
+    listener->model_loaded = false;
+    gui->AddResponseHandler("load_model", listener);
 }
 
 Editor::~Editor(void){
     //
 }
 
+void Editor::PickObject(glm::vec2 mouse_position) {
+    glm::vec2 dimensions = glm::vec2(graphics->GetViewportWidth(), graphics->GetViewportHeight());
+    EG::Graphics::Camera *c = scene->GetCurrentCamera();
+    glm::vec3 begin = c->GetPosition();
+    glm::vec3 dir = EG::Math::Utility::ProjectClick(mouse_position, dimensions, begin, c->GetInverseViewMatrix(), c->GetInverseProjectionMatrix());
+
+    EG::Graphics::MeshManager *meshes = scene->GetMeshManager();
+    EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
+    EG::Utility::UnsignedIntDictionaryKeysIterator iter = objects->GetKeysBegin();
+    bool object_picked = false;
+    while (iter != objects->GetKeysEnd()) {
+        unsigned int object_id = (*iter);
+        EG::Game::Object *object = objects->Get(object_id);
+        glm::mat4 trans = glm::mat4(1.0f);
+        if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION)) {
+            std::vector<EG::Game::ObjectAttribute *> *tattrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
+            EG::Game::ObjectAttribute *tattr = (*tattrs)[0];
+            trans = (static_cast<EG::Game::ObjectAttributeBasicTransformation *>(&(tattr[0])))->GetTransformation();
+        }
+        if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH)) {
+            std::vector<EG::Game::ObjectAttribute *> *attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+            std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attributes->begin();
+            while (attr_iter != attributes->end()) {
+                EG::Game::ObjectAttributeRenderingMesh *mattr = (static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*attr_iter));
+                EG::Graphics::Mesh *mesh = meshes->Get(mattr->GetMeshId());
+                glm::vec3 *box = mesh->GetBoundingBox();
+                glm::mat4 mtrans = trans * mattr->GetOffset();
+                object_picked = EG::Math::Utility::RayAABBTest(begin, dir, box[0], box[1], mtrans);
+                if (object_picked) {
+                    break;
+                }
+                ++attr_iter;
+            }
+        }
+        if (object_picked) {
+            break;
+        }
+        ++iter;
+    }
+    if (object_picked) {
+        EG::Game::Object *object = objects->Get((*iter));
+        std::stringstream out;
+        out << "Object Picked: " << object->GetObjectName();
+        console->Print(out.str());
+    } else {
+        console->Print("No Object Picked");
+    }
+}
+
 void Editor::Update(void){
     float movement_speed = time->GetFrameTime() * 2.0f;
     if (input->IsKeyDown(EG::Input::v)) {
         movement_speed /= 100.0f;
+    }
+    if (input->IsMouseToggled(EG::Input::mouse_left)) {
+        PickObject(input->GetMousePosition());
     }
     if (input->IsMouseDown(EG::Input::mouse_right)){
         scene->GetCurrentCamera()->RotateByMouse(input->GetMouseDelta());

@@ -27,9 +27,9 @@ define(function(require) {
         },
         setup_tools: function() {
             var object_list = new tool_object_list.ObjectList({
-                edge: 'left'
+                edge: 'right'
             });
-            this.add_tool('left', object_list);
+            this.add_tool('right', object_list);
         },
         render: function() {
             this.render_left();

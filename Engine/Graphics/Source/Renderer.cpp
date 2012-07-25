@@ -44,7 +44,8 @@ namespace EG{
             shaders->Add("billboarding", "Shaders/Basic/billboarding.vert", "Shaders/Basic/billboarding.frag");
             shaders->Add("lighting", "Shaders/Basic/lighting.vert", "Shaders/Basic/lighting.frag");
             shaders->Add("textured", "Shaders/Basic/textured.vert", "Shaders/Basic/textured.frag");
-            shaders->Add("font_rendering", "Shaders/Basic/font_rendering.vert", "Shaders/Basic/font_rendering.frag");
+            shaders->Add("gui_rendering", "Shaders/Basic/font_rendering.vert", "Shaders/Basic/font_rendering.frag");
+            shaders->Add("font_rendering", "Shaders/Basic/font_rendering_ftgl.vert", "Shaders/Basic/font_rendering_ftgl.frag");
             shaders->Add("sphere_cube_map_gradient_decal", "Shaders/Basic/sphere_cube_mapped_with_gradient_decal.vert", "Shaders/Basic/sphere_cube_mapped_with_gradient_decal.frag");
             shaders->Add("sphere_cube_map_gradient_decal_with_lighting", "Shaders/Basic/sphere_cube_mapped_with_gradient_decal_with_lighting.vert", "Shaders/Basic/sphere_cube_mapped_with_gradient_decal_with_lighting.frag");
             shaders->Add("planet_atmosphere", "Shaders/Basic/planet_atmosphere.vert", "Shaders/Basic/planet_atmosphere.frag");
@@ -496,7 +497,7 @@ namespace EG{
 
             // 2D Overlays
             glDisable(GL_DEPTH_TEST);
-            shaders->Bind("font_rendering");
+            shaders->Bind("gui_rendering");
             shaders->SetMatrix4("projection_matrix", orthographics_projection_matrix);
             shaders->SetMatrix4("view_matrix", glm::mat4(1.0f));
             shaders->SetMatrix4("model_matrix", glm::scale(float(graphics->GetViewportWidth()), float(graphics->GetViewportHeight()), 1.0f));
@@ -526,23 +527,12 @@ namespace EG{
             shaders->SetInt("decal_map", 0);
             shaders->SetFloat4("material_color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
-            std::stringstream campos;
-            campos.precision(3);
-            campos << camera->GetPosition().x << ", " << camera->GetPosition().y << ", " << camera->GetPosition().z;
-            campos.flush();
-            font_manager->Draw(campos.str());
-
-            shaders->SetMatrix4("model_matrix", glm::translate(glm::vec3(10.0f, 24.0f, 0.0f)));
-            std::stringstream fps;
-            fps.precision(3);
-            fps << time->GetFPS();
-            fps.flush();
-            font_manager->Draw(fps.str());
+            scene->GetConsole()->Draw(shaders, glm::vec3(0.0f, 25.0f, 0.0f));
 
             shaders->Unbind();
 
             // LOGO
-            glDisable(GL_DEPTH_TEST);
+            /*glDisable(GL_DEPTH_TEST);
             glEnable(GL_BLEND);
             glEnable(GL_TEXTURE_2D);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -559,7 +549,7 @@ namespace EG{
             scene->GetMeshManager()->Get("rectangle")->Draw();
             shaders->Unbind();
             glDisable(GL_BLEND);
-            glEnable(GL_DEPTH_TEST);
+            glEnable(GL_DEPTH_TEST);*/
             // END LOGO
         }
     }

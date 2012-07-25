@@ -12,7 +12,7 @@ class Editor : public EG::Game::Game{
 
         void Update(void);
     private:
-        //
+        void PickObject(glm::vec2 mouse_position);
 };
 
 class GetVideoSettingsListener : public EG::GUI::WebResourceResponse{
@@ -32,6 +32,15 @@ class SetVideoSettingsListener : public EG::GUI::WebResourceResponse{
 class FileBrowserListener : public EG::GUI::WebResourceResponse {
     public:
         virtual std::string Call(std::map<std::string, std::string> args);
+};
+
+class LoadModelEventListener : public EG::GUI::WebResourceResponse{
+    public:
+        virtual std::string Call(std::map<std::string, std::string> args);
+        bool model_loaded;
+        EG::Game::Scene *scene;
+        EG::Media::ModelLoader *model;
+        EG::Game::Object *model_object;
 };
 
 #endif

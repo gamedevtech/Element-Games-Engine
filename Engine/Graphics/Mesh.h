@@ -86,6 +86,8 @@ namespace EG{
                 bool HasBinormals(void);
                 bool HasBitangents(void);
                 bool HasSkeleton(void);
+                void GenerateBoundingBox(void);
+                glm::vec3 *GetBoundingBox(void);
 
                 void Draw(void);
             private:
@@ -94,6 +96,9 @@ namespace EG{
                 bool has_vertices, has_texcoords, has_normals, has_binormals, has_bitangents, has_skeleton;
                 unsigned int vertex_count;
                 unsigned int stride;
+
+                // Picking Data
+                glm::vec3 box[2];
 
                 // Skeletal Data
                 //unsigned int *weight_vertex_indices;

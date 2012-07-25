@@ -57,12 +57,19 @@ define(function(require) {
             var elem = $(event.currentTarget);
             var path = elem.attr("path");
             var type = elem.attr("type");
+            console.log(type);
+            console.log(path);
+
             var current_path = this.model.get("current_path");
             current_path += "/" + path;
             this.model.set({current_path: current_path});
-            this.model.fetch();
-            console.log(type);
-            console.log(path);
+
+            if (type === "dir") {
+                this.model.fetch();
+            } else {
+                this.trigger("file_selected", current_path);
+                this.cancel();
+            }
         },
         render_list: function() {
             this.$(".modal-body").empty();

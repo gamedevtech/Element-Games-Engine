@@ -37,6 +37,8 @@ namespace EG{
             physics = new EG::Dynamics::Physics();
 
             time->Update();
+            console = new EG::Utility::Console();
+            scene->SetConsole(console);
         }
 
         Game::~Game(void){
@@ -66,6 +68,7 @@ namespace EG{
         }
 
         void Game::PostUpdates(void){
+            console->Update(time->GetFrameTime());
             physics->Update(time->GetFrameTime());
 
             if (gui->GetInitialized()){

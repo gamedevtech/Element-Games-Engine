@@ -9,6 +9,7 @@ define(function(require) {
     var tools = require("tools");
     var video_preferences = require("video_preferences");
     var file_browser = require("file_browser");
+    var util = require("util");
 
     function open_video_preferences() {
         var prefs_model = new video_preferences.VideoPreferences();
@@ -21,11 +22,20 @@ define(function(require) {
         prefs_model.fetch();
     }
 
-    function open_file_browser() {
+    function model_selected(path) {
+        console.log("File Selected:");
+        console.log(path);
+        util.Post("load_model", {path: path}, function(data) {
+            console.log("Model Loaded!... i hope");
+        });
+    }
+
+    function select_model() {
         var model = new file_browser.FileBrowserModel();
         var view = new file_browser.FileBrowser({
             model: model
         });
+        view.bind("file_selected", model_selected);
         view.render();
         model.bind("read_complete", view.render_list);
         model.fetch();
@@ -62,7 +72,7 @@ define(function(require) {
             }
         });
         nav.bind("video_prefs", open_video_preferences);
-        nav.bind("import_model", open_file_browser);
+        nav.bind("import_model", select_model);
         nav.render();
 
         var gui_state = true;

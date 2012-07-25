@@ -45,7 +45,7 @@ namespace EG{
             shaders->Add("planet_atmosphere", "Shaders/Deferred/planet_atmosphere2.vert", "Shaders/Deferred/planet_atmosphere2.frag", "", "", "", 4);
             shaders->Add("translucent_lit_prepass", "Shaders/Deferred/translucent_lit_prepass.vert", "Shaders/Deferred/translucent_lit_prepass.frag", "", "", "", 4);
             shaders->Add("prepass_debug", "Shaders/Deferred/prepass_debug.vert", "Shaders/Deferred/prepass_debug.frag");
-            shaders->Add("font_rendering", "Shaders/Basic/font_rendering.vert", "Shaders/Basic/font_rendering.frag");
+            shaders->Add("font_rendering", "Shaders/Basic/font_rendering_ftgl.vert", "Shaders/Basic/font_rendering_ftgl.frag");
             shaders->Add("lighting", "Shaders/Deferred/lighting.vert", "Shaders/Deferred/lighting.frag", "", "", "", 2);
             shaders->Add("composition", "Shaders/Deferred/composition.vert", "Shaders/Deferred/composition.frag");
             shaders->Add("convolution", "Shaders/Deferred/convolution.vert", "Shaders/Deferred/convolution.frag");
@@ -659,7 +659,7 @@ namespace EG{
             shaders->SetInt("decal", 0);
             shaders->SetFloat4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
-            std::stringstream campos;
+            /*std::stringstream campos;
             campos.precision(3);
             campos << camera->GetPosition().x << ", " << camera->GetPosition().y << ", " << camera->GetPosition().z;
             campos.flush();
@@ -670,7 +670,8 @@ namespace EG{
             fps.precision(3);
             fps << time->GetFPS();
             fps.flush();
-            font_manager->Draw(fps.str());
+            font_manager->Draw(fps.str());*/
+            scene->GetConsole()->Draw(shaders, glm::vec3(0.0f, 25.0f, 0.0f));
 
             shaders->Unbind();
 

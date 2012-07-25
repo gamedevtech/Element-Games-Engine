@@ -311,12 +311,17 @@ namespace EG{
         }
 
         Mesh::Mesh(TriangleMesh *triangle_mesh){
+            box[0] = glm::vec3(999999.0f, 999999.0f, 999999.0f);
+            box[1] = glm::vec3(-999999.0f, -999999.0f, -999999.0f);
             GenerateMeshFromTriangleArrayMesh(triangle_mesh);
             stride = 4;
+            GenerateBoundingBox();
             GenerateBuffer();
         }
 
         Mesh::Mesh(unsigned int _vertex_count, unsigned int _stride, float *_vertices, bool _has_vertices, float *_texcoords, bool _has_texcoords, float *_normals, bool _has_normals, float *_binormals, bool _has_binormals, float *_bitangents, bool _has_bitangents, float *_weights, float *_bone_indices, float _has_skeleton){
+            box[0] = glm::vec3(999999.0f, 999999.0f, 999999.0f);
+            box[1] = glm::vec3(-999999.0f, -999999.0f, -999999.0f);
             vertex_count = _vertex_count;
             stride = _stride;
 
@@ -346,6 +351,7 @@ namespace EG{
                 weights = _weights;
                 weight_vertex_indices = _bone_indices;
             }
+            GenerateBoundingBox();
             GenerateBuffer();
         }
 
@@ -365,6 +371,40 @@ namespace EG{
             if (has_bitangents){
                 delete []bitangents;
             }
+        }
+
+        void Mesh::GenerateBoundingBox(void) {
+            vertices;
+            for (unsigned int i = 0; i < vertex_count; i++) {
+                unsigned int vi = i * 4;
+                float x = vertices[vi];
+                float y = vertices[vi + 1];
+                float z = vertices[vi + 2];
+
+                if (x < box[0].x) {
+                    box[0].x = x;
+                }
+                if (y < box[0].y) {
+                    box[0].y = y;
+                }
+                if (z < box[0].z) {
+                    box[0].z = z;
+                }
+
+                if (x > box[1].x) {
+                    box[1].x = x;
+                }
+                if (y > box[1].y) {
+                    box[1].y = y;
+                }
+                if (z > box[1].z) {
+                    box[1].z = z;
+                }
+            }
+        }
+
+        glm::vec3 *Mesh::GetBoundingBox(void) {
+            return box;
         }
 
         unsigned int Mesh::GetVertexCount(void){
