@@ -73,46 +73,47 @@ namespace EG{
         }
 
         bool Utility::RayAABBTest(glm::vec3 begin, glm::vec3 dir, glm::vec3 min, glm::vec3 max, glm::mat4 model) {
-            dir = glm::normalize(dir);
-
-            glm::vec3 dirfrac = glm::vec3(1.0f / dir.x, 1.0f / dir.y, 1.0f / dir.z);
-
             glm::vec4 bmin = model * glm::vec4(min.x, min.y, min.z, 1.0f);
             glm::vec4 bmax = model * glm::vec4(max.x, max.y, max.z, 1.0f);
 
-            float t1 = (bmin.x - begin.x) * dirfrac.x;
-            float t2 = (bmax.x - begin.x) * dirfrac.x;
-            float t3 = (bmin.y - begin.y) * dirfrac.y;
-            float t4 = (bmax.y - begin.y) * dirfrac.y;
-            float t5 = (bmin.z - begin.z) * dirfrac.z;
-            float t6 = (bmax.z - begin.z) * dirfrac.z;
+            glm::vec3 t1, t2;
+            double t_near = -DBL_MAX; // maximums defined in float.h
+            double t_far = DBL_MAX;
 
-            float tmin = glm::max(glm::max(glm::min(t1, t2), glm::min(t3, t4)), glm::min(t5, t6));
-            float tmax = glm::min(glm::min(glm::max(t1, t2), glm::max(t3, t4)), glm::max(t5, t6));
+            for (int i = 0; i < 3; i++){ //we test slabs in every direction
+                if (dir[i] == 0){ // ray parallel to planes in this direction
+                    if ((begin[i] < bmin[i]) || (begin[i] > bmax[i])) {
+                        return false; // parallel AND outside box : no intersection possible
+                    }
+                } else { // ray not parallel to planes in this direction
+                    t1[i] = (bmin[i] - begin[i]) / dir[i];
+                    t2[i] = (bmax[i] - begin[i]) / dir[i];
 
-            // if tmax < 0, ray (line) is intersecting AABB, but whole AABB is behing us
-            if (tmax < 0) {
-                return false;
+                    if(t1[i] > t2[i]){ // we want t1 to hold values for intersection with near plane
+                        glm::vec3 tmp = t2;
+                        t2 = t1;
+                        t1 = tmp;
+                    }
+                    if (t1[i] > t_near){
+                        t_near = t1[i];
+                    }
+                    if (t2[i] < t_far){
+                        t_far = t2[i];
+                    }
+                    if( (t_near > t_far) || (t_far < 0) ){
+                        return false;
+                    }
+                }
             }
-
-            // if tmin > tmax, ray doesn't intersect AABB
-            if (tmin > tmax) {
-                return false;
-            }
-
-            return true;
+            //tnear = t_near; tfar = t_far; // put return values in place
+            return true; // if we made it here, there was an intersection - YAY
         }
 
-        glm::vec3 Utility::ProjectClick(glm::vec2 mp, glm::vec2 dims, glm::vec3 camera_position, glm::mat4 inverse_view, glm::mat4 inverse_projection) {
-            glm::vec4 mouse_clip = glm::vec4(mp.x * 2.0f / dims.x - 1.0f, 1.0f - mp.y * 2.0f / dims.y, 0.0f, 1.0f);
-            glm::vec4 mouse_world = inverse_view * inverse_projection * mouse_clip;
-            glm::vec3 mouse = glm::normalize(glm::vec3(mouse_world.x, mouse_world.y, mouse_world.z));
-            glm::vec3 out = glm::normalize(mouse - camera_position);
-            console->Print(mouse_clip, "Mouse Click: ");
-            console->Print(mouse, "Mouse World: ");
-            console->Print(camera_position, "Cam Pos: ");
-            console->Print(out, "Dir: ");
-            return out;
+        glm::vec3 Utility::ProjectClick(glm::vec2 viewport_dimensions, glm::vec2 mouse_position, float far, glm::vec3 camera_position, glm::mat4 view_matrix, glm::mat4 projection_matrix) {
+            glm::vec4 viewport = glm::vec4(0.0f, 0.0f, viewport_dimensions.x, viewport_dimensions.y);
+            glm::vec3 wincoord = glm::vec3(mouse_position.x, viewport_dimensions.y - mouse_position.y, -far);
+            glm::vec3 dir = glm::normalize(glm::unProject(wincoord, view_matrix, projection_matrix, viewport) - camera_position);
+            return dir;
         }
     }
 }

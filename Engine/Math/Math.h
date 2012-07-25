@@ -36,7 +36,7 @@ namespace EG{
                 static float RandomFloat(float min, float max);
                 static glm::mat4 GenerateTransform(glm::vec3 translate = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f), glm::quat rotation = glm::quat(glm::vec3(0.0f)));
                 static bool RayAABBTest(glm::vec3 begin, glm::vec3 dir, glm::vec3 min, glm::vec3 max, glm::mat4 model = glm::mat4(1.0f));
-                static glm::vec3 ProjectClick(glm::vec2 mp, glm::vec2 dims, glm::vec3 camera_position, glm::mat4 inverse_view, glm::mat4 inverse_projection);
+                static glm::vec3 ProjectClick(glm::vec2 viewport_dimensions, glm::vec2 mouse_position, float far, glm::vec3 camera_position, glm::mat4 view_matrix, glm::mat4 projection_matrix);
             private:
                 //
         };

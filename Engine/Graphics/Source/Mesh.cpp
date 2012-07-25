@@ -311,8 +311,8 @@ namespace EG{
         }
 
         Mesh::Mesh(TriangleMesh *triangle_mesh){
-            box[0] = glm::vec3(999999.0f, 999999.0f, 999999.0f);
-            box[1] = glm::vec3(-999999.0f, -999999.0f, -999999.0f);
+            box[0] = glm::vec3(FLT_MAX, FLT_MAX, FLT_MAX);
+            box[1] = glm::vec3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
             GenerateMeshFromTriangleArrayMesh(triangle_mesh);
             stride = 4;
             GenerateBoundingBox();
@@ -320,8 +320,8 @@ namespace EG{
         }
 
         Mesh::Mesh(unsigned int _vertex_count, unsigned int _stride, float *_vertices, bool _has_vertices, float *_texcoords, bool _has_texcoords, float *_normals, bool _has_normals, float *_binormals, bool _has_binormals, float *_bitangents, bool _has_bitangents, float *_weights, float *_bone_indices, float _has_skeleton){
-            box[0] = glm::vec3(999999.0f, 999999.0f, 999999.0f);
-            box[1] = glm::vec3(-999999.0f, -999999.0f, -999999.0f);
+            box[0] = glm::vec3(FLT_MAX, FLT_MAX, FLT_MAX);
+            box[1] = glm::vec3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
             vertex_count = _vertex_count;
             stride = _stride;
 

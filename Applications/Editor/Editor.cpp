@@ -247,10 +247,11 @@ Editor::~Editor(void){
 }
 
 void Editor::PickObject(glm::vec2 mouse_position) {
-    glm::vec2 dimensions = glm::vec2(graphics->GetViewportWidth(), graphics->GetViewportHeight());
     EG::Graphics::Camera *c = scene->GetCurrentCamera();
     glm::vec3 begin = c->GetPosition();
-    glm::vec3 dir = EG::Math::Utility::ProjectClick(mouse_position, dimensions, begin, c->GetInverseViewMatrix(), c->GetInverseProjectionMatrix());
+    glm::vec3 dir = EG::Math::Utility::ProjectClick(glm::vec2(graphics->GetViewportWidth(), graphics->GetViewportHeight()),
+                                                    mouse_position, scene->GetCurrentCamera()->GetNearFar().y,
+                                                    c->GetPosition(), c->GetViewMatrix(), c->GetProjectionMatrix());
 
     EG::Graphics::MeshManager *meshes = scene->GetMeshManager();
     EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
