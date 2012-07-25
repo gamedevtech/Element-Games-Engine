@@ -21,14 +21,11 @@ namespace EG{
 
 				void SetCurrentCamera(EG::Graphics::Camera *camera);
 				EG::Graphics::Camera *GetCurrentCamera(void);
-                void SetConsole(EG::Utility::Console *_console);
-                EG::Utility::Console *GetConsole(void);
 			private:
 				EG::Game::ObjectManager *objects;
 				EG::Graphics::MeshManager *meshes;
 				EG::Graphics::TextureManager *textures;
 				EG::Graphics::Camera *current_camera;
-                EG::Utility::Console *console;
 		};
 	}
 }

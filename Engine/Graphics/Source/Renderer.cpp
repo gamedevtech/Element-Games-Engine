@@ -527,7 +527,7 @@ namespace EG{
             shaders->SetInt("decal_map", 0);
             shaders->SetFloat4("material_color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
-            scene->GetConsole()->Draw(shaders, glm::vec3(0.0f, 25.0f, 0.0f));
+            console->Draw(shaders, glm::vec3(0.0f, 25.0f, 0.0f));
 
             shaders->Unbind();
 

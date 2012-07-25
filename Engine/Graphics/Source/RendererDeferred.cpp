@@ -671,7 +671,7 @@ namespace EG{
             fps << time->GetFPS();
             fps.flush();
             font_manager->Draw(fps.str());*/
-            scene->GetConsole()->Draw(shaders, glm::vec3(0.0f, 25.0f, 0.0f));
+            console->Draw(shaders, glm::vec3(0.0f, 25.0f, 0.0f));
 
             shaders->Unbind();
 

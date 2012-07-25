@@ -37,7 +37,6 @@ namespace EG{
 				EG::Input::Input *input;
 				EG::Utility::Time *time;
 				EG::Dynamics::Physics *physics;
-                EG::Utility::Console *console;
 				RenderingMethod rendering_method;
 		};
 	}

@@ -41,6 +41,15 @@ namespace EG{
             return color;
         }
 
+        // Singleton Stuff
+        Console *Console::instance = NULL;
+        Console *Console::Instance(void){
+            if (instance == NULL){
+                instance = new Console();
+            }
+            return instance;
+        }
+
         Console::Console(void) {
             //
         }

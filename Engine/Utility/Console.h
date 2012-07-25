@@ -7,6 +7,8 @@
 #include "../Math/Math.h"
 #include "../Graphics/ShaderManager.h"
 
+#define console EG::Utility::Console::Instance()
+
 namespace EG{
     namespace Utility{
         class ConsoleLine {
@@ -38,7 +40,10 @@ namespace EG{
                 void Print(glm::vec3 val, std::string prefix = "", glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
                 void Print(glm::vec4 val, std::string prefix = "", glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
                 void Print(glm::mat4 val, std::string prefix = "", glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+
+                static Console *Instance(void);
             private:
+                static Console *instance;
                 std::vector<ConsoleLine *> lines;
                 unsigned int max_lines;
                 float fade_time;

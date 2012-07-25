@@ -43,13 +43,5 @@ namespace EG{
         EG::Graphics::Camera *Scene::GetCurrentCamera(void){
             return current_camera;
         }
-
-        void Scene::SetConsole(EG::Utility::Console *_console) {
-            console = _console;
-        }
-
-        EG::Utility::Console *Scene::GetConsole(void) {
-            return console;
-        }
     }
 }

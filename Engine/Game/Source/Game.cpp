@@ -37,8 +37,7 @@ namespace EG{
             physics = new EG::Dynamics::Physics();
 
             time->Update();
-            console = new EG::Utility::Console();
-            scene->SetConsole(console);
+            console->Print("Game Initialized");
         }
 
         Game::~Game(void){
