@@ -24,3 +24,5 @@ Remember:
 - Separate all transparent rendering and draw it in depth first order!
 - Separate Game Updating and Rendering into separate threads at least!
     - Possibly make job queue system which just picks the next available core!
+- Decals or Mega texture?!? Texture Painting?!?
+    - Growable Decal Megatexture?
