@@ -6,6 +6,7 @@
 #include "../../Engine/Graphics/Renderer.h"
 #include "../../Engine/Graphics/RendererDeferred.h"
 #include "../../Engine/Utility/StringMethods.h"
+#include "../../Engine/Utility/JSON.h"
 
 #include <boost/filesystem.hpp>
 #include <stdio.h>
@@ -122,6 +123,7 @@ std::string FileBrowserListener::Call(std::map< std::string, std::string > args)
 std::string ReadObjectsListener::Call(std::map<std::string, std::string> args) {
     EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
     EG::Utility::UnsignedIntDictionaryKeysIterator iter = objects->GetKeysBegin();
+
     std::stringstream out;
     out << "[";
     bool first = true;

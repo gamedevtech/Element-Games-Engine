@@ -141,6 +141,7 @@ set(SRCS
 	./Utility/Source/Time.cpp
 	./Utility/Source/Font.cpp
 	./Utility/Source/Text.cpp
+    ./Utility/Source/JSON.cpp
 	./Utility/Source/GUI.cpp
 	./Utility/Source/StringMethods.cpp
     ./Utility/Source/Console.cpp

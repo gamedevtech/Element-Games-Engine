@@ -22,3 +22,5 @@ Remember:
 - JSON Based Scene Format
 - Picking in Editor on Non-Physics Objects (Bounding Box Automatically Generated!)
 - Separate all transparent rendering and draw it in depth first order!
+- Separate Game Updating and Rendering into separate threads at least!
+    - Possibly make job queue system which just picks the next available core!

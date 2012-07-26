@@ -19,45 +19,20 @@ namespace EG{
     namespace Utility{
         class JSON{
             public:
-            JSON(std::string _filename = ""){
-                    filename = _filename;
-                    boost::property_tree::json_parser::read_json(filename, pt);
-                }
-                ~JSON(void){
-                    //
-                }
+                JSON(std::string _filename = "");
+                ~JSON(void);
 
-                bool GetBool(std::string path){
-                    return pt.get<bool>(path);
-                }
+                std::string GetJSON(void);
 
-                int GetInt(std::string path){
-                    return pt.get<int>(path);
-                }
+                bool GetBool(std::string path);
+                int GetInt(std::string path);
+                float GetFloat(std::string path);
+                std::string GetString(std::string path);
 
-                float GetFloat(std::string path){
-                    return pt.get<float>(path);
-                }
-
-                std::string GetString(std::string path){
-                    return pt.get<std::string>(path);
-                }
-
-                void Put(std::string path, bool value){
-                    pt.put(path, value);
-                }
-
-                void Put(std::string path, int value){
-                    pt.put(path, value);
-                }
-
-                void Put(std::string path, float value){
-                    pt.put(path, value);
-                }
-
-                void Put(std::string path, std::string value){
-                    pt.put(path, value);
-                }
+                void Put(std::string path, bool value);
+                void Put(std::string path, int value);
+                void Put(std::string path, float value);
+                void Put(std::string path, std::string value);
             private:
                 std::string filename;
                 boost::property_tree::ptree pt;
