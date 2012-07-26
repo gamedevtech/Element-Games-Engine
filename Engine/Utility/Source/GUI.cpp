@@ -1,6 +1,7 @@
 #include "../GUI.h"
 #include "../../Graphics/GraphicsSubsystem.h"
 #include "../StringMethods.h"
+#include <sstream>
 
 namespace EG{
     namespace GUI{
@@ -194,9 +195,16 @@ namespace EG{
 
         void js_console_callback(awe_webview *caller, const awe_string *message, int line_number, const awe_string *source){
             unsigned int string_length = awe_string_get_length(message);
-            char *c_url = new char[string_length];
+            unsigned int source_length = awe_string_get_length(source);
+            char *c_url = new char[string_length + 1];
+            char *s = new char[source_length + 1];
             awe_string_to_utf8(message, c_url, string_length);
-            std::cout << "JSConsole: " << c_url << std::endl;
+            awe_string_to_utf8(source, s, source_length);
+            c_url[string_length] = '\0';
+            s[source_length] = '\0';
+            std::stringstream out;
+            out << "JSConsole (" << line_number << "): " << c_url << std::endl << "Source: " << s;
+            std::cout << out.str() << std::endl;
             delete []c_url;
         }
     }

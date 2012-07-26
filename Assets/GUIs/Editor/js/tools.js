@@ -6,6 +6,7 @@ define(function(require) {
     var Backbone = require("backbone");
 
     var tool_object_list = require("tool_object_list");
+    var object_data = require("object");
 
     var Tools = Backbone.View.extend({
         initialize: function() {
@@ -20,14 +21,17 @@ define(function(require) {
                 'left': [],
                 'right': []
             };
+            this.data = this.options.data;
             this.setup_tools();
         },
         add_tool: function(side, tool_view) {
             this.tool_views[side].push(tool_view);
         },
         setup_tools: function() {
+            /* Objects */
             var object_list = new tool_object_list.ObjectList({
-                edge: 'right'
+                edge: 'right',
+                collection: this.data.objects
             });
             this.add_tool('right', object_list);
         },

@@ -119,6 +119,29 @@ std::string FileBrowserListener::Call(std::map< std::string, std::string > args)
     return out.c_str();
 }
 
+std::string ReadObjectsListener::Call(std::map<std::string, std::string> args) {
+    EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
+    EG::Utility::UnsignedIntDictionaryKeysIterator iter = objects->GetKeysBegin();
+    std::stringstream out;
+    out << "[";
+    bool first = true;
+    while (iter != objects->GetKeysEnd()) {
+        EG::Game::Object *object = scene->GetObjectManager()->GetObjects()->Get((*iter));
+        if (first) {
+            first = false;
+        } else {
+            out << ",";
+        }
+        out << "{\"id\": \"" << object->GetObjectName() << "\", ";
+        out << "\"record_id\": " << object->GetObjectId();
+        out << "}";
+        ++iter;
+    }
+    out << "]";
+    std::cout << out.str() << std::endl;
+    return out.str().c_str();
+}
+
 std::string LoadModelEventListener::Call(std::map<std::string, std::string> args){
     std::string filename = args["path"].substr(3);
     filename = EG::Utility::StringMethods::SearchAndReplace(filename, "%2F", "/");
@@ -240,6 +263,10 @@ Editor::Editor(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_wi
     listener->scene = scene;
     listener->model_loaded = false;
     gui->AddResponseHandler("load_model", listener);
+
+    ReadObjectsListener *read_objects_listener = new ReadObjectsListener();
+    read_objects_listener->scene = scene;
+    gui->AddResponseHandler("read_objects", read_objects_listener);
 }
 
 Editor::~Editor(void){

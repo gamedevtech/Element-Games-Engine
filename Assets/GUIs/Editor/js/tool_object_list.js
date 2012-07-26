@@ -12,7 +12,16 @@ define(function(require) {
         },
         render_tool: function() {
             var el = this.elem;
-            el.append("<h3>Test</h3>");
+            var i, obj;
+            var ul = $("<ul>");
+            for (i = 0; i < this.collection.length; i += 1) {
+                obj = this.collection.at(i);
+                ul.append("<li>" + obj.id + "</li>");
+            }
+            el.append(ul);
+        },
+        setup: function() {
+            this.collection.bind("change", this.render());
         }
     });
 

@@ -17,8 +17,13 @@ define(function(require) {
             _.bindAll(this, "toggle");
             _.bindAll(this, "render");
             _.bindAll(this, "render_tool");
+            _.bindAll(this, "setup");
             this.collapsed = true;
             this.edge = this.options.edge;
+            this.setup();
+        },
+        setup: function() {
+            //
         },
         toggle: function(event) {
             event.preventDefault();

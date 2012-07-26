@@ -10,6 +10,7 @@ define(function(require) {
     var video_preferences = require("video_preferences");
     var file_browser = require("file_browser");
     var util = require("util");
+    var object_data = require("object");
 
     function open_video_preferences() {
         var prefs_model = new video_preferences.VideoPreferences();
@@ -89,11 +90,19 @@ define(function(require) {
         });
 
         /* Tools */
-        var tools_view = new tools.Tools({
-            left_el: $("#left"),
-            right_el: $("#right")
+        var objects_collection = new object_data.ObjectCollection();
+        objects_collection.bind("read_complete", function(collection) {
+            console.log("Objects Read");
+            var tools_view = new tools.Tools({
+                left_el: $("#left"),
+                right_el: $("#right"),
+                data: {
+                    objects: objects_collection
+                }
+            });
+            tools_view.render();
         });
-        tools_view.render();
+        objects_collection.fetch();
     });
 });
 
