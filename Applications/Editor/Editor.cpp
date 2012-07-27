@@ -320,6 +320,10 @@ void Editor::PickObject(glm::vec2 mouse_position) {
         std::stringstream out;
         out << "Object Picked: " << object->GetObjectName();
         console->Print(out.str());
+        std::stringstream script;
+        script << "main_view.tools.select_object(\"" << object->GetObjectName() << "\");";
+        console->Print(script.str());
+        gui->ExecuteScript(script.str().c_str());
     } else {
         console->Print("No Object Picked");
     }

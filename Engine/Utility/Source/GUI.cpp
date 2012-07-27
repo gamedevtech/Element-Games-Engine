@@ -99,7 +99,7 @@ namespace EG{
 
         void GUI::ExecuteScript(std::string script){
             awe_string *tempstr = awe_string_create_from_ascii(script.c_str(), script.size());
-            awe_string *tempstr2 = awe_string_create_from_ascii("default", 7);
+            awe_string *tempstr2 = awe_string_create_from_ascii("", 0);
             awe_webview_execute_javascript(web_view, tempstr, tempstr2);
             awe_string_destroy(tempstr);
             awe_string_destroy(tempstr2);

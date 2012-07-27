@@ -133,3 +133,7 @@ body {
 .modal {
     color: #FFF;
 }
+
+.toggle_button {
+    padding-left: 4px;
+}

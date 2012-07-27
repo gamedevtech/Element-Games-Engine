@@ -7,7 +7,8 @@ define(function(require) {
 
     var ObjectList = toolarea.ToolArea.extend({
         data: {
-            button_img: "img/object_label.png",
+            button_icon: "icon-list",
+            toop_tip: "Objects List",
             tool_name: "object_list"
         },
         render_tool: function() {

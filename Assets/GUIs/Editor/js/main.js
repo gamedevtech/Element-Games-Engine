@@ -1,3 +1,6 @@
+/*global main_view:true*/
+var main_view;
+
 define(function(require) {
     "use strict";
 
@@ -68,14 +71,14 @@ define(function(require) {
             this.nav.render();
         },
         render_tools: function() {
-            var tools_view = new tools.Tools({
+            this.tools = new tools.Tools({
                 left_el: this.$("#left"),
                 right_el: this.$("#right"),
                 data: {
                     objects: this.data.objects_collection
                 }
             });
-            tools_view.render();
+            this.tools.render();
         },
         gui_toggle: function() {
             if (this.gui_state === true) {
@@ -122,16 +125,15 @@ define(function(require) {
     domReady(function() {
         // TODO: This should be fetching all init data at once!
         var objects_collection = new object_data.ObjectCollection();
+        main_view = new Main({
+            el: $("body"),
+            data: {
+                objects_collection: objects_collection
+            }
+        });
         objects_collection.bind("read_complete", function(c) {
-            var view = new Main({
-                el: $("body"),
-                data: {
-                    objects_collection: c
-                }
-            });
-            view.render();
+            main_view.render();
         });
         objects_collection.fetch();
     });
 });
-

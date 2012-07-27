@@ -6,6 +6,7 @@ define(function(require) {
     var Backbone = require("backbone");
 
     var tool_object_list = require("tool_object_list");
+    var tool_object_editor = require("tool_object_editor");
     var object_data = require("object");
 
     var Tools = Backbone.View.extend({
@@ -15,6 +16,7 @@ define(function(require) {
             _.bindAll(this, "render_right");
             _.bindAll(this, "add_tool");
             _.bindAll(this, "setup_tools");
+            _.bindAll(this, "select_object");
             this.left_el = this.options.left_el;
             this.right_el = this.options.right_el;
             this.tool_views = {
@@ -29,11 +31,16 @@ define(function(require) {
         },
         setup_tools: function() {
             /* Objects */
-            var object_list = new tool_object_list.ObjectList({
+            this.object_list = new tool_object_list.ObjectList({
                 edge: 'right',
                 collection: this.data.objects
             });
-            this.add_tool('right', object_list);
+            this.add_tool('right', this.object_list);
+            /* Object Editor */
+            this.object_editor = new tool_object_editor.ObjectEditor({
+                edge: 'right'
+            });
+            this.add_tool('right', this.object_editor);
         },
         render: function() {
             this.render_left();
@@ -69,6 +76,12 @@ define(function(require) {
             } else {
                 this.right_el.hide();
             }
+        },
+        select_object: function(object_id) {
+            console.log("Select Object: ");
+            console.log(object_id);
+            this.object_editor.model = this.object_list.collection.get(object_id);
+            this.object_editor.render();
         }
     });
 
