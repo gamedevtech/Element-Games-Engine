@@ -1,5 +1,5 @@
 #ifndef JSON_PARSER_H
-#define JSON_H
+#define JSON_PARSER_H
 
 #include <string>
 #include <boost/property_tree/ptree.hpp>
@@ -17,6 +17,23 @@
 
 namespace EG{
     namespace Utility{
+        class JSONValue {
+            public:
+                enum JSONType{
+                    INT = 0,
+                    FLOAT = 1,
+                    STRING = 2,
+                    ARRAY = 3,
+                    OBJECT = 4
+                };
+
+                JSONValue(void);
+                ~JSONValue(void);
+            private:
+                unsigned int type;
+                int int_value;
+        };
+
         class JSON{
             public:
                 JSON(std::string _filename = "");

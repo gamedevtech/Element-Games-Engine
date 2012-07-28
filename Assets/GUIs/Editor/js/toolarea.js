@@ -32,13 +32,15 @@ define(function(require) {
         },
         render: function() {
             this.$el.empty();
-            var html = '<a href="javascript:;" class="vertical_text toggle_button"><i class="icon-white ' + this.data.button_icon + '"></i></a>';
+            var html = '<a href="javascript:;" class="vertical_text toggle_button"><img src="' + this.data.button_icon + '" /></a>';
             if (this.edge === 'left') {
                 html += '<div class="tool_area tool_left"></div>';
             } else if (this.edge === 'right') {
                 html += '<div class="tool_area tool_right"></div>';
             }
             this.$el.html(html);
+
+            // Tooltip
             var placement = 'left';
             if (this.edge === 'left') {
                 placement = 'right';
@@ -49,6 +51,7 @@ define(function(require) {
                 delay: {show: 500, hide: 100},
                 title: this.data.tool_tip
             });
+
             this.elem = this.$('.tool_area');
             this.render_tool();
             return this;

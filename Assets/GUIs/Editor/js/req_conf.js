@@ -20,11 +20,13 @@ var require = {
             exports: "Backbone"
         },
         "external/backbone.subroute": ["backbone"],
-        "external/Backbone.ModelBinder": ["backbone"]
+        "external/Backbone.ModelBinder": ["backbone"],
+        "external/bootstrap-colorpicker": ["external/bootstrap"]
     },
     deps: [
         "underscore",
         "jquery",
-        "external/bootstrap"
+        "external/bootstrap",
+        "external/bootstrap-colorpicker"
     ]
 };

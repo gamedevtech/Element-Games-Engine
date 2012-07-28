@@ -137,3 +137,9 @@ body {
 .toggle_button {
     padding-left: 4px;
 }
+
+input[type=text]{
+    font-size: 12px;
+    height: 20px;
+    width: 150px;
+}

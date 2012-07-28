@@ -136,6 +136,31 @@ std::string ReadObjectsListener::Call(std::map<std::string, std::string> args) {
         }
         out << "{\"id\": \"" << object->GetObjectName() << "\", ";
         out << "\"record_id\": " << object->GetObjectId();
+
+        if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH)) {
+            out << ", \"materials\": [";
+            std::vector<EG::Game::ObjectAttribute *> *material_attributes = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+            std::vector<EG::Game::ObjectAttribute *>::iterator material_iter = material_attributes->begin();
+            while (material_iter != material_attributes->end()) {
+                EG::Game::ObjectAttributeRenderingMesh *material_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*material_iter);
+                EG::Graphics::RenderingMaterial *material = material_attribute->GetMaterial();
+                // Mesh Id
+                out << "{\"mesh_id\": \"" << material_attribute->GetMeshId() << "\"";
+
+                // Color
+                glm::vec4 c = material->GetColor();
+                out << ",\"color\": [" << c.x << ", " << c.y << ", " << c.z << ", " << c.w << "]";
+
+                // Specular
+                out << ",\"specular\": " << material->GetSpecular();
+
+                // Fin
+                out << "}";
+                ++material_iter;
+            }
+            out << "]";
+        }
+
         out << "}";
         ++iter;
     }
