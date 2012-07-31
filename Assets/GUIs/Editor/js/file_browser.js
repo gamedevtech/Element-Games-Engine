@@ -52,13 +52,12 @@ define(function(require) {
         cancel: function() {
             this.$el.modal('hide');
             this.$el.remove();
+            return false;
         },
         file_click: function(event) {
             var elem = $(event.currentTarget);
             var path = elem.attr("path");
             var type = elem.attr("type");
-            console.log(type);
-            console.log(path);
 
             var current_path = this.model.get("current_path");
             current_path += "/" + path;
@@ -70,6 +69,7 @@ define(function(require) {
                 this.trigger("file_selected", current_path);
                 this.cancel();
             }
+            return false;
         },
         render_list: function() {
             this.$(".modal-body").empty();
@@ -78,7 +78,7 @@ define(function(require) {
             var model_regexp = new RegExp("(dae|3ds|ego)$", "i");
 
             var well = $('<div class="well">');
-            var ul = $("<ul>");
+            var ul = $('<ul style="list-style: none;">');
             var i, file, li;
             for (i = 0; i < this.model.collection.length; i += 1) {
                 file = this.model.collection.at(i);
@@ -88,7 +88,7 @@ define(function(require) {
                     li.append('<i class="icon-folder-close icon-white"></i>&nbsp;');
                 } else {
                     if (file.get("path").match(pic_regexp)) {
-                        li.append('<i class="icon-picture icon-white"></i>&nbsp;');
+                        li.append('<img src="../../../' + this.model.get("current_path") + '/' + file.get("path") + '" height="12px" />&nbsp;');
                     } else if (file.get("path").match(model_regexp)) {
                         li.append('<i class="icon-plane icon-white"></i>&nbsp;');
                     } else {
@@ -107,7 +107,9 @@ define(function(require) {
             this.$el.empty();
             this.$el.html(template);
             this.render_list();
-            this.$el.modal();
+            this.$el.modal({
+                backdrop: 'static'
+            });
             return this;
         }
     });

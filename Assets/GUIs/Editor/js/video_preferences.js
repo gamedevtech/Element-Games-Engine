@@ -53,6 +53,7 @@ define(function(require) {
         cancel: function() {
             this.$el.modal('hide');
             this.$el.remove();
+            return false;
         },
         apply: function() {
             var form_data = {};
@@ -87,6 +88,7 @@ define(function(require) {
             }
             this.model.bind("save_complete", this.cancel);
             this.model.save(form_data);
+            return false;
         },
         template_data: function() {
             var data = this.model.toJSON();

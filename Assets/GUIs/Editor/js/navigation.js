@@ -30,6 +30,7 @@ define(function(require) {
             var entry = $(event.currentTarget).data("entry");
             console.log("Triggering: ", entry);
             this.trigger(entry);
+            return false;
         },
         build_menu: function() {
             var out = '';

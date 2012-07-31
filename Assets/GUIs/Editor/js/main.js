@@ -90,6 +90,7 @@ define(function(require) {
                 this.$("#body_container").fadeIn();
                 this.gui_state = true;
             }
+            return false;
         },
         open_video_preferences: function() {
             var prefs_model = new video_preferences.VideoPreferences();
@@ -135,5 +136,11 @@ define(function(require) {
             main_view.render();
         });
         objects_collection.fetch();
+
+        $("body").click(function() {
+            util.Get("body_click", function() {
+                console.log("Body Click Callback Received!");
+            });
+        });
     });
 });

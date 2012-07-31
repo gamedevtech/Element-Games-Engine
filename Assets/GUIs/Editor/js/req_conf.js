@@ -21,6 +21,7 @@ var require = {
         },
         "external/backbone.subroute": ["backbone"],
         "external/Backbone.ModelBinder": ["backbone"],
+        "external/backbone-relational": ["backbone"],
         "external/bootstrap-colorpicker": ["external/bootstrap"]
     },
     deps: [

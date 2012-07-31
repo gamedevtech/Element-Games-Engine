@@ -29,6 +29,7 @@ define(function(require) {
             event.preventDefault();
             this.collapsed = !(this.collapsed);
             this.$(".tool_area").animate({width: 'toggle'}, 150);
+            return false;
         },
         render: function() {
             this.$el.empty();

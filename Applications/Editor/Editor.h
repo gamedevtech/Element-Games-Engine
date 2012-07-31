@@ -11,6 +11,7 @@ class Editor : public EG::Game::Game{
         ~Editor(void);
 
         void Update(void);
+        bool pick_object;
     private:
         void PickObject(glm::vec2 mouse_position);
 };
@@ -38,6 +39,12 @@ class ReadObjectsListener : public EG::GUI::WebResourceResponse{
 class FileBrowserListener : public EG::GUI::WebResourceResponse {
     public:
         virtual std::string Call(std::map<std::string, std::string> args);
+};
+
+class BodyClickListener : public EG::GUI::WebResourceResponse {
+    public:
+        virtual std::string Call(std::map<std::string, std::string> args);
+        EG::Game::Game *game;
 };
 
 class LoadModelEventListener : public EG::GUI::WebResourceResponse{

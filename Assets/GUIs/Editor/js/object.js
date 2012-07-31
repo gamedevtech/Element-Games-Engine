@@ -6,9 +6,30 @@ define(function(require) {
     var Backbone = require("backbone");
     var util = require("util");
 
+    var Material = Backbone.Model.extend({
+        defaults: {
+            color: [1.0, 1.0, 1.0, 1.0],
+            specular: 1.0,
+            decal: '',
+            normal: '',
+            height: '',
+            specular: ''
+        }
+    });
+
+    var Materials = Backbone.Collection.extend({
+        model: Material
+    });
+
     var ObjectModel = Backbone.Model.extend({
         initialize: function() {
             _.bindAll(this, "sync");
+            _.bindAll(this, "prepare_data");
+            this.prepare_data();
+        },
+        prepare_data: function() {
+            this.materials = new Materials(this.get("materials"));
+            this.unset("materials");
         },
         sync: function(method, model, options) {
             if (method === "create") {

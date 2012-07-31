@@ -47,7 +47,7 @@ std::string GetVideoSettingsListener::Call(std::map<std::string, std::string> ar
     out += " ,\"dof\": " + dof_enabled;
 
     out += "}";
-    std::cout << "Bin Response: " << out << std::endl;
+    //std::cout << "Bin Response: " << out << std::endl;
     return out.c_str();
 }
 
@@ -116,7 +116,7 @@ std::string FileBrowserListener::Call(std::map< std::string, std::string > args)
         out += "}";
     }
     out += "]";
-    std::cout << out << std::endl;
+    //std::cout << out << std::endl;
     return out.c_str();
 }
 
@@ -145,7 +145,7 @@ std::string ReadObjectsListener::Call(std::map<std::string, std::string> args) {
                 EG::Game::ObjectAttributeRenderingMesh *material_attribute = static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*material_iter);
                 EG::Graphics::RenderingMaterial *material = material_attribute->GetMaterial();
                 // Mesh Id
-                out << "{\"mesh_id\": \"" << material_attribute->GetMeshId() << "\"";
+                out << "{\"id\": \"" << material_attribute->GetMeshId() << "\"";
 
                 // Color
                 glm::vec4 c = material->GetColor();
@@ -153,6 +153,34 @@ std::string ReadObjectsListener::Call(std::map<std::string, std::string> args) {
 
                 // Specular
                 out << ",\"specular\": " << material->GetSpecular();
+
+                // Decal
+                out << ",\"decal\": \"";
+                if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL)){
+                    out << scene->GetTextureManager()->GetTexture(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL))->GetFilePath();
+                }
+                out << "\"";
+
+                // Normal
+                out << ",\"normal\": \"";
+                if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL)){
+                    out << scene->GetTextureManager()->GetTexture(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL))->GetFilePath();
+                }
+                out << "\"";
+
+                // Height
+                out << ",\"height\": \"";
+                if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT)){
+                    out << scene->GetTextureManager()->GetTexture(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT))->GetFilePath();
+                }
+                out << "\"";
+
+                // Specular
+                out << ",\"specular\": \"";
+                if (material->HasTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR)){
+                    out << scene->GetTextureManager()->GetTexture(material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR))->GetFilePath();
+                }
+                out << "\"";
 
                 // Fin
                 out << "}";
@@ -165,7 +193,7 @@ std::string ReadObjectsListener::Call(std::map<std::string, std::string> args) {
         ++iter;
     }
     out << "]";
-    std::cout << out.str() << std::endl;
+    //std::cout << out.str() << std::endl;
     return out.str().c_str();
 }
 
@@ -270,7 +298,14 @@ std::string LoadModelEventListener::Call(std::map<std::string, std::string> args
     }
 }
 
+std::string BodyClickListener::Call(std::map<std::string, std::string> args) {
+    Editor *e = static_cast<Editor *>(game);
+    e->pick_object = true;
+    return "{\"status\": \"ok\"}";
+}
+
 Editor::Editor(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
+    pick_object = false;
     gui->Initialize("Assets/GUIs/Editor", "index.html");
 
     GetVideoSettingsListener *get_video_listener = new GetVideoSettingsListener();
@@ -294,6 +329,10 @@ Editor::Editor(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_wi
     ReadObjectsListener *read_objects_listener = new ReadObjectsListener();
     read_objects_listener->scene = scene;
     gui->AddResponseHandler("read_objects", read_objects_listener);
+
+    BodyClickListener *body_click_listener = new BodyClickListener();
+    body_click_listener->game = this;
+    gui->AddResponseHandler("body_click", body_click_listener);
 }
 
 Editor::~Editor(void){
@@ -347,10 +386,7 @@ void Editor::PickObject(glm::vec2 mouse_position) {
         console->Print(out.str());
         std::stringstream script;
         script << "main_view.tools.select_object(\"" << object->GetObjectName() << "\");";
-        console->Print(script.str());
         gui->ExecuteScript(script.str().c_str());
-    } else {
-        console->Print("No Object Picked");
     }
 }
 
@@ -359,8 +395,9 @@ void Editor::Update(void){
     if (input->IsKeyDown(EG::Input::v)) {
         movement_speed /= 100.0f;
     }
-    if (input->IsMouseToggled(EG::Input::mouse_left)) {
-        PickObject(input->GetMousePosition());
+    if (pick_object) {
+       PickObject(input->GetMousePosition());
+       pick_object = false;
     }
     if (input->IsMouseDown(EG::Input::mouse_right)){
         scene->GetCurrentCamera()->RotateByMouse(input->GetMouseDelta());
