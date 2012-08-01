@@ -182,6 +182,18 @@ std::string ReadObjectsListener::Call(std::map<std::string, std::string> args) {
                 }
                 out << "\"";
 
+                // Material Specularity
+                out << ",\"specular_scalar\": " << material->GetSpecular();
+
+                // Casts Shadows
+                out << ",\"casts_shadows\": " << (material->GetCastsShadows() ? "true" : "false");
+
+                // Lit
+                out << ",\"lit\": " << (material->GetLit() ? "true" : "false");
+
+                // Translucent
+                out << ",\"translucent\": " << (material->GetTranslucent() ? "true" : "false");
+
                 // Fin
                 out << "}";
                 ++material_iter;
@@ -329,6 +341,30 @@ std::string SaveMaterialListener::Call(std::map<std::string, std::string> args) 
             float *color_floats = EG::Utility::StringMethods::ConvertStringToFloatArray(color_string);
             glm::vec4 color = glm::vec4(color_floats[0], color_floats[1], color_floats[2], color_floats[3]);
             material->SetColor(color);
+
+            // Is Lit
+            if (args["lit"] == "true") {
+                material->SetLit(true);
+            } else {
+                material->SetLit(false);
+            }
+
+            // Is Translucent
+            if (args["translucent"] == "true") {
+                material->SetTranslucent(true);
+            } else {
+                material->SetTranslucent(false);
+            }
+
+            // Casts Shadows
+            if (args["casts_shadows"] == "true") {
+                material->SetCastsShadows(true);
+            } else {
+                material->SetCastsShadows(false);
+            }
+
+            // Specular Scalar
+            material->SetSpecular(EG::Utility::StringMethods::ConvertStringToFloatArray(args["specular_scalar"])[0]);
 
             // Decal
             std::string decal = EG::Utility::StringMethods::SearchAndReplace(args["decal"], "%2F", "/");

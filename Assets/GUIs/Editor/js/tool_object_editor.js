@@ -32,7 +32,13 @@ define(function(require) {
 
             h.append('<h4>' + this.title + '</h4>');
 
-            b.append('<img src="../../../' + this.file_path + '" height="512px" />');
+            var path = this.file_path;
+            if (path === "" || _.isUndefined(path) || _.isNull(path)) {
+                path = "img/no_image.png";
+            } else {
+                path = "../../../" + path;
+            }
+            b.append('<img src="' + path + '" height="512px" />');
             b.append('<br>');
             b.append('<input type="text" value="' + this.file_path + '" disabled="disabled" />');
             b.append('<button class="choose_button btn-success">Choose...</button>');
@@ -97,12 +103,24 @@ define(function(require) {
             return false;
         },
         render: function() {
-            this.$el.append('<a href="#" class="image_chooser"><img src="../../../' + this.file_path + '" height="50px" /></a>');
+            var path = this.file_path;
+            if (path === "" || _.isUndefined(path) || _.isNull(path)) {
+                path = "img/no_image.png";
+            } else {
+                path = "../../../" + path;
+            }
+            this.$el.append('<a href="#" class="image_chooser"><img src="' + path + '" height="50px" /></a>');
             return this;
         }
     });
 
     var MaterialView = Backbone.View.extend({
+        events: {
+            "blur #specular_scalar": "specular_scalar_changed",
+            "click #translucent": "translucent_changed",
+            "click #lit": "lit_changed",
+            "click #casts_shadows": "casts_shadows_changed"
+        },
         initialize: function() {
             _.bindAll(this, "render");
             _.bindAll(this, "color_changed");
@@ -110,6 +128,10 @@ define(function(require) {
             _.bindAll(this, "normal_changed");
             _.bindAll(this, "height_changed");
             _.bindAll(this, "specular_changed");
+            _.bindAll(this, "specular_scalar_changed");
+            _.bindAll(this, "casts_shadows_changed");
+            _.bindAll(this, "translucent_changed");
+            _.bindAll(this, "lit_changed");
         },
         render: function() {
             var html = "<strong>Material:</strong><br>";
@@ -170,6 +192,20 @@ define(function(require) {
             table.append(tr1);
 
             this.$el.append(table);
+
+            this.$el.append('<strong>Specular: </strong><input id="specular_scalar" type="text" value="' + this.model.get("specular_scalar") + '" /><br>');
+            this.$el.append('<strong>Casts Shadows: </strong><input type="checkbox" id="casts_shadows" value="true" /><br>');
+            if (this.model.get("casts_shadows") === true) {
+                this.$("#casts_shadows").attr("checked", "checked");
+            }
+            this.$el.append('<strong>Receives Lighting: </strong><input type="checkbox" id="lit" value="true" /><br>');
+            if (this.model.get("lit") === true) {
+                this.$("#lit").attr("checked", "checked");
+            }
+            this.$el.append('<strong>Translucent: </strong><input type="checkbox" id="translucent" value="true" /><br>');
+            if (this.model.get("translucent") === true) {
+                this.$("#translucent").attr("checked", "checked");
+            }
             return this;
         },
         color_changed: function(ev) {
@@ -181,12 +217,10 @@ define(function(require) {
             this.model.save({color: [r, g, b, a]});
         },
         decal_changed: function(path) {
-            console.log("Decal: " + path);
             this.model.save({decal: path});
             this.render();
         },
         normal_changed: function(path) {
-            console.log("Normal: " + path);
             this.model.save({normal: path});
             this.render();
         },
@@ -197,6 +231,30 @@ define(function(require) {
         specular_changed: function(path) {
             this.model.save({specular: path});
             this.render();
+        },
+        lit_changed: function(event) {
+            if (this.$("#lit").is(":checked")) {
+                this.model.save({lit: true});
+            } else {
+                this.model.save({lit: false});
+            }
+        },
+        specular_scalar_changed: function(event) {
+            this.model.save({specular_scalar: this.$("#specular_scalar").val()});
+        },
+        casts_shadows_changed: function(event) {
+            if (this.$("#casts_shadows").is(":checked")) {
+                this.model.save({casts_shadows: true});
+            } else {
+                this.model.save({casts_shadows: false});
+            }
+        },
+        translucent_changed: function(event) {
+            if (this.$("#translucent").is(":checked")) {
+                this.model.save({translucent: true});
+            } else {
+                this.model.save({translucent: false});
+            }
         }
     });
 
@@ -233,6 +291,7 @@ define(function(require) {
             return view.$el;
         },
         render_tool: function() {
+            this.elem.empty();
             var el = this.elem;
             if (_.isUndefined(this.model)) {
                 el.append("<h5>No Object Selected</h5>");

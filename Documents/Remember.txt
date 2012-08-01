@@ -26,3 +26,4 @@ Remember:
     - Possibly make job queue system which just picks the next available core!
 - Decals or Mega texture?!? Texture Painting?!?
     - Growable Decal Megatexture?
+- Texture Repeat in Rendering Material

@@ -78,8 +78,11 @@ define(function(require) {
             }
         },
         select_object: function(object_id) {
-            this.object_editor.model = this.object_list.collection.get(object_id);
-            this.object_editor.render();
+            if (_.isUndefined(this.object_editor.model) ||
+                    this.object_editor.model.id !== object_id) {
+                this.object_editor.model = this.object_list.collection.get(object_id);
+                this.object_editor.render_tool();
+            }
         }
     });
 

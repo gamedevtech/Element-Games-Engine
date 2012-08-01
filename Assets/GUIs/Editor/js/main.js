@@ -137,7 +137,10 @@ define(function(require) {
         });
         objects_collection.fetch();
 
-        $("body").click(function() {
+        $("#middle").click(function(event) {
+            if (event.target !== this) {
+                return true;
+            }
             util.Get("body_click", function() {
                 console.log("Body Click Callback Received!");
             });
