@@ -27,7 +27,7 @@ void main(){
         // Position and Specular Factor
         float specularity = material_specularity;
         if (use_specular_map == 1) {
-            specularity = texture(specular_map, texcoord).r;
+            specularity *= texture(specular_map, texcoord).r;
         }
         fragment0 = vec4(position, specularity);
 

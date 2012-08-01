@@ -116,7 +116,7 @@ define(function(require) {
 
     var MaterialView = Backbone.View.extend({
         events: {
-            "blur #specular_scalar": "specular_scalar_changed",
+            "keyup #specular_scalar": "specular_scalar_changed",
             "click #translucent": "translucent_changed",
             "click #lit": "lit_changed",
             "click #casts_shadows": "casts_shadows_changed"
@@ -232,15 +232,19 @@ define(function(require) {
             this.model.save({specular: path});
             this.render();
         },
+        specular_scalar_changed: function(event) {
+            var s = this.$("#specular_scalar").val();
+            var sf = parseFloat(s);
+            if (!(_.isNaN(sf))) {
+                this.model.save({specular_scalar: sf});
+            }
+        },
         lit_changed: function(event) {
             if (this.$("#lit").is(":checked")) {
                 this.model.save({lit: true});
             } else {
                 this.model.save({lit: false});
             }
-        },
-        specular_scalar_changed: function(event) {
-            this.model.save({specular_scalar: this.$("#specular_scalar").val()});
         },
         casts_shadows_changed: function(event) {
             if (this.$("#casts_shadows").is(":checked")) {

@@ -317,11 +317,11 @@ std::string BodyClickListener::Call(std::map<std::string, std::string> args) {
 }
 
 std::string SaveMaterialListener::Call(std::map<std::string, std::string> args) {
-    std::string object_id = args["object_id"];
-    std::string mesh_id = args["id"];
+    std::string object_id = EG::Utility::StringMethods::SearchAndReplace(args["object_id"], "%2F", "/");
+    std::string mesh_id = EG::Utility::StringMethods::SearchAndReplace(args["id"], "%2F", "/");
 
     EG::Game::Object *object = scene->GetObjectManager()->GetObjectByName(object_id);
-    if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH)) {
+    if (object && object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH)) {
         std::vector<EG::Game::ObjectAttribute *> *attrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
         std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
         EG::Graphics::RenderingMaterial *material;
@@ -364,7 +364,8 @@ std::string SaveMaterialListener::Call(std::map<std::string, std::string> args) 
             }
 
             // Specular Scalar
-            material->SetSpecular(EG::Utility::StringMethods::ConvertStringToFloatArray(args["specular_scalar"])[0]);
+            float specular_scalar = EG::Utility::StringMethods::ConvertStringToFloatArray(args["specular_scalar"])[0];
+            material->SetSpecular(specular_scalar);
 
             // Decal
             std::string decal = EG::Utility::StringMethods::SearchAndReplace(args["decal"], "%2F", "/");

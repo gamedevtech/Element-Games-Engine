@@ -23,7 +23,7 @@ namespace EG{
             }
 
             // Resolution needs to be from config
-            bool deferred = false;
+            bool deferred = true;
             if (deferred) {
                 rendering_method = RENDERER_DEFERRED;
                 renderer = new EG::Graphics::RendererDeferred();
