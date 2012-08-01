@@ -346,7 +346,7 @@ std::string SaveMaterialListener::Call(std::map<std::string, std::string> args) 
             // Normal
             std::string normal = EG::Utility::StringMethods::SearchAndReplace(args["normal"], "%2F", "/");
             if (normal == "") {
-                material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "default_normal");
+                material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, "default_normal");
             } else {
                 if (!(scene->GetTextureManager()->HasTexture(normal))) {
                     scene->GetTextureManager()->AddTexture(normal, new EG::Graphics::Texture(normal));
@@ -359,7 +359,7 @@ std::string SaveMaterialListener::Call(std::map<std::string, std::string> args) 
             // Height
             std::string height = EG::Utility::StringMethods::SearchAndReplace(args["height"], "%2F", "/");
             if (height == "") {
-                material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "default_height");
+                material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT, "default_height");
             } else {
                 if (!(scene->GetTextureManager()->HasTexture(height))) {
                     scene->GetTextureManager()->AddTexture(height, new EG::Graphics::Texture(height));
@@ -372,7 +372,7 @@ std::string SaveMaterialListener::Call(std::map<std::string, std::string> args) 
             // Specular
             std::string specular = EG::Utility::StringMethods::SearchAndReplace(args["specular"], "%2F", "/");
             if (specular == "") {
-                material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "default_specular");
+                material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR, "default_specular");
             } else {
                 if (!(scene->GetTextureManager()->HasTexture(specular))) {
                     scene->GetTextureManager()->AddTexture(specular, new EG::Graphics::Texture(specular));
