@@ -15,6 +15,7 @@ uniform vec3 light_attenuation;
 uniform float light_radius;
 uniform vec3 light_color;
 uniform int normal_mapping_enabled;
+uniform vec4 material_color;
 
 out vec4 fragment_output;
 
@@ -40,6 +41,5 @@ void main() {
         light_factor += pow(max(dot(normalize(reflect(light_vector, normal_vector)), normalize(view)), 0.0), 16.0) * 0.7 * attenuation_factor;
     }
 
-    color_out *= vec4((light_color * light_factor), 1.0);
-    fragment_output = color_out;
+    fragment_output = material_color * color_out * vec4((light_color * light_factor), 1.0);
 }

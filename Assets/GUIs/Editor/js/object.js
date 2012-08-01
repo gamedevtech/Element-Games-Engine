@@ -14,6 +14,13 @@ define(function(require) {
             normal: '',
             height: '',
             specular: ''
+        },
+        sync: function(method, model, options) {
+            if (method === "update" || method === "create") {
+                util.Post("save_material", model.toJSON(), function(ret) {
+                    //console.log("Material Saved");
+                });
+            }
         }
     });
 
@@ -28,7 +35,11 @@ define(function(require) {
             this.prepare_data();
         },
         prepare_data: function() {
+            var t = this;
             this.materials = new Materials(this.get("materials"));
+            this.materials.each(function(m) {
+                m.set({object_id: t.id});
+            });
             this.unset("materials");
         },
         sync: function(method, model, options) {

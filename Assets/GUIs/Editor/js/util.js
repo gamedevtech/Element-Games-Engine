@@ -28,9 +28,7 @@ define(function(require) {
                 url += attr_name + "=" + encodeURIComponent(attr_value);
             }
         }
-        console.log(url);
         $.get(url, function(json_raw) {
-            console.log("Raw: ", json_raw);
             var data = JSON.parse(json_raw.toString());
             callback(data);
         });

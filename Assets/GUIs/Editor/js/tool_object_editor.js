@@ -45,7 +45,7 @@ define(function(require) {
             this.$el.modal({
                 backdrop: 'static'
             }).on("hidden", function() {
-                t.trigger("image_chosen", this.file_path);
+                t.trigger("image_chosen", t.file_path);
             });
             return this;
         },
@@ -178,23 +178,24 @@ define(function(require) {
             var g = color.g / 255.0;
             var b = color.b / 255.0;
             var a = color.a;
-            this.model.set({color: [r, g, b, a]});
+            this.model.save({color: [r, g, b, a]});
         },
         decal_changed: function(path) {
             console.log("Decal: " + path);
-            this.model.set({decal: path});
+            this.model.save({decal: path});
             this.render();
         },
         normal_changed: function(path) {
-            this.model.set({normal: path});
+            console.log("Normal: " + path);
+            this.model.save({normal: path});
             this.render();
         },
         height_changed: function(path) {
-            this.model.set({height: path});
+            this.model.save({height: path});
             this.render();
         },
         specular_changed: function(path) {
-            this.model.set({specular: path});
+            this.model.save({specular: path});
             this.render();
         }
     });

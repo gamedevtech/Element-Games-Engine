@@ -36,6 +36,12 @@ class ReadObjectsListener : public EG::GUI::WebResourceResponse{
         EG::Game::Scene *scene;
 };
 
+class SaveMaterialListener : public EG::GUI::WebResourceResponse{
+    public:
+        virtual std::string Call(std::map<std::string, std::string> args);
+        EG::Game::Scene *scene;
+};
+
 class FileBrowserListener : public EG::GUI::WebResourceResponse {
     public:
         virtual std::string Call(std::map<std::string, std::string> args);

@@ -304,6 +304,89 @@ std::string BodyClickListener::Call(std::map<std::string, std::string> args) {
     return "{\"status\": \"ok\"}";
 }
 
+std::string SaveMaterialListener::Call(std::map<std::string, std::string> args) {
+    std::string object_id = args["object_id"];
+    std::string mesh_id = args["id"];
+
+    EG::Game::Object *object = scene->GetObjectManager()->GetObjectByName(object_id);
+    if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH)) {
+        std::vector<EG::Game::ObjectAttribute *> *attrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH);
+        std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = attrs->begin();
+        EG::Graphics::RenderingMaterial *material;
+        bool found = false;
+        while (attr_iter != attrs->end()) {
+            EG::Game::ObjectAttributeRenderingMesh *attr = static_cast<EG::Game::ObjectAttributeRenderingMesh *>((*attr_iter));
+            if (attr->GetMeshId() == mesh_id) {
+                found = true;
+                material = attr->GetMaterial();
+                break;
+            }
+            ++attr_iter;
+        }
+        if (found) {
+            // Color
+            std::string color_string = EG::Utility::StringMethods::SearchAndReplace(args["color"], "%2C", " ");
+            float *color_floats = EG::Utility::StringMethods::ConvertStringToFloatArray(color_string);
+            glm::vec4 color = glm::vec4(color_floats[0], color_floats[1], color_floats[2], color_floats[3]);
+            material->SetColor(color);
+
+            // Decal
+            std::string decal = EG::Utility::StringMethods::SearchAndReplace(args["decal"], "%2F", "/");
+            if (decal == "") {
+                material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "default_decal");
+            } else {
+                if (!(scene->GetTextureManager()->HasTexture(decal))) {
+                    scene->GetTextureManager()->AddTexture(decal, new EG::Graphics::Texture(decal));
+                }
+                if (material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL) != decal) {
+                    material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, decal);
+                }
+            }
+
+            // Normal
+            std::string normal = EG::Utility::StringMethods::SearchAndReplace(args["normal"], "%2F", "/");
+            if (normal == "") {
+                material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "default_normal");
+            } else {
+                if (!(scene->GetTextureManager()->HasTexture(normal))) {
+                    scene->GetTextureManager()->AddTexture(normal, new EG::Graphics::Texture(normal));
+                }
+                if (material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL) != normal) {
+                    material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, normal);
+                }
+            }
+
+            // Height
+            std::string height = EG::Utility::StringMethods::SearchAndReplace(args["height"], "%2F", "/");
+            if (height == "") {
+                material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "default_height");
+            } else {
+                if (!(scene->GetTextureManager()->HasTexture(height))) {
+                    scene->GetTextureManager()->AddTexture(height, new EG::Graphics::Texture(height));
+                }
+                if (material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT) != height) {
+                    material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT, height);
+                }
+            }
+
+            // Specular
+            std::string specular = EG::Utility::StringMethods::SearchAndReplace(args["specular"], "%2F", "/");
+            if (specular == "") {
+                material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "default_specular");
+            } else {
+                if (!(scene->GetTextureManager()->HasTexture(specular))) {
+                    scene->GetTextureManager()->AddTexture(specular, new EG::Graphics::Texture(specular));
+                }
+                if (material->GetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR) != specular) {
+                    material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR, specular);
+                }
+            }
+        }
+    }
+
+    return "{\"status\": true}";
+}
+
 Editor::Editor(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
     pick_object = false;
     gui->Initialize("Assets/GUIs/Editor", "index.html");
@@ -333,6 +416,10 @@ Editor::Editor(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_wi
     BodyClickListener *body_click_listener = new BodyClickListener();
     body_click_listener->game = this;
     gui->AddResponseHandler("body_click", body_click_listener);
+
+    SaveMaterialListener *save_material_listener = new SaveMaterialListener();
+    save_material_listener->scene = scene;
+    gui->AddResponseHandler("save_material", save_material_listener);
 }
 
 Editor::~Editor(void){
