@@ -83,7 +83,7 @@ std::string SetVideoSettingsListener::Call(std::map<std::string, std::string> ar
 
 std::string FileBrowserListener::Call(std::map< std::string, std::string > args) {
     // Make config! Go with scene!
-    std::string path = boost::filesystem::current_path().c_str() + EG::Utility::StringMethods::SearchAndReplace(args["path"], "%2F", "/");
+    std::string path = boost::filesystem::current_path().c_str() + EG::Utility::StringMethods::ConvertURI(args["path"]);
     std::cout << "File Browser @: " << path << std::endl;
     std::string out = "[";
     boost::filesystem::directory_iterator end_itr; // Default ctor yields past-the-end
@@ -211,7 +211,7 @@ std::string ReadObjectsListener::Call(std::map<std::string, std::string> args) {
 
 std::string LoadModelEventListener::Call(std::map<std::string, std::string> args){
     std::string filename = args["path"].substr(3);
-    filename = EG::Utility::StringMethods::SearchAndReplace(filename, "%2F", "/");
+    filename = EG::Utility::StringMethods::ConvertURI(filename);
     model = new EG::Media::ModelLoader(scene);
     model_loaded = model->Load(filename);
     std::cout << "Loading Model: " << filename << std::endl;
@@ -317,8 +317,8 @@ std::string BodyClickListener::Call(std::map<std::string, std::string> args) {
 }
 
 std::string SaveMaterialListener::Call(std::map<std::string, std::string> args) {
-    std::string object_id = EG::Utility::StringMethods::SearchAndReplace(args["object_id"], "%2F", "/");
-    std::string mesh_id = EG::Utility::StringMethods::SearchAndReplace(args["id"], "%2F", "/");
+    std::string object_id = EG::Utility::StringMethods::ConvertURI(args["object_id"]);
+    std::string mesh_id = EG::Utility::StringMethods::ConvertURI(args["id"]);
 
     EG::Game::Object *object = scene->GetObjectManager()->GetObjectByName(object_id);
     if (object && object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH)) {
@@ -368,7 +368,7 @@ std::string SaveMaterialListener::Call(std::map<std::string, std::string> args) 
             material->SetSpecular(specular_scalar);
 
             // Decal
-            std::string decal = EG::Utility::StringMethods::SearchAndReplace(args["decal"], "%2F", "/");
+            std::string decal = EG::Utility::StringMethods::ConvertURI(args["decal"]);
             if (decal == "") {
                 material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "default_decal");
             } else {
@@ -381,7 +381,7 @@ std::string SaveMaterialListener::Call(std::map<std::string, std::string> args) 
             }
 
             // Normal
-            std::string normal = EG::Utility::StringMethods::SearchAndReplace(args["normal"], "%2F", "/");
+            std::string normal = EG::Utility::StringMethods::ConvertURI(args["normal"]);
             if (normal == "") {
                 material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, "default_normal");
             } else {
@@ -394,7 +394,7 @@ std::string SaveMaterialListener::Call(std::map<std::string, std::string> args) 
             }
 
             // Height
-            std::string height = EG::Utility::StringMethods::SearchAndReplace(args["height"], "%2F", "/");
+            std::string height = EG::Utility::StringMethods::ConvertURI(args["height"]);
             if (height == "") {
                 material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_HEIGHT, "default_height");
             } else {
@@ -407,7 +407,7 @@ std::string SaveMaterialListener::Call(std::map<std::string, std::string> args) 
             }
 
             // Specular
-            std::string specular = EG::Utility::StringMethods::SearchAndReplace(args["specular"], "%2F", "/");
+            std::string specular = EG::Utility::StringMethods::ConvertURI(args["specular"]);
             if (specular == "") {
                 material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR, "default_specular");
             } else {
