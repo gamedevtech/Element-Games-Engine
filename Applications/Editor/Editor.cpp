@@ -525,9 +525,14 @@ void Editor::PickObject(glm::vec2 mouse_position) {
         gui->ExecuteScript(script.str().c_str());
         object_selected = true;
         selected_object_id = object->GetObjectId();
-        glm::vec3 scaling = EG::Math::Utility::GetScalingFromMatrix(multiplied_trans);
-        glm::vec4 position = multiplied_trans[3];
-        glm::mat4 new_trans = EG::Math::Utility::GenerateTransform(glm::vec3(position.x, position.y, position.z), scaling * glm::vec3(1.1f, 1.1f, 1.1f));
+        glm::vec4 box_min = glm::vec4(box[0].x, box[0].y, box[0].z, 1.0f);
+        glm::vec4 box_max = glm::vec4(box[1].x, box[1].y, box[1].z, 1.0f);
+        box_min = multiplied_trans * box_min;
+        box_max = multiplied_trans * box_max;
+        glm::vec4 box_diff = box_max - box_min;
+        glm::vec4 position = ((box_max + box_min) / 2.0f) - (box_diff / 2.0f);
+        glm::vec3 scaling = glm::vec3(box_diff.x, box_diff.y, box_diff.z) + glm::vec3(0.1f, 0.1f, 0.1f);
+        glm::mat4 new_trans = EG::Math::Utility::GenerateTransform(glm::vec3(position.x, position.y, position.z), scaling);
         std::vector<EG::Game::ObjectAttribute *> *tattrs = selection_box->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
         EG::Game::ObjectAttribute *tattr = (*tattrs)[0];
         (static_cast<EG::Game::ObjectAttributeBasicTransformation *>(&(tattr[0])))->SetTransformation(new_trans);
