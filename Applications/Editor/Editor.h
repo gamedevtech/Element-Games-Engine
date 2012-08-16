@@ -12,7 +12,11 @@ class Editor : public EG::Game::Game{
 
         void Update(void);
         bool pick_object;
+        void SetSelectionBox(EG::Game::Object *_selection_box);
     private:
+        EG::Game::Object *selection_box;
+        bool object_selected;
+        unsigned int selected_object_id;
         void PickObject(glm::vec2 mouse_position);
 };
 

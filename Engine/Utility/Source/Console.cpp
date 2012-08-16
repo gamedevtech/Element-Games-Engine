@@ -21,10 +21,10 @@ namespace EG{
             time -= dt;
             if (time < 0.0f) {
                 alive = false;
-                color.a = 0.0f;
+                color.w = 0.0f;
             } else {
                 if (time < fade_time) {
-                    color.a = time / fade_time;
+                    color.w = time / fade_time;
                 }
             }
         }

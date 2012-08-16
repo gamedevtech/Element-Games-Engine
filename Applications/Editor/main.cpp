@@ -41,8 +41,8 @@ int main(int argc, char **argv){
     // Test Cube2
     EG::Graphics::Mesh *cube = EG::Graphics::GenerateCube();
     scene->GetMeshManager()->Add("cube", cube);
-    EG::Game::Object *object2 = new EG::Game::Object("TestObject2");
-    EG::Graphics::Texture *texture = new EG::Graphics::Texture("Assets/Textures/concrete.jpg"); // CRASHES HERE WIN32
+    EG::Game::Object *object2 = new EG::Game::Object("Ground");
+    EG::Graphics::Texture *texture = new EG::Graphics::Texture("Assets/Textures/concrete.jpg");
     scene->GetTextureManager()->AddTexture("concrete_decal", texture);
     texture = new EG::Graphics::Texture("Assets/Textures/concrete_normal.jpg");
     scene->GetTextureManager()->AddTexture("concrete_normal", texture);
@@ -60,6 +60,21 @@ int main(int argc, char **argv){
     EG::Dynamics::RigidBody *plane_body = new EG::Dynamics::RigidBody(plane_box, translate, glm::vec3(10.0f, 0.1f, 10.0f));
     object2->AddAttribute(new EG::Game::ObjectAttributeControlRigidBody(plane_body));
     //object2->AddScript(new EG::Game::ObjectScript("Assets/Scripts/hello_world.lua"));
+
+    // Selection Box
+    EG::Game::Object *selection_box = new EG::Game::Object("SelectionBox");
+    texture = new EG::Graphics::Texture("Assets/Textures/outline.png");
+    scene->GetTextureManager()->AddTexture("outline_texture", texture);
+    selection_box->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(/*glm::scale(glm::vec3(0.01f, 0.01f, 0.01f))*/glm::mat4(1.0f)));
+    material = new EG::Graphics::RenderingMaterial();
+    material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "outline_texture");
+    material->SetLit(false);
+    material->SetCastsShadows(false);
+    material->SetTranslucent(true);
+    material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ALPHA);
+    material->SetColor(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+    selection_box->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("cube", material));
+    game->SetSelectionBox(selection_box);
 
     // Light 0
     EG::Game::Object *light_object = new EG::Game::Object("RedLight");
@@ -98,6 +113,7 @@ int main(int argc, char **argv){
     objects->AddObject(object2);
     objects->AddObject(light_object);
     objects->AddObject(camera_object);
+    objects->AddObject(selection_box);
     game->GetScene()->SetCurrentCamera(main_camera);
     // NOTE: End Test Data
 

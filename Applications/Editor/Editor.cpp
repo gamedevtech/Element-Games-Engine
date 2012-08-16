@@ -427,6 +427,8 @@ std::string SaveMaterialListener::Call(std::map<std::string, std::string> args) 
 Editor::Editor(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene){
     pick_object = false;
     gui->Initialize("Assets/GUIs/Editor", "index.html");
+    object_selected = false;
+    selected_object_id = 0;
 
     GetVideoSettingsListener *get_video_listener = new GetVideoSettingsListener();
     get_video_listener->scene = scene;
@@ -463,6 +465,10 @@ Editor::~Editor(void){
     //
 }
 
+void Editor::SetSelectionBox(EG::Game::Object *_selection_box) {
+    selection_box = _selection_box;
+}
+
 void Editor::PickObject(glm::vec2 mouse_position) {
     EG::Graphics::Camera *c = scene->GetCurrentCamera();
     glm::vec3 begin = c->GetPosition();
@@ -474,9 +480,15 @@ void Editor::PickObject(glm::vec2 mouse_position) {
     EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
     EG::Utility::UnsignedIntDictionaryKeysIterator iter = objects->GetKeysBegin();
     bool object_picked = false;
+    glm::mat4 multiplied_trans;
+    glm::vec3 *box;
     while (iter != objects->GetKeysEnd()) {
         unsigned int object_id = (*iter);
         EG::Game::Object *object = objects->Get(object_id);
+        if (object->GetObjectId() == selection_box->GetObjectId()) {
+            ++iter;
+            continue;
+        }
         glm::mat4 trans = glm::mat4(1.0f);
         if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION)) {
             std::vector<EG::Game::ObjectAttribute *> *tattrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
@@ -489,9 +501,9 @@ void Editor::PickObject(glm::vec2 mouse_position) {
             while (attr_iter != attributes->end()) {
                 EG::Game::ObjectAttributeRenderingMesh *mattr = (static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*attr_iter));
                 EG::Graphics::Mesh *mesh = meshes->Get(mattr->GetMeshId());
-                glm::vec3 *box = mesh->GetBoundingBox();
-                glm::mat4 mtrans = trans * mattr->GetOffset();
-                object_picked = EG::Math::Utility::RayAABBTest(begin, dir, box[0], box[1], mtrans);
+                box = mesh->GetBoundingBox();
+                multiplied_trans = trans * mattr->GetOffset();
+                object_picked = EG::Math::Utility::RayAABBTest(begin, dir, box[0], box[1], multiplied_trans);
                 if (object_picked) {
                     break;
                 }
@@ -511,6 +523,11 @@ void Editor::PickObject(glm::vec2 mouse_position) {
         std::stringstream script;
         script << "main_view.tools.select_object(\"" << object->GetObjectName() << "\");";
         gui->ExecuteScript(script.str().c_str());
+        object_selected = true;
+        selected_object_id = object->GetObjectId();
+        std::vector<EG::Game::ObjectAttribute *> *tattrs = selection_box->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
+        EG::Game::ObjectAttribute *tattr = (*tattrs)[0];
+        (static_cast<EG::Game::ObjectAttributeBasicTransformation *>(&(tattr[0])))->SetTransformation(glm::scale(multiplied_trans, glm::vec3(1.1f, 1.1f, 1.1f)));
     }
 }
 
