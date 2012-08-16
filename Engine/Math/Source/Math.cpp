@@ -115,5 +115,13 @@ namespace EG{
             glm::vec3 dir = glm::normalize(glm::unProject(wincoord, view_matrix, projection_matrix, viewport) - camera_position);
             return dir;
         }
+
+        glm::vec3 Utility::GetScalingFromMatrix(glm::mat4 in) {
+            glm::vec3 out;
+            out.x = glm::length(in[0]);
+            out.y = glm::length(in[1]);
+            out.z = glm::length(in[2]);
+            return out;
+        }
     }
 }

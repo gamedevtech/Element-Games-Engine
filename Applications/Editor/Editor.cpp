@@ -525,9 +525,12 @@ void Editor::PickObject(glm::vec2 mouse_position) {
         gui->ExecuteScript(script.str().c_str());
         object_selected = true;
         selected_object_id = object->GetObjectId();
+        glm::vec3 scaling = EG::Math::Utility::GetScalingFromMatrix(multiplied_trans);
+        glm::vec4 position = multiplied_trans[3];
+        glm::mat4 new_trans = EG::Math::Utility::GenerateTransform(position, scaling * glm::vec3(1.1f, 1.1f, 1.1f));
         std::vector<EG::Game::ObjectAttribute *> *tattrs = selection_box->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION);
         EG::Game::ObjectAttribute *tattr = (*tattrs)[0];
-        (static_cast<EG::Game::ObjectAttributeBasicTransformation *>(&(tattr[0])))->SetTransformation(glm::scale(multiplied_trans, glm::vec3(1.1f, 1.1f, 1.1f)));
+        (static_cast<EG::Game::ObjectAttributeBasicTransformation *>(&(tattr[0])))->SetTransformation(new_trans);
     }
 }
 
