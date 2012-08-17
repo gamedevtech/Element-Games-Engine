@@ -38,7 +38,7 @@ define(function(require) {
             } else {
                 path = "../../../" + path;
             }
-            b.append('<img src="' + path + '" height="512px" />');
+            b.append('<img src="' + path + '" height="256px" />');
             b.append('<br>');
             b.append('<input type="text" value="' + this.file_path + '" disabled="disabled" />');
             b.append('<button class="choose_button btn-success">Choose...</button>');
@@ -58,7 +58,8 @@ define(function(require) {
         choose: function() {
             var model = new file_browser.FileBrowserModel();
             var view = new file_browser.FileBrowser({
-                model: model
+                model: model,
+                filter: "images"
             });
             view.bind("file_selected", this.selected);
             view.render();

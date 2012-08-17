@@ -71,7 +71,9 @@ int main(int argc, char **argv){
     material->SetLit(false);
     material->SetCastsShadows(false);
     material->SetTranslucent(true);
-    material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ALPHA);
+    material->SetDepthMask(true);
+    material->SetDepthTest(false);
+    material->SetBlendingMode(EG::Graphics::RenderingMaterial::BLEND_ALPHA_PARTICLE);
     material->SetColor(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
     selection_box->AddAttribute(new EG::Game::ObjectAttributeRenderingMesh("cube", material));
     game->SetSelectionBox(selection_box);

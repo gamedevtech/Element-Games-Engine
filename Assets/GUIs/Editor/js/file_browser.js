@@ -48,6 +48,10 @@ define(function(require) {
             _.bindAll(this, "file_click");
 
             this.model.bind("change", this.render_list);
+            this.filter = this.options.filter;
+            if (_.isUndefined(this.filter)) {
+                this.filter = "";
+            }
         },
         cancel: function() {
             this.$el.modal('hide');
@@ -79,25 +83,43 @@ define(function(require) {
 
             var well = $('<div class="well">');
             var ul = $('<ul style="list-style: none;">');
-            var i, file, li;
+            var i, file, li, use;
+            li = $('<li class="file_link">');
+            li.attr("type", "up");
+            li.attr("path", "..");
+            li.append('<span class="path">..</span>');
+            ul.append(li);
             for (i = 0; i < this.model.collection.length; i += 1) {
+                use = false;
                 file = this.model.collection.at(i);
                 li = $("<li class=\"file_link\">");
                 li.attr("type", file.get("type"));
                 if (file.get("type") === "dir") {
                     li.append('<i class="icon-folder-close icon-white"></i>&nbsp;');
+                    use = true;
                 } else {
                     if (file.get("path").match(pic_regexp)) {
-                        li.append('<img src="../../../' + this.model.get("current_path") + '/' + file.get("path") + '" height="12px" />&nbsp;');
+                        if (this.filter === "" || this.filter === "images") {
+                            use = true;
+                            li.append('<img src="../../../' + this.model.get("current_path") + '/' + file.get("path") + '" height="12px" />&nbsp;');
+                        }
                     } else if (file.get("path").match(model_regexp)) {
-                        li.append('<i class="icon-plane icon-white"></i>&nbsp;');
+                        if (this.filter === "" || this.filter === "models") {
+                            use = true;
+                            li.append('<i class="icon-plane icon-white"></i>&nbsp;');
+                        }
                     } else {
-                        li.append('<i class="icon-question-sign icon-white"></i>&nbsp;');
+                        if (this.filter === "") {
+                            use = true;
+                            li.append('<i class="icon-question-sign icon-white"></i>&nbsp;');
+                        }
                     }
                 }
-                li.attr("path", file.get("path"));
-                li.append('<span class="path">' + file.get("path") + '</span>');
-                ul.append(li);
+                if (use === true) {
+                    li.attr("path", file.get("path"));
+                    li.append('<span class="path">' + file.get("path") + '</span>');
+                    ul.append(li);
+                }
             }
 
             well.append(ul);
