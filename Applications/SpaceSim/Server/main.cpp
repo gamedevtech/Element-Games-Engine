@@ -4,7 +4,7 @@
 int main(int argc, char **argv) {
     EGServer::Networking *n = new EGServer::Networking;
     while (true) {
-        n->update();
+        n->Update();
     }
     return 0;
 }
