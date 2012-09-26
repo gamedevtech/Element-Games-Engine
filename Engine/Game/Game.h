@@ -8,6 +8,7 @@
 #include "../Utility/GUI.h"
 #include "../Utility/Console.h"
 #include "../Dynamics/Physics.h"
+#include "../Networking/Networking.h"
 
 namespace EG{
 	namespace Game{
@@ -37,6 +38,7 @@ namespace EG{
 				EG::Input::Input *input;
 				EG::Utility::Time *time;
 				EG::Dynamics::Physics *physics;
+                EG::Network::Network *network;
 				RenderingMethod rendering_method;
 		};
 	}

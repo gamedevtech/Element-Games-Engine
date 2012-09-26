@@ -16,6 +16,7 @@ namespace EG{
             input = new EG::Input::Input();
             sfml_interface->SetInput(input);
             time = new EG::Utility::Time();
+            network = new EG::Network::Network();
             graphics->Initialize(window->GetResolutionWidth(), window->GetResolutionHeight());
 
             if (!(graphics->CheckVersion(3, 0))) {
@@ -69,6 +70,7 @@ namespace EG{
         void Game::PostUpdates(void){
             console->Update(time->GetFrameTime());
             physics->Update(time->GetFrameTime());
+            network->Update();
 
             if (gui->GetInitialized()){
                 if (input->IsMousePressed(EG::Input::mouse_left)) {
