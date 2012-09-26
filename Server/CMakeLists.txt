@@ -19,15 +19,15 @@ ELSE (WIN32)
     link_directories(../../../build/Engine)#../../Dependencies/linux/lib)
 ENDIF (WIN32)
 
-add_executable(element_games_server ./Networking.h ./Source/Networking.cpp ./main.cpp)
-IF (WIN32)
-    #NOTHING
-ELSE (WIN32)
-    set_target_properties(element_games_server PROPERTIES LINK_FLAGS -pg)
-ENDIF (WIN32)
+set(SRCS
+    ./Networking.h
+    ./Source/Networking.h
+)
 
 IF (WIN32)
-    target_link_libraries(element_games_server sfml-system sfml-network lua mingw32 sfml-system sfml-network lua mingw32)
+    add_library(egserver STATIC ${SRCS})
+    target_link_libraries(egserver sfml-system sfml-network lua mingw32 egserver sfml-system sfml-network lua mingw32)
 ELSE (WIN32)
-    target_link_libraries(element_games_server sfml-system sfml-network lua)
+    add_library(egserver SHARED ${SRCS})
+    target_link_libraries(egserver)
 ENDIF (WIN32)
