@@ -24,6 +24,13 @@ Remember:
 - Separate all transparent rendering and draw it in depth first order!
 - Separate Game Updating and Rendering into separate threads at least!
     - Possibly make job queue system which just picks the next available core!
+    - Also, probably need more threads
+        - Rendering, Animation/Physics, Networking, Input, Data Input, Data Output, Audio, AI/GameLogic
+    - This will demand pipelinging
+        - Only have 3 copies of data, one for what's being rendered, and two for buffers
+            - If renderer is currently rendering from data, then write directly to next data set
+            - If renderer is currently copying next buffer to current, then render to third data set
+            - This might have some timing issues, especially is renderer moves way too fast, we'll see.
 - Decals or Mega texture?!? Texture Painting?!?
     - Growable Decal Megatexture?
 - Texture Repeat in Rendering Material

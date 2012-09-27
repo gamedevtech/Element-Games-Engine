@@ -17,11 +17,13 @@ namespace EG {
 
                 void SendPacket(Packet *p, bool connectionless = false);
                 void Update(void);
-                Packet *ReceivePacket(void);
+                Packet *ReceivePacket(bool &response);
                 void PrintStatus(sf::Socket::Status s);
+                unsigned int GetClientId(void);
             private:
                 bool connected, has_client_id;
                 unsigned int client_id;
+                Packet *next_packet;
                 sf::IpAddress *server_ip_address;
                 sf::TcpSocket *tcp;
                 sf::UdpSocket *udp;

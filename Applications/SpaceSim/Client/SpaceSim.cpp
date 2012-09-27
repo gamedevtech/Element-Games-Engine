@@ -8,8 +8,31 @@ SpaceSim::~SpaceSim(void) {
     //
 }
 
-void SpaceSim::Update(void) {
-    float movement_speed = time->GetFrameTime() * 2.0f;
+void SpaceSim::ProcessNetworkPacket(float frame_time, EG::Network::Packet* packet) {
+    sf::Packet *sfpacket = packet->GetPacket();
+    unsigned int client_id, action_type_id;
+    *(sfpacket) >> client_id >> action_type_id;
+    if (action_type_id == NETWORK_ACTION_MESSAGE_RELAY) {
+        unsigned int from_client_id;
+        std::string message;
+        *(sfpacket) >> from_client_id >> message;
+        std::stringstream stream;
+        stream << "Received Broadcast Message From " << client_id << ":" << from_client_id << " of " << message << std::endl;
+        console->Print(stream.str());
+    }
+}
+
+void SpaceSim::NetworkUpdates(float frame_time) {
+    bool got_packet = false;
+    EG::Network::Packet *packet = network->ReceivePacket(got_packet);
+    while (got_packet) {
+        ProcessNetworkPacket(frame_time, packet);
+        packet = network->ReceivePacket(got_packet);
+    }
+}
+
+void SpaceSim::InputUpdates(float frame_time) {
+    float movement_speed = frame_time * 2.0f;
     if (input->IsKeyDown(EG::Input::v)) {
         movement_speed /= 100.0f;
     }
@@ -70,6 +93,21 @@ void SpaceSim::Update(void) {
             (static_cast<EG::Graphics::RendererDeferred *>(renderer))->ToggleDOF();
         }
     }
+    if (input->IsKeyPressed(EG::Input::k)) {
+        EG::Network::Packet *packet = new EG::Network::Packet();
+        std::string message = "What's up server!";
+        *(packet->GetPacket()) << network->GetClientId() << NETWORK_ACTION_MESSAGE_BROADCAST << message;
+        network->SendPacket(packet);
+    }
+}
 
-    physics->Update(time->GetFrameTime());
+void SpaceSim::PhysicsUpdates(float frame_time) {
+    physics->Update(frame_time);
+}
+
+void SpaceSim::Update(void) {
+    float frame_time = time->GetFrameTime();
+    NetworkUpdates(frame_time);
+    InputUpdates(frame_time);
+    PhysicsUpdates(frame_time);
 }

@@ -21,7 +21,9 @@ ENDIF (WIN32)
 
 set(SRCS
     ./Networking.h
+    ./Packet.h
     ./Source/Networking.cpp
+    ./Source/Packet.cpp
 )
 
 IF (WIN32)

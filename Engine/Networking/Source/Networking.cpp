@@ -4,12 +4,13 @@
 namespace EG {
     namespace Network {
         Network::Network(std::string server_ip_string) {
-            tcp = new sf::TcpSocket;
+            tcp = new sf::TcpSocket();
             tcp->setBlocking(false);
-            udp = new sf::UdpSocket;
+            udp = new sf::UdpSocket();
             udp->setBlocking(false);
             client_id = 999999999999;
             has_client_id = false;
+            next_packet = new Packet();
 
             server_ip_address = new sf::IpAddress(server_ip_string);
             server_ip_address->toInteger();
@@ -55,17 +56,18 @@ namespace EG {
 
             bool done = false;
             while (!done) {
-                Packet *p = new Packet();
-                sf::Packet *sfp = p->GetPacket();
-                sf::Socket::Status s = tcp->receive(*(p->GetPacket()));
+                sf::Packet *sfp = next_packet->GetPacket();
+                sf::Socket::Status s = tcp->receive(*(next_packet->GetPacket()));
 
                 if (s == sf::Socket::Done) {
                     std::cout << "Receiving Data" << std::endl;
                     if (!has_client_id) {
                         *sfp >> client_id;
                         std::cout << "Client ID From Server: " << client_id << std::endl;
+                        has_client_id = true;
                     } else {
-                        packets_received.push(p);
+                        packets_received.push(next_packet);
+                        next_packet = new Packet();
                     }
                 } else if (s == sf::Socket::NotReady) {
                     // Nothing to receive!
@@ -81,11 +83,19 @@ namespace EG {
             }
         }
 
-        Packet *Network::ReceivePacket(void) {
-            Packet *ret = packets_received.front();
+        Packet *Network::ReceivePacket(bool &response) {
+            if (packets_received.empty()) {
+                response = false;
+                return NULL;
+            }
+            Packet *out = packets_received.front();
             packets_received.pop();
-            return ret;
+            response = true;
+            return out;
         }
 
+        unsigned int Network::GetClientId(void) {
+            return client_id;
+        }
     };
 };
