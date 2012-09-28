@@ -30,15 +30,14 @@ namespace EGServer {
             clients[client_id] = current_client;
             clients[client_id]->setBlocking(false);
             current_client = new sf::TcpSocket();
-            sf::Packet p;
-            p << client_id;
-            clients[client_id]->send(p);
+            client_states[client_id] = CLIENT_CONNECTED;
         }
 
         std::map<unsigned int, sf::TcpSocket *>::iterator client_iterator = clients.begin();
         while (client_iterator != clients.end()) {
             unsigned int client_id = client_iterator->first;
             sf::TcpSocket *client = client_iterator->second;
+            ClientState client_state = client_states[client_id];
 
             bool done = false;
             while (!done) {
@@ -46,6 +45,7 @@ namespace EGServer {
                 if (s == sf::Socket::Disconnected) {
                     std::cout << "Client Disconnected: " << client->getRemoteAddress() << std::endl;
                     clients.erase(client_iterator);
+                    client_states.erase(client_states.find(client_id));
                     done = true;
                 } else if (s == sf::Socket::Error) {
                     // Handle Error
@@ -53,7 +53,7 @@ namespace EGServer {
                     done = true;
                 } else if (s == sf::Socket::Done) {
                     // Handle Data
-                    packets_received.push(next_packet);
+                    packets_received.push(std::pair<Packet *, unsigned int>(next_packet, client_id));
                     next_packet = new Packet();
                     std::cout << "Client Data: " << client->getRemoteAddress() << std::endl;
                 } else if (s == sf::Socket::NotReady) {
@@ -65,15 +65,38 @@ namespace EGServer {
         }
     }
 
-    Packet *Networking::ReceivePacket(bool &response) {
+    void Networking::SendPacket(unsigned int client_id, Packet *p, bool connectionless) {
+        if (connectionless) {
+            // TODO: UDP
+        } else {
+            if (clients.count(client_id) > 0) {
+                sf::TcpSocket *s = clients[client_id];
+                s->send(*(p->GetPacket()));
+            }
+        }
+    }
+
+    Packet *Networking::ReceivePacket(bool &response, unsigned int &client_id) {
         if (packets_received.empty()) {
             response = false;
             return NULL;
         }
-        Packet *out = packets_received.front();
+        std::pair<Packet *, unsigned int> r = packets_received.front();
+        client_id = r.second;
         packets_received.pop();
         response = true;
-        return out;
+        return r.first;
+    }
+
+    Networking::ClientState Networking::GetClientState(unsigned int client_id) {
+        if (client_states.count(client_id) > 0) {
+            return client_states[client_id];
+        }
+        return CLIENT_DISCONNECTED;
+    }
+
+    void Networking::SetClientState(unsigned int client_id, ClientState state) {
+        client_states[client_id] = state;
     }
 
     sf::TcpSocket *Networking::GetClientSocket(unsigned int client_id) {

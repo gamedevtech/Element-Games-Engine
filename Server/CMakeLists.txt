@@ -15,20 +15,24 @@ IF (WIN32)
         #link_directories(../../Dependencies/Windows/library/debug)
     ENDIF (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
 ELSE (WIN32)
-    include_directories(/usr/local/include/ ${CMAKE_CURRENT_BINARY_DIR})
+    include_directories(/usr/local/include/ /usr/local/include/mongo/ ${CMAKE_CURRENT_BINARY_DIR})
     link_directories(../../../build/Engine)#../../Dependencies/linux/lib)
 ENDIF (WIN32)
 
 set(SRCS
     ./Networking.h
     ./Packet.h
+    ./Database.h
+    ./Server.h
     ./Source/Networking.cpp
     ./Source/Packet.cpp
+    ./Source/Database.cpp
+    ./Source/Server.cpp
 )
 
 IF (WIN32)
     add_library(egserver STATIC ${SRCS})
-    target_link_libraries(egserver sfml-system sfml-network lua mingw32 egserver sfml-system sfml-network lua mingw32)
+    target_link_libraries(egserver sfml-system sfml-network lua mongoclient mingw32 egserver sfml-system sfml-network lua mongoclient mingw32)
 ELSE (WIN32)
     add_library(egserver SHARED ${SRCS})
     target_link_libraries(egserver)

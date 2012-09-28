@@ -1,7 +1,7 @@
 #include "SpaceSim.h"
 
 SpaceSim::SpaceSim(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene) {
-    //
+    network->Connect("127.0.0.1", "admin", "admin");
 }
 
 SpaceSim::~SpaceSim(void) {

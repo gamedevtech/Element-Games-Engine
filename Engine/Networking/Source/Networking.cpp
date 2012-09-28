@@ -3,29 +3,35 @@
 
 namespace EG {
     namespace Network {
-        Network::Network(std::string server_ip_string) {
+        Network::Network(void) {
             tcp = new sf::TcpSocket();
             tcp->setBlocking(false);
             udp = new sf::UdpSocket();
             udp->setBlocking(false);
-            client_id = 999999999999;
-            has_client_id = false;
+            client_id = 0;
+            connected = false;
+            authenticated = false;
             next_packet = new Packet();
-
-            server_ip_address = new sf::IpAddress(server_ip_string);
-            server_ip_address->toInteger();
-            if (server_ip_address->toInteger() == 0) {
-                delete server_ip_address;
-                server_ip_address = new sf::IpAddress("127.0.0.1");
-            }
-
-            sf::Socket::Status s = tcp->connect(*server_ip_address, EG_ENGINE_PORT);
-            connected = true;
-            udp->bind(EG_ENGINE_PORT);
         }
 
         Network::~Network(void) {
             //
+        }
+
+        std::vector<std::pair<std::string, std::string> > Network::PollLAN(void) {
+            // Searches LAN for Servers
+        }
+
+        void Network::Connect(std::string server_address, std::string username, std::string password) {
+            // Negotiate A Connection0
+            server_ip_address = new sf::IpAddress(server_address);
+            tcp->connect(*server_ip_address, EG_ENGINE_PORT);
+            connected = true;
+            udp->bind(EG_ENGINE_PORT);
+
+            sf::Packet auth;
+            auth << username << password;
+            tcp->send(auth);
         }
 
         void Network::PrintStatus(sf::Socket::Status s) {
@@ -49,10 +55,11 @@ namespace EG {
         }
 
         void Network::Update(void) {
-            // TODO: UDP Receive
             if (!connected) {
                 return;
             }
+
+            // TODO: UDP Receive
 
             bool done = false;
             while (!done) {
@@ -60,11 +67,18 @@ namespace EG {
                 sf::Socket::Status s = tcp->receive(*(next_packet->GetPacket()));
 
                 if (s == sf::Socket::Done) {
-                    std::cout << "Receiving Data" << std::endl;
-                    if (!has_client_id) {
-                        *sfp >> client_id;
-                        std::cout << "Client ID From Server: " << client_id << std::endl;
-                        has_client_id = true;
+                    if (!authenticated) {
+                        // Check For Authentication Packet
+                        // TODO: Get Encryption Key Here
+                        unsigned int result;
+                        *sfp >> result >> client_id;
+                        if (result == 1) {
+                            authenticated = true;
+                            std::cout << "Authenticated... Got Client ID: " << client_id << std::endl;
+                        } else {
+                            connected = false;
+                            std::cout << "Authentication Failed!" << std::endl;
+                        }
                     } else {
                         packets_received.push(next_packet);
                         next_packet = new Packet();
@@ -74,7 +88,9 @@ namespace EG {
                     done = true;
                 } else if (s == sf::Socket::Disconnected) {
                     std::cout << "Disconnected" << std::endl;
+                    authenticated = false;
                     connected = false;
+                    client_id = 0;
                     done = true;
                 } else if (s == sf::Socket::Error) {
                     std::cout << "Error" << std::endl;
