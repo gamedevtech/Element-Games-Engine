@@ -10,12 +10,12 @@ SpaceSim::~SpaceSim(void) {
 
 void SpaceSim::ProcessNetworkPacket(float frame_time, EG::Network::Packet* packet) {
     sf::Packet *sfpacket = packet->GetPacket();
-    unsigned int client_id, action_type_id;
-    *(sfpacket) >> client_id >> action_type_id;
+    unsigned int action_type_id;
+    *(sfpacket) >> action_type_id;
     if (action_type_id == NETWORK_ACTION_MESSAGE_RELAY) {
-        unsigned int from_client_id;
+        unsigned int client_id, from_client_id;
         std::string message;
-        *(sfpacket) >> from_client_id >> message;
+        *(sfpacket) >> client_id >> from_client_id >> message;
         std::stringstream stream;
         stream << "Received Broadcast Message From " << client_id << ":" << from_client_id << " of " << message << std::endl;
         console->Print(stream.str());
@@ -96,8 +96,12 @@ void SpaceSim::InputUpdates(float frame_time) {
     if (input->IsKeyPressed(EG::Input::k)) {
         EG::Network::Packet *packet = new EG::Network::Packet();
         std::string message = "What's up server!";
-        *(packet->GetPacket()) << network->GetClientId() << NETWORK_ACTION_MESSAGE_BROADCAST << message;
+        *(packet->GetPacket()) << NETWORK_ACTION_MESSAGE_BROADCAST << network->GetClientId() << message;
         network->SendPacket(packet);
+        console->Print("Sending Broadcast Message");
+    }
+    if (input->IsKeyPressed(EG::Input::p)) {
+        network->PollLAN();
     }
 }
 

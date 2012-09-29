@@ -25,11 +25,15 @@ void SpaceSimServer::ProcessPacket(unsigned int client_id, EGServer::Packet* pac
             if (to_client_id != received_client_id) {
                 std::cout << "Relaying Message To: " << to_client_id << "@" << client->getRemoteAddress() << std::endl;
                 sf::Packet p;
-                p << NETWORK_SERVER_CLIENT_ID << NETWORK_ACTION_MESSAGE_RELAY << received_client_id << message;
+                p << NETWORK_ACTION_MESSAGE_RELAY << NETWORK_SERVER_CLIENT_ID << received_client_id << message;
                 client->send(p);
             }
 
             ++client_iter;
         }
     }
+}
+
+void SpaceSimServer::ProcessConnectionlessPacket(sf::IpAddress ip_address, EGServer::Packet *packet) {
+    //
 }

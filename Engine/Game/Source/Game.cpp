@@ -70,7 +70,7 @@ namespace EG{
         void Game::PostUpdates(void){
             console->Update(time->GetFrameTime());
             physics->Update(time->GetFrameTime());
-            network->Update();
+            network->Update(time->GetFrameTime());
 
             if (gui->GetInitialized()){
                 if (input->IsMousePressed(EG::Input::mouse_left)) {

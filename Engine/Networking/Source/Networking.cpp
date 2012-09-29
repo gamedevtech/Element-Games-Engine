@@ -11,6 +11,7 @@ namespace EG {
             client_id = 0;
             connected = false;
             authenticated = false;
+            polling_lan = false;
             next_packet = new Packet();
         }
 
@@ -19,15 +20,19 @@ namespace EG {
         }
 
         std::vector<std::pair<std::string, std::string> > Network::PollLAN(void) {
-            // Searches LAN for Servers
+            sf::Packet p;
+            p << NETWORK_ACTION_LAN_DISCOVERY;
+            udp->send(p, sf::IpAddress::Broadcast, EG_ENGINE_UDP_PORT);
+            polling_lan = true;
+            timer = 0.0f;
         }
 
         void Network::Connect(std::string server_address, std::string username, std::string password) {
             // Negotiate A Connection0
             server_ip_address = new sf::IpAddress(server_address);
-            tcp->connect(*server_ip_address, EG_ENGINE_PORT);
+            tcp->connect(*server_ip_address, EG_ENGINE_TCP_PORT);
             connected = true;
-            udp->bind(EG_ENGINE_PORT);
+            //udp->bind(EG_ENGINE_UDP_PORT);
 
             sf::Packet auth;
             auth << username << password;
@@ -48,36 +53,69 @@ namespace EG {
 
         void Network::SendPacket(Packet *p, bool connectionless) {
             if (connectionless) {
-                udp->send(*(p->GetPacket()), *server_ip_address, EG_ENGINE_PORT);
+                udp->send(*(p->GetPacket()), *server_ip_address, EG_ENGINE_UDP_PORT);
             } else {
                 tcp->send(*(p->GetPacket()));
             }
         }
 
-        void Network::Update(void) {
-            if (!connected) {
-                return;
-            }
+        void Network::Update(float frame_time) {
+            timer += frame_time;
 
             // TODO: UDP Receive
-
             bool done = false;
+            /*while (!done) {
+                sf::Packet *sfp = next_packet->GetPacket();
+                sf::IpAddress ip_address;
+                short unsigned int port;
+                sf::Socket::Status s = udp->receive(*sfp, ip_address, port);
+
+                if (s == sf::Socket::Done) {
+                    if (port == EG_ENGINE_UDP_PORT) {
+                        if (polling_lan) {
+                            server_ip_addresses.push_back(ip_address);
+                            next_packet = new Packet();
+                            if (timer >= 2.0f) {
+                                polling_lan = false;
+                                std::vector<sf::IpAddress>::iterator ip_iter = server_ip_addresses.begin();
+                                while (ip_iter != server_ip_addresses.end()) {
+                                    sf::IpAddress server_ip = *(ip_iter);
+                                    std::cout << "Recived Poll Response From: " << server_ip.toString() << std::endl;
+                                    ++ip_iter;
+                                }
+                            }
+                        }
+                    }
+                } else if (s == sf::Socket::NotReady) {
+                    done = true;
+                } else if (s == sf::Socket::Disconnected) {
+                    done = true;
+                } else if (s == sf::Socket::Error) {
+                    done = true;
+                }
+            }*/
+
+            done = false;
             while (!done) {
                 sf::Packet *sfp = next_packet->GetPacket();
                 sf::Socket::Status s = tcp->receive(*(next_packet->GetPacket()));
 
                 if (s == sf::Socket::Done) {
                     if (!authenticated) {
-                        // Check For Authentication Packet
-                        // TODO: Get Encryption Key Here
-                        unsigned int result;
-                        *sfp >> result >> client_id;
-                        if (result == 1) {
-                            authenticated = true;
-                            std::cout << "Authenticated... Got Client ID: " << client_id << std::endl;
-                        } else {
-                            connected = false;
-                            std::cout << "Authentication Failed!" << std::endl;
+                        unsigned int action_type;
+                        *sfp >> action_type;
+                        if (action_type == NETWORK_ACTION_AUTH_RESPONSE) {
+                            // Check For Authentication Packet
+                            // TODO: Get Encryption Key Here
+                            unsigned int result;
+                            *sfp >> result >> client_id;
+                            if (result == 1) {
+                                authenticated = true;
+                                std::cout << "Authenticated... Got Client ID: " << client_id << std::endl;
+                            } else {
+                                connected = false;
+                                std::cout << "Authentication Failed!" << std::endl;
+                            }
                         }
                     } else {
                         packets_received.push(next_packet);
@@ -112,6 +150,14 @@ namespace EG {
 
         unsigned int Network::GetClientId(void) {
             return client_id;
+        }
+
+        bool Network::IsPollingLAN(void) {
+            return polling_lan;
+        }
+
+        std::vector<sf::IpAddress> *Network::GetServerIpAddresses(void) {
+            return &server_ip_addresses;
         }
     };
 };

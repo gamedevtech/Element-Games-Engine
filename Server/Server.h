@@ -13,11 +13,13 @@ namespace EGServer {
 
             void Update(void);
             virtual void ProcessPacket(unsigned int client_id, EGServer::Packet *packet);
+            virtual void ProcessConnectionlessPacket(sf::IpAddress ip_address, EGServer::Packet *packet);
         protected:
             Database *database;
             Networking *network;
         private:
             void InternalProcessPacket(unsigned int client_id, EGServer::Packet *packet);
+            void InternalProcessConnectionlessPacket(sf::IpAddress ip_address, EGServer::Packet *packet);
     };
 };
 
