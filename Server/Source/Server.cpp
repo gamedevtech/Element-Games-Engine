@@ -20,6 +20,13 @@ namespace EGServer {
             InternalProcessPacket(client_id, packet);
             packet = network->ReceivePacket(has_packet, client_id);
         }
+
+        has_packet = false;
+        sf::IpAddress remote_ip;
+        packet = network->ReceiveConnectionlessPacket(has_packet, remote_ip);
+        while (has_packet) {
+            InternalProcessConnectionlessPacket(remote_ip, packet);
+        }
     }
 
     void Server::ProcessPacket(unsigned int client_id, Packet *packet) {
@@ -54,6 +61,7 @@ namespace EGServer {
         sf::Packet *p = packet->GetPacket();
         unsigned int action_type_id;
         (*p) >> action_type_id;
+        std::cout << "Processing UDP Packet" << std::endl;
         if (action_type_id == NETWORK_ACTION_LAN_DISCOVERY) {
             Packet *out = new Packet();
             *(out->GetPacket()) << NETWORK_ACTION_LAN_DISCOVERY_RESPONSE;

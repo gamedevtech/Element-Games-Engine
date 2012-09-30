@@ -32,7 +32,12 @@ namespace EG {
             server_ip_address = new sf::IpAddress(server_address);
             tcp->connect(*server_ip_address, EG_ENGINE_TCP_PORT);
             connected = true;
-            //udp->bind(EG_ENGINE_UDP_PORT);
+            std::cout << "(" << server_ip_address->getLocalAddress() << ")" << std::endl;
+            if (server_address == "127.0.0.1") {
+                udp->bind(sf::Socket::AnyPort);
+            } else {
+                udp->bind(EG_ENGINE_UDP_PORT);
+            }
 
             sf::Packet auth;
             auth << username << password;
@@ -64,7 +69,7 @@ namespace EG {
 
             // TODO: UDP Receive
             bool done = false;
-            /*while (!done) {
+            while (!done) {
                 sf::Packet *sfp = next_packet->GetPacket();
                 sf::IpAddress ip_address;
                 short unsigned int port;
@@ -93,7 +98,7 @@ namespace EG {
                 } else if (s == sf::Socket::Error) {
                     done = true;
                 }
-            }*/
+            }
 
             done = false;
             while (!done) {

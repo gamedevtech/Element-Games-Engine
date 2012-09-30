@@ -57,14 +57,11 @@ namespace EGServer {
         private:
             // Connection and Packet Acceptance
             // Threads
-            sf::Thread *tcp_thread;
-            sf::Thread *udp_thread;
+            sf::Thread *thread;
             // Mutexes
-            sf::Mutex tcp_mutex;
-            sf::Mutex udp_mutex;
+            sf::Mutex mutex;
             // Functions
-            void TCPListener(void);
-            void UDPListener(void);
+            void Listener(void);
             // Main Thread is for Data Processing
 
             // New Connection Storage
