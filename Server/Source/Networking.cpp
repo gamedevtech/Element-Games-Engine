@@ -31,14 +31,12 @@ namespace EGServer {
     }
 
     void Networking::Listener(void) {
-        std::cout << "Listening To TCP" << std::endl;
+        std::cout << "Listening to Network" << std::endl;
         while (selector.wait()) {
-            std::cout << "Shit's Going Down!" << std::endl;
             //mutex.lock();
 
             // New Connection
             if (selector.isReady(listener)) {
-                std::cout << "TCP Listener is Ready" << std::endl;
                 if (listener.accept(*current_client) == sf::Socket::Done) {
                     unsigned int client_id = GetNextClientId();
                     clients[client_id] = current_client;
@@ -55,7 +53,6 @@ namespace EGServer {
                 unsigned short int received_port;
                 sf::Socket::Status s = udp.receive(*(next_packet->GetPacket()), received_ip, received_port);
                 if (s == sf::Socket::Done) {
-                    std::cout << "New UDP Packet" << std::endl;
                     //mutex.lock();
                     udp_packets_received.push(std::pair<Packet *, sf::IpAddress>(next_packet, received_ip));
                     next_packet = new Packet();
@@ -69,7 +66,6 @@ namespace EGServer {
                 sf::TcpSocket *client = client_iterator->second;
 
                 if (selector.isReady(*client)) {
-                    std::cout << "Client Socket for " << client_id << " is ready!" << std::endl;
                     sf::Socket::Status s = client->receive(*(next_packet->GetPacket()));
                     if (s == sf::Socket::Disconnected) {
                         std::cout << "Client Disconnected: " << client->getRemoteAddress() << std::endl;
@@ -83,7 +79,6 @@ namespace EGServer {
                         // Handle Data
                         packets_received.push(std::pair<Packet *, unsigned int>(next_packet, client_id));
                         next_packet = new Packet();
-                        std::cout << "Client Data: " << client->getRemoteAddress() << std::endl;
                     } else if (s == sf::Socket::NotReady) {
                         // Not Ready
                     }

@@ -40,7 +40,6 @@ namespace EGServer {
     void Server::InternalProcessPacket(unsigned int client_id, Packet *packet) {
         sf::Packet *p = packet->GetPacket();
         Networking::ClientState client_state = network->GetClientState(client_id);
-        std::cout << "Packet Recieved From " << client_id << "@" << network->GetClientSocket(client_id)->getRemoteAddress() << std::endl;
         if (client_state == Networking::CLIENT_CONNECTED) {
             std::cout << "Client: " << client_id << "@" << network->GetClientSocket(client_id)->getRemoteAddress() << " is authenticating!" << std::endl;
             std::string username, password;
@@ -52,7 +51,6 @@ namespace EGServer {
             network->SetClientState(client_id, Networking::CLIENT_AUTHENTICATED);
             std::cout << "Client Authenticated!" << std::endl;
         } else if (client_state == Networking::CLIENT_AUTHENTICATED) {
-            std::cout << "Processing Packet Normally From " << client_id << "@" << network->GetClientSocket(client_id)->getRemoteAddress() << std::endl;
             ProcessPacket(client_id, packet);
         }
     }

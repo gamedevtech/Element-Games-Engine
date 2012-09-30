@@ -11,7 +11,7 @@ SpaceSimServer::~SpaceSimServer(void) {
 void SpaceSimServer::ProcessPacket(unsigned int client_id, EGServer::Packet* packet) {
     sf::Packet *sfp = packet->GetPacket();
     unsigned int received_client_id, action_type_id;
-    *(sfp) >> received_client_id >> action_type_id;
+    *(sfp) >> action_type_id >> received_client_id;
     std::cout << "Processing Packet, Client: " << received_client_id << " Action Type: " << action_type_id << std::endl;
     if (action_type_id == NETWORK_ACTION_MESSAGE_BROADCAST) {
         std::string message;
