@@ -84,6 +84,7 @@ namespace EG {
                             if (timer >= 2.0f) {
                                 polling_lan = false;
                                 std::vector<sf::IpAddress>::iterator ip_iter = server_ip_addresses.begin();
+                                std::cout << "Done Polling... Recieved " << server_ip_addresses.size() << " Responses" << std::endl;
                                 while (ip_iter != server_ip_addresses.end()) {
                                     sf::IpAddress server_ip = *(ip_iter);
                                     std::cout << "Recived Poll Response From: " << server_ip.toString() << std::endl;

@@ -126,8 +126,8 @@ namespace EGServer {
 
     Packet *Networking::ReceiveConnectionlessPacket(bool &response, sf::IpAddress &ip_address) {
         //mutex.lock();
+        response = false;
         if (udp_packets_received.empty()) {
-            response = false;
             return NULL;
         }
         std::pair<Packet *, sf::IpAddress> r = udp_packets_received.front();
