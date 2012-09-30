@@ -4,11 +4,17 @@ namespace EGServer {
     Server::Server(void) {
         database = new Database();
         network = new Networking();
+        done = false;
     }
 
     Server::~Server(void) {
         delete network;
         delete database;
+        std::cout << "Cleaning Up Server" << std::endl;
+    }
+
+    bool Server::IsDone(void) {
+        return done;
     }
 
     void Server::Update(void) {
@@ -59,13 +65,17 @@ namespace EGServer {
         sf::Packet *p = packet->GetPacket();
         unsigned int action_type_id;
         (*p) >> action_type_id;
-        std::cout << "Processing UDP Packet" << std::endl;
+        //std::cout << "UDP Pakcet with Action Type: " << action_type_id << "@" << ip_address.toString() << std::endl;
         if (action_type_id == NETWORK_ACTION_LAN_DISCOVERY) {
             Packet *out = new Packet();
             *(out->GetPacket()) << NETWORK_ACTION_LAN_DISCOVERY_RESPONSE;
+            //std::cout << "Sending LAN Discovery Response" << std::endl;
             network->SendPacket(ip_address, out);
+            // TODO: Cleanup Packet
         } else {
             ProcessConnectionlessPacket(ip_address, packet);
         }
+        //std::cout << "DONE" << std::endl;
+        done = true;
     }
 };

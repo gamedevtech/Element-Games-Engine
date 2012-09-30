@@ -11,10 +11,12 @@ namespace EGServer {
             Server(void);
             ~Server(void);
 
+            bool IsDone(void);
             void Update(void);
             virtual void ProcessPacket(unsigned int client_id, EGServer::Packet *packet);
             virtual void ProcessConnectionlessPacket(sf::IpAddress ip_address, EGServer::Packet *packet);
         protected:
+            bool done;
             Database *database;
             Networking *network;
         private:

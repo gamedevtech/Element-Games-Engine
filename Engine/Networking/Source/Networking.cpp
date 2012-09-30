@@ -25,6 +25,7 @@ namespace EG {
             udp->send(p, sf::IpAddress::Broadcast, EG_ENGINE_UDP_PORT);
             polling_lan = true;
             timer = 0.0f;
+            std::cout << "Sent LAN Discovery UDP Packet" << std::endl;
         }
 
         void Network::Connect(std::string server_address, std::string username, std::string password) {
