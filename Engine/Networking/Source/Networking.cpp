@@ -20,12 +20,14 @@ namespace EG {
         }
 
         std::vector<std::pair<std::string, std::string> > Network::PollLAN(void) {
+            server_ip_addresses.clear();
+            polling_lan = true;
             sf::Packet p;
             p << NETWORK_ACTION_LAN_DISCOVERY;
-            udp->send(p, sf::IpAddress::Broadcast, EG_ENGINE_UDP_PORT);
-            polling_lan = true;
+            udp->send(p, sf::IpAddress::Broadcast, EG_ENGINE_UDP_CLIENT_PORT);
             timer = 0.0f;
             std::cout << "Sent LAN Discovery UDP Packet" << std::endl;
+            server_ip_addresses.clear();
         }
 
         void Network::Connect(std::string server_address, std::string username, std::string password) {
@@ -33,12 +35,7 @@ namespace EG {
             server_ip_address = new sf::IpAddress(server_address);
             tcp->connect(*server_ip_address, EG_ENGINE_TCP_PORT);
             connected = true;
-            std::cout << "(" << server_ip_address->getLocalAddress() << ")" << std::endl;
-            if (server_address == "127.0.0.1") {
-                udp->bind(sf::Socket::AnyPort);
-            } else {
-                udp->bind(EG_ENGINE_UDP_PORT);
-            }
+            udp->bind(EG_ENGINE_UDP_SERVER_PORT);
 
             sf::Packet auth;
             auth << username << password;
@@ -59,7 +56,7 @@ namespace EG {
 
         void Network::SendPacket(Packet *p, bool connectionless) {
             if (connectionless) {
-                udp->send(*(p->GetPacket()), *server_ip_address, EG_ENGINE_UDP_PORT);
+                udp->send(*(p->GetPacket()), *server_ip_address, EG_ENGINE_UDP_CLIENT_PORT);
             } else {
                 tcp->send(*(p->GetPacket()));
             }
@@ -69,6 +66,19 @@ namespace EG {
             timer += frame_time;
 
             // TODO: UDP Receive
+            if (polling_lan) {
+                if (timer >= 2.0f) {
+                    polling_lan = false;
+                    std::vector<sf::IpAddress>::iterator ip_iter = server_ip_addresses.begin();
+                    std::cout << "Done Polling... Recieved " << server_ip_addresses.size() << " Responses" << std::endl;
+                    while (ip_iter != server_ip_addresses.end()) {
+                        sf::IpAddress server_ip = *(ip_iter);
+                        std::cout << "Recived Poll Response From: " << server_ip.toString() << std::endl;
+                        ++ip_iter;
+                    }
+                }
+            }
+
             bool done = false;
             while (!done) {
                 sf::Packet *sfp = next_packet->GetPacket();
@@ -77,21 +87,15 @@ namespace EG {
                 sf::Socket::Status s = udp->receive(*sfp, ip_address, port);
 
                 if (s == sf::Socket::Done) {
-                    if (port == EG_ENGINE_UDP_PORT) {
-                        if (polling_lan) {
+                    if (polling_lan) {
+                        unsigned int action_type;
+                        *(sfp) >> action_type;
+                        if (action_type == NETWORK_ACTION_LAN_DISCOVERY_RESPONSE) {
                             server_ip_addresses.push_back(ip_address);
                             next_packet = new Packet();
-                            if (timer >= 2.0f) {
-                                polling_lan = false;
-                                std::vector<sf::IpAddress>::iterator ip_iter = server_ip_addresses.begin();
-                                std::cout << "Done Polling... Recieved " << server_ip_addresses.size() << " Responses" << std::endl;
-                                while (ip_iter != server_ip_addresses.end()) {
-                                    sf::IpAddress server_ip = *(ip_iter);
-                                    std::cout << "Recived Poll Response From: " << server_ip.toString() << std::endl;
-                                    ++ip_iter;
-                                }
-                            }
                         }
+                    } else {
+                        // TODO: Add to packets received.
                     }
                 } else if (s == sf::Socket::NotReady) {
                     done = true;

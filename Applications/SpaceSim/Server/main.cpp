@@ -8,7 +8,6 @@ int main(int argc, char **argv) {
         server->Update();
     }
     delete server;
-    std::cout << "Main Thread Done" << std::endl;
 
     return 0;
 }

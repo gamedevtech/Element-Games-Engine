@@ -5,7 +5,7 @@ namespace EGServer {
         thread = new sf::Thread(&Networking::Listener, this);
         listener.listen(EG_ENGINE_TCP_PORT);
         selector.add(listener);
-        udp.bind(EG_ENGINE_UDP_PORT);
+        udp.bind(EG_ENGINE_UDP_CLIENT_PORT);
         selector.add(udp);
         current_client = new sf::TcpSocket();
         next_packet = new Packet();
@@ -106,7 +106,7 @@ namespace EGServer {
 
     void Networking::SendPacket(sf::IpAddress &ip_address, Packet *p) {
         //mutex.lock();
-        udp.send(*(p->GetPacket()), ip_address, EG_ENGINE_UDP_PORT);
+        udp.send(*(p->GetPacket()), ip_address, EG_ENGINE_UDP_SERVER_PORT);
         //mutex.unlock();
     }
 
