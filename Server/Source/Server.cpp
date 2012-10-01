@@ -18,7 +18,6 @@ namespace EGServer {
     }
 
     void Server::Update(void) {
-        //network->Update();
         bool has_packet = false;
         unsigned int client_id = 0;
         EGServer::Packet *packet = network->ReceivePacket(has_packet, client_id);
@@ -29,10 +28,10 @@ namespace EGServer {
 
         has_packet = false;
         sf::IpAddress remote_ip;
-        packet = network->ReceiveConnectionlessPacket(has_packet, remote_ip);
+        packet = network->ReceivePacket(has_packet, remote_ip);
         while (has_packet) {
-            InternalProcessConnectionlessPacket(remote_ip, packet);
-            packet = network->ReceiveConnectionlessPacket(has_packet, remote_ip);
+            InternalProcessPacket(remote_ip, packet);
+            packet = network->ReceivePacket(has_packet, remote_ip);
         }
     }
 
@@ -40,7 +39,7 @@ namespace EGServer {
         //
     }
 
-    void Server::ProcessConnectionlessPacket(sf::IpAddress ip_address, EGServer::Packet *packet) {
+    void Server::ProcessPacket(sf::IpAddress ip_address, EGServer::Packet *packet) {
         //
     }
 
@@ -62,7 +61,7 @@ namespace EGServer {
         }
     }
 
-    void Server::InternalProcessConnectionlessPacket(sf::IpAddress ip_address, EGServer::Packet *packet) {
+    void Server::InternalProcessPacket(sf::IpAddress ip_address, EGServer::Packet *packet) {
         sf::Packet *p = packet->GetPacket();
         unsigned int action_type_id;
         (*p) >> action_type_id;
@@ -74,7 +73,7 @@ namespace EGServer {
             network->SendPacket(ip_address, out);
             // TODO: Cleanup Packet
         } else {
-            ProcessConnectionlessPacket(ip_address, packet);
+            ProcessPacket(ip_address, packet);
         }
     }
 };

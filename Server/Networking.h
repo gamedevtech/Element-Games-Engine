@@ -40,8 +40,8 @@ namespace EGServer {
             void SendPacket(sf::IpAddress &ip_address, Packet *p);
             // TCP Recieve
             Packet *ReceivePacket(bool &response, unsigned int &client_id);
-            // UDP Recieve TODO: Make this same name as above
-            Packet *ReceiveConnectionlessPacket(bool &response, sf::IpAddress &ip_address);
+            // UDP Recieve
+            Packet *ReceivePacket(bool &response, sf::IpAddress &ip_address);
 
             // Gets the next available Client ID
             unsigned int GetNextClientId(void);

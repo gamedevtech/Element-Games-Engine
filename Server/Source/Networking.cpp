@@ -33,7 +33,7 @@ namespace EGServer {
     void Networking::Listener(void) {
         std::cout << "Listening to Network" << std::endl;
         while (selector.wait()) {
-            //mutex.lock();
+            mutex.lock();
 
             // New Connection
             if (selector.isReady(listener)) {
@@ -53,10 +53,8 @@ namespace EGServer {
                 unsigned short int received_port;
                 sf::Socket::Status s = udp.receive(*(next_packet->GetPacket()), received_ip, received_port);
                 if (s == sf::Socket::Done) {
-                    //mutex.lock();
                     udp_packets_received.push(std::pair<Packet *, sf::IpAddress>(next_packet, received_ip));
                     next_packet = new Packet();
-                    //mutex.unlock();
                 }
             }
 
@@ -73,20 +71,16 @@ namespace EGServer {
                         client_states.erase(client_states.find(client_id));
                         selector.remove(*client);
                     } else if (s == sf::Socket::Error) {
-                        // Handle Error
                         std::cout << "Client Error: " << client->getRemoteAddress() << std::endl;
                     } else if (s == sf::Socket::Done) {
-                        // Handle Data
                         packets_received.push(std::pair<Packet *, unsigned int>(next_packet, client_id));
                         next_packet = new Packet();
-                    } else if (s == sf::Socket::NotReady) {
-                        // Not Ready
                     }
                 }
 
                 ++client_iterator;
             }
-            //mutex.unlock();
+            mutex.unlock();
         }
         std::cout << "Done Listening To TCP" << std::endl;
     }
@@ -96,67 +90,73 @@ namespace EGServer {
     }
 
     void Networking::SendPacket(unsigned int client_id, Packet *p) {
-        //mutex.lock();
+        mutex.lock();
         if (clients.count(client_id) > 0) {
             sf::TcpSocket *s = clients[client_id];
             s->send(*(p->GetPacket()));
         }
-        //mutex.unlock();
+        mutex.unlock();
     }
 
     void Networking::SendPacket(sf::IpAddress &ip_address, Packet *p) {
-        //mutex.lock();
+        mutex.lock();
         udp.send(*(p->GetPacket()), ip_address, EG_ENGINE_UDP_SERVER_PORT);
-        //mutex.unlock();
+        mutex.unlock();
     }
 
     Packet *Networking::ReceivePacket(bool &response, unsigned int &client_id) {
-        //mutex.lock();
+        mutex.lock();
         if (packets_received.empty()) {
             response = false;
+            mutex.unlock();
             return NULL;
         }
         std::pair<Packet *, unsigned int> r = packets_received.front();
         client_id = r.second;
         packets_received.pop();
         response = true;
-        //mutex.unlock();
+        mutex.unlock();
         return r.first;
     }
 
-    Packet *Networking::ReceiveConnectionlessPacket(bool &response, sf::IpAddress &ip_address) {
-        //mutex.lock();
+    Packet *Networking::ReceivePacket(bool &response, sf::IpAddress &ip_address) {
+        mutex.lock();
         response = false;
         if (udp_packets_received.empty()) {
+            mutex.unlock();
             return NULL;
         }
         std::pair<Packet *, sf::IpAddress> r = udp_packets_received.front();
         ip_address = r.second;
         udp_packets_received.pop();
         response = true;
-        //mutex.unlock();
+        mutex.unlock();
         return r.first;
     }
 
     Networking::ClientState Networking::GetClientState(unsigned int client_id) {
-        //mutex.lock();
+        mutex.lock();
         if (client_states.count(client_id) > 0) {
+            mutex.unlock();
             return client_states[client_id];
         }
-        //mutex.unlock();
+        mutex.unlock();
         return CLIENT_DISCONNECTED;
     }
 
     void Networking::SetClientState(unsigned int client_id, ClientState state) {
-        //mutex.lock();
+        mutex.lock();
         client_states[client_id] = state;
-        //mutex.unlock();
+        mutex.unlock();
     }
 
     sf::TcpSocket *Networking::GetClientSocket(unsigned int client_id) {
+        mutex.lock();
         if (clients.count(client_id) > 0) {
+            mutex.unlock();
             return clients[client_id];
         }
+        mutex.unlock();
         return NULL;
     }
 

@@ -34,6 +34,6 @@ void SpaceSimServer::ProcessPacket(unsigned int client_id, EGServer::Packet* pac
     }
 }
 
-void SpaceSimServer::ProcessConnectionlessPacket(sf::IpAddress ip_address, EGServer::Packet *packet) {
+void SpaceSimServer::ProcessPacket(sf::IpAddress ip_address, EGServer::Packet *packet) {
     //
 }
