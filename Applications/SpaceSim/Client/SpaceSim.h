@@ -25,6 +25,26 @@ class SpaceSim : public EG::Game::Game{
 
         void InputUpdates(float frame_time);
         void PhysicsUpdates(float frame_time);
+
+        bool polling_lan;
+};
+
+class GetLANServersListener : public EG::GUI::WebResourceResponse{
+    public:
+        virtual std::string Call(std::map<std::string, std::string> args);
+        SpaceSim *game;
+};
+
+class GetLANServerResultsListener : public EG::GUI::WebResourceResponse{
+    public:
+        virtual std::string Call(std::map<std::string, std::string> args);
+        SpaceSim *game;
+};
+
+class QuitGameListener : public EG::GUI::WebResourceResponse{
+    public:
+        virtual std::string Call(std::map<std::string, std::string> args);
+        SpaceSim *game;
 };
 
 #endif

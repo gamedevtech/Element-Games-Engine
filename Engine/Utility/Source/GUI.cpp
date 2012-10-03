@@ -136,6 +136,7 @@ namespace EG{
             key_event.modifiers = 0;
             key_event.type = AWE_WKT_CHAR;
             key_event.is_system_key = false;
+            //std::cout << int(key_code) << ": " << int(wkey_code) << std::endl;
             awe_webview_inject_keyboard_event(web_view, key_event);
             key_event.type = AWE_WKT_KEYDOWN;
             awe_webview_inject_keyboard_event(web_view, key_event);

@@ -2,6 +2,20 @@
 
 SpaceSim::SpaceSim(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene) {
     network->Connect("127.0.0.1", "admin", "admin");
+    gui->Initialize("Assets/GUIs/SpaceSimClient", "index.html");
+    polling_lan = false;
+
+    GetLANServersListener *lan_server_listener = new GetLANServersListener();
+    lan_server_listener->game = this;
+    gui->AddResponseHandler("lan_servers", lan_server_listener);
+
+    GetLANServerResultsListener *lan_server_results_listener = new GetLANServerResultsListener();
+    lan_server_results_listener->game = this;
+    gui->AddResponseHandler("lan_results", lan_server_results_listener);
+
+    QuitGameListener *quit_game_listener = new QuitGameListener();
+    quit_game_listener->game = this;
+    gui->AddResponseHandler("quit", quit_game_listener);
 }
 
 SpaceSim::~SpaceSim(void) {
@@ -28,6 +42,12 @@ void SpaceSim::NetworkUpdates(float frame_time) {
     while (got_packet) {
         ProcessNetworkPacket(frame_time, packet);
         packet = network->ReceivePacket(got_packet);
+    }
+
+    if (polling_lan) {
+        if (!(network->IsPollingLAN())) {
+            // Done Polling
+        }
     }
 }
 
@@ -102,6 +122,7 @@ void SpaceSim::InputUpdates(float frame_time) {
     }
     if (input->IsKeyPressed(EG::Input::p)) {
         network->PollLAN();
+        polling_lan = true;
     }
 }
 
@@ -114,4 +135,28 @@ void SpaceSim::Update(void) {
     NetworkUpdates(frame_time);
     InputUpdates(frame_time);
     PhysicsUpdates(frame_time);
+}
+
+std::string QuitGameListener::Call(std::map<std::string, std::string> args) {
+    game->GetWindow()->Close();
+    return "{\"status\": true}";
+}
+
+std::string GetLANServersListener::Call(std::map<std::string, std::string> args) {
+    game->GetNetwork()->PollLAN();
+    console->Print("Started Polling");
+    return "{\"status\": true}";
+}
+
+std::string GetLANServerResultsListener::Call(std::map<std::string, std::string> args) {
+    std::vector<sf::IpAddress> *ips = game->GetNetwork()->GetServerIpAddresses();
+    std::vector<sf::IpAddress>::iterator ips_iter = ips->begin();
+    std::string out = "[";
+    while (ips_iter != ips->end()) {
+        sf::IpAddress ip = (*ips_iter);
+        out += "{\"id\": \"" + ip.toString() + "\"}";
+        ++ips_iter;
+    }
+    out += "]";
+    return out.c_str();
 }

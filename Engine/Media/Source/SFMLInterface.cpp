@@ -184,7 +184,8 @@ namespace EG{
         }
 
         void SFMLInterface::Close(void){
-            sfml_application->close();
+            //sfml_application->close();
+            opened = false;
         }
     }
 }

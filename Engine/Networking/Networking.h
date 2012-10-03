@@ -28,7 +28,7 @@ namespace EG {
                 ~Network(void);
 
                 void Connect(std::string server_address, std::string username = "", std::string password = "");
-                std::vector<std::pair<std::string, std::string> > PollLAN(void);
+                void PollLAN(void);
                 void SendPacket(Packet *p, bool connectionless = false);
                 void Update(float frame_time);
                 Packet *ReceivePacket(bool &response);

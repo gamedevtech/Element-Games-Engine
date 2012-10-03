@@ -52,6 +52,7 @@ namespace EGServer {
                 sf::IpAddress received_ip;
                 unsigned short int received_port;
                 sf::Socket::Status s = udp.receive(*(next_packet->GetPacket()), received_ip, received_port);
+                std::cout << "Received UDP Packets From " << received_ip.toString() << "@" << received_port << std::endl;
                 if (s == sf::Socket::Done) {
                     udp_packets_received.push(std::pair<Packet *, sf::IpAddress>(next_packet, received_ip));
                     next_packet = new Packet();

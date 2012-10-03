@@ -31,6 +31,7 @@ namespace EG{
 				EG::Graphics::Renderer *GetRenderer(void);
                 EG::Input::Input *GetInput(void);
                 EG::Utility::Time *GetTime(void);
+                EG::Network::Network *GetNetwork(void);
 			protected:
 				EG::Utility::Window *window;
 				EG::Graphics::Renderer *renderer;

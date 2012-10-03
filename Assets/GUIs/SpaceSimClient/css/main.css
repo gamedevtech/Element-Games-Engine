@@ -1,0 +1,33 @@
+body {
+    background: black;
+    color: white;
+}
+
+.centered {
+    text-align: center;
+    margin: 0px;
+    padding: 0px;
+    margin-top: 20%;
+    vertical-align: middle;
+}
+
+#back_area {
+    position: fixed;
+    top: 8px;
+    left: 4px;
+    z-index: 10;
+}
+
+#back_button {
+    display: none;
+}
+
+.header {
+    text-align: center;
+    position: fixed;
+    top: 12px;
+    left: 0px;
+    width: 100%;
+    font-size: 32px;
+    z-index: 8;
+}

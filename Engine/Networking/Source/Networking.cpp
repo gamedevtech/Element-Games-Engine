@@ -13,13 +13,14 @@ namespace EG {
             authenticated = false;
             polling_lan = false;
             next_packet = new Packet();
+            udp->bind(EG_ENGINE_UDP_SERVER_PORT);
         }
 
         Network::~Network(void) {
             //
         }
 
-        std::vector<std::pair<std::string, std::string> > Network::PollLAN(void) {
+        void Network::PollLAN(void) {
             server_ip_addresses.clear();
             polling_lan = true;
             sf::Packet p;
@@ -35,7 +36,6 @@ namespace EG {
             server_ip_address = new sf::IpAddress(server_address);
             tcp->connect(*server_ip_address, EG_ENGINE_TCP_PORT);
             connected = true;
-            udp->bind(EG_ENGINE_UDP_SERVER_PORT);
 
             sf::Packet auth;
             auth << username << password;
@@ -87,12 +87,14 @@ namespace EG {
                 sf::Socket::Status s = udp->receive(*sfp, ip_address, port);
 
                 if (s == sf::Socket::Done) {
+                    std::cout << "Received UDP Packet" << std::endl;
                     if (polling_lan) {
                         unsigned int action_type;
                         *(sfp) >> action_type;
                         if (action_type == NETWORK_ACTION_LAN_DISCOVERY_RESPONSE) {
                             server_ip_addresses.push_back(ip_address);
                             next_packet = new Packet();
+                            std::cout << "Recieved Server" << std::endl;
                         }
                     } else {
                         // TODO: Add to packets received.
@@ -107,6 +109,9 @@ namespace EG {
             }
 
             done = false;
+            if (!connected) {
+                done = true;
+            }
             while (!done) {
                 sf::Packet *sfp = next_packet->GetPacket();
                 sf::Socket::Status s = tcp->receive(*(next_packet->GetPacket()));

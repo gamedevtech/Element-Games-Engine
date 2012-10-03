@@ -229,24 +229,28 @@ namespace EG{
             }
         }
 
-        EG::Utility::Window *Game::GetWindow(void){
+        EG::Utility::Window *Game::GetWindow(void) {
             return window;
         }
 
-        EG::Game::Scene *Game::GetScene(void){
+        EG::Game::Scene *Game::GetScene(void) {
             return scene;
         }
 
-        EG::Graphics::Renderer *Game::GetRenderer(void){
+        EG::Graphics::Renderer *Game::GetRenderer(void) {
             return renderer;
         }
 
-        EG::Input::Input *Game::GetInput(void){
+        EG::Input::Input *Game::GetInput(void) {
             return input;
         }
 
-        EG::Utility::Time *Game::GetTime(void){
+        EG::Utility::Time *Game::GetTime(void) {
             return time;
+        }
+
+        EG::Network::Network *Game::GetNetwork(void) {
+            return network;
         }
     }
 }
