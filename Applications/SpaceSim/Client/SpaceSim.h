@@ -47,4 +47,10 @@ class QuitGameListener : public EG::GUI::WebResourceResponse{
         SpaceSim *game;
 };
 
+class ConnectServerListener : public EG::GUI::WebResourceResponse{
+    public:
+        virtual std::string Call(std::map<std::string, std::string> args);
+        SpaceSim *game;
+};
+
 #endif

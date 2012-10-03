@@ -33,10 +33,24 @@ define(function(require) {
     var LANBrowser = Backbone.View.extend({
         tagName: "div",
         className: "row centered",
+        events: {
+            "click .server_link": "connect"
+        },
         initialize: function() {
+            _.bindAll(this, "connect");
             _.bindAll(this, "render");
             _.bindAll(this, "render_servers");
             this.collection.bind("change", this.render_servers);
+        },
+        connect: function(event) {
+            var el = $(event.currentTarget);
+            var ip = el.data("id");
+            var t = this;
+            console.log("Connecting To: " + ip);
+            util.Post("connect", {ip: ip}, function(response) {
+                console.log("connected");
+                t.trigger("connected");
+            });
         },
         render: function() {
             var template = '<div id="lan_browser"><img src="img/ajax-loader.gif" /></div>';
@@ -46,7 +60,7 @@ define(function(require) {
         render_servers: function() {
             var html = '<h3>Servers...</h3>';
             this.collection.each(function(m) {
-                html += '<div>' + m.id.toString() + '</div>';
+                html += '<div><a href="javascript:;" class="server_link" data-id="' + m.id.toString() + '">' + m.id.toString() + '</a></div>';
             });
             this.$el.html(html);
             return this;

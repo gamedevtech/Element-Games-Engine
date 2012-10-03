@@ -1,7 +1,7 @@
 #include "SpaceSim.h"
 
 SpaceSim::SpaceSim(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game(_window, _scene) {
-    network->Connect("127.0.0.1", "admin", "admin");
+    //network->Connect("127.0.0.1", "admin", "admin");
     gui->Initialize("Assets/GUIs/SpaceSimClient", "index.html");
     polling_lan = false;
 
@@ -16,6 +16,10 @@ SpaceSim::SpaceSim(EG::Utility::Window *_window, EG::Game::Scene *_scene) : Game
     QuitGameListener *quit_game_listener = new QuitGameListener();
     quit_game_listener->game = this;
     gui->AddResponseHandler("quit", quit_game_listener);
+
+    ConnectServerListener *connect_server_listener = new ConnectServerListener();
+    connect_server_listener->game = this;
+    gui->AddResponseHandler("connect", connect_server_listener);
 }
 
 SpaceSim::~SpaceSim(void) {
@@ -159,4 +163,10 @@ std::string GetLANServerResultsListener::Call(std::map<std::string, std::string>
     }
     out += "]";
     return out.c_str();
+}
+
+std::string ConnectServerListener::Call(std::map<std::string, std::string> args) {
+    std::cout << "(" << args["ip"] << ")" << std::endl;
+    game->GetNetwork()->Connect(args["ip"], "admin", "admin");
+    return "{\"status\": true}";
 }

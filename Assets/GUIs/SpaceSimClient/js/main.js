@@ -19,6 +19,7 @@ define(function(require) {
             _.bindAll(this, "join");
             _.bindAll(this, "options");
             _.bindAll(this, "quit");
+            _.bindAll(this, "connected");
 
             this.el = $("#content");
         },
@@ -36,6 +37,7 @@ define(function(require) {
             var nb = new network_browser.LANBrowser({
                 collection: servers
             });
+            nb.bind("connected", this.connected);
             servers.begin_fetch();
             nb.render();
             this.el.append(nb.el);
@@ -49,6 +51,9 @@ define(function(require) {
             util.Get("quit", function(response) {
                 console.log("G'Bye!");
             });
+        },
+        connected: function() {
+            $("#all").hide();
         }
     });
 
