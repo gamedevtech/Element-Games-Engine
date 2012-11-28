@@ -83,7 +83,8 @@ std::string SetVideoSettingsListener::Call(std::map<std::string, std::string> ar
 
 std::string FileBrowserListener::Call(std::map< std::string, std::string > args) {
     // Make config! Go with scene!
-    std::string path = boost::filesystem::current_path().c_str() + EG::Utility::StringMethods::ConvertURI(args["path"]);
+    std::string path(boost::filesystem::current_path().generic_string());
+    path += EG::Utility::StringMethods::ConvertURI(args["path"]);
     std::cout << "File Browser @: " << path << std::endl;
     std::string out = "[";
     boost::filesystem::directory_iterator end_itr; // Default ctor yields past-the-end
@@ -96,7 +97,7 @@ std::string FileBrowserListener::Call(std::map< std::string, std::string > args)
             out += ",";
         }
 
-        std::string name = i->path().c_str();
+        std::string name(i->path().generic_string());
         unsigned int index = name.find_last_of('/');
         name = name.substr(index + 1);
 

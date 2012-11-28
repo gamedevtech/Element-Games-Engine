@@ -1,9 +1,9 @@
 #ifndef EG_GRAPHICS_OPENGL_INTERFACE_H
 #define EG_GRAPHICS_OPENGL_INTERFACE_H
 
-#ifdef WIN32
+/*#ifdef WIN32
 #define GLEW_STATIC
-#endif
+#endif*/
 
 #include "../Math/Math.h"
 #include <GL/glew.h>

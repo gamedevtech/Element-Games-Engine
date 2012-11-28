@@ -3,7 +3,7 @@
 
 #define BIT(x) (1<<(x))
 
-#include <btBulletDynamicsCommon.h>
+#include <bullet/btBulletDynamicsCommon.h>
 #include <vector>
 #include "../Math/Math.h"
 

@@ -149,7 +149,7 @@ set(SRCS
 
 IF (WIN32)
 	add_library(egengine STATIC ${SRCS})
-	target_link_libraries(egengine glew_static glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath Awesomium lua freetype ftgl_static mingw32 egengine glew_static glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath Awesomium lua freetype ftgl_static mingw32)
+        target_link_libraries(egengine glew32 glut32 glu32 opengl32 sfml-system sfml-audio sfml-network sfml-window sfml-graphics assimp BulletDynamics BulletCollision LinearMath Awesomium lua freetype ftgl boost_system boost_filesystem)
 ELSE (WIN32)
 	add_library(egengine SHARED ${SRCS})
 	target_link_libraries(egengine)
