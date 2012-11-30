@@ -26,6 +26,6 @@ add_subdirectory(Engine)
 add_subdirectory(Applications)
 
 IF (NOT WIN32)
-    add_subdirectory(Scripting)
+    #add_subdirectory(Scripting)
     add_subdirectory(Server)
 ENDIF (WIN32)

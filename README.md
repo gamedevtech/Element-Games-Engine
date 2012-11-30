@@ -14,7 +14,7 @@ http://bulletphysics.org/Bullet/phpBB3/viewtopic.php?t=5250-->
 
 #Setting up Development Environment for Ubuntu 12.04:#
 ##Dependency Installation##
-```sudo apt-get install git build-essential cmake libsndfile1-dev libopenal-dev libfreetype6-dev libxrandr-dev libx11-dev libboost-dev libboost-python-dev libglu1-mesa-dev libxmu-dev libxi-dev freeglut3-dev libjpeg-dev libjpeg62-dev```
+```sudo apt-get install git build-essential cmake libsndfile1-dev libopenal-dev libfreetype6-dev libxrandr-dev libx11-dev libboost-dev libboost-python-dev libglu1-mesa-dev libxmu-dev libxi-dev freeglut3-dev libjpeg-dev libjpeg62-dev libboost-filesystem-dev libboost-system-dev libreadline-dev libncurses5-dev scons libboost-thread-dev libboost-program-options-dev```
 
 ##I also like to use KDevelop, but it's up to you!##
 ```sudo apt-get install kdevelop kdevelop-dev```
@@ -68,14 +68,23 @@ sudo cp -R build/bin/release/* /usr/local/lib/
 sudo cp -R build/bin/release/* /usr/local/bin/  
 sudo cp -R include/* /usr/local/include/
 ```
-###boost-python###
+###lua###
+```
+make linux
+sudo make install
+```
+###mongod SERVER ONLY###
+```
+scons
+sudo scons install
+```
+###boost-python DEPRECATED###
 ```
 Edit /usr/include/boost/python/detail/wrap_python.hpp as sudo  
 replace "#include <pyconfig.h>" with "#include <python2.7/pyconfig.h>"  
 replace "#include <patchlevel.h>" with "#include <python2.7/patchlevel.h>"  
 replace "#include <Python.h>" with "#include <python2.7/Python.h>"
 ```
-
 ##Compile and Run!##
 
 ###Compile###
