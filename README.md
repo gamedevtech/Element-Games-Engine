@@ -54,10 +54,7 @@ sudo make install
 ```
 ###bullet:###
 ```
-cmake -G "Unix Makefiles"  
-Edit CMakeCache.txt  
-    Find CMAKE_CXX_FLAGS:STRING= and append -fPIC such that it reads "CMAKE_CXX_FLAGS:STRING=-fPIC"  
-    Find CMAKE_C_FLAGS:STRING= and append -fPIC such that it reads "CMAKE_C_FLAGS:STRING=-fPIC"  
+cmake -G "Unix Makefiles" -DCMAKE_CXX_FLAGS="-fPIC" -DCMAKE_C_FLAGS="-fPIC"   
 make  
 sudo make install
 sudo cp -R /usr/local/include/bullet/* /usr/local/include/
@@ -70,12 +67,12 @@ sudo cp -R include/* /usr/local/include/
 ```
 ###lua###
 ```
-make linux
+make linux  
 sudo make install
 ```
 ###mongod SERVER ONLY###
 ```
-scons
+scons  
 sudo scons install
 ```
 ###boost-python DEPRECATED###
