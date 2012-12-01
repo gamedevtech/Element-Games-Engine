@@ -57,6 +57,7 @@ void SpaceSim::NetworkUpdates(float frame_time) {
 
 void SpaceSim::InputUpdates(float frame_time) {
     float movement_speed = frame_time * 2.0f;
+	bool moved = false;
     if (input->IsKeyDown(EG::Input::v)) {
         movement_speed /= 100.0f;
     }
@@ -65,27 +66,35 @@ void SpaceSim::InputUpdates(float frame_time) {
     }
     if (input->IsKeyDown(EG::Input::q)){
         scene->GetCurrentCamera()->Rotate(glm::vec3(0.0f, 0.0f, -movement_speed));
+		moved = true;
     }
     if (input->IsKeyDown(EG::Input::e)){
         scene->GetCurrentCamera()->Rotate(glm::vec3(0.0f, 0.0f, movement_speed));
+		moved = true;
     }
     if (input->IsKeyDown(EG::Input::w)){
         scene->GetCurrentCamera()->Move(glm::vec3(0.0f, 0.0f, -movement_speed));
+		moved = true;
     }
     if (input->IsKeyDown(EG::Input::s)){
         scene->GetCurrentCamera()->Move(glm::vec3(0.0f, 0.0f, movement_speed));
+		moved = true;
     }
     if (input->IsKeyDown(EG::Input::a)){
         scene->GetCurrentCamera()->Move(glm::vec3(-movement_speed, 0.0f, 0.0f));
+		moved = true;
     }
     if (input->IsKeyDown(EG::Input::d)){
         scene->GetCurrentCamera()->Move(glm::vec3(movement_speed, 0.0f, 0.0f));
+		moved = true;
     }
     if (input->IsKeyDown(EG::Input::space)){
         scene->GetCurrentCamera()->Move(glm::vec3(0.0f, movement_speed, 0.0f));
+		moved = true;
     }
     if (input->IsKeyDown(EG::Input::c)){
         scene->GetCurrentCamera()->Move(glm::vec3(0.0f, -movement_speed, 0.0f));
+		moved = true;
     }
     if (input->IsKeyPressed(EG::Input::t)){
         if (rendering_method == RENDERER_DEFERRED){
@@ -117,6 +126,12 @@ void SpaceSim::InputUpdates(float frame_time) {
             (static_cast<EG::Graphics::RendererDeferred *>(renderer))->ToggleDOF();
         }
     }
+	if (moved) {
+		EG::Network::Packet *packet = new EG::Network::Packet();
+		glm::vec3 p = scene->GetCurrentCamera()->GetPosition();
+		*(packet->GetPacket()) << NETWORK_ACTION_MOVEMENT_BROADCAST << network->GetClientId() << p.x << p.y << p.z;
+		network->SendPacket(packet, true);
+	}
     if (input->IsKeyPressed(EG::Input::k)) {
         EG::Network::Packet *packet = new EG::Network::Packet();
         std::string message = "What's up server!";
