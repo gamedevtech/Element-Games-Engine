@@ -26,6 +26,24 @@ SpaceSim::~SpaceSim(void) {
     //
 }
 
+EG::Game::Object *SpaceSim::CreateNewPlayerObject(glm::vec3 pos) {
+	EG::Game::Object *out = new EG::Game::Object();
+	EG::Graphics::RenderingMaterial *material = new EG::Graphics::RenderingMaterial();
+	material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "concrete_decal");
+	material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, "concrete_normal");
+	EG::Game::ObjectAttributeRenderingMesh *mesh_attr = new EG::Game::ObjectAttributeRenderingMesh("sphere", material);
+	out->AddAttribute(mesh_attr);
+	glm::mat4 trans = glm::translate(pos);
+	out->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(trans));
+	scene->GetObjectManager()->AddObject(out);
+	return out;
+}
+
+void SpaceSim::UpdatePlayerObject(EG::Game::Object *obj, glm::vec3 pos) {
+	EG::Game::ObjectAttributeBasicTransformation * trans = (static_cast<EG::Game::ObjectAttributeBasicTransformation *>((*(obj->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION)))[0]));
+	trans->SetTransformation(glm::translate(pos));
+}
+
 void SpaceSim::ProcessNetworkPacket(float frame_time, EG::Network::Packet* packet) {
     sf::Packet *sfpacket = packet->GetPacket();
     unsigned int action_type_id;
@@ -37,7 +55,18 @@ void SpaceSim::ProcessNetworkPacket(float frame_time, EG::Network::Packet* packe
         std::stringstream stream;
         stream << "Received Broadcast Message From " << client_id << ":" << from_client_id << " of " << message << std::endl;
         console->Print(stream.str());
-    }
+    } else if (action_type_id == NETWORK_ACTION_MOVEMENT_BROADCAST_RELAY) {
+		unsigned int server_client_id, player_client_id;
+		glm::vec3 pos;
+		*(sfpacket) >> server_client_id >> player_client_id >> pos.x >> pos.y >> pos.z;
+		EG::Game::Object *player_object;
+		if (players.count(player_client_id) < 1) {
+			player_object = CreateNewPlayerObject(pos);
+			players[player_client_id] = player_object;
+		} else {
+			UpdatePlayerObject(players[player_client_id], pos);
+		}
+	}
 }
 
 void SpaceSim::NetworkUpdates(float frame_time) {

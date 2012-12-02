@@ -27,6 +27,10 @@ class SpaceSim : public EG::Game::Game{
         void PhysicsUpdates(float frame_time);
 
         bool polling_lan;
+
+		EG::Game::Object *CreateNewPlayerObject(glm::vec3 pos);
+		void UpdatePlayerObject(EG::Game::Object *obj, glm::vec3 pos);
+		std::map<unsigned int, EG::Game::Object *> players;
 };
 
 class GetLANServersListener : public EG::GUI::WebResourceResponse{

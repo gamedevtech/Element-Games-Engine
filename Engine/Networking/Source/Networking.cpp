@@ -97,6 +97,8 @@ namespace EG {
                             std::cout << "Recieved Server" << std::endl;
                         }
                     } else {
+						packets_received.push(next_packet);
+						next_packet = new Packet();
                         // TODO: Add to packets received.
                     }
                 } else if (s == sf::Socket::NotReady) {
