@@ -1,4 +1,5 @@
 #include "SpaceSimServer.h"
+#include "../Common/SpaceSimNetworkActionTypes.h"
 
 SpaceSimServer::SpaceSimServer(void) : EGServer::Server() {
     //
@@ -35,5 +36,24 @@ void SpaceSimServer::ProcessPacket(unsigned int client_id, EGServer::Packet* pac
 }
 
 void SpaceSimServer::ProcessPacket(sf::IpAddress ip_address, EGServer::Packet *packet) {
-    //
+    sf::Packet *sfp = packet->GetPacket();
+    unsigned int action_type_id, received_client_id;
+    glm::vec3 pos;
+    *(sfp) >> action_type_id >> received_client_id >> pos.x >> pos.y >> pos.z;
+    if (action_type_id == NETWORK_ACTION_MOVEMENT_BROADCAST) {
+        std::map<unsigned int, sf::TcpSocket *>::iterator client_iter = network->ClientsBegin();
+        while (client_iter != network->ClientsEnd()) {
+            unsigned int to_client_id = client_iter->first;
+            sf::TcpSocket *client = client_iter->second;
+            sf::IpAddress to_ip = client->getRemoteAddress();
+
+            if (to_client_id != received_client_id) {
+                EGServer::Packet *packet = new EGServer::Packet();
+                *(packet->GetPacket()) << NETWORK_ACTION_MOVEMENT_BROADCAST_RELAY << NETWORK_SERVER_CLIENT_ID << received_client_id << pos.x << pos.y << pos.z;
+                network->SendPacket(to_ip, packet);
+            }
+
+            ++client_iter;
+        }
+    }
 }

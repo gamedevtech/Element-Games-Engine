@@ -2,6 +2,7 @@
 #define SPACESIMSERVER_H
 
 #include "../../../Server/Server.h"
+#include "../../../Engine/Math/Math.h"
 
 class SpaceSimServer : public EGServer::Server {
     public:
