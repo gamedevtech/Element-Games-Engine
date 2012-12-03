@@ -21,7 +21,7 @@ namespace EGServer {
             Networking *network;
         private:
             void InternalProcessPacket(unsigned int client_id, EGServer::Packet *packet);
-            void InternalProcessPacket(sf::IpAddress ip_address, EGServer::Packet *packet);
+            void InternalProcessPacket(unsigned int action_type_id, sf::IpAddress ip_address, EGServer::Packet *packet);
     };
 };
 

@@ -10,7 +10,7 @@ class SpaceSimServer : public EGServer::Server {
         ~SpaceSimServer(void);
 
         void ProcessPacket(unsigned int client_id, EGServer::Packet *packet);
-        void ProcessPacket(sf::IpAddress ip_address, EGServer::Packet *packet);
+        void ProcessPacket(unsigned int action_type_id, sf::IpAddress ip_address, EGServer::Packet *packet);
     private:
         //
 };

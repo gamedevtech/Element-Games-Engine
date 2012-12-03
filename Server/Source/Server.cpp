@@ -73,7 +73,7 @@ namespace EGServer {
             network->SendPacket(ip_address, out);
             // TODO: Cleanup Packet
         } else {
-            ProcessPacket(ip_address, packet);
+            ProcessPacket(action_type_id, ip_address, packet);
         }
     }
 };
