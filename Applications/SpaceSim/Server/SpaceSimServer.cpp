@@ -41,6 +41,9 @@ void SpaceSimServer::ProcessPacket(sf::IpAddress ip_address, EGServer::Packet *p
     glm::vec3 pos;
     *(sfp) >> action_type_id >> received_client_id >> pos.x >> pos.y >> pos.z;
     if (action_type_id == NETWORK_ACTION_MOVEMENT_BROADCAST) {
+		std::stringstream msg;
+		msg << "Received Movement From: " << received_client_id << " @ " << pos.x << ' ' << pos.y << ' ' << pos.z;
+		std::cout << msg.str() << std::endl;
         std::map<unsigned int, sf::TcpSocket *>::iterator client_iter = network->ClientsBegin();
         while (client_iter != network->ClientsEnd()) {
             unsigned int to_client_id = client_iter->first;
