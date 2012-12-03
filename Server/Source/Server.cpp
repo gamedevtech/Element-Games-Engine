@@ -39,7 +39,7 @@ namespace EGServer {
         //
     }
 
-    void Server::ProcessPacket(sf::IpAddress ip_address, EGServer::Packet *packet) {
+    void Server::ProcessPacket(unsigned int action_type_id, sf::IpAddress ip_address, EGServer::Packet *packet) {
         //
     }
 
