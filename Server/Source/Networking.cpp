@@ -43,6 +43,9 @@ namespace EGServer {
                     selector.add(*(clients[client_id]));
                     current_client = new sf::TcpSocket();
                     client_states[client_id] = CLIENT_CONNECTED;
+                    sf::Packet p;
+                    p << NETWORK_ACTION_AUTH_RESPONSE << NETWORK_SERVER_CLIENT_ID << 1 << client_id;
+                    clients[client_id]->send(p);
                     std::cout << "New Connection From: " << clients[client_id]->getRemoteAddress() << std::endl;
                 }
             }

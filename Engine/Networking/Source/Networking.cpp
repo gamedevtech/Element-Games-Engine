@@ -37,9 +37,9 @@ namespace EG {
             tcp->connect(*server_ip_address, EG_ENGINE_TCP_PORT);
             connected = true;
 
-            sf::Packet auth;
-            auth << username << password;
-            tcp->send(auth);
+            //sf::Packet auth;
+            //auth << NETWORK_ACTION_AUTH << username << password;
+            //tcp->send(auth);
         }
 
         void Network::PrintStatus(sf::Socket::Status s) {
@@ -97,8 +97,8 @@ namespace EG {
                             std::cout << "Recieved Server" << std::endl;
                         }
                     } else {
-						packets_received.push(next_packet);
-						next_packet = new Packet();
+                        packets_received.push(next_packet);
+                        next_packet = new Packet();
                         // TODO: Add to packets received.
                     }
                 } else if (s == sf::Socket::NotReady) {
@@ -125,8 +125,8 @@ namespace EG {
                         if (action_type == NETWORK_ACTION_AUTH_RESPONSE) {
                             // Check For Authentication Packet
                             // TODO: Get Encryption Key Here
-                            unsigned int result;
-                            *sfp >> result >> client_id;
+                            unsigned int server_client_id, result;
+                            *sfp >> server_client_id >> result >> client_id;
                             if (result == 1) {
                                 authenticated = true;
                                 std::cout << "Authenticated... Got Client ID: " << client_id << std::endl;
