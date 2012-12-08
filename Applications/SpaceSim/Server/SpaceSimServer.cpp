@@ -13,7 +13,6 @@ void SpaceSimServer::ProcessPacket(unsigned int client_id, EGServer::Packet* pac
     sf::Packet *sfp = packet->GetPacket();
     unsigned int received_client_id, action_type_id;
     *(sfp) >> action_type_id >> received_client_id;
-    std::cout << "Processing Packet, Client: " << received_client_id << " Action Type: " << action_type_id << std::endl;
     if (action_type_id == NETWORK_ACTION_MESSAGE_BROADCAST) {
         std::string message;
         *(sfp) >> message;
@@ -42,15 +41,12 @@ void SpaceSimServer::ProcessPacket(unsigned int action_type_id, sf::IpAddress ip
         glm::vec3 pos;
         *(sfp) >> received_client_id >> pos.x >> pos.y >> pos.z;
         std::stringstream msg;
-        msg << "Received Movement From: " << received_client_id << " @ " << pos.x << ' ' << pos.y << ' ' << pos.z;
-        std::cout << msg.str() << std::endl;
         std::map<unsigned int, sf::TcpSocket *>::iterator client_iter = network->ClientsBegin();
         while (client_iter != network->ClientsEnd()) {
             unsigned int to_client_id = client_iter->first;
             sf::TcpSocket *client = client_iter->second;
             sf::IpAddress to_ip = client->getRemoteAddress();
 
-            std::cout << "To Client: " << to_client_id << " From Client: " << received_client_id << std::endl;
             if (to_client_id != received_client_id) {
                 EGServer::Packet *packet = new EGServer::Packet();
                 *(packet->GetPacket()) << NETWORK_ACTION_MOVEMENT_BROADCAST_RELAY << NETWORK_SERVER_CLIENT_ID << received_client_id << pos.x << pos.y << pos.z;

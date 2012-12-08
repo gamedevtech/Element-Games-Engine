@@ -61,8 +61,8 @@ void SpaceSim::ProcessNetworkPacket(float frame_time, EG::Network::Packet* packe
         glm::vec3 pos;
         *(sfpacket) >> server_client_id >> player_client_id >> pos.x >> pos.y >> pos.z;
         std::stringstream msg;
-        msg << "Getting Player Movement from: " << player_client_id << " to " << pos.x << ' ' << pos.y << ' ' << pos.z;
-        console->Print(msg.str());
+        //msg << "Getting Player Movement from: " << player_client_id << " to " << pos.x << ' ' << pos.y << ' ' << pos.z;
+        //console->Print(msg.str());
         EG::Game::Object *player_object;
         if (players.count(player_client_id) < 1) {
             player_object = CreateNewPlayerObject(pos);
