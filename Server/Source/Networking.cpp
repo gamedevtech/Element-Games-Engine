@@ -32,61 +32,63 @@ namespace EGServer {
 
     void Networking::Listener(void) {
         std::cout << "Listening to Network" << std::endl;
-        while (selector.wait()) {
-            mutex.lock();
+        while (true) {
+            while (selector.wait()) {
+                mutex.lock();
 
-            // New Connection
-            if (selector.isReady(listener)) {
-                if (listener.accept(*current_client) == sf::Socket::Done) {
-                    unsigned int client_id = GetNextClientId();
-                    clients[client_id] = current_client;
-                    selector.add(*(clients[client_id]));
-                    current_client = new sf::TcpSocket();
-                    client_states[client_id] = CLIENT_CONNECTED;
-                    sf::Packet p;
-                    p << NETWORK_ACTION_AUTH_RESPONSE << NETWORK_SERVER_CLIENT_ID << 1 << client_id;
-                    clients[client_id]->send(p);
-                    std::cout << "New Connection From: " << clients[client_id]->getRemoteAddress() << std::endl;
+                // New Connection
+                if (selector.isReady(listener)) {
+                    if (listener.accept(*current_client) == sf::Socket::Done) {
+                        unsigned int client_id = GetNextClientId();
+                        clients[client_id] = current_client;
+                        selector.add(*(clients[client_id]));
+                        current_client = new sf::TcpSocket();
+                        client_states[client_id] = CLIENT_CONNECTED;
+                        sf::Packet p;
+                        p << NETWORK_ACTION_AUTH_RESPONSE << NETWORK_SERVER_CLIENT_ID << 1 << client_id;
+                        clients[client_id]->send(p);
+                        std::cout << "New Connection From: " << clients[client_id]->getRemoteAddress() << std::endl;
+                    }
                 }
-            }
 
-            // Receive Data
-            if (selector.isReady(udp)) {
-                sf::IpAddress received_ip;
-                unsigned short int received_port;
-                sf::Socket::Status s = udp.receive(*(next_packet->GetPacket()), received_ip, received_port);
-                std::cout << "Received UDP Packets From " << received_ip.toString() << "@" << received_port << std::endl;
-                if (s == sf::Socket::Done) {
-                    udp_packets_received.push(std::pair<Packet *, sf::IpAddress>(next_packet, received_ip));
-                    next_packet = new Packet();
-                }
-            }
-
-            std::map<unsigned int, sf::TcpSocket *>::iterator client_iterator = clients.begin();
-            while (client_iterator != clients.end()) {
-                unsigned int client_id = client_iterator->first;
-                sf::TcpSocket *client = client_iterator->second;
-
-                if (selector.isReady(*client)) {
-                    sf::Socket::Status s = client->receive(*(next_packet->GetPacket()));
-                    if (s == sf::Socket::Disconnected) {
-                        std::cout << "Client Disconnected: " << client->getRemoteAddress() << std::endl;
-                        clients.erase(client_iterator);
-                        client_states.erase(client_states.find(client_id));
-                        selector.remove(*client);
-                    } else if (s == sf::Socket::Error) {
-                        std::cout << "Client Error: " << client->getRemoteAddress() << std::endl;
-                    } else if (s == sf::Socket::Done) {
-                        packets_received.push(std::pair<Packet *, unsigned int>(next_packet, client_id));
+                // Receive Data
+                if (selector.isReady(udp)) {
+                    sf::IpAddress received_ip;
+                    unsigned short int received_port;
+                    sf::Socket::Status s = udp.receive(*(next_packet->GetPacket()), received_ip, received_port);
+                    std::cout << "Received UDP Packets From " << received_ip.toString() << "@" << received_port << std::endl;
+                    if (s == sf::Socket::Done) {
+                        udp_packets_received.push(std::pair<Packet *, sf::IpAddress>(next_packet, received_ip));
                         next_packet = new Packet();
                     }
                 }
 
-                ++client_iterator;
+                std::map<unsigned int, sf::TcpSocket *>::iterator client_iterator = clients.begin();
+                while (client_iterator != clients.end()) {
+                    unsigned int client_id = client_iterator->first;
+                    sf::TcpSocket *client = client_iterator->second;
+
+                    if (selector.isReady(*client)) {
+                        sf::Socket::Status s = client->receive(*(next_packet->GetPacket()));
+                        if (s == sf::Socket::Disconnected) {
+                            std::cout << "Client Disconnected: " << client->getRemoteAddress() << std::endl;
+                            clients.erase(client_iterator);
+                            client_states.erase(client_states.find(client_id));
+                            selector.remove(*client);
+                        } else if (s == sf::Socket::Error) {
+                            std::cout << "Client Error: " << client->getRemoteAddress() << std::endl;
+                        } else if (s == sf::Socket::Done) {
+                            packets_received.push(std::pair<Packet *, unsigned int>(next_packet, client_id));
+                            next_packet = new Packet();
+                        }
+                    }
+
+                    ++client_iterator;
+                }
+                mutex.unlock();
             }
-            mutex.unlock();
+            std::cout << "Done Listening To TCP" << std::endl;
         }
-        std::cout << "Done Listening To TCP" << std::endl;
     }
 
     void Networking::Update(void) {
