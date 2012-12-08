@@ -27,21 +27,22 @@ SpaceSim::~SpaceSim(void) {
 }
 
 EG::Game::Object *SpaceSim::CreateNewPlayerObject(glm::vec3 pos) {
-	EG::Game::Object *out = new EG::Game::Object();
-	EG::Graphics::RenderingMaterial *material = new EG::Graphics::RenderingMaterial();
-	material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "concrete_decal");
-	material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, "concrete_normal");
-	EG::Game::ObjectAttributeRenderingMesh *mesh_attr = new EG::Game::ObjectAttributeRenderingMesh("sphere", material);
-	out->AddAttribute(mesh_attr);
-	glm::mat4 trans = glm::translate(pos);
-	out->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(trans));
-	scene->GetObjectManager()->AddObject(out);
-	return out;
+    EG::Game::Object *out = new EG::Game::Object();
+    EG::Graphics::RenderingMaterial *material = new EG::Graphics::RenderingMaterial();
+    material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_DECAL, "concrete_decal");
+    material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_NORMAL, "concrete_normal");
+    glm::mat4 mesh_trans = glm::scale(0.2f, 0.2f, 0.2f);
+    EG::Game::ObjectAttributeRenderingMesh *mesh_attr = new EG::Game::ObjectAttributeRenderingMesh("sphere", material, mesh_trans);
+    out->AddAttribute(mesh_attr);
+    glm::mat4 trans = glm::translate(pos);
+    out->AddAttribute(new EG::Game::ObjectAttributeBasicTransformation(trans));
+    scene->GetObjectManager()->AddObject(out);
+    return out;
 }
 
 void SpaceSim::UpdatePlayerObject(EG::Game::Object *obj, glm::vec3 pos) {
-	EG::Game::ObjectAttributeBasicTransformation * trans = (static_cast<EG::Game::ObjectAttributeBasicTransformation *>((*(obj->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION)))[0]));
-	trans->SetTransformation(glm::translate(pos));
+    EG::Game::ObjectAttributeBasicTransformation * trans = (static_cast<EG::Game::ObjectAttributeBasicTransformation *>((*(obj->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION)))[0]));
+    trans->SetTransformation(glm::translate(pos));
 }
 
 void SpaceSim::ProcessNetworkPacket(float frame_time, EG::Network::Packet* packet) {
@@ -56,20 +57,20 @@ void SpaceSim::ProcessNetworkPacket(float frame_time, EG::Network::Packet* packe
         stream << "Received Broadcast Message From " << client_id << ":" << from_client_id << " of " << message << std::endl;
         console->Print(stream.str());
     } else if (action_type_id == NETWORK_ACTION_MOVEMENT_BROADCAST_RELAY) {
-		unsigned int server_client_id, player_client_id;
-		glm::vec3 pos;
-		*(sfpacket) >> server_client_id >> player_client_id >> pos.x >> pos.y >> pos.z;
-		std::stringstream msg;
-		msg << "Getting Player Movement from: " << player_client_id << " to " << pos.x << ' ' << pos.y << ' ' << pos.z;
-		console->Print(msg.str());
-		EG::Game::Object *player_object;
-		if (players.count(player_client_id) < 1) {
-			player_object = CreateNewPlayerObject(pos);
-			players[player_client_id] = player_object;
-		} else {
-			UpdatePlayerObject(players[player_client_id], pos);
-		}
-	}
+        unsigned int server_client_id, player_client_id;
+        glm::vec3 pos;
+        *(sfpacket) >> server_client_id >> player_client_id >> pos.x >> pos.y >> pos.z;
+        std::stringstream msg;
+        msg << "Getting Player Movement from: " << player_client_id << " to " << pos.x << ' ' << pos.y << ' ' << pos.z;
+        console->Print(msg.str());
+        EG::Game::Object *player_object;
+        if (players.count(player_client_id) < 1) {
+            player_object = CreateNewPlayerObject(pos);
+            players[player_client_id] = player_object;
+        } else {
+            UpdatePlayerObject(players[player_client_id], pos);
+        }
+    }
 }
 
 void SpaceSim::NetworkUpdates(float frame_time) {
@@ -89,7 +90,7 @@ void SpaceSim::NetworkUpdates(float frame_time) {
 
 void SpaceSim::InputUpdates(float frame_time) {
     float movement_speed = frame_time * 2.0f;
-	bool moved = false;
+    bool moved = false;
     if (input->IsKeyDown(EG::Input::v)) {
         movement_speed /= 100.0f;
     }
@@ -98,35 +99,35 @@ void SpaceSim::InputUpdates(float frame_time) {
     }
     if (input->IsKeyDown(EG::Input::q)){
         scene->GetCurrentCamera()->Rotate(glm::vec3(0.0f, 0.0f, -movement_speed));
-		moved = true;
+        moved = true;
     }
     if (input->IsKeyDown(EG::Input::e)){
         scene->GetCurrentCamera()->Rotate(glm::vec3(0.0f, 0.0f, movement_speed));
-		moved = true;
+        moved = true;
     }
     if (input->IsKeyDown(EG::Input::w)){
         scene->GetCurrentCamera()->Move(glm::vec3(0.0f, 0.0f, -movement_speed));
-		moved = true;
+        moved = true;
     }
     if (input->IsKeyDown(EG::Input::s)){
         scene->GetCurrentCamera()->Move(glm::vec3(0.0f, 0.0f, movement_speed));
-		moved = true;
+        moved = true;
     }
     if (input->IsKeyDown(EG::Input::a)){
         scene->GetCurrentCamera()->Move(glm::vec3(-movement_speed, 0.0f, 0.0f));
-		moved = true;
+        moved = true;
     }
     if (input->IsKeyDown(EG::Input::d)){
         scene->GetCurrentCamera()->Move(glm::vec3(movement_speed, 0.0f, 0.0f));
-		moved = true;
+        moved = true;
     }
     if (input->IsKeyDown(EG::Input::space)){
         scene->GetCurrentCamera()->Move(glm::vec3(0.0f, movement_speed, 0.0f));
-		moved = true;
+        moved = true;
     }
     if (input->IsKeyDown(EG::Input::c)){
         scene->GetCurrentCamera()->Move(glm::vec3(0.0f, -movement_speed, 0.0f));
-		moved = true;
+        moved = true;
     }
     if (input->IsKeyPressed(EG::Input::t)){
         if (rendering_method == RENDERER_DEFERRED){
@@ -158,12 +159,12 @@ void SpaceSim::InputUpdates(float frame_time) {
             (static_cast<EG::Graphics::RendererDeferred *>(renderer))->ToggleDOF();
         }
     }
-	if (moved) {
-		EG::Network::Packet *packet = new EG::Network::Packet();
-		glm::vec3 p = scene->GetCurrentCamera()->GetPosition();
-		*(packet->GetPacket()) << NETWORK_ACTION_MOVEMENT_BROADCAST << network->GetClientId() << p.x << p.y << p.z;
-		network->SendPacket(packet, true);
-	}
+    if (moved) {
+        EG::Network::Packet *packet = new EG::Network::Packet();
+        glm::vec3 p = scene->GetCurrentCamera()->GetPosition();
+        *(packet->GetPacket()) << NETWORK_ACTION_MOVEMENT_BROADCAST << network->GetClientId() << p.x << p.y << p.z;
+        network->SendPacket(packet, true);
+    }
     if (input->IsKeyPressed(EG::Input::k)) {
         EG::Network::Packet *packet = new EG::Network::Packet();
         std::string message = "What's up server!";
