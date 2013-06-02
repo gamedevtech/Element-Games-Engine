@@ -8,7 +8,7 @@ IF (WIN32)
 	add_definitions(-DSFML_STATIC -W0)
 	add_definitions(-W0)
 ELSE (WIN32)
-	add_definitions(-pg -Wall -ggdb) # For Profiling
+	add_definitions(-pg -Wall -ggdb -std=c++11) # For Profiling
 	set(CMAKE_SHARED_LINKER_FLAGS "-pg")
 ENDIF (WIN32)
 ###

@@ -121,6 +121,7 @@ int main(int argc, char **argv){
     while (game->GetWindow()->IsOpened()){
         game->Update();
         game->Render();
+        glFinish();
     }
     window->Close();
     std::cout << "Exiting..." << std::endl;
