@@ -5,12 +5,11 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <unordered_map>
 
 #include <sys/types.h>
-#include <sys/stat.h> 
+#include <sys/stat.h>
 
-#include "../Utility/StringDictionary.h"
-#include "../Utility/UnsignedIntDictionary.h"
 #include "Shader.h"
 #include "GraphicsSubsystem.h"
 
@@ -102,8 +101,8 @@ namespace EG{
                 }
                 void AddEngineUniformUsage(std::string shader_id, EG::Graphics::ShaderManager::EngineUniforms variable_name);
                 void AddObjectUniformUsage(std::string shader_id, std::string variable_name, EG::Graphics::ShaderManager::ShaderUniformTypes variable_type);
-                std::vector<EG::Graphics::ShaderManager::EngineUniforms> *GetEngineUniforms(std::string shader_id);
-                std::vector<std::pair<std::string, EG::Graphics::ShaderManager::ShaderUniformTypes> > *GetObjectUniforms(std::string shader_id);
+                std::vector<EG::Graphics::ShaderManager::EngineUniforms> GetEngineUniforms(std::string shader_id);
+                std::vector<std::pair<std::string, EG::Graphics::ShaderManager::ShaderUniformTypes> > GetObjectUniforms(std::string shader_id);
 
                 unsigned int GetVariableLocation(std::string variable_name, bool uniform_or_attribute = true);
                 void SetInt(const char *variable_name, int value0);
@@ -134,17 +133,17 @@ namespace EG{
             private:
                 bool shader_bound;
                 unsigned int current_program_object_id;
-                EG::Utility::StringDictionary<ShaderFiles *> shader_files;
-                EG::Utility::StringDictionary<unsigned int> fragment_output_counts;
-                EG::Utility::StringDictionary<unsigned int> program_objects;
-                EG::Utility::UnsignedIntDictionary<unsigned int> vertex_shader_objects;
-                EG::Utility::UnsignedIntDictionary<unsigned int> fragment_shader_objects;
-                EG::Utility::UnsignedIntDictionary<unsigned int> geometry_shader_objects;
-                EG::Utility::UnsignedIntDictionary<unsigned int> tessellation_control_shader_objects;
-                EG::Utility::UnsignedIntDictionary<unsigned int> tessellation_evaluation_shader_objects;
-                EG::Utility::UnsignedIntDictionary<EG::Utility::StringDictionary<int> *> variable_locations;
-                EG::Utility::UnsignedIntDictionary<std::vector<EG::Graphics::ShaderManager::EngineUniforms> *> engine_shader_uniforms;
-                EG::Utility::UnsignedIntDictionary<std::vector<std::pair<std::string, EG::Graphics::ShaderManager::ShaderUniformTypes> > *> object_shader_uniforms;
+                std::unordered_map<std::string, ShaderFiles *> shader_files;
+                std::unordered_map<std::string, unsigned int> fragment_output_counts;
+                std::unordered_map<std::string, unsigned int> program_objects;
+                std::unordered_map<unsigned int, unsigned int> vertex_shader_objects;
+                std::unordered_map<unsigned int, unsigned int> fragment_shader_objects;
+                std::unordered_map<unsigned int, unsigned int> geometry_shader_objects;
+                std::unordered_map<unsigned int, unsigned int> tessellation_control_shader_objects;
+                std::unordered_map<unsigned int, unsigned int> tessellation_evaluation_shader_objects;
+                std::unordered_map<unsigned int, std::unordered_map<std::string, int> > variable_locations;
+                std::unordered_map<unsigned int, std::vector<EG::Graphics::ShaderManager::EngineUniforms>> engine_shader_uniforms;
+                std::unordered_map<unsigned int, std::vector<std::pair<std::string, EG::Graphics::ShaderManager::ShaderUniformTypes> >> object_shader_uniforms;
 
                 void PrintProgramLog(unsigned int program_object_id);
                 void PrintShaderLog(unsigned int shader_object_id);
@@ -153,8 +152,8 @@ namespace EG{
                 void StoreShaderUniforms(std::string shader_id, std::vector<std::pair<std::string, std::string> > params);
                 std::vector<std::pair<std::string, std::string> > FindUniforms(char **source, int *sizes, int line_count);
                 void InterpretShaderVariables(EG::Graphics::ShaderSource *shader_source, std::string shader_id);
-                EG::Utility::StringDictionary<EngineUniforms> engine_uniform_string_translations;
-                EG::Utility::StringDictionary<ShaderUniformTypes> uniform_type_translations;
+                std::unordered_map<std::string, EngineUniforms> engine_uniform_string_translations;
+                std::unordered_map<std::string, ShaderUniformTypes> uniform_type_translations;
                 void CreateUniformStringTranslations(void);
         };
     }

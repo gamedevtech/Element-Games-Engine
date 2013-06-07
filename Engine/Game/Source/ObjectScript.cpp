@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "../ObjectScript.h"
 #include "../Object.h"
 

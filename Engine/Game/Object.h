@@ -5,13 +5,16 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <unordered_map>
 
-#include "../Utility/Dictionary.h"
 #include "ObjectAttribute.h"
 #include "ObjectScript.h"
 
 namespace EG{
     namespace Game{
+        typedef std::vector<EG::Game::ObjectAttribute *> ObjectAttributeArray;
+        typedef std::pair<EG::Game::ObjectAttribute::ObjectAttributeType, ObjectAttributeArray> ObjectAttributeArrayPair;
+        typedef std::unordered_map<EG::Game::ObjectAttribute::ObjectAttributeType, ObjectAttributeArray, std::hash<unsigned int>> ObjectAttributes;
         class Object{
             public:
                 Object(std::string _object_name = "");
@@ -23,9 +26,9 @@ namespace EG{
 
                 void AddAttribute(EG::Game::ObjectAttribute *attribute);
 
-                EG::Utility::Dictionary<EG::Game::ObjectAttribute::ObjectAttributeType, std::vector<EG::Game::ObjectAttribute *> *> *GetAttributes(void);
-                std::vector<EG::Game::ObjectAttribute *> *GetAttributesByType(EG::Game::ObjectAttribute::ObjectAttributeType type);
+                ObjectAttributes *GetAttributes(void);
                 bool HasAttributesOfType(EG::Game::ObjectAttribute::ObjectAttributeType type);
+                ObjectAttributeArray *GetAttributesByType(EG::Game::ObjectAttribute::ObjectAttributeType type);
 
                 void AddScript(ObjectScript *script);
                 std::vector<ObjectScript *> *GetScripts(void);
@@ -33,7 +36,7 @@ namespace EG{
                 std::string object_name;
                 unsigned int object_id;
 
-                EG::Utility::Dictionary<EG::Game::ObjectAttribute::ObjectAttributeType, std::vector<EG::Game::ObjectAttribute *> *> attributes;
+                ObjectAttributes attributes;
                 std::vector<ObjectScript *> scripts;
         };
     }

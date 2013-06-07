@@ -205,7 +205,7 @@ namespace EG{
                 std::cout << tmesh->GetTriangles()->at(0).tangents[0].x << ' ' << tmesh->GetTriangles()->at(0).tangents[0].y << ' ' << tmesh->GetTriangles()->at(0).tangents[0].z << ' ' << tmesh->GetTriangles()->at(0).tangents[0].w << std::endl;
                 std::cout << tmesh->GetTriangles()->at(0).bitangents[0].x << ' ' << tmesh->GetTriangles()->at(0).bitangents[0].y << ' ' << tmesh->GetTriangles()->at(0).bitangents[0].z << ' ' << tmesh->GetTriangles()->at(0).bitangents[0].w << std::endl;
                 scene->GetMeshManager()->Add(mesh_name, new EG::Graphics::Mesh(tmesh));
-                meshes.Set(index, mesh_name);
+                meshes[index] = mesh_name;
             }
         }
 
@@ -262,7 +262,7 @@ namespace EG{
                 }
                 material->SetTexture(EG::Graphics::RenderingMaterial::RENDERING_MATERIAL_TEXTURE_SPECULAR, texture_path);
             }
-            materials.Set(index, material);
+            materials[index] = material;
         }
 
         glm::mat4 AssimpInterface::ConvertMatrix(aiMatrix4x4 in) {

@@ -11,50 +11,48 @@ namespace EG{
         }
 
         bool ObjectManager::AddObject(EG::Game::Object *object){
-            if (object->GetObjectName() != "" && objects_by_name.Has(object->GetObjectName())){
+            if (object->GetObjectName() != "" && objects_by_name.count(object->GetObjectName())){
                 return false;
             }
 
             if (object->GetObjectName() != ""){
-                objects_by_name.Set(object->GetObjectName(), object);
+                objects_by_name[object->GetObjectName()] = object;
             }
 
             unsigned int object_id = 0;
             bool found = false;
             while (!found){
                 object_id += 1;
-                if (!(objects_by_id.Has(object_id))){
+                if (!(objects_by_id.count(object_id))){
                     found = true;
                 }
             }
 
             object->SetObjectId(object_id);
-            objects_by_id.Set(object_id, object);
+            objects_by_id[object_id] = object;
 
             return true;
         }
 
         unsigned int ObjectManager::GetObjectCount(void){
-            return objects_by_id.GetKeys()->size();
+            return objects_by_id.size();
         }
 
         EG::Game::Object *ObjectManager::GetObjectByName(std::string object_name){
-            EG::Game::Object *out = objects_by_name.Get(object_name);
-            if (out != NULL){
-                return out;
+            if (objects_by_name.count(object_name)) {
+                return objects_by_name[object_name];
             }
-            return NULL;
+            return nullptr;
         }
 
         EG::Game::Object *ObjectManager::GetObjectById(unsigned int object_id){
-            EG::Game::Object *out = objects_by_id.Get(object_id);
-            if (out != NULL){
-                return out;
+            if (objects_by_id.count(object_id)) {
+                return objects_by_id[object_id];
             }
-            return NULL;
+            return nullptr;
         }
 
-        EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *ObjectManager::GetObjects(void){
+        std::unordered_map<unsigned int, EG::Game::Object *> *ObjectManager::GetObjects(void){
             return &objects_by_id;
         }
     }

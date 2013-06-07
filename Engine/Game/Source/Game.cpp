@@ -6,7 +6,6 @@
 #include "../../Media/AssimpInterface.h"
 #include "../../Graphics/RendererDeferred.h"
 #include "../../Graphics/RendererMultipass.h"
-#include "../../Utility/UnsignedIntDictionary.h"
 
 namespace EG{
     namespace Game{
@@ -118,10 +117,9 @@ namespace EG{
 
             input->Update();
 
-            EG::Utility::UnsignedIntDictionaryKeysIterator object_iter = scene->GetObjectManager()->GetObjects()->GetKeysBegin();
-            while (object_iter != scene->GetObjectManager()->GetObjects()->GetKeysEnd()){
-                unsigned int object_id = (*object_iter);
-                EG::Game::Object *object = scene->GetObjectManager()->GetObjectById(object_id);
+            for (std::pair<unsigned int, EG::Game::Object *> object_pair : *(scene->GetObjectManager()->GetObjects())) {
+                unsigned int object_id = object_pair.first;
+                EG::Game::Object *object = object_pair.second;
 
                 if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM)){
                     std::vector<EG::Game::ObjectAttribute *> *attrs = object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_PARTICLE_SYSTEM);
@@ -224,8 +222,6 @@ namespace EG{
                     script->Run();
                     ++script_iter;
                 }
-
-                ++object_iter;
             }
         }
 

@@ -7,7 +7,7 @@ namespace EG{
             distance_from_camera = 0.0f;
         }
         Particle::~Particle(void){
-            attributes.Clear();
+            attributes.clear();
         }
         void Particle::SetAlive(bool _alive){
             alive = _alive;
@@ -22,11 +22,11 @@ namespace EG{
             return distance_from_camera;
         }
         void Particle::SetAttribute(std::string key, float value){
-            attributes.Set(key, value);
+            attributes[key] = value;
         }
         float Particle::GetAttribute(std::string key){
-            if (attributes.Has(key)){
-                return attributes.Get(key);
+            if (attributes.count(key)){
+                return attributes[key];
             }
             return 0.0f;
         }

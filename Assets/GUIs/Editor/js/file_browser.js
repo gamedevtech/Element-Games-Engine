@@ -78,7 +78,7 @@ define(function(require) {
         render_list: function() {
             this.$(".modal-body").empty();
 
-            var pic_regexp = new RegExp("(png|jpg|jpeg|bmp)$", "i");
+            var pic_regexp = new RegExp("(png|jpg|jpeg|bmp|tga)$", "i");
             var model_regexp = new RegExp("(dae|3ds|ego)$", "i");
 
             var well = $('<div class="well">');
@@ -89,15 +89,25 @@ define(function(require) {
             li.attr("path", "..");
             li.append('<span class="path">..</span>');
             ul.append(li);
+            this.model.collection.comparator = function(model) {
+                return model.get("path");
+            }
+            this.model.collection.sort();
+            var dirs = this.model.collection.where({type: "dir"});
+            _.each(dirs, function(dir) {
+                var li = $("<li class=\"file_link\">");
+                li.attr("type", "dir");
+                li.append('<i class="icon-folder-close icon-white"></i>&nbsp;');
+                li.attr("path", dir.get("path"));
+                li.append('<span class="path">' + dir.get("path") + '</span>');
+                ul.append(li);
+            }, this);
             for (i = 0; i < this.model.collection.length; i += 1) {
                 use = false;
                 file = this.model.collection.at(i);
                 li = $("<li class=\"file_link\">");
                 li.attr("type", file.get("type"));
-                if (file.get("type") === "dir") {
-                    li.append('<i class="icon-folder-close icon-white"></i>&nbsp;');
-                    use = true;
-                } else {
+                if (file.get("type") !== "dir") {
                     if (file.get("path").match(pic_regexp)) {
                         if (this.filter === "" || this.filter === "images") {
                             use = true;

@@ -33,17 +33,17 @@ namespace EG{
         }
 
         bool FontManager::AddFont(std::string font_name, std::string font_path){
-            if (!(fonts.Has(font_name))){
+            if (!(fonts.count(font_name))){
                 Font *new_font = new Font(font_path);
-                fonts.Set(font_name, new_font);
+                fonts[font_name] = new_font;
                 return true;
             }
             return false;
         }
 
         bool FontManager::Draw(std::string text, unsigned int size, std::string font_name){
-            if (fonts.Has(font_name)){
-                Font *font = fonts.Get(font_name);
+            if (fonts.count(font_name)){
+                Font *font = fonts[font_name];
                 font->Draw(text, size);
                 return true;
             }

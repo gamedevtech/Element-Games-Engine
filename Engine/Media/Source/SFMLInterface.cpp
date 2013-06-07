@@ -56,14 +56,14 @@ namespace EG{
                     resolution_height = sfml_event.size.height;
                     window_resized = true;
                 }else if (sfml_event.type == sf::Event::KeyPressed){
-                    EG::Input::Key eg_key = key_translations.Get(sfml_event.key.code);
+                    EG::Input::Key eg_key = key_translations[sfml_event.key.code];
                     input->KeyPressed(eg_key);
                 }else if (sfml_event.type == sf::Event::KeyReleased){
-                    input->KeyReleased(key_translations.Get(sfml_event.key.code));
+                    input->KeyReleased(key_translations[sfml_event.key.code]);
                 }else if (sfml_event.type == sf::Event::MouseButtonPressed){
-                    input->MouseButtonPressed(mouse_translations.Get(sfml_event.mouseButton.button));
+                    input->MouseButtonPressed(mouse_translations[sfml_event.mouseButton.button]);
                 }else if (sfml_event.type == sf::Event::MouseButtonReleased){
-                    input->MouseButtonReleased(mouse_translations.Get(sfml_event.mouseButton.button));
+                    input->MouseButtonReleased(mouse_translations[sfml_event.mouseButton.button]);
                 }else if (sfml_event.type == sf::Event::MouseMoved){
                     input->MouseMoved(glm::vec2(float(sfml_event.mouseMove.x), float(sfml_event.mouseMove.y)));
                 }else if (sfml_event.type == sf::Event::MouseWheelMoved){
@@ -98,55 +98,55 @@ namespace EG{
 
         void SFMLInterface::SetInput(EG::Input::Input *_input){
             input = _input;
-            key_translations.Set(sf::Keyboard::A, EG::Input::a);
-            key_translations.Set(sf::Keyboard::B, EG::Input::b);
-            key_translations.Set(sf::Keyboard::C, EG::Input::c);
-            key_translations.Set(sf::Keyboard::D, EG::Input::d);
-            key_translations.Set(sf::Keyboard::E, EG::Input::e);
-            key_translations.Set(sf::Keyboard::F, EG::Input::f);
-            key_translations.Set(sf::Keyboard::G, EG::Input::g);
-            key_translations.Set(sf::Keyboard::H, EG::Input::h);
-            key_translations.Set(sf::Keyboard::I, EG::Input::i);
-            key_translations.Set(sf::Keyboard::J, EG::Input::j);
-            key_translations.Set(sf::Keyboard::K, EG::Input::k);
-            key_translations.Set(sf::Keyboard::L, EG::Input::l);
-            key_translations.Set(sf::Keyboard::M, EG::Input::m);
-            key_translations.Set(sf::Keyboard::N, EG::Input::n);
-            key_translations.Set(sf::Keyboard::O, EG::Input::o);
-            key_translations.Set(sf::Keyboard::P, EG::Input::p);
-            key_translations.Set(sf::Keyboard::Q, EG::Input::q);
-            key_translations.Set(sf::Keyboard::R, EG::Input::r);
-            key_translations.Set(sf::Keyboard::S, EG::Input::s);
-            key_translations.Set(sf::Keyboard::T, EG::Input::t);
-            key_translations.Set(sf::Keyboard::U, EG::Input::u);
-            key_translations.Set(sf::Keyboard::V, EG::Input::v);
-            key_translations.Set(sf::Keyboard::W, EG::Input::w);
-            key_translations.Set(sf::Keyboard::X, EG::Input::x);
-            key_translations.Set(sf::Keyboard::Y, EG::Input::y);
-            key_translations.Set(sf::Keyboard::Z, EG::Input::z);
-            key_translations.Set(sf::Keyboard::Num1, EG::Input::one);
-            key_translations.Set(sf::Keyboard::Num2, EG::Input::two);
-            key_translations.Set(sf::Keyboard::Num3, EG::Input::three);
-            key_translations.Set(sf::Keyboard::Num4, EG::Input::four);
-            key_translations.Set(sf::Keyboard::Num5, EG::Input::five);
-            key_translations.Set(sf::Keyboard::Num6, EG::Input::six);
-            key_translations.Set(sf::Keyboard::Num7, EG::Input::seven);
-            key_translations.Set(sf::Keyboard::Num8, EG::Input::eight);
-            key_translations.Set(sf::Keyboard::Num9, EG::Input::nine);
-            key_translations.Set(sf::Keyboard::Num0, EG::Input::zero);
-            key_translations.Set(sf::Keyboard::Space, EG::Input::space);
-            key_translations.Set(sf::Keyboard::Escape, EG::Input::escape);
-            key_translations.Set(sf::Keyboard::Up, EG::Input::up);
-            key_translations.Set(sf::Keyboard::Down, EG::Input::down);
-            key_translations.Set(sf::Keyboard::Left, EG::Input::left);
-            key_translations.Set(sf::Keyboard::Right, EG::Input::right);
-            key_translations.Set(sf::Keyboard::BackSpace, EG::Input::back_space);
-            key_translations.Set(sf::Keyboard::Delete, EG::Input::del);
-            key_translations.Set(sf::Keyboard::Tab, EG::Input::tab);
-            key_translations.Set(sf::Keyboard::Return, EG::Input::enter);
-            mouse_translations.Set(sf::Mouse::Left, EG::Input::mouse_left);
-            mouse_translations.Set(sf::Mouse::Right, EG::Input::mouse_right);
-            mouse_translations.Set(sf::Mouse::Middle, EG::Input::mouse_middle);
+            key_translations[sf::Keyboard::A] = EG::Input::a;
+            key_translations[sf::Keyboard::B] = EG::Input::b;
+            key_translations[sf::Keyboard::C] = EG::Input::c;
+            key_translations[sf::Keyboard::D] = EG::Input::d;
+            key_translations[sf::Keyboard::E] = EG::Input::e;
+            key_translations[sf::Keyboard::F] = EG::Input::f;
+            key_translations[sf::Keyboard::G] = EG::Input::g;
+            key_translations[sf::Keyboard::H] = EG::Input::h;
+            key_translations[sf::Keyboard::I] = EG::Input::i;
+            key_translations[sf::Keyboard::J] = EG::Input::j;
+            key_translations[sf::Keyboard::K] = EG::Input::k;
+            key_translations[sf::Keyboard::L] = EG::Input::l;
+            key_translations[sf::Keyboard::M] = EG::Input::m;
+            key_translations[sf::Keyboard::N] = EG::Input::n;
+            key_translations[sf::Keyboard::O] = EG::Input::o;
+            key_translations[sf::Keyboard::P] = EG::Input::p;
+            key_translations[sf::Keyboard::Q] = EG::Input::q;
+            key_translations[sf::Keyboard::R] = EG::Input::r;
+            key_translations[sf::Keyboard::S] = EG::Input::s;
+            key_translations[sf::Keyboard::T] = EG::Input::t;
+            key_translations[sf::Keyboard::U] = EG::Input::u;
+            key_translations[sf::Keyboard::V] = EG::Input::v;
+            key_translations[sf::Keyboard::W] = EG::Input::w;
+            key_translations[sf::Keyboard::X] = EG::Input::x;
+            key_translations[sf::Keyboard::Y] = EG::Input::y;
+            key_translations[sf::Keyboard::Z] = EG::Input::z;
+            key_translations[sf::Keyboard::Num1] = EG::Input::one;
+            key_translations[sf::Keyboard::Num2] = EG::Input::two;
+            key_translations[sf::Keyboard::Num3] = EG::Input::three;
+            key_translations[sf::Keyboard::Num4] = EG::Input::four;
+            key_translations[sf::Keyboard::Num5] = EG::Input::five;
+            key_translations[sf::Keyboard::Num6] = EG::Input::six;
+            key_translations[sf::Keyboard::Num7] = EG::Input::seven;
+            key_translations[sf::Keyboard::Num8] = EG::Input::eight;
+            key_translations[sf::Keyboard::Num9] = EG::Input::nine;
+            key_translations[sf::Keyboard::Num0] = EG::Input::zero;
+            key_translations[sf::Keyboard::Space] = EG::Input::space;
+            key_translations[sf::Keyboard::Escape] = EG::Input::escape;
+            key_translations[sf::Keyboard::Up] = EG::Input::up;
+            key_translations[sf::Keyboard::Down] = EG::Input::down;
+            key_translations[sf::Keyboard::Left] = EG::Input::left;
+            key_translations[sf::Keyboard::Right] = EG::Input::right;
+            key_translations[sf::Keyboard::BackSpace] = EG::Input::back_space;
+            key_translations[sf::Keyboard::Delete] = EG::Input::del;
+            key_translations[sf::Keyboard::Tab] = EG::Input::tab;
+            key_translations[sf::Keyboard::Return] = EG::Input::enter;
+            mouse_translations[sf::Mouse::Left] = EG::Input::mouse_left;
+            mouse_translations[sf::Mouse::Right] = EG::Input::mouse_right;
+            mouse_translations[sf::Mouse::Middle] = EG::Input::mouse_middle;
         }
 
         unsigned char *SFMLInterface::LoadImage(std::string file_path, bool *success, unsigned int *width, unsigned int *height){

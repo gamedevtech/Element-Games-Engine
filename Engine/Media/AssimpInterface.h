@@ -1,11 +1,15 @@
 #ifndef EG_MEDIA_ASSIMP_INTERFACE_H
 #define EG_MEDIA_ASSIMP_INTERFACE_H
 
-#include <assimp/assimp.hpp>
-#include <assimp/aiScene.h>
-#include <assimp/aiPostProcess.h>
+#include <unordered_map>
 
-#include "../Utility/Dictionary.h"
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+// #include <assimp/assimp.hpp>
+// #include <assimp/aiScene.h>
+// #include <assimp/aiPostProcess.h>
+
 #include "../Game/Scene.h"
 #include "../Graphics/RenderingMaterial.h"
 #include "../Graphics/Mesh.h"
@@ -24,10 +28,10 @@ namespace EG{
                     return count;
                 }
                 std::string GetMesh(unsigned int index){
-                    return meshes.Get(index);
+                    return meshes[index];
                 }
                 EG::Graphics::RenderingMaterial *GetMaterial(unsigned int index){
-                    return materials.Get(index);
+                    return materials[index];
                 }
                 EG::Dynamics::Animations *GetAnimations(void){
                     return animations;
@@ -60,8 +64,8 @@ namespace EG{
                                                        unsigned int index);
 
                 unsigned int count;
-                EG::Utility::Dictionary<unsigned int, std::string> meshes;
-                EG::Utility::Dictionary<unsigned int, EG::Graphics::RenderingMaterial *> materials;
+                std::unordered_map<unsigned int, std::string> meshes;
+                std::unordered_map<unsigned int, EG::Graphics::RenderingMaterial *> materials;
                 std::map<unsigned int, std::map<unsigned int, glm::mat4> > bone_transformations;
                 EG::Dynamics::Animations *animations;
                 bool has_animations;

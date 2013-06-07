@@ -3,30 +3,29 @@
 #include <iostream>
 
 namespace EG{
-	namespace Graphics{
-		MeshManager::MeshManager(void){
-			//
-		}
+    namespace Graphics{
+        MeshManager::MeshManager(void){
+            //
+        }
 
-		MeshManager::~MeshManager(void){
-			meshes.Clear();
-		}
+        MeshManager::~MeshManager(void){
+            // NOTE: Delete meshes here?
+            meshes.clear();
+        }
 
-		bool MeshManager::Add(std::string mesh_id, EG::Graphics::Mesh *mesh){
-			EG::Graphics::Mesh *temp = meshes.Get(mesh_id);
-			if (temp == NULL){
-				meshes.Set(mesh_id, mesh);
-				return true;
-			}
-			return false;
-		}
+        bool MeshManager::Add(std::string mesh_id, EG::Graphics::Mesh *mesh){
+            if (meshes.count(mesh_id) < 1) {
+                meshes[mesh_id] = mesh;
+                return true;
+            }
+            return false;
+        }
 
-		EG::Graphics::Mesh *MeshManager::Get(std::string mesh_id){
-			EG::Graphics::Mesh *temp = meshes.Get(mesh_id);
-			if (temp != NULL){
-				return meshes.Get(mesh_id);
-			}
-			return NULL;
-		}
-	}
+        EG::Graphics::Mesh *MeshManager::Get(std::string mesh_id){
+            if (meshes.count(mesh_id) > 0) {
+                return meshes[mesh_id];
+            }
+            return nullptr;
+        }
+    }
 }

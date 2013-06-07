@@ -204,14 +204,10 @@ namespace EG{
         }
 
         void Renderer::BindShaderBeginUniforms(std::string shader_id, EG::Game::Scene *scene, EG::Graphics::Light *light){
-            std::vector<EG::Graphics::ShaderManager::EngineUniforms> *uniforms = shaders->GetEngineUniforms(shader_id);
-            if (uniforms == NULL){
-                return;
-            }
-
+            std::vector<EG::Graphics::ShaderManager::EngineUniforms> uniforms = shaders->GetEngineUniforms(shader_id);
             EG::Graphics::Camera *camera = scene->GetCurrentCamera();
-            std::vector<EG::Graphics::ShaderManager::EngineUniforms>::iterator uniform_iter = uniforms->begin();
-            while (uniform_iter != uniforms->end()){
+            std::vector<EG::Graphics::ShaderManager::EngineUniforms>::iterator uniform_iter = uniforms.begin();
+            while (uniform_iter != uniforms.end()){
                 EG::Graphics::ShaderManager::EngineUniforms variable = (*uniform_iter);
                 if (variable == EG::Graphics::ShaderManager::ENGINE_CAMERA_MATRIX) {
                     shaders->SetMatrix4("camera_matrix", camera->GetViewMatrix());
@@ -261,13 +257,9 @@ namespace EG{
         // phase = ["obj", "lit", "2d"]
         // associated data = lights or frame buffers or whatever is needed
         void Renderer::BindEngineShaderUniforms(EG::Game::Object *object, std::string shader_id, std::string phase, glm::mat4 transform, EG::Graphics::RenderingMaterial *material, EG::Game::Scene *scene){
-            std::vector<EG::Graphics::ShaderManager::EngineUniforms> *uniforms = shaders->GetEngineUniforms(shader_id);
-            if (uniforms == NULL){
-                return;
-            }
-
-            std::vector<EG::Graphics::ShaderManager::EngineUniforms>::iterator uniform_iter = uniforms->begin();
-            while (uniform_iter != uniforms->end()){
+            std::vector<EG::Graphics::ShaderManager::EngineUniforms> uniforms = shaders->GetEngineUniforms(shader_id);
+            std::vector<EG::Graphics::ShaderManager::EngineUniforms>::iterator uniform_iter = uniforms.begin();
+            while (uniform_iter != uniforms.end()){
                 EG::Graphics::ShaderManager::EngineUniforms variable = (*uniform_iter);
                 if (variable == EG::Graphics::ShaderManager::ENGINE_MATERIAL_COLOR) {
                     shaders->SetFloat4("material_color", material->GetColor());
@@ -361,14 +353,11 @@ namespace EG{
         */
 
         void Renderer::BindCustomShaderUniforms(EG::Game::Object *object, std::string shader_id){
-            std::vector<std::pair<std::string, EG::Graphics::ShaderManager::ShaderUniformTypes> > *uniforms = shaders->GetObjectUniforms(shader_id);
-            if (uniforms == NULL) {
-                return;
-            }
-            std::vector<std::pair<std::string, EG::Graphics::ShaderManager::ShaderUniformTypes> >::iterator uniform_iter = uniforms->begin();
+            std::vector<std::pair<std::string, EG::Graphics::ShaderManager::ShaderUniformTypes> > uniforms = shaders->GetObjectUniforms(shader_id);
+            std::vector<std::pair<std::string, EG::Graphics::ShaderManager::ShaderUniformTypes> >::iterator uniform_iter = uniforms.begin();
             std::vector<EG::Game::ObjectAttribute *> *attrs;
             std::vector<EG::Game::ObjectAttribute *>::iterator attrs_iter;
-            while (uniform_iter != uniforms->end()){
+            while (uniform_iter != uniforms.end()){
                 std::pair<std::string, EG::Graphics::ShaderManager::ShaderUniformTypes> variable = (*uniform_iter);
                 if (variable.second == EG::Graphics::ShaderManager::UNIFORM_INT) {
                     if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_INTEGER)) {
@@ -446,18 +435,13 @@ namespace EG{
 
             // Render Objects
             // TODO: Sort by shader, by depth?
-            EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
-            EG::Utility::UnsignedIntDictionaryKeysIterator object_iterator = objects->GetKeysBegin();
-            while (object_iterator != objects->GetKeysEnd()){
-                EG::Game::Object *object = objects->Get(*object_iterator);
+            for (std::pair<unsigned int, EG::Game::Object *> object_pair : *(scene->GetObjectManager()->GetObjects())) {
+                EG::Game::Object *object = object_pair.second;
                 RenderLitObject(scene, &blank_light, object);
-                ++object_iterator;
             }
 
-            EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
-            EG::Utility::UnsignedIntDictionaryKeysIterator light_object_iterator = objects->GetKeysBegin();
-            while (light_object_iterator != light_objects->GetKeysEnd()){
-                EG::Game::Object *light_object = light_objects->Get(*light_object_iterator);
+            for (std::pair<unsigned int, EG::Game::Object *> light_object_pair : *(scene->GetObjectManager()->GetObjects())) {
+                EG::Game::Object *light_object = light_object_pair.second;
                 if (light_object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT)){
                     std::vector<EG::Game::ObjectAttribute *> *light_attributes = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
                     std::vector<EG::Game::ObjectAttribute *>::iterator light_attribute_iterator = light_attributes->begin();
@@ -465,17 +449,14 @@ namespace EG{
                         EG::Game::ObjectAttributeEmissionLight *light_attribute = static_cast<EG::Game::ObjectAttributeEmissionLight *>(*light_attribute_iterator);
                         EG::Graphics::Light *light = light_attribute->GetLight();
 
-                        object_iterator = objects->GetKeysBegin();
-                        while (object_iterator != objects->GetKeysEnd()){
-                            EG::Game::Object *object = objects->Get(*object_iterator);
+                        for (std::pair<unsigned int, EG::Game::Object *> object_pair : *(scene->GetObjectManager()->GetObjects())) {
+                            EG::Game::Object *object = object_pair.second;
                             BindShaderBeginUniforms(current_shader_id, scene, light);
                             RenderLitObject(scene, light, object);
-                            ++object_iterator;
                         }
                         ++light_attribute_iterator;
                     }
                 }
-                ++light_object_iterator;
             }
             shaders->Unbind();
 
@@ -483,12 +464,10 @@ namespace EG{
             current_shader_id = "textured";
             shaders->Bind(current_shader_id);
             BindShaderBeginUniforms(current_shader_id, scene, NULL);
-            object_iterator = objects->GetKeysBegin();
 
-            while (object_iterator != objects->GetKeysEnd()){
-                EG::Game::Object *object = objects->Get(*object_iterator);
+            for (std::pair<unsigned int, EG::Game::Object *> object_pair : *(scene->GetObjectManager()->GetObjects())) {
+                EG::Game::Object *object = object_pair.second;
                 RenderObject(scene, object);
-                ++object_iterator;
             }
 
             shaders->Unbind();

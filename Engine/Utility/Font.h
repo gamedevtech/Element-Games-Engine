@@ -7,8 +7,8 @@
 #include "../Graphics/Texture.h"
 #include "../Graphics/Mesh.h"
 #include "../Math/Math.h"
-#include "../Utility/Dictionary.h"
 #include <string>
+#include <unordered_map>
 
 #include <FTGL/ftgl.h>
 #include <FTGL/FTGLTextureFont.h>
@@ -39,7 +39,7 @@ namespace EG{
             private:
                 static FontManager *instance;
                 EG::Graphics::Mesh *rect;
-                EG::Utility::Dictionary<std::string, EG::Utility::Font *> fonts;
+                std::unordered_map<std::string, EG::Utility::Font *> fonts;
         };
     }
 }

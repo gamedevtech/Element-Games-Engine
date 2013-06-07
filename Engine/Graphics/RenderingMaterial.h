@@ -2,8 +2,7 @@
 #define EG_GRAPHICS_RENDERING_MATERIAL_H
 
 #include <map>
-#include "../Utility/Dictionary.h"
-//#include "../Utility/StringDictionary.h"
+#include <unordered_map>
 #include <string>
 #include "../Math/Math.h"
 
@@ -95,10 +94,10 @@ namespace EG{
                 EG::Graphics::RenderingMaterial::CullWinding cull_winding;
                 glm::vec4 color;
                 EG::Graphics::RenderingMaterial::BlendingMode blending_mode;
-                EG::Utility::Dictionary<EG::Graphics::RenderingMaterial::RenderingMaterialTextureType, std::string> textures;
-                EG::Utility::Dictionary<EG::Graphics::RenderingMaterial::RenderingMaterialTextureType, std::string> cube_maps;
-                // TODO: Put shader info in here too so people can override the default shaders for the various techniques
-                EG::Utility::Dictionary<EG::Graphics::RenderingMaterial::RendererType, EG::Utility::Dictionary<EG::Graphics::RenderingMaterial::RenderingPhaseShaderType, std::string> *> shaders;
+                std::unordered_map<EG::Graphics::RenderingMaterial::RenderingMaterialTextureType, std::string, std::hash<unsigned int> > textures;
+                std::unordered_map<EG::Graphics::RenderingMaterial::RenderingMaterialTextureType, std::string, std::hash<unsigned int> > cube_maps;
+                // TODO: Put shader info in here too so people can override the default shaders for the various techniquess
+                std::unordered_map<EG::Graphics::RenderingMaterial::RendererType, std::unordered_map<EG::Graphics::RenderingMaterial::RenderingPhaseShaderType, std::string, std::hash<unsigned int> >, std::hash<unsigned int> > shaders;
         };
     }
 }

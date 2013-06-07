@@ -17,7 +17,7 @@ IF (WIN32)
     #include_directories(C:\Users\Douglas\Projects\MSVC2010x86\include\ C:\Users\Douglas\Projects\MSVC2010x86\include\bullet\ ${CMAKE_CURRENT_BINARY_DIR})
 	#link_directories(C:\Users\Douglas\Projects\MSVC2010x86\lib\release\)
 ELSE (WIN32)
-	include_directories(/usr/local/include/ ${CMAKE_CURRENT_BINARY_DIR})
+	include_directories(/usr/local/include/ ${CMAKE_CURRENT_BINARY_DIR} /usr/include/lua5.2/)
 	#link_directories(Dependencies/Linux/lib)
 ENDIF (WIN32)
 

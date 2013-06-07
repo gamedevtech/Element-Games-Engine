@@ -19,11 +19,7 @@ namespace EG{
         }
 
         RenderingMaterial::~RenderingMaterial(void){
-            std::vector<EG::Graphics::RenderingMaterial::RendererType>::iterator shiter = shaders.GetKeysBegin();
-            while (shiter != shaders.GetKeysEnd()){
-                delete shaders.Get(*shiter);
-                ++shiter;
-            }
+            //
         }
 
         void RenderingMaterial::SetLit(bool _lit){
@@ -59,11 +55,11 @@ namespace EG{
         }
 
         void RenderingMaterial::SetTexture(EG::Graphics::RenderingMaterial::RenderingMaterialTextureType type, std::string texture_id){
-            textures.Set(type, texture_id);
+            textures[type] = texture_id;
         }
 
         void RenderingMaterial::SetCubeMap(EG::Graphics::RenderingMaterial::RenderingMaterialTextureType type, std::string texture_id){
-            cube_maps.Set(type, texture_id);
+            cube_maps[type] = texture_id;
         }
 
         bool RenderingMaterial::GetLit(void){
@@ -123,45 +119,42 @@ namespace EG{
         }
 
         std::string RenderingMaterial::GetTexture(EG::Graphics::RenderingMaterial::RenderingMaterialTextureType type){
-            if (textures.Has(type)){
-                return textures.Get(type);
+            if (textures.count(type)){
+                return textures[type];
             }
             return "";
         }
 
         std::string RenderingMaterial::GetCubeMap(EG::Graphics::RenderingMaterial::RenderingMaterialTextureType type){
-            if (cube_maps.Has(type)){
-                return cube_maps.Get(type);
+            if (cube_maps.count(type)){
+                return cube_maps[type];
             }
             return "";
         }
 
         bool RenderingMaterial::HasTexture(EG::Graphics::RenderingMaterial::RenderingMaterialTextureType type){
-            return textures.Has(type);
+            return textures.count(type);
         }
 
         bool RenderingMaterial::HasCubeMap(EG::Graphics::RenderingMaterial::RenderingMaterialTextureType type){
-            return cube_maps.Has(type);
+            return cube_maps.count(type);
         }
 
         void RenderingMaterial::SetShaderOverride(EG::Graphics::RenderingMaterial::RendererType renderer_type, EG::Graphics::RenderingMaterial::RenderingPhaseShaderType rendering_phase, std::string shader_id){
-            if (!(shaders.Has(renderer_type))){
-                shaders.Set(renderer_type, new EG::Utility::Dictionary<EG::Graphics::RenderingMaterial::RenderingPhaseShaderType, std::string>());
-            }
-            shaders.Get(renderer_type)->Set(rendering_phase, shader_id);
+            shaders[renderer_type][rendering_phase] = shader_id;
         }
 
         bool RenderingMaterial::HasShader(EG::Graphics::RenderingMaterial::RendererType renderer_type, EG::Graphics::RenderingMaterial::RenderingPhaseShaderType rendering_phase){
-            if (shaders.Has(renderer_type)){
-                return shaders.Get(renderer_type)->Has(rendering_phase);
+            if (shaders.count(renderer_type)){
+                return shaders[renderer_type].count(rendering_phase) > 0;
             }
             return false;
         }
 
         std::string RenderingMaterial::GetShader(EG::Graphics::RenderingMaterial::RendererType renderer_type, EG::Graphics::RenderingMaterial::RenderingPhaseShaderType rendering_phase){
-            if (shaders.Has(renderer_type)){
-                if (shaders.Get(renderer_type)->Has(rendering_phase)){
-                    return shaders.Get(renderer_type)->Get(rendering_phase);
+            if (shaders.count(renderer_type)){
+                if (shaders[renderer_type].count(rendering_phase)){
+                    return shaders[renderer_type][rendering_phase];
                 }
             }
             return "";

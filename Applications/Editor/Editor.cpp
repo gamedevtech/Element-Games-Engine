@@ -122,14 +122,12 @@ std::string FileBrowserListener::Call(std::map< std::string, std::string > args)
 }
 
 std::string ReadObjectsListener::Call(std::map<std::string, std::string> args) {
-    EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
-    EG::Utility::UnsignedIntDictionaryKeysIterator iter = objects->GetKeysBegin();
 
     std::stringstream out;
     out << "[";
     bool first = true;
-    while (iter != objects->GetKeysEnd()) {
-        EG::Game::Object *object = scene->GetObjectManager()->GetObjects()->Get((*iter));
+    for (std::pair<unsigned int, EG::Game::Object *> object_pair : *(scene->GetObjectManager()->GetObjects())) {
+        EG::Game::Object *object = object_pair.second;
         if (first) {
             first = false;
         } else {
@@ -203,7 +201,6 @@ std::string ReadObjectsListener::Call(std::map<std::string, std::string> args) {
         }
 
         out << "}";
-        ++iter;
     }
     out << "]";
     //std::cout << out.str() << std::endl;
@@ -478,16 +475,14 @@ void Editor::PickObject(glm::vec2 mouse_position) {
                                                     c->GetPosition(), c->GetViewMatrix(), c->GetProjectionMatrix());
 
     EG::Graphics::MeshManager *meshes = scene->GetMeshManager();
-    EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
-    EG::Utility::UnsignedIntDictionaryKeysIterator iter = objects->GetKeysBegin();
     bool object_picked = false;
     glm::mat4 multiplied_trans;
     glm::vec3 *box;
-    while (iter != objects->GetKeysEnd()) {
-        unsigned int object_id = (*iter);
-        EG::Game::Object *object = objects->Get(object_id);
+    EG::Game::Object *object;
+    for (std::pair<unsigned int, EG::Game::Object *> object_pair : *(scene->GetObjectManager()->GetObjects())) {
+        unsigned int object_id = object_pair.first;
+        object = object_pair.second;
         if (object->GetObjectId() == selection_box->GetObjectId()) {
-            ++iter;
             continue;
         }
         glm::mat4 trans = glm::mat4(1.0f);
@@ -514,10 +509,8 @@ void Editor::PickObject(glm::vec2 mouse_position) {
         if (object_picked) {
             break;
         }
-        ++iter;
     }
     if (object_picked) {
-        EG::Game::Object *object = objects->Get((*iter));
         std::stringstream out;
         out << "Object Picked: " << object->GetObjectName();
         console->Print(out.str());

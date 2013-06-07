@@ -1,8 +1,8 @@
 #ifndef EG_GRAPHICS_PARTICLE_H
 #define EG_GRAPHICS_PARTICLE_H
 
+#include <unordered_map>
 #include <list>
-#include "../Utility/StringDictionary.h"
 #include "../Math/Math.h"
 #include "../Game/Object.h"
 
@@ -15,14 +15,14 @@ namespace EG{
 
                 void SetAlive(bool _alive);
                 bool Alive(void);
-		void SetDistanceFromCamera(float _distance_from_camera);
-		float GetDistanceFromCamera(void);
+                void SetDistanceFromCamera(float _distance_from_camera);
+                float GetDistanceFromCamera(void);
                 void SetAttribute(std::string key, float value);
                 float GetAttribute(std::string key);
             protected:
                 bool alive;
-		float distance_from_camera;
-                EG::Utility::StringDictionary<float> attributes;
+                float distance_from_camera;
+                std::unordered_map<std::string, float> attributes;
         };
 
         class ParticleController{

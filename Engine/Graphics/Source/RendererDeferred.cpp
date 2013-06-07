@@ -115,10 +115,8 @@ namespace EG{
 
         void RendererDeferred::StoreLights(EG::Game::Scene *scene) {
             lights.clear();
-            EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *light_objects = scene->GetObjectManager()->GetObjects();
-            EG::Utility::UnsignedIntDictionaryKeysIterator light_object_iterator = light_objects->GetKeysBegin();
-            while (light_object_iterator != light_objects->GetKeysEnd()){
-                EG::Game::Object *light_object = light_objects->Get(*light_object_iterator);
+            for (std::pair<unsigned int, EG::Game::Object *> object_pair : *(scene->GetObjectManager()->GetObjects())) {
+                EG::Game::Object *light_object = object_pair.second;
                 if (light_object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT)){
                     std::vector<EG::Game::ObjectAttribute *> *light_attributes = light_object->GetAttributesByType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT);
                     std::vector<EG::Game::ObjectAttribute *>::iterator light_attribute_iterator = light_attributes->begin();
@@ -152,8 +150,6 @@ namespace EG{
                         ++attr_iter;
                     }
                 }
-
-                ++light_object_iterator;
             }
         }
 
@@ -361,12 +357,9 @@ namespace EG{
             BindShaderBeginUniforms(current_shader_id, scene, NULL);
 
             // Render Objects
-            EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
-            EG::Utility::UnsignedIntDictionaryKeysIterator object_iterator = objects->GetKeysBegin();
-            while (object_iterator != objects->GetKeysEnd()){
-                EG::Game::Object *object = objects->Get(*object_iterator);
+            for (std::pair<unsigned int, EG::Game::Object *> object_pair : *(scene->GetObjectManager()->GetObjects())) {
+                EG::Game::Object *object = object_pair.second;
                 RenderObject(scene, object);
-                ++object_iterator;
             }
 
             // Render Translucent yet Lit Objects Forwardly
@@ -376,13 +369,12 @@ namespace EG{
                 EG::Graphics::Light *light = (*lights_iter);
                 std::map<unsigned int, EG::Game::Object *>::iterator trans_obj_iter = translucent_lit_objects.begin();
                 while (trans_obj_iter != translucent_lit_objects.end()) {
-                    EG::Game::Object *object = objects->Get((*trans_obj_iter).first);
+                    EG::Game::Object *object = scene->GetObjectManager()->GetObjectById((*trans_obj_iter).first);
                     RenderObjectForward(scene, light, object);
                     ++trans_obj_iter;
                 }
                 ++lights_iter;
             }
-            //translucent_lit_objects.Clear();
             translucent_lit_objects.clear();
 
             graphics->EndMultiBufferOffscreenRender();
@@ -852,10 +844,8 @@ namespace EG{
                         //shaders->SetMatrix4("view_matrix", camera->GetViewMatrix());
 
                         // TODO: Disable Color Writes, ETC... After it's working that is!
-                        EG::Utility::UnsignedIntDictionary<EG::Game::Object *> *objects = scene->GetObjectManager()->GetObjects();
-                        EG::Utility::UnsignedIntDictionaryKeysIterator object_iterator = objects->GetKeysBegin();
-                        while (object_iterator != objects->GetKeysEnd()){
-                            EG::Game::Object *object = objects->Get(*object_iterator);
+                        for (std::pair<unsigned int, EG::Game::Object *> object_pair : *(scene->GetObjectManager()->GetObjects())) {
+                            EG::Game::Object *object = object_pair.second;
 
                             // HACK: For now, don't render objects with particle systems
                             if (object->HasAttributesOfType(EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH)){
@@ -914,8 +904,6 @@ namespace EG{
                                     ++attr_iter;
                                 }
                             }
-
-                            ++object_iterator;
                         }
 
                         shaders->Unbind();

@@ -11,24 +11,23 @@ namespace EG{
         }
 
         Object::~Object(void){
-            std::vector<EG::Game::ObjectAttribute::ObjectAttributeType>::iterator type_iter = attributes.GetKeysBegin();
-            while (type_iter != attributes.GetKeysEnd()){
-                EG::Game::ObjectAttribute::ObjectAttributeType type_key = (*type_iter);
-                std::vector<EG::Game::ObjectAttribute *> *type_attributes = GetAttributesByType(type_key);
-                std::vector<EG::Game::ObjectAttribute *>::iterator attr_iter = type_attributes->begin();
-                while (attr_iter != type_attributes->end()){
-                    if (type_key == EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH) {
-                        delete static_cast<EG::Game::ObjectAttributeRenderingMesh *>(*attr_iter);
-                    }else if (type_key == EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION){
-                        delete static_cast<EG::Game::ObjectAttributeBasicTransformation *>(*attr_iter);
-                    }else if (type_key == EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT){
-                        delete static_cast<EG::Game::ObjectAttributeEmissionLight *>(*attr_iter);
-                    }else if (type_key == EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY){
-                        delete static_cast<EG::Game::ObjectAttributeControlRigidBody *>(*attr_iter);
+            for (ObjectAttributeArrayPair attributes_of_type : attributes) {
+                for (ObjectAttribute *attribute : attributes_of_type.second) {
+                    switch (attribute->GetType()) {
+                        case EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_RENDERING_MESH:
+                            delete static_cast<EG::Game::ObjectAttributeRenderingMesh *>(attribute);
+                            break;
+                        case EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_BASIC_TRANSFORMATION:
+                            delete static_cast<EG::Game::ObjectAttributeBasicTransformation *>(attribute);
+                            break;
+                        case EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_EMISSION_LIGHT:
+                            delete static_cast<EG::Game::ObjectAttributeEmissionLight *>(attribute);
+                            break;
+                        case EG::Game::ObjectAttribute::OBJECT_ATTRIBUTE_CONTROL_RIGID_BODY:
+                            delete static_cast<EG::Game::ObjectAttributeControlRigidBody *>(attribute);
+                            break;
                     }
-                    ++attr_iter;
                 }
-                ++type_iter;
             }
         }
 
@@ -50,23 +49,19 @@ namespace EG{
         }
 
         void Object::AddAttribute(EG::Game::ObjectAttribute *attribute){
-            if (!(attributes.Has(attribute->GetType()))){
-                attributes.Set(attribute->GetType(), new std::vector<EG::Game::ObjectAttribute *>);
-            }
-            attributes.Get(attribute->GetType())->push_back(attribute);
+            attributes[attribute->GetType()].push_back(attribute);
         }
 
-        EG::Utility::Dictionary<EG::Game::ObjectAttribute::ObjectAttributeType, std::vector<EG::Game::ObjectAttribute *> *> *Object::GetAttributes(void){
+        ObjectAttributes *Object::GetAttributes(void){
             return &attributes;
         }
 
-        std::vector<EG::Game::ObjectAttribute *> *Object::GetAttributesByType(EG::Game::ObjectAttribute::ObjectAttributeType type){
-            std::vector<EG::Game::ObjectAttribute *> *out = attributes.Get(type);
-            return out;
+        bool Object::HasAttributesOfType(EG::Game::ObjectAttribute::ObjectAttributeType type) {
+            return attributes.count(type) > 0;
         }
 
-        bool Object::HasAttributesOfType(EG::Game::ObjectAttribute::ObjectAttributeType type){
-            return attributes.Has(type);
+        ObjectAttributeArray *Object::GetAttributesByType(EG::Game::ObjectAttribute::ObjectAttributeType type) {
+            return &attributes[type];
         }
 
         void Object::AddScript(ObjectScript *script) {

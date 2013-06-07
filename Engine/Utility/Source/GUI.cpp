@@ -178,8 +178,8 @@ namespace EG{
                 ++token_iter;
             }
 
-            if (resources.Has(path)){
-                std::string response = resources.Get(path)->Call(args);
+            if (resources.count(path)){
+                std::string response = resources[path]->Call(args);
                 unsigned char *text = reinterpret_cast<unsigned char *>(const_cast<char *>(response.c_str()));
                 return awe_resource_response_create(response.size(), text, mime_type);
             }
@@ -187,7 +187,7 @@ namespace EG{
         }
 
         void GUI::AddResponseHandler(std::string url, WebResourceResponse *handler){
-            resources.Set(url, handler);
+            resources[url] = handler;
         }
 
         awe_resource_response *resource_interceptor(awe_webview *caller, awe_resource_request *request){
